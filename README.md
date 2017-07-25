@@ -1,2 +1,0 @@
-# cppdevtk
-C++ Development Toolkit

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test Disk Space Widget
+GenericName=CppDevTk test application
+Comment=Test CppDevTk Disk Space Widget
+Exec=/opt/cososys/bin/cppdevtk_test_disk_space_widget
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

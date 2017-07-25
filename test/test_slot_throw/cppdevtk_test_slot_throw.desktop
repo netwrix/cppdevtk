@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test Slot Throw
+GenericName=CppDevTk test application
+Comment=Test CppDevTk Slot Throw
+Exec=/opt/cososys/bin/cppdevtk_test_slot_throw
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

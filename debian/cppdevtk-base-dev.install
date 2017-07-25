@@ -1,0 +1,4 @@
+opt/cososys/include/cppdevtk/config/*
+opt/cososys/include/cppdevtk/base/*
+opt/cososys/lib*/libcppdevtk_base.so
+opt/cososys/lib*/libcppdevtk_base.prl

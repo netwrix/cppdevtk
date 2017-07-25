@@ -1,0 +1,294 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file
+///
+/// \copyright Copyright (C) 2015 - 2017 CoSoSys Ltd <info@cososys.com>\n
+/// Licensed under the Apache License, Version 2.0 (the "License");\n
+/// you may not use this file except in compliance with the License.\n
+/// You may obtain a copy of the License at\n
+/// http://www.apache.org/licenses/LICENSE-2.0\n
+/// Unless required by applicable law or agreed to in writing, software\n
+/// distributed under the License is distributed on an "AS IS" BASIS,\n
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n
+/// See the License for the specific language governing permissions and\n
+/// limitations under the License.\n
+/// Please see the file COPYING.
+///
+/// \authors Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#ifndef CPPDEVTK_BASE_SYSTEM_EXCEPTION_HPP_INCLUDED_
+#define CPPDEVTK_BASE_SYSTEM_EXCEPTION_HPP_INCLUDED_
+
+
+#include "config.hpp"
+#include "stdexcept.hpp"
+#include "error_condition.hpp"
+#include "error_code.hpp"
+#include "error_category.hpp"
+
+
+namespace cppdevtk {
+namespace base {
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \defgroup system_exception System Exception related
+/// System Exception related
+/// \ingroup std_exceptions
+/// @{
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+
+#define CPPDEVTK_SYS_EXC_W_EC(errorCode)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+
+#define CPPDEVTK_SYS_EXC_W_EC_WA(errorCode, whatArg)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg))
+
+#define CPPDEVTK_SYS_EXC_W_EV(errVal, errorCategory)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory)
+
+#define CPPDEVTK_SYS_EXC_W_EV_WA(errVal, errorCategory, whatArg)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg))
+
+
+#define CPPDEVTK_SYS_EXC_W_EC_CAUSE(errorCode, cause)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (cause))
+
+#define CPPDEVTK_SYS_EXC_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg), (cause))
+
+#define CPPDEVTK_SYS_EXC_W_EV_CAUSE(errVal, errorCategory, cause)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (cause))
+
+#define CPPDEVTK_SYS_EXC_W_EV_WA_CAUSE(errVal, errorCategory, whatArg, cause)	\
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg), (cause))
+
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EC(excName, errorCode)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EC_WA(excName, errorCode, whatArg)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg))
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EV(excName, errVal, errorCategory)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory)
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EV_WA(excName, errVal, errorCategory, whatArg)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg))
+
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EC_CAUSE(excName, errorCode, cause)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (cause))
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg), (cause))
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EV_CAUSE(excName, errVal, errorCategory, cause)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (cause))
+
+#define CPPDEVTK_MAKE_SYS_EXC_W_EV_WA_CAUSE(excName, errVal, errorCategory, whatArg, cause)	\
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg), (cause))
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \sa C++ 11 std, 19.5.6 Class system_error
+class CPPDEVTK_BASE_API SystemException: public virtual RuntimeException {
+public:
+	SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode);
+	SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const char* whatArg);
+	SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const QString& whatArg);
+	
+	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory);
+	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory, const char* whatArg);
+	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory, const QString& whatArg);
+	
+	SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const Exception& cause);
+	SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const char* whatArg, const Exception& cause);
+	SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const QString& whatArg, const Exception& cause);
+	
+	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
+			const Exception& cause);
+	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory, const char* whatArg,
+			const Exception& cause);
+	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory, const QString& whatArg,
+			const Exception& cause);
+	
+	SystemException(const SystemException& other) throw();
+	
+	virtual ~SystemException() throw();
+	
+	SystemException& operator=(const SystemException& other) throw();
+	
+	::std::auto_ptr<SystemException> Clone() const;
+	
+#	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+#	else
+	virtual SystemException* clone() const;
+#	endif
+	
+	void Swap(SystemException& other);
+	
+	const ErrorCode& ErrorCodeRef() const throw();
+protected:
+	virtual void DoThrow() const;
+	
+#	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+	virtual Cloneable* DoClone() const;
+#	else
+	virtual SystemException* DoClone() const;
+#	endif
+	
+	void SwapOwnData(SystemException& other);
+private:
+	ErrorCode errorCode_;
+};
+
+
+CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y);
+
+
+/// @}	// system_exception
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Inline functions
+
+#define CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG "%1; error code: %2"
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode):
+		Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
+		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
+		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory):
+		Exception(throwPoint), RuntimeException(throwPoint,""), errorCode_(errVal, errorCategory) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
+		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errVal, errorCategory) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
+		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errVal, errorCategory) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
+		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
+		errorCode_(errorCode) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
+		const char* whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
+		errorCode_(errorCode) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
+		const QString& whatArg, const Exception& cause): Exception(throwPoint, cause),
+		RuntimeException(throwPoint, "", cause), errorCode_(errorCode) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
+		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint,"", cause),
+		errorCode_(errVal, errorCategory) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
+		const char* whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
+		errorCode_(errVal, errorCategory) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
+		const QString& whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
+		errorCode_(errVal, errorCategory) {
+	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
+}
+
+inline SystemException::SystemException(const SystemException& other) throw(): Exception(other), RuntimeException(other),
+		errorCode_(other.errorCode_) {}
+
+inline SystemException::~SystemException() throw() {}
+
+inline SystemException& SystemException::operator=(const SystemException& other) throw() {
+	SystemException tmp(other);
+	Swap(tmp);
+	return *this;
+}
+
+inline ::std::auto_ptr<SystemException> SystemException::Clone() const {
+	return ::std::auto_ptr<SystemException>(dynamic_cast<SystemException*>(Cloneable::Clone().release()));
+}
+
+#if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+inline CPPDEVTK_QT_EXCEPTION* SystemException::clone() const {
+#else
+inline SystemException* SystemException::clone() const {
+#endif
+	return Clone().release();
+}
+
+inline void SystemException::Swap(SystemException& other) {
+	if (this != &other) {
+		RuntimeException::Swap(other);
+		SwapOwnData(other);
+	}
+}
+
+inline const ErrorCode& SystemException::ErrorCodeRef() const throw() {
+	return errorCode_;
+}
+
+inline void SystemException::DoThrow() const {
+	throw *this;
+}
+
+#if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+inline Cloneable* SystemException::DoClone() const {
+#else
+inline SystemException* SystemException::DoClone() const {
+#endif
+	return new SystemException(*this);
+}
+
+inline void SystemException::SwapOwnData(SystemException& other) {
+	using ::std::swap;
+	
+	swap(errorCode_, other.errorCode_);
+}
+
+
+inline CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y) {
+	x.Swap(y);
+}
+
+
+}	// namespace base
+}	// namespace cppdevtk
+
+
+#endif	// CPPDEVTK_BASE_SYSTEM_EXCEPTION_HPP_INCLUDED_

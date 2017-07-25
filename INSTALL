@@ -1,0 +1,70 @@
+1. Update version:
+1.1 Search in files cppdevtk/common.pri and cppdevtk/include/cppdevtk/config/product_info.hpp
+for CPPDEVTK_VERSION_MAJOR, CPPDEVTK_VERSION_MINOR and CPPDEVTK_VERSION_PATCH
+1.2 Search in *.plist for CFBundleShortVersionString and CFBundleVersion
+1.3 Modify in AndroidManifest.xml files versionName and versionCode
+1.4 Update in Doxyfile PROJECT_NUMBER
+1.5 Update Version in cppdevtk.spec
+
+2. (optional) Copy customization files (if needed)
+
+3. Update translations (run cppdevtk/scripts/translate.* (bat/sh))
+
+4. Update documentation (run doxygen ./Doxyfile)
+
+5. Create archive cppdevtk.zip and copy to Linux/Mac
+
+6. Build
+6.1 On Windows/Linux build from Qt Creator
+- make sure to select Release configuration
+On Linux add in Qt Creator, Build Steps:
+static:
+CONFIG+=release CONFIG+=static
+shared:
+CONFIG+=release CONFIG+=shared
+
+6.2 Mac
+Qt Creator does not work on Mac OS X 10.4 so use CLI...
+Open terminal in cppdevtk
+
+static:
+> export PATH=/opt/cososys/third_party/static/bin:$PATH
+> qmake ./cppdevtk.pro -r -spec macx-g++ CONFIG+=release CONFIG+=static
+
+shared:
+> export PATH=/opt/cososys/third_party/shared/bin:$PATH
+> qmake ./cppdevtk.pro -r -spec macx-g++ CONFIG+=release CONFIG+=shared
+
+make
+make -j1 install
+
+
+Android:
+shared:
+CONFIG+=release CONFIG+=shared
+
+
+iOS:
+static:
+CONFIG+=release CONFIG+=static
+
+
+Qt 5 >= 5.6.1:
+
+- Ubuntu:
+Use ppa:beineri (https://launchpad.net/~beineri)
+16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt591-xenial
+14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt591-trusty
+12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt562
+> sudo apt-get update
+> sudo apt-get install qt-latest qtcreator-latest
+or
+> sudo apt-get install qt59-meta-full qt59creator
+
+- CentOS
+Use EPEL repo
+> yum install epel-release
+
+
+RPM: rpmbuild -ta cppdevtk-1.0.0.tar.bz2
+Deb: debuild --no-tgz-check -D -us -uc -B

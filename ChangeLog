@@ -1,0 +1,28 @@
+Version 1.0.2.1:
+- Release date: 25 Jul 2017
+- New features:
+	- made public on GitHub: https://github.com/cososys/cppdevtk
+- Improvements:
+	- packaging cleanup
+	- JNI review
+- Fixed bugs:
+	- mutex impl .NET workaround: use QMutex even if std mutex available; maybe pImpl in the future
+
+
+Version 1.0.1.1:
+- Release date: 3 Jul 2017
+- New features:
+	- Debian based packaging
+	- require C++11 enabled for clang and gcc >= 4.3.0
+- Improvements:
+	- Made ThrowOutOfMemoryErrorOrAbort() public
+	- mutex impl: use std mutex if available
+- Fixed bugs:
+	- fixed check Qt allowed version
+
+
+Version 1.0.0.1:
+- Release date: 22 May 2017
+- New features:
+- Improvements:
+- Fixed bugs:

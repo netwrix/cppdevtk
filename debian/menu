@@ -1,0 +1,14 @@
+?package(cppdevtk-test-base):needs="X11" section="Applications/Programming"\
+  title="CppDevTk Test Base"\
+  command="/opt/cososys/bin/cppdevtk_test_base"\
+  icon="/usr/share/pixmaps/cppdevtk.png"
+
+?package(cppdevtk-test-util):needs="X11" section="Applications/Programming"\
+  title="CppDevTk Test Util"\
+  command="/opt/cososys/bin/cppdevtk_test_util"\
+  icon="/usr/share/pixmaps/cppdevtk.png"
+
+?package(cppdevtk-test-gui):needs="X11" section="Applications/Programming"\
+  title="CppDevTk Test gui"\
+  command="/opt/cososys/bin/cppdevtk_test_gui"\
+  icon="/usr/share/pixmaps/cppdevtk.png"

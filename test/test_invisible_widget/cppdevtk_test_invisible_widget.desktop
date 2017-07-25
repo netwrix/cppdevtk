@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test Invisible Widget
+GenericName=CppDevTk test application
+Comment=Test CppDevTk Invisible Widget
+Exec=/opt/cososys/bin/cppdevtk_test_invisible_widget
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

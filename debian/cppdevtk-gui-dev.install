@@ -1,0 +1,3 @@
+opt/cososys/include/cppdevtk/gui/*
+opt/cososys/lib*/libcppdevtk_gui.so
+opt/cososys/lib*/libcppdevtk_gui.prl

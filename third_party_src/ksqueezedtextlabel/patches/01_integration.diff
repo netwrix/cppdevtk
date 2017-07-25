@@ -1,0 +1,437 @@
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/ksqueezedtextlabel-orig/ksqueezedtextlabel.cpp /home/canita/work/patches/ksqueezedtextlabel/ksqueezedtextlabel.cpp
+--- /home/canita/work/patches/ksqueezedtextlabel-orig/ksqueezedtextlabel.cpp	2017-06-28 19:56:27.657462985 +0300
++++ /home/canita/work/patches/ksqueezedtextlabel/ksqueezedtextlabel.cpp	2017-01-28 12:35:55.000000000 +0200
+@@ -16,33 +16,51 @@
+    Boston, MA 02110-1301, USA.
+ */
+ 
+-#include "ksqueezedtextlabel.h"
+-#include <kdebug.h>
+-#include <klocale.h>
+-#include <QContextMenuEvent>
+-#include <kaction.h>
+-#include <QMenu>
+-#include <QClipboard>
+-#include <QApplication>
+-#include <QMimeData>
+-#include <kglobalsettings.h>
++#include <cppdevtk/gui/k_squeezed_text_label.hpp>
+ 
+-class KSqueezedTextLabelPrivate
+-{
+-public:
++#include <QtCore/QtDebug>
++#include <QtCore/QLocale>
++#include <QtCore/QMimeData>
++#include <QtGui/QContextMenuEvent>
++#include <QtGui/QClipboard>
++#include <QtCore/QtGlobal>
++#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
++#include <QtWidgets/QAction>
++#include <QtWidgets/QMenu>
++#include <QtWidgets/QApplication>
++#include <QtWidgets/QDesktopWidget>
++#else
++#include <QtGui/QAction>
++#include <QtGui/QMenu>
++#include <QtGui/QApplication>
++#include <QtGui/QDesktopWidget>
++#endif
++
++
++namespace cppdevtk {
++namespace gui {
+ 
++
++class KSqueezedTextLabelPrivate: public QObject
++{
++	Q_OBJECT
++public Q_SLOTS:
+     void _k_copyFullText() {
+         QApplication::clipboard()->setText(fullText);
+     }
+ 
++public:
+     QString fullText;
+     Qt::TextElideMode elideMode;
+ };
+ 
++
+ KSqueezedTextLabel::KSqueezedTextLabel(const QString &text , QWidget *parent)
+- : QLabel (parent),
++ : QLabel (parent), WidgetBase(),
+   d(new KSqueezedTextLabelPrivate)
+ {
++	 SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "ksqueezed_text_label");
++	 
+   setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+   d->fullText = text;
+   d->elideMode = Qt::ElideMiddle;
+@@ -50,9 +68,11 @@
+ }
+ 
+ KSqueezedTextLabel::KSqueezedTextLabel(QWidget *parent)
+- : QLabel (parent),
++ : QLabel (parent), WidgetBase(),
+   d(new KSqueezedTextLabelPrivate)
+ {
++	 SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "ksqueezed_text_label");
++	 
+   setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+   d->elideMode = Qt::ElideMiddle;
+ }
+@@ -76,7 +96,7 @@
+ 
+ QSize KSqueezedTextLabel::sizeHint() const
+ {
+-  int maxWidth = KGlobalSettings::desktopGeometry(this).width() * 3 / 4;
++  int maxWidth = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+   QFontMetrics fm(fontMetrics());
+   int textWidth = fm.width(d->fullText);
+   if (textWidth > maxWidth) {
+@@ -162,8 +182,8 @@
+     if (showCustomPopup) {
+         QMenu menu(this);
+ 
+-        KAction* act = new KAction(i18n("&Copy Full Text"), this);
+-        connect(act, SIGNAL(triggered()), this, SLOT(_k_copyFullText()));
++        QAction* act = new QAction(tr("&Copy Full Text"), this);
++        connect(act, SIGNAL(triggered()), d, SLOT(_k_copyFullText()));
+         menu.addAction(act);
+ 
+         ev->accept();
+@@ -173,9 +193,15 @@
+     }
+ }
+ 
++void KSqueezedTextLabel::mousePressEvent(QMouseEvent* pEvent) {
++	QLabel::mousePressEvent(pEvent);
++	
++	emit Pressed();
++}
++
+ void KSqueezedTextLabel::mouseReleaseEvent(QMouseEvent* ev)
+ {
+-#if QT_VERSION >= 0x040700
++#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+     if (QApplication::clipboard()->supportsSelection() &&
+         textInteractionFlags() != Qt::NoTextInteraction &&
+         ev->button() == Qt::LeftButton &&
+@@ -200,6 +226,19 @@
+     {
+         QLabel::mouseReleaseEvent(ev);
+     }
++	
++	emit Released();
+ }
+ 
+-#include "ksqueezedtextlabel.moc"
++void KSqueezedTextLabel::mouseDoubleClickEvent(QMouseEvent* pEvent) {
++	QLabel::mouseDoubleClickEvent(pEvent);
++	
++	emit DoubleClicked();
++}
++
++
++}	// namespace gui
++}	// namespace cppdevtk
++
++
++#include "k_squeezed_text_label.moc"
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/ksqueezedtextlabel-orig/ksqueezedtextlabel.h /home/canita/work/patches/ksqueezedtextlabel/ksqueezedtextlabel.h
+--- /home/canita/work/patches/ksqueezedtextlabel-orig/ksqueezedtextlabel.h	2017-06-28 19:56:46.257076581 +0300
++++ /home/canita/work/patches/ksqueezedtextlabel/ksqueezedtextlabel.h	1970-01-01 02:00:00.000000000 +0200
+@@ -1,131 +0,0 @@
+-/* This file is part of the KDE libraries
+-   Copyright (C) 2000 Ronny Standtke <Ronny.Standtke@gmx.de>
+-
+-   This library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Library General Public
+-   License version 2 as published by the Free Software Foundation.
+-
+-   This library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Library General Public License for more details.
+-
+-   You should have received a copy of the GNU Library General Public License
+-   along with this library; see the file COPYING.LIB.  If not, write to
+-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+-   Boston, MA 02110-1301, USA.
+-*/
+-
+-#ifndef KSQUEEZEDTEXTLABEL_H
+-#define KSQUEEZEDTEXTLABEL_H
+-
+-#include <kdeui_export.h>
+-#include <QtGui/QLabel>
+-
+-class KSqueezedTextLabelPrivate;
+-
+-/**
+- * @short A replacement for QLabel that squeezes its text
+- *
+- * A label class that squeezes its text into the label
+- *
+- * If the text is too long to fit into the label it is divided into
+- * remaining left and right parts which are separated by three dots.
+- *
+- * Example:
+- * http://www.kde.org/documentation/index.html could be squeezed to
+- * http://www.kde...ion/index.html
+- *
+- * \image html ksqueezedtextlabel.png "KSqueezedTextLabel Widget"
+- *
+- * @author Ronny Standtke <Ronny.Standtke@gmx.de>
+- */
+-
+-/*
+- * QLabel
+- */
+-class KDEUI_EXPORT KSqueezedTextLabel : public QLabel {
+-  Q_OBJECT
+-  Q_PROPERTY( Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode )
+-
+-public:
+-  /**
+-   * Default constructor.
+-   */
+-  explicit KSqueezedTextLabel( QWidget *parent = 0 );
+-  explicit KSqueezedTextLabel( const QString &text, QWidget *parent = 0 );
+-
+-  virtual ~KSqueezedTextLabel();
+-
+-  virtual QSize minimumSizeHint() const;
+-  virtual QSize sizeHint() const;
+-  /**
+-   * Overridden for internal reasons; the API remains unaffected.
+-   */
+-  virtual void setAlignment( Qt::Alignment );
+-
+-  /**
+-   *  Returns the text elide mode.
+-   */
+-  Qt::TextElideMode textElideMode() const;
+-
+-  /**
+-   * Sets the text elide mode.
+-   * @param mode The text elide mode.
+-   */
+-  void setTextElideMode( Qt::TextElideMode mode );
+-
+-  /**
+-   * Get the full text set via setText.
+-   *
+-   * @since 4.4
+-   */
+-  QString fullText() const;
+-
+-public Q_SLOTS:
+-  /**
+-   * Sets the text. Note that this is not technically a reimplementation of QLabel::setText(),
+-   * which is not virtual (in Qt 4.3). Therefore, you may need to cast the object to
+-   * KSqueezedTextLabel in some situations:
+-   * \Example
+-   * \code
+-   * KSqueezedTextLabel* squeezed = new KSqueezedTextLabel("text", parent);
+-   * QLabel* label = squeezed;
+-   * label->setText("new text");	// this will not work
+-   * squeezed->setText("new text");	// works as expected
+-   * static_cast<KSqueezedTextLabel*>(label)->setText("new text");	// works as expected
+-   * \endcode
+-   * @param mode The new text.
+-   */
+-  void setText( const QString &text );
+-  /**
+-   * Clears the text. Same remark as above.
+-   *
+-   */
+-  void clear();
+-
+-protected:
+-    /**
+-     * \reimp
+-     */
+-    void mouseReleaseEvent(QMouseEvent*);
+-    
+-    /**
+-     * Called when widget is resized
+-     */
+-    void resizeEvent( QResizeEvent * );
+-    /**
+-     * \reimp
+-     */
+-    void contextMenuEvent(QContextMenuEvent* );
+-    /**
+-     * does the dirty work
+-     */
+-    void squeezeTextToLabel();
+-
+-private:
+-    Q_PRIVATE_SLOT(d, void _k_copyFullText())
+-  KSqueezedTextLabelPrivate * const d;
+-};
+-
+-#endif // KSQUEEZEDTEXTLABEL_H
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/ksqueezedtextlabel-orig/ksqueezedtextlabel.hpp /home/canita/work/patches/ksqueezedtextlabel/ksqueezedtextlabel.hpp
+--- /home/canita/work/patches/ksqueezedtextlabel-orig/ksqueezedtextlabel.hpp	1970-01-01 02:00:00.000000000 +0200
++++ /home/canita/work/patches/ksqueezedtextlabel/ksqueezedtextlabel.hpp	2017-01-28 12:35:54.000000000 +0200
+@@ -0,0 +1,158 @@
++/* This file is part of the KDE libraries
++   Copyright (C) 2000 Ronny Standtke <Ronny.Standtke@gmx.de>
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public
++   License version 2 as published by the Free Software Foundation.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public License
++   along with this library; see the file COPYING.LIB.  If not, write to
++   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++   Boston, MA 02110-1301, USA.
++*/
++
++
++#ifndef CPPDEVTK_GUI_K_SQUEEZED_TEXT_LABEL_HPP_INCLUDED_
++#define CPPDEVTK_GUI_K_SQUEEZED_TEXT_LABEL_HPP_INCLUDED_
++
++
++#include "config.hpp"
++#include "widget_base.hpp"
++
++#include <QtCore/QString>
++#include <QtCore/QSize>
++#include <QtCore/Qt>
++#include <QtCore/QtGlobal>
++#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
++#include <QtWidgets/QLabel>
++#else
++#include <QtGui/QLabel>
++#endif
++
++
++namespace cppdevtk {
++namespace gui {
++
++
++class KSqueezedTextLabelPrivate;
++
++/**
++ * @short A replacement for QLabel that squeezes its text
++ *
++ * A label class that squeezes its text into the label
++ *
++ * If the text is too long to fit into the label it is divided into
++ * remaining left and right parts which are separated by three dots.
++ *
++ * Example:
++ * http://www.kde.org/documentation/index.html could be squeezed to
++ * http://www.kde...ion/index.html
++ *
++ *
++ * @author Ronny Standtke <Ronny.Standtke@gmx.de>
++ */
++
++/*
++ * QLabel
++ */
++class CPPDEVTK_GUI_API KSqueezedTextLabel : public QLabel, public WidgetBase {
++  Q_OBJECT
++  Q_PROPERTY( Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode )
++signals:
++	void Pressed();
++	void Released();
++	void DoubleClicked();
++public:
++  /**
++   * Default constructor.
++   */
++  explicit KSqueezedTextLabel( QWidget *parent = 0 );
++  explicit KSqueezedTextLabel( const QString &text, QWidget *parent = 0 );
++
++  virtual ~KSqueezedTextLabel();
++
++  virtual QSize minimumSizeHint() const;
++  virtual QSize sizeHint() const;
++  /**
++   * Overridden for internal reasons; the API remains unaffected.
++   */
++  virtual void setAlignment( Qt::Alignment );
++
++  /**
++   *  Returns the text elide mode.
++   */
++  Qt::TextElideMode textElideMode() const;
++
++  /**
++   * Sets the text elide mode.
++   * @param mode The text elide mode.
++   */
++  void setTextElideMode( Qt::TextElideMode mode );
++
++  /**
++   * Get the full text set via setText.
++   *
++   * @since 4.4
++   */
++  QString fullText() const;
++
++public Q_SLOTS:
++  /**
++   * Sets the text. Note that this is not technically a reimplementation of QLabel::setText(),
++   * which is not virtual (in Qt 4.3). Therefore, you may need to cast the object to
++   * KSqueezedTextLabel in some situations:
++   * \Example
++   * \code
++   * KSqueezedTextLabel* squeezed = new KSqueezedTextLabel("text", parent);
++   * QLabel* label = squeezed;
++   * label->setText("new text");	// this will not work
++   * squeezed->setText("new text");	// works as expected
++   * static_cast<KSqueezedTextLabel*>(label)->setText("new text");	// works as expected
++   * \endcode
++   * @param mode The new text.
++   */
++  void setText( const QString &text );
++  /**
++   * Clears the text. Same remark as above.
++   *
++   */
++  void clear();
++
++protected:
++	virtual void mousePressEvent(QMouseEvent* pEvent);
++	
++    /**
++     * \reimp
++     */
++    void mouseReleaseEvent(QMouseEvent*);
++	
++	virtual void mouseDoubleClickEvent(QMouseEvent* pEvent);
++    
++    /**
++     * Called when widget is resized
++     */
++    void resizeEvent( QResizeEvent * );
++    /**
++     * \reimp
++     */
++    void contextMenuEvent(QContextMenuEvent* );
++    /**
++     * does the dirty work
++     */
++    void squeezeTextToLabel();
++
++private:
++  KSqueezedTextLabelPrivate * const d;
++};
++
++
++}	// namespace gui
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_GUI_K_SQUEEZED_TEXT_LABEL_HPP_INCLUDED_

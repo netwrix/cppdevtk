@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/cppdevtk/test_config">
+        <file>res/ico/application.icns</file>
+        <file>res/ico/application.ico</file>
+    </qresource>
+</RCC>

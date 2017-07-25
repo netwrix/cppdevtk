@@ -1,0 +1,26 @@
+cppdevtk (1.0.2-0ubuntu1) xenial; urgency=medium
+
+  * made public on GitHub: https://github.com/cososys/cppdevtk
+  * packaging cleanup
+  * JNI review
+  * mutex impl .NET workaround: use QMutex even if std mutex available; maybe pImpl in the future
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Tue, 25 Jul 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.1-0ubuntu1) xenial; urgency=medium
+
+  * Debian based packaging
+  * require C++11 enabled for clang and gcc >= 4.3.0
+  * Made ThrowOutOfMemoryErrorOrAbort() public
+  * mutex impl: use std mutex if available
+  * fixed check Qt allowed version
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 3 Jul 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.0-0ubuntu1) xenial; urgency=medium
+
+  * Initial release
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 22 May 2017 14:19:46 +0300

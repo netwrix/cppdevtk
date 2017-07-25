@@ -1,0 +1,132 @@
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/jsondist-orig/json/json-forwards.h /home/canita/work/patches/jsondist/json/json-forwards.h
+--- /home/canita/work/patches/jsondist-orig/json/json-forwards.h	2016-09-29 17:54:06.000000000 +0300
++++ /home/canita/work/patches/jsondist/json/json-forwards.h	2017-01-28 12:35:54.000000000 +0200
+@@ -75,6 +75,10 @@
+ 
+ #ifndef JSON_FORWARD_AMALGATED_H_INCLUDED
+ # define JSON_FORWARD_AMALGATED_H_INCLUDED
++
++
++#include <cppdevtk/util/config.hpp>
++
+ /// If defined, indicates that the source file is amalgated
+ /// to prevent private header inclusion.
+ #define JSON_IS_AMALGAMATION
+@@ -136,6 +140,11 @@
+ #define JSON_API
+ #endif
+ 
++
++#undef JSON_API
++#define JSON_API CPPDEVTK_UTIL_API
++
++
+ // If JSON_NO_INT64 is defined, then Json only support C++ "int" type for
+ // integer
+ // Storages, and 64 bits integer support is disabled.
+@@ -214,6 +223,9 @@
+ #ifndef JSON_FORWARDS_H_INCLUDED
+ #define JSON_FORWARDS_H_INCLUDED
+ 
++
++#include "config.hpp"
++
+ #if !defined(JSON_IS_AMALGAMATION)
+ #include "config.h"
+ #endif // if !defined(JSON_IS_AMALGAMATION)
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/jsondist-orig/json/json.h /home/canita/work/patches/jsondist/json/json.h
+--- /home/canita/work/patches/jsondist-orig/json/json.h	2016-09-29 17:54:06.000000000 +0300
++++ /home/canita/work/patches/jsondist/json/json.h	2017-01-28 12:35:54.000000000 +0200
+@@ -74,6 +74,11 @@
+ 
+ #ifndef JSON_AMALGATED_H_INCLUDED
+ # define JSON_AMALGATED_H_INCLUDED
++
++
++#include <cppdevtk/util/config.hpp>
++
++
+ /// If defined, indicates that the source file is amalgated
+ /// to prevent private header inclusion.
+ #define JSON_IS_AMALGAMATION
+@@ -162,6 +167,11 @@
+ #define JSON_API
+ #endif
+ 
++
++#undef JSON_API
++#define JSON_API CPPDEVTK_UTIL_API
++
++
+ // If JSON_NO_INT64 is defined, then Json only support C++ "int" type for
+ // integer
+ // Storages, and 64 bits integer support is disabled.
+@@ -1944,7 +1954,7 @@
+   {                                                                            \
+     std::ostringstream oss; oss << message;                                    \
+     Json::throwLogicError(oss.str());                                          \
+-    abort();                                                                   \
++    /* abort(); */                                                                   \
+   }
+ 
+ #else // JSON_USE_EXCEPTION
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/jsondist-orig/jsoncpp.cpp /home/canita/work/patches/jsondist/jsoncpp.cpp
+--- /home/canita/work/patches/jsondist-orig/jsoncpp.cpp	2016-09-29 17:54:06.000000000 +0300
++++ /home/canita/work/patches/jsondist/jsoncpp.cpp	2017-06-27 23:24:53.000000000 +0300
+@@ -73,7 +73,7 @@
+ 
+ 
+ 
+-#include "json/json.h"
++#include <cppdevtk/util/json/json.h>
+ 
+ #ifndef JSON_IS_AMALGAMATION
+ #error "Compile with -I PATH_TO_JSON_DIRECTORY"
+@@ -230,11 +230,15 @@
+ 
+ namespace Json {
+ 
++#if 0
+ #if __GNUC__ >= 6
+ typedef std::scoped_ptr<CharReader> const  CharReaderPtr;
+ #else
+ typedef std::auto_ptr<CharReader>          CharReaderPtr;
+ #endif
++#else
++typedef std::auto_ptr<CharReader>          CharReaderPtr;
++#endif
+ 
+ // Implementation of class Features
+ // ////////////////////////////////
+@@ -1285,6 +1289,7 @@
+   token.start_ = current_;
+   Char c = getNextChar();
+   bool ok = true;
++  // NOTE: to remove GCC 7 warnings -Wimplicit-fallthrough use comments /* Falls through. */
+   switch (c) {
+   case '{':
+     token.type_ = tokenObjectBegin;
+@@ -1308,6 +1313,7 @@
+     ok = readStringSingleQuote();
+     break;
+     } // else continue
++    /* Falls through. */
+   case '/':
+     token.type_ = tokenComment;
+     ok = readComment();
+@@ -3799,11 +3805,15 @@
+ 
+ namespace Json {
+ 
++#if 0
+ #if __GNUC__ >= 6
+ typedef std::scoped_ptr<StreamWriter> const  StreamWriterPtr;
+ #else
+ typedef std::auto_ptr<StreamWriter>          StreamWriterPtr;
+ #endif
++#else
++typedef std::auto_ptr<StreamWriter>          StreamWriterPtr;
++#endif
+ 
+ static bool containsControlCharacter(const char* str) {
+   while (*str) {

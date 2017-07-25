@@ -1,0 +1,323 @@
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qzip-orig/qzip.cpp /home/canita/work/patches/qzip/qzip.cpp
+--- /home/canita/work/patches/qzip-orig/qzip.cpp	2017-01-28 12:36:00.000000000 +0200
++++ /home/canita/work/patches/qzip/qzip.cpp	2017-02-10 18:03:22.000000000 +0200
+@@ -39,20 +39,31 @@
+ **
+ ****************************************************************************/
+ 
+-#include <qglobal.h>
+ 
+-#ifndef QT_NO_TEXTODFWRITER
++#include <cppdevtk/util/q_zip_reader.hpp>
++#include <cppdevtk/util/q_zip_writer.hpp>
++#include <cppdevtk/base/cassert.hpp>
++#include <cppdevtk/base/logger.hpp>
+ 
+-#include "qzipreader_p.h"
+-#include "qzipwriter_p.h"
+-#include <qdatetime.h>
+ #include <qplatformdefs.h>
+-#include <qendian.h>
+-#include <qdebug.h>
+-#include <qdir.h>
++#include <QtCore/QtGlobal>
++#include <QtCore/QDateTime>
++#include <QtCore/QtEndian>
++#include <QtCore/QDebug>
++#include <QtCore/QtDebug>
++#include <QtCore/QDir>
++
++
++#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
++#	pragma warning(disable: 4242)	// C4242: 'identifier' : conversion from 'type1' to 'type2', possible loss of data
++#	pragma warning(disable: 4946)	// C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
++#	pragma warning(disable: 4458)	// C4458: declaration of 'var' hides class member
++#endif
++
+ 
+ #include <zlib.h>
+ 
++
+ #if defined(Q_OS_WIN)
+ #  undef S_IFREG
+ #  define S_IFREG 0100000
+@@ -90,7 +101,10 @@
+ #define ZDEBUG if (0) qDebug
+ #endif
+ 
+-QT_BEGIN_NAMESPACE
++
++namespace cppdevtk {
++namespace util {
++
+ 
+ static inline uint readUInt(const uchar *data)
+ {
+@@ -495,7 +509,7 @@
+     uchar tmp[4];
+     device->read((char *)tmp, 4);
+     if (readUInt(tmp) != 0x04034b50) {
+-        qWarning() << "QZip: not a zip file!";
++        CPPDEVTK_LOG_WARN("not a zip file!");
+         return;
+     }
+ 
+@@ -505,9 +519,9 @@
+     int num_dir_entries = 0;
+     EndOfDirectory eod;
+     while (start_of_directory == -1) {
+-        int pos = device->size() - sizeof(EndOfDirectory) - i;
++        int pos = (int)(device->size() - sizeof(EndOfDirectory) - i);
+         if (pos < 0 || i > 65535) {
+-            qWarning() << "QZip: EndOfDirectory not found";
++            CPPDEVTK_LOG_WARN("EndOfDirectory not found");
+             return;
+         }
+ 
+@@ -524,7 +538,7 @@
+     ZDEBUG("start_of_directory at %d, num_dir_entries=%d", start_of_directory, num_dir_entries);
+     int comment_length = readUShort(eod.comment_length);
+     if (comment_length != i)
+-        qWarning() << "QZip: failed to parse zip file.";
++        CPPDEVTK_LOG_WARN("failed to parse zip file.");
+     comment = device->read(qMin(comment_length, i));
+ 
+ 
+@@ -533,30 +547,30 @@
+         FileHeader header;
+         int read = device->read((char *) &header.h, sizeof(CentralFileHeader));
+         if (read < (int)sizeof(CentralFileHeader)) {
+-            qWarning() << "QZip: Failed to read complete header, index may be incomplete";
++            CPPDEVTK_LOG_WARN("Failed to read complete header, index may be incomplete");
+             break;
+         }
+         if (readUInt(header.h.signature) != 0x02014b50) {
+-            qWarning() << "QZip: invalid header signature, index may be incomplete";
++            CPPDEVTK_LOG_WARN("invalid header signature, index may be incomplete");
+             break;
+         }
+ 
+         int l = readUShort(header.h.file_name_length);
+         header.file_name = device->read(l);
+         if (header.file_name.length() != l) {
+-            qWarning() << "QZip: Failed to read filename from zip index, index may be incomplete";
++            CPPDEVTK_LOG_WARN("Failed to read filename from zip index, index may be incomplete");
+             break;
+         }
+         l = readUShort(header.h.extra_field_length);
+         header.extra_field = device->read(l);
+         if (header.extra_field.length() != l) {
+-            qWarning() << "QZip: Failed to read extra field in zip file, skipping file, index may be incomplete";
++            CPPDEVTK_LOG_WARN("Failed to read extra field in zip file, skipping file, index may be incomplete");
+             break;
+         }
+         l = readUShort(header.h.file_comment_length);
+         header.file_comment = device->read(l);
+         if (header.file_comment.length() != l) {
+-            qWarning() << "QZip: Failed to read read file comment, index may be incomplete";
++            CPPDEVTK_LOG_WARN("Failed to read read file comment, index may be incomplete");
+             break;
+         }
+ 
+@@ -614,7 +628,7 @@
+                 data.resize(len);
+                 break;
+             case Z_MEM_ERROR:
+-                qWarning("QZip: Z_MEM_ERROR: Not enough memory to compress file, skipping");
++                CPPDEVTK_LOG_WARN("Z_MEM_ERROR: Not enough memory to compress file, skipping");
+                 data.resize(0);
+                 break;
+             case Z_BUF_ERROR:
+@@ -631,7 +645,7 @@
+ 
+     header.file_name = fileName.toLocal8Bit();
+     if (header.file_name.size() > 0xffff) {
+-        qWarning("QZip: Filename too long, chopping it to 65535 characters");
++        CPPDEVTK_LOG_WARN("Filename too long, chopping it to 65535 characters");
+         header.file_name = header.file_name.left(0xffff);
+     }
+     writeUShort(header.h.file_name_length, header.file_name.length());
+@@ -759,7 +773,7 @@
+ QZipReader::QZipReader(QIODevice *device)
+     : d(new QZipReaderPrivate(device, /*ownDevice=*/false))
+ {
+-    Q_ASSERT(device);
++    CPPDEVTK_ASSERT(device);
+ }
+ 
+ /*!
+@@ -893,19 +907,19 @@
+                     baunzip.resize(len);
+                 break;
+             case Z_MEM_ERROR:
+-                qWarning("QZip: Z_MEM_ERROR: Not enough memory");
++                CPPDEVTK_LOG_WARN("Z_MEM_ERROR: Not enough memory");
+                 break;
+             case Z_BUF_ERROR:
+                 len *= 2;
+                 break;
+             case Z_DATA_ERROR:
+-                qWarning("QZip: Z_DATA_ERROR: Input data is corrupted");
++                CPPDEVTK_LOG_WARN("Z_DATA_ERROR: Input data is corrupted");
+                 break;
+             }
+         } while (res == Z_BUF_ERROR);
+         return baunzip;
+     }
+-    qWarning() << "QZip: Unknown compression method";
++    CPPDEVTK_LOG_WARN("Unknown compression method");
+     return QByteArray();
+ }
+ 
+@@ -1044,7 +1058,7 @@
+ QZipWriter::QZipWriter(QIODevice *device)
+     : d(new QZipWriterPrivate(device, /*ownDevice=*/false))
+ {
+-    Q_ASSERT(device);
++    CPPDEVTK_ASSERT(device);
+ }
+ 
+ QZipWriter::~QZipWriter()
+@@ -1182,7 +1196,7 @@
+ */
+ void QZipWriter::addFile(const QString &fileName, QIODevice *device)
+ {
+-    Q_ASSERT(device);
++    CPPDEVTK_ASSERT(device);
+     QIODevice::OpenMode mode = device->openMode();
+     bool opened = false;
+     if ((mode & QIODevice::ReadOnly) == 0) {
+@@ -1258,6 +1272,6 @@
+     d->device->close();
+ }
+ 
+-QT_END_NAMESPACE
+ 
+-#endif // QT_NO_TEXTODFWRITER
++}	// namespace util
++}	// namespace cppdevtk
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qzip-orig/qzipreader_p.h /home/canita/work/patches/qzip/qzipreader_p.h
+--- /home/canita/work/patches/qzip-orig/qzipreader_p.h	2017-01-28 12:36:00.000000000 +0200
++++ /home/canita/work/patches/qzip/qzipreader_p.h	2017-01-28 12:35:54.000000000 +0200
+@@ -39,10 +39,10 @@
+ **
+ ****************************************************************************/
+ 
+-#ifndef QZIPREADER_H
+-#define QZIPREADER_H
+ 
+-#ifndef QT_NO_TEXTODFWRITER
++#ifndef CPPDEVTK_UTIL_Q_ZIP_READER_HPP_INCLUDED_
++#define CPPDEVTK_UTIL_Q_ZIP_READER_HPP_INCLUDED_
++
+ 
+ //
+ //  W A R N I N G
+@@ -55,15 +55,23 @@
+ // We mean it.
+ //
+ 
+-#include <QtCore/qdatetime.h>
+-#include <QtCore/qfile.h>
+-#include <QtCore/qstring.h>
+ 
+-QT_BEGIN_NAMESPACE
++#include "config.hpp"
++
++#include <QtCore/QDateTime>
++#include <QtCore/QFile>
++#include <QtCore/QString>
++#include <QtCore/QList>
++
++
++namespace cppdevtk {
++namespace util {
++
+ 
+ class QZipReaderPrivate;
+ 
+-class Q_GUI_EXPORT QZipReader
++
++class CPPDEVTK_UTIL_API QZipReader
+ {
+ public:
+     QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
+@@ -76,7 +84,7 @@
+     bool isReadable() const;
+     bool exists() const;
+ 
+-    struct Q_GUI_EXPORT FileInfo
++    struct CPPDEVTK_UTIL_API FileInfo
+     {
+         FileInfo();
+         FileInfo(const FileInfo &other);
+@@ -118,7 +126,9 @@
+     Q_DISABLE_COPY(QZipReader)
+ };
+ 
+-QT_END_NAMESPACE
+ 
+-#endif // QT_NO_TEXTODFWRITER
+-#endif // QZIPREADER_H
++}	// namespace util
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_UTIL_Q_ZIP_READER_HPP_INCLUDED_
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qzip-orig/qzipwriter_p.h /home/canita/work/patches/qzip/qzipwriter_p.h
+--- /home/canita/work/patches/qzip-orig/qzipwriter_p.h	2017-01-28 12:36:00.000000000 +0200
++++ /home/canita/work/patches/qzip/qzipwriter_p.h	2017-01-28 12:35:54.000000000 +0200
+@@ -38,9 +38,11 @@
+ ** $QT_END_LICENSE$
+ **
+ ****************************************************************************/
+-#ifndef QZIPWRITER_H
+-#define QZIPWRITER_H
+-#ifndef QT_NO_TEXTODFWRITER
++
++
++#ifndef CPPDEVTK_UTIL_Q_ZIP_WRITER_HPP_INCLUDED_
++#define CPPDEVTK_UTIL_Q_ZIP_WRITER_HPP_INCLUDED_
++
+ 
+ //
+ //  W A R N I N G
+@@ -53,15 +55,21 @@
+ // We mean it.
+ //
+ 
+-#include <QtCore/qstring.h>
+-#include <QtCore/qfile.h>
+ 
+-QT_BEGIN_NAMESPACE
++#include "config.hpp"
++
++#include <QtCore/QString>
++#include <QtCore/QFile>
++
++
++namespace cppdevtk {
++namespace util {
++
+ 
+ class QZipWriterPrivate;
+ 
+ 
+-class Q_GUI_EXPORT QZipWriter
++class CPPDEVTK_UTIL_API QZipWriter
+ {
+ public:
+     QZipWriter(const QString &fileName, QIODevice::OpenMode mode = (QIODevice::WriteOnly | QIODevice::Truncate) );
+@@ -110,7 +118,9 @@
+     Q_DISABLE_COPY(QZipWriter)
+ };
+ 
+-QT_END_NAMESPACE
+ 
+-#endif // QT_NO_TEXTODFWRITER
+-#endif // QZIPWRITER_H
++}	// namespace util
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_UTIL_Q_ZIP_WRITER_HPP_INCLUDED_

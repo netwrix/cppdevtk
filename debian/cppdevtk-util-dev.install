@@ -1,0 +1,3 @@
+opt/cososys/include/cppdevtk/util/*
+opt/cososys/lib*/libcppdevtk_util.so
+opt/cososys/lib*/libcppdevtk_util.prl

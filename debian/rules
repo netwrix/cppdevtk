@@ -1,0 +1,48 @@
+#!/usr/bin/make -f
+
+
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# see ENVIRONMENT in dpkg-buildflags(1)
+# package maintainers to append CFLAGS
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# package maintainers to append LDFLAGS
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+
+ifeq ($(shell uname -m),x86_64)
+	export CPPDEVTK_RPATHDIR_AUX=/opt/cososys/lib64:/opt/qt59/lib
+else
+	export CPPDEVTK_RPATHDIR_AUX=/opt/cososys/lib:/opt/qt59/lib
+endif
+export JAVA_HOME=/usr/lib/jvm/default-java
+
+
+%:
+	dh $@ 
+
+
+override_dh_auto_configure:
+	. /opt/qt59/bin/qt59-env.sh &&	\
+	qmake ./cppdevtk.pro -r -spec linux-g++	\
+	CONFIG*=release CONFIG-=debug CONFIG-=debug_and_release	\
+	CONFIG*=shared CONFIG-=static CONFIG-=static_and_shared	\
+	CONFIG+=cppdevtk_rpmbuild	\
+	CPPDEVTK_PREFIX=/opt/cososys	\
+	CPPDEVTK_DATA_ROOT_DIR=/usr/share	\
+	CPPDEVTK_SYS_CONF_DIR=/etc	\
+	CPPDEVTK_LOCAL_STATE_DIR=/var	\
+	CPPDEVTK_RPATHDIR=$(CPPDEVTK_RPATHDIR_AUX)	\
+	&& make qmake_all
+
+#override_dh_auto_install:
+#	dh_auto_install -- prefix=$(PREFIX)
+
+override_dh_install:
+	dh_install --fail-missing

@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cppdevtk
+Source: https://github.com/cososys/cppdevtk
+
+Files: *
+Copyright: 2015 - 2017 CoSoSys Ltd <info@cososys.com>
+License: Apache License, Version 2.0
+
+
+Files: debian/*
+Copyright: 2015 - 2017 CoSoSys Ltd <info@cososys.com>
+License: Apache License, Version 2.0

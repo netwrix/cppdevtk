@@ -1,0 +1,184 @@
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/StackWalker-orig/StackWalker.cpp /home/canita/work/patches/StackWalker/StackWalker.cpp
+--- /home/canita/work/patches/StackWalker-orig/StackWalker.cpp	2014-11-21 18:18:57.000000000 +0200
++++ /home/canita/work/patches/StackWalker/StackWalker.cpp	2017-01-28 12:35:56.000000000 +0200
+@@ -79,15 +79,35 @@
+  *   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
+  **********************************************************************/
+-#include <windows.h>
++
++
++// NOTE: Do not use CPPDEVTK_ASSERT() because it use StackTrace; use Q_ASSERT() instead
++
++
++#include "stack_walker_win_msvc.hpp"
++#if (!CPPDEVTK_COMPILER_MSVC)
++#	error "This file is msvc specific!!!"
++#endif
++#if (!CPPDEVTK_PLATFORM_WINDOWS)
++#	error "This file is Windows specific!!!"
++#endif
++
++#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
++#	pragma warning(disable: 4191)	// C4191: 'operator/operation' : unsafe conversion from 'type of expression' to 'type required'
++#	pragma warning(disable: 4062)	// C4062: enumerator 'identifier' in switch of enum 'enumeration' is not handled
++#	pragma warning(disable: 4740)	// C4740: flow in or out of inline asm code suppresses global optimization
++#	pragma warning(disable: 4748)	// C4748: /GS can not protect parameters and local variables from local buffer overrun because optimizations are disabled in function
++#	pragma warning(disable: 4777)	// C4777: '_snprintf_s' : format string '%d' requires an argument of type 'x', but variadic argument y has type 'z'
++#	pragma warning(disable: 4996)	// C4996: 'func' : was declared deprecated
++#endif
++
+ #include <tchar.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#pragma comment(lib, "version.lib")  // for "VerQueryValue"
++#include <cstring>
++//#pragma comment(lib, "version.lib")  // for "VerQueryValue"
+ #pragma warning(disable:4826)
+ 
+-#include "StackWalker.h"
+-
+ 
+ // If VC7 and later, then use the shipped 'dbghelp.h'-file
+ #pragma pack(push,8)
+@@ -248,6 +268,11 @@
+ #define USED_CONTEXT_FLAGS CONTEXT_FULL
+ 
+ 
++namespace cppdevtk {
++namespace base {
++namespace detail {
++
++
+ class StackWalkerInternal
+ {
+ public:
+@@ -416,7 +441,7 @@
+   LPSTR m_szSymPath;
+ 
+ #pragma pack(push,8)
+-typedef struct IMAGEHLP_MODULE64_V3 {
++struct IMAGEHLP_MODULE64_V3 {
+     DWORD    SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE64)
+     DWORD64  BaseOfImage;            // base load address of module
+     DWORD    ImageSize;              // virtual size of the loaded module
+@@ -444,7 +469,7 @@
+     BOOL     Publics;                // contains public symbols
+ };
+ 
+-typedef struct IMAGEHLP_MODULE64_V2 {
++struct IMAGEHLP_MODULE64_V2 {
+     DWORD    SizeOfStruct;           // set to sizeof(IMAGEHLP_MODULE64)
+     DWORD64  BaseOfImage;            // base load address of module
+     DWORD    ImageSize;              // virtual size of the loaded module
+@@ -651,7 +676,7 @@
+     pGMI = (tGMI) GetProcAddress( hPsapi, "GetModuleInformation" );
+     if ( (pEPM == NULL) || (pGMFNE == NULL) || (pGMBN == NULL) || (pGMI == NULL) )
+     {
+-      // we couldn�t find all functions
++      // we couldn't find all functions
+       FreeLibrary(hPsapi);
+       return FALSE;
+     }
+@@ -1006,6 +1031,13 @@
+ static StackWalker::PReadProcessMemoryRoutine s_readMemoryFunction = NULL;
+ static LPVOID s_readMemoryFunction_UserData = NULL;
+ 
++
++#define CPPDEVTK_STACK_WALKER_DISABLE_OPTIMIZATIONS 0
++
++#if (CPPDEVTK_STACK_WALKER_DISABLE_OPTIMIZATIONS)
++#pragma optimize("", off)
++#endif
++
+ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadProcessMemoryRoutine readMemoryFunction, LPVOID pUserData)
+ {
+   CONTEXT c;
+@@ -1246,6 +1278,11 @@
+   return TRUE;
+ }
+ 
++#if (CPPDEVTK_STACK_WALKER_DISABLE_OPTIMIZATIONS)
++#pragma optimize("", on)
++#endif
++
++
+ BOOL __stdcall StackWalker::myReadProcMem(
+     HANDLE      hProcess,
+     DWORD64     qwBaseAddress,
+@@ -1351,3 +1388,8 @@
+ {
+   OutputDebugStringA(buffer);
+ }
++
++
++}	// namespace detail
++}	// namespace base
++}	// namespace cppdevtk
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/StackWalker-orig/StackWalker.h /home/canita/work/patches/StackWalker/StackWalker.h
+--- /home/canita/work/patches/StackWalker-orig/StackWalker.h	2014-11-21 18:18:57.000000000 +0200
++++ /home/canita/work/patches/StackWalker/StackWalker.h	2017-01-28 12:35:56.000000000 +0200
+@@ -32,12 +32,23 @@
+  *   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
+  * **********************************************************************/
+-// #pragma once is supported starting with _MCS_VER 1000, 
+-// so we need not to check the version (because we only support _MSC_VER >= 1100)!
+-#pragma once
++
++
++#ifndef CPPDEVTK_BASE_STACK_WALKER_MSVC_WIN_HPP_INCLUDED_
++#define CPPDEVTK_BASE_STACK_WALKER_MSVC_WIN_HPP_INCLUDED_
++
++
++#include <cppdevtk/base/config.hpp>
++#if (!CPPDEVTK_COMPILER_MSVC)
++#	error "This file is msvc specific!!!"
++#endif
++#if (!CPPDEVTK_PLATFORM_WINDOWS)
++#	error "This file is Windows specific!!!"
++#endif
+ 
+ #include <windows.h>
+ 
++
+ // special defines for VC5/6 (if no actual PSDK is installed):
+ #if _MSC_VER < 1300
+ typedef unsigned __int64 DWORD64, *PDWORD64;
+@@ -48,7 +59,15 @@
+ #endif
+ #endif  // _MSC_VER < 1300
+ 
++
++namespace cppdevtk {
++namespace base {
++namespace detail {
++
++
+ class StackWalkerInternal;  // forward
++
++
+ class StackWalker
+ {
+ public:
+@@ -139,7 +158,7 @@
+     CHAR loadedImageName[STACKWALK_MAX_NAMELEN];
+   } CallstackEntry;
+ 
+-  typedef enum CallstackEntryType {firstEntry, nextEntry, lastEntry};
++  enum CallstackEntryType {firstEntry, nextEntry, lastEntry};
+ 
+   virtual void OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUserName);
+   virtual void OnLoadModule(LPCSTR img, LPCSTR mod, DWORD64 baseAddr, DWORD size, DWORD result, LPCSTR symType, LPCSTR pdbName, ULONGLONG fileVersion);
+@@ -212,3 +231,11 @@
+     RtlCaptureContext(&c); \
+ } while(0);
+ #endif
++
++
++}	// namespace detail
++}	// namespace base
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_BASE_STACK_WALKER_MSVC_WIN_HPP_INCLUDED_

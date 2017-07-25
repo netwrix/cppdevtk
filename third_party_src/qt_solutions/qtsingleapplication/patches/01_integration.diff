@@ -1,0 +1,415 @@
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qtsingleapplication-orig/src/qtlocalpeer.cpp /home/canita/work/patches/qtsingleapplication/src/qtlocalpeer.cpp
+--- /home/canita/work/patches/qtsingleapplication-orig/src/qtlocalpeer.cpp	2015-06-29 06:40:52.000000000 +0300
++++ /home/canita/work/patches/qtsingleapplication/src/qtlocalpeer.cpp	2017-01-28 12:35:57.000000000 +0200
+@@ -39,13 +39,21 @@
+ ****************************************************************************/
+ 
+ 
+-#include "qtlocalpeer.h"
+-#include <QCoreApplication>
+-#include <QDataStream>
+-#include <QTime>
++#include <cppdevtk/util/qt_local_peer.hpp>
++
++#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
++#pragma warning(disable: 4191)	// C4191: 'operator/operation' : unsafe conversion from 'type of expression' to 'type required'
++#endif
++
++#include <cppdevtk/base/logger.hpp>
++
++#include <QtCore/QtGlobal>
++#include <QtCore/QCoreApplication>
++#include <QtCore/QTime>
++#include <QtCore/QDataStream>
+ 
+ #if defined(Q_OS_WIN)
+-#include <QLibrary>
++#include <QtCore/QLibrary>
+ #include <qt_windows.h>
+ typedef BOOL(WINAPI*PProcessIdToSessionId)(DWORD,DWORD*);
+ static PProcessIdToSessionId pProcessIdToSessionId = 0;
+@@ -56,14 +64,10 @@
+ #include <unistd.h>
+ #endif
+ 
+-namespace QtLP_Private {
+-#include "qtlockedfile.cpp"
+-#if defined(Q_OS_WIN)
+-#include "qtlockedfile_win.cpp"
+-#else
+-#include "qtlockedfile_unix.cpp"
+-#endif
+-}
++
++namespace cppdevtk {
++namespace util {
++
+ 
+ const char* QtLocalPeer::ack = "ack";
+ 
+@@ -115,7 +119,7 @@
+     if (lockFile.isLocked())
+         return false;
+ 
+-    if (!lockFile.lock(QtLP_Private::QtLockedFile::WriteLock, false))
++    if (!lockFile.lock(QtLockedFile::WriteLock, false))
+         return true;
+ 
+     bool res = server->listen(socketName);
+@@ -127,7 +131,7 @@
+     }
+ #endif
+     if (!res)
+-        qWarning("QtSingleCoreApplication: listen on local socket failed, %s", qPrintable(server->errorString()));
++        CPPDEVTK_LOG_WARN("listen on local socket failed, " << qPrintable(server->errorString()));
+     QObject::connect(server, SIGNAL(newConnection()), SLOT(receiveConnection()));
+     return false;
+ }
+@@ -169,6 +173,9 @@
+     return res;
+ }
+ 
++bool QtLocalPeer::unlock() {
++	return lockFile.unlock();
++}
+ 
+ void QtLocalPeer::receiveConnection()
+ {
+@@ -191,7 +198,7 @@
+         uMsgBuf += got;
+     } while (remaining && got >= 0 && socket->waitForReadyRead(2000));
+     if (got < 0) {
+-        qWarning("QtLocalPeer: Message reception failed %s", socket->errorString().toLatin1().constData());
++        CPPDEVTK_LOG_WARN("Message reception failed " << socket->errorString().toLatin1().constData());
+         delete socket;
+         return;
+     }
+@@ -202,3 +209,7 @@
+     delete socket;
+     emit messageReceived(message); //### (might take a long time to return)
+ }
++
++
++}	// namespace util
++}	// namespace cppdevtk
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qtsingleapplication-orig/src/qtlocalpeer.h /home/canita/work/patches/qtsingleapplication/src/qtlocalpeer.h
+--- /home/canita/work/patches/qtsingleapplication-orig/src/qtlocalpeer.h	2015-06-29 06:40:52.000000000 +0300
++++ /home/canita/work/patches/qtsingleapplication/src/qtlocalpeer.h	2017-01-28 12:35:54.000000000 +0200
+@@ -38,16 +38,25 @@
+ **
+ ****************************************************************************/
+ 
+-#ifndef QTLOCALPEER_H
+-#define QTLOCALPEER_H
+ 
+-#include <QLocalServer>
+-#include <QLocalSocket>
+-#include <QDir>
++#ifndef CPPDEVTK_UTIL_QT_LOCAL_PEER_HPP_INCLUDED_
++#define CPPDEVTK_UTIL_QT_LOCAL_PEER_HPP_INCLUDED_
+ 
+-#include "qtlockedfile.h"
+ 
+-class QtLocalPeer : public QObject
++#include "config.hpp"
++#include "qt_locked_file.hpp"
++
++
++#include <QtNetwork/QLocalServer>
++#include <QtNetwork/QLocalSocket>
++#include <QtCore/QDir>
++
++
++namespace cppdevtk {
++namespace util {
++
++
++class CPPDEVTK_UTIL_API QtLocalPeer : public QObject
+ {
+     Q_OBJECT
+ 
+@@ -57,7 +66,8 @@
+     bool sendMessage(const QString &message, int timeout);
+     QString applicationId() const
+         { return id; }
+-
++	
++	bool unlock();
+ Q_SIGNALS:
+     void messageReceived(const QString &message);
+ 
+@@ -68,10 +78,15 @@
+     QString id;
+     QString socketName;
+     QLocalServer* server;
+-    QtLP_Private::QtLockedFile lockFile;
++    QtLockedFile lockFile;
+ 
+ private:
+     static const char* ack;
+ };
+ 
+-#endif // QTLOCALPEER_H
++
++}	// namespace util
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_UTIL_QT_LOCAL_PEER_HPP_INCLUDED_
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qtsingleapplication-orig/src/qtsingleapplication.cpp /home/canita/work/patches/qtsingleapplication/src/qtsingleapplication.cpp
+--- /home/canita/work/patches/qtsingleapplication-orig/src/qtsingleapplication.cpp	2015-06-29 06:40:52.000000000 +0300
++++ /home/canita/work/patches/qtsingleapplication/src/qtsingleapplication.cpp	2017-01-28 12:35:55.000000000 +0200
+@@ -39,9 +39,19 @@
+ ****************************************************************************/
+ 
+ 
+-#include "qtsingleapplication.h"
+-#include "qtlocalpeer.h"
+-#include <QWidget>
++#include <cppdevtk/gui/qt_single_application.hpp>
++#include <cppdevtk/util/qt_local_peer.hpp>
++
++#include <QtCore/QtGlobal>
++#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
++#include <QtWidgets/QWidget>
++#else
++#include <QtGui/QWidget>
++#endif
++
++
++namespace cppdevtk {
++namespace gui {
+ 
+ 
+ /*!
+@@ -136,7 +146,7 @@
+ void QtSingleApplication::sysInit(const QString &appId)
+ {
+     actWin = 0;
+-    peer = new QtLocalPeer(this, appId);
++    peer = new ::cppdevtk::util::QtLocalPeer(this, appId);
+     connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
+ }
+ 
+@@ -170,7 +180,7 @@
+     sysInit(appId);
+ }
+ 
+-#if QT_VERSION < 0x050000
++#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+ 
+ /*!
+     Creates a QtSingleApplication object. The application identifier
+@@ -272,6 +282,11 @@
+ }
+ 
+ 
++bool QtSingleApplication::unlock() {
++	return peer->unlock();
++}
++
++
+ /*!
+   Sets the activation window of this application to \a aw. The
+   activation window is the widget that will be activated by
+@@ -345,3 +360,7 @@
+ 
+     \obsolete
+ */
++
++
++}	// namespace gui
++}	// namespace cppdevtk
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qtsingleapplication-orig/src/qtsingleapplication.h /home/canita/work/patches/qtsingleapplication/src/qtsingleapplication.h
+--- /home/canita/work/patches/qtsingleapplication-orig/src/qtsingleapplication.h	2015-06-29 06:40:52.000000000 +0300
++++ /home/canita/work/patches/qtsingleapplication/src/qtsingleapplication.h	2017-01-28 12:35:54.000000000 +0200
+@@ -38,37 +38,45 @@
+ **
+ ****************************************************************************/
+ 
+-#ifndef QTSINGLEAPPLICATION_H
+-#define QTSINGLEAPPLICATION_H
+ 
+-#include <QApplication>
++#ifndef CPPDEVTK_GUI_QT_SINGLE_APPLICATION_HPP_INCLUDED_
++#define CPPDEVTK_GUI_QT_SINGLE_APPLICATION_HPP_INCLUDED_
+ 
+-class QtLocalPeer;
+ 
+-#if defined(Q_OS_WIN)
+-#  if !defined(QT_QTSINGLEAPPLICATION_EXPORT) && !defined(QT_QTSINGLEAPPLICATION_IMPORT)
+-#    define QT_QTSINGLEAPPLICATION_EXPORT
+-#  elif defined(QT_QTSINGLEAPPLICATION_IMPORT)
+-#    if defined(QT_QTSINGLEAPPLICATION_EXPORT)
+-#      undef QT_QTSINGLEAPPLICATION_EXPORT
+-#    endif
+-#    define QT_QTSINGLEAPPLICATION_EXPORT __declspec(dllimport)
+-#  elif defined(QT_QTSINGLEAPPLICATION_EXPORT)
+-#    undef QT_QTSINGLEAPPLICATION_EXPORT
+-#    define QT_QTSINGLEAPPLICATION_EXPORT __declspec(dllexport)
+-#  endif
++#include "config.hpp"
++#include <cppdevtk/base/unused.hpp>
++
++#include <QtCore/QtGlobal>
++#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
++#include <QtWidgets/QApplication>
+ #else
+-#  define QT_QTSINGLEAPPLICATION_EXPORT
++#include <QtGui/QApplication>
+ #endif
+ 
+-class QT_QTSINGLEAPPLICATION_EXPORT QtSingleApplication : public QApplication
++
++namespace cppdevtk {
++namespace util {
++
++
++class QtLocalPeer;
++
++
++}	// namespace util
++}	// namespace cppdevtk
++
++
++namespace cppdevtk {
++namespace gui {
++
++
++class CPPDEVTK_GUI_API QtSingleApplication : public QApplication
+ {
+     Q_OBJECT
+ 
+ public:
+     QtSingleApplication(int &argc, char **argv, bool GUIenabled = true);
+     QtSingleApplication(const QString &id, int &argc, char **argv);
+-#if QT_VERSION < 0x050000
++#	if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+     QtSingleApplication(int &argc, char **argv, Type type);
+ #  if defined(Q_WS_X11)
+     QtSingleApplication(Display* dpy, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
+@@ -79,13 +87,15 @@
+ 
+     bool isRunning();
+     QString id() const;
++	
++	bool unlock();
+ 
+     void setActivationWindow(QWidget* aw, bool activateOnMessage = true);
+     QWidget* activationWindow() const;
+ 
+     // Obsolete:
+     void initialize(bool dummy = true)
+-        { isRunning(); Q_UNUSED(dummy) }
++        { isRunning(); ::cppdevtk::base::SuppressUnusedWarning(dummy); }
+ 
+ public Q_SLOTS:
+     bool sendMessage(const QString &message, int timeout = 5000);
+@@ -98,8 +108,13 @@
+ 
+ private:
+     void sysInit(const QString &appId = QString());
+-    QtLocalPeer *peer;
++    ::cppdevtk::util::QtLocalPeer *peer;
+     QWidget *actWin;
+ };
+ 
+-#endif // QTSINGLEAPPLICATION_H
++
++}	// namespace gui
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_GUI_QT_SINGLE_APPLICATION_HPP_INCLUDED_
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qtsingleapplication-orig/src/qtsinglecoreapplication.cpp /home/canita/work/patches/qtsingleapplication/src/qtsinglecoreapplication.cpp
+--- /home/canita/work/patches/qtsingleapplication-orig/src/qtsinglecoreapplication.cpp	2015-06-29 06:40:52.000000000 +0300
++++ /home/canita/work/patches/qtsingleapplication/src/qtsinglecoreapplication.cpp	2017-01-28 12:35:57.000000000 +0200
+@@ -39,8 +39,13 @@
+ ****************************************************************************/
+ 
+ 
+-#include "qtsinglecoreapplication.h"
+-#include "qtlocalpeer.h"
++#include <cppdevtk/util/qt_single_core_application.hpp>
++#include <cppdevtk/util/qt_local_peer.hpp>
++
++
++namespace cppdevtk {
++namespace util {
++
+ 
+ /*!
+     \class QtSingleCoreApplication qtsinglecoreapplication.h
+@@ -139,6 +144,11 @@
+ }
+ 
+ 
++bool QtSingleCoreApplication::unlock() {
++	return peer->unlock();
++}
++
++
+ /*!
+     \fn void QtSingleCoreApplication::messageReceived(const QString& message)
+ 
+@@ -147,3 +157,7 @@
+ 
+     \sa sendMessage()
+ */
++
++
++}	// namespace util
++}	// namespace cppdevtk
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/qtsingleapplication-orig/src/qtsinglecoreapplication.h /home/canita/work/patches/qtsingleapplication/src/qtsinglecoreapplication.h
+--- /home/canita/work/patches/qtsingleapplication-orig/src/qtsinglecoreapplication.h	2015-06-29 06:40:52.000000000 +0300
++++ /home/canita/work/patches/qtsingleapplication/src/qtsinglecoreapplication.h	2017-01-28 12:35:54.000000000 +0200
+@@ -38,14 +38,24 @@
+ **
+ ****************************************************************************/
+ 
+-#ifndef QTSINGLECOREAPPLICATION_H
+-#define QTSINGLECOREAPPLICATION_H
+ 
+-#include <QCoreApplication>
++#ifndef CPPDEVTK_UTIL_QT_SINGLE_CORE_APPLICATION_HPP_INCLUDED_
++#define CPPDEVTK_UTIL_QT_SINGLE_CORE_APPLICATION_HPP_INCLUDED_
++
++
++#include "config.hpp"
++
++#include <QtCore/QCoreApplication>
++
++
++namespace cppdevtk {
++namespace util {
++
+ 
+ class QtLocalPeer;
+ 
+-class QtSingleCoreApplication : public QCoreApplication
++
++class CPPDEVTK_UTIL_API QtSingleCoreApplication : public QCoreApplication
+ {
+     Q_OBJECT
+ 
+@@ -55,7 +65,8 @@
+ 
+     bool isRunning();
+     QString id() const;
+-
++	
++	bool unlock();
+ public Q_SLOTS:
+     bool sendMessage(const QString &message, int timeout = 5000);
+ 
+@@ -68,4 +79,9 @@
+     QtLocalPeer* peer;
+ };
+ 
+-#endif // QTSINGLECOREAPPLICATION_H
++
++}	// namespace util
++}	// namespace cppdevtk
++
++
++#endif	// CPPDEVTK_UTIL_QT_SINGLE_CORE_APPLICATION_HPP_INCLUDED_

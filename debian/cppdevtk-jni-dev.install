@@ -1,0 +1,3 @@
+opt/cososys/include/cppdevtk/jni/*
+opt/cososys/lib*/libcppdevtk_jni.so
+opt/cososys/lib*/libcppdevtk_jni.prl

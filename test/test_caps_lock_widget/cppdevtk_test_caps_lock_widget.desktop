@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test Caps Lock Widget
+GenericName=CppDevTk test application
+Comment=Test CppDevTk Caps Lock Widget
+Exec=/opt/cososys/bin/cppdevtk_test_caps_lock_widget
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

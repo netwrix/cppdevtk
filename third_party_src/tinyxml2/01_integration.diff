@@ -1,0 +1,1150 @@
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/tinyxml2-master-orig/tinyxml2.cpp /home/canita/work/patches/tinyxml2-master/tinyxml2.cpp
+--- /home/canita/work/patches/tinyxml2-master-orig/tinyxml2.cpp	2016-09-14 20:31:10.000000000 +0300
++++ /home/canita/work/patches/tinyxml2-master/tinyxml2.cpp	2017-06-27 23:22:06.000000000 +0300
+@@ -21,7 +21,8 @@
+ distribution.
+ */
+ 
+-#include "tinyxml2.h"
++#include <cppdevtk/util/tinyxml2.h>
++
+ 
+ #include <new>		// yes, this one new style header, is in the Android SDK.
+ #if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
+@@ -77,12 +78,12 @@
+ 				const int required = _vsnprintf(str, len, format, va);
+ 				delete[] str;
+ 				if ( required != -1 ) {
+-					TIXMLASSERT( required >= 0 );
++					CPPDEVTK_ASSERT( required >= 0 );
+ 					len = required;
+ 					break;
+ 				}
+ 			}
+-			TIXMLASSERT( len >= 0 );
++			CPPDEVTK_ASSERT( len >= 0 );
+ 			return len;
+ 		}
+ 	#endif
+@@ -94,7 +95,7 @@
+ 	static inline int TIXML_VSCPRINTF( const char* format, va_list va )
+ 	{
+ 		int len = vsnprintf( 0, 0, format, va );
+-		TIXMLASSERT( len >= 0 );
++		CPPDEVTK_ASSERT( len >= 0 );
+ 		return len;
+ 	}
+ 	#define TIXML_SSCANF   sscanf
+@@ -116,6 +117,9 @@
+ static const unsigned char TIXML_UTF_LEAD_1 = 0xbbU;
+ static const unsigned char TIXML_UTF_LEAD_2 = 0xbfU;
+ 
++
++namespace cppdevtk {
++namespace util {
+ namespace tinyxml2
+ {
+ 
+@@ -149,10 +153,10 @@
+     // This in effect implements the assignment operator by "moving"
+     // ownership (as in auto_ptr).
+ 
+-    TIXMLASSERT( other != 0 );
+-    TIXMLASSERT( other->_flags == 0 );
+-    TIXMLASSERT( other->_start == 0 );
+-    TIXMLASSERT( other->_end == 0 );
++    CPPDEVTK_ASSERT( other != 0 );
++    CPPDEVTK_ASSERT( other->_flags == 0 );
++    CPPDEVTK_ASSERT( other->_start == 0 );
++    CPPDEVTK_ASSERT( other->_end == 0 );
+ 
+     other->Reset();
+ 
+@@ -178,10 +182,10 @@
+ 
+ void StrPair::SetStr( const char* str, int flags )
+ {
+-    TIXMLASSERT( str );
++    CPPDEVTK_ASSERT( str );
+     Reset();
+     size_t len = strlen( str );
+-    TIXMLASSERT( _start == 0 );
++    CPPDEVTK_ASSERT( _start == 0 );
+     _start = new char[ len+1 ];
+     memcpy( _start, str, len+1 );
+     _end = _start + len;
+@@ -191,7 +195,7 @@
+ 
+ char* StrPair::ParseText( char* p, const char* endTag, int strFlags )
+ {
+-    TIXMLASSERT( endTag && *endTag );
++    CPPDEVTK_ASSERT( endTag && *endTag );
+ 
+     char* start = p;
+     char  endChar = *endTag;
+@@ -232,7 +236,7 @@
+ void StrPair::CollapseWhitespace()
+ {
+     // Adjusting _start would cause undefined behavior on delete[]
+-    TIXMLASSERT( ( _flags & NEEDS_DELETE ) == 0 );
++    CPPDEVTK_ASSERT( ( _flags & NEEDS_DELETE ) == 0 );
+     // Trim leading space.
+     _start = XMLUtil::SkipWhiteSpace( _start );
+ 
+@@ -260,8 +264,8 @@
+ 
+ const char* StrPair::GetStr()
+ {
+-    TIXMLASSERT( _start );
+-    TIXMLASSERT( _end );
++    CPPDEVTK_ASSERT( _start );
++    CPPDEVTK_ASSERT( _end );
+     if ( _flags & NEEDS_FLUSH ) {
+         *_end = 0;
+         _flags ^= NEEDS_FLUSH;
+@@ -311,8 +315,8 @@
+                             ++q;
+                         }
+                         else {
+-                            TIXMLASSERT( 0 <= len && len <= buflen );
+-                            TIXMLASSERT( q + len <= adjusted );
++                            CPPDEVTK_ASSERT( 0 <= len && len <= buflen );
++                            CPPDEVTK_ASSERT( q + len <= adjusted );
+                             p = adjusted;
+                             memcpy( q, buf, len );
+                             q += len;
+@@ -354,7 +358,7 @@
+         }
+         _flags = (_flags & NEEDS_DELETE);
+     }
+-    TIXMLASSERT( _start );
++    CPPDEVTK_ASSERT( _start );
+     return _start;
+ }
+ 
+@@ -365,8 +369,8 @@
+ 
+ const char* XMLUtil::ReadBOM( const char* p, bool* bom )
+ {
+-    TIXMLASSERT( p );
+-    TIXMLASSERT( bom );
++    CPPDEVTK_ASSERT( p );
++    CPPDEVTK_ASSERT( bom );
+     *bom = false;
+     const unsigned char* pu = reinterpret_cast<const unsigned char*>(p);
+     // Check for BOM:
+@@ -376,7 +380,7 @@
+         *bom = true;
+         p += 3;
+     }
+-    TIXMLASSERT( p );
++    CPPDEVTK_ASSERT( p );
+     return p;
+ }
+ 
+@@ -407,25 +411,26 @@
+     output += *length;
+ 
+     // Scary scary fall throughs.
++    // NOTE: to remove GCC 7 warnings -Wimplicit-fallthrough use comments /* Falls through. */
+     switch (*length) {
+         case 4:
+             --output;
+             *output = (char)((input | BYTE_MARK) & BYTE_MASK);
+-            input >>= 6;
++            input >>= 6;	/* Falls through. */
+         case 3:
+             --output;
+             *output = (char)((input | BYTE_MARK) & BYTE_MASK);
+-            input >>= 6;
++            input >>= 6;	/* Falls through. */
+         case 2:
+             --output;
+             *output = (char)((input | BYTE_MARK) & BYTE_MASK);
+-            input >>= 6;
++            input >>= 6;	/* Falls through. */
+         case 1:
+             --output;
+             *output = (char)(input | FIRST_BYTE_MARK[*length]);
+             break;
+         default:
+-            TIXMLASSERT( false );
++            CPPDEVTK_ASSERT( false );
+     }
+ }
+ 
+@@ -437,7 +442,7 @@
+ 
+     if ( *(p+1) == '#' && *(p+2) ) {
+         unsigned long ucs = 0;
+-        TIXMLASSERT( sizeof( ucs ) >= 4 );
++        CPPDEVTK_ASSERT( sizeof( ucs ) >= 4 );
+         ptrdiff_t delta = 0;
+         unsigned mult = 1;
+         static const char SEMICOLON = ';';
+@@ -454,7 +459,7 @@
+             if ( !q ) {
+                 return 0;
+             }
+-            TIXMLASSERT( *q == SEMICOLON );
++            CPPDEVTK_ASSERT( *q == SEMICOLON );
+ 
+             delta = q-p;
+             --q;
+@@ -474,12 +479,12 @@
+                 else {
+                     return 0;
+                 }
+-                TIXMLASSERT( digit < 16 );
+-                TIXMLASSERT( digit == 0 || mult <= UINT_MAX / digit );
++                CPPDEVTK_ASSERT( digit < 16 );
++                CPPDEVTK_ASSERT( digit == 0 || mult <= UINT_MAX / digit );
+                 const unsigned int digitScaled = mult * digit;
+-                TIXMLASSERT( ucs <= ULONG_MAX - digitScaled );
++                CPPDEVTK_ASSERT( ucs <= ULONG_MAX - digitScaled );
+                 ucs += digitScaled;
+-                TIXMLASSERT( mult <= UINT_MAX / 16 );
++                CPPDEVTK_ASSERT( mult <= UINT_MAX / 16 );
+                 mult *= 16;
+                 --q;
+             }
+@@ -496,7 +501,7 @@
+             if ( !q ) {
+                 return 0;
+             }
+-            TIXMLASSERT( *q == SEMICOLON );
++            CPPDEVTK_ASSERT( *q == SEMICOLON );
+ 
+             delta = q-p;
+             --q;
+@@ -504,16 +509,16 @@
+             while ( *q != '#' ) {
+                 if ( *q >= '0' && *q <= '9' ) {
+                     const unsigned int digit = *q - '0';
+-                    TIXMLASSERT( digit < 10 );
+-                    TIXMLASSERT( digit == 0 || mult <= UINT_MAX / digit );
++                    CPPDEVTK_ASSERT( digit < 10 );
++                    CPPDEVTK_ASSERT( digit == 0 || mult <= UINT_MAX / digit );
+                     const unsigned int digitScaled = mult * digit;
+-                    TIXMLASSERT( ucs <= ULONG_MAX - digitScaled );
++                    CPPDEVTK_ASSERT( ucs <= ULONG_MAX - digitScaled );
+                     ucs += digitScaled;
+                 }
+                 else {
+                     return 0;
+                 }
+-                TIXMLASSERT( mult <= UINT_MAX / 10 );
++                CPPDEVTK_ASSERT( mult <= UINT_MAX / 10 );
+                 mult *= 10;
+                 --q;
+             }
+@@ -632,13 +637,13 @@
+ 
+ char* XMLDocument::Identify( char* p, XMLNode** node )
+ {
+-    TIXMLASSERT( node );
+-    TIXMLASSERT( p );
++    CPPDEVTK_ASSERT( node );
++    CPPDEVTK_ASSERT( p );
+     char* const start = p;
+     p = XMLUtil::SkipWhiteSpace( p );
+     if( !*p ) {
+         *node = 0;
+-        TIXMLASSERT( p );
++        CPPDEVTK_ASSERT( p );
+         return p;
+     }
+ 
+@@ -655,23 +660,23 @@
+     static const int dtdHeaderLen		= 2;
+     static const int elementHeaderLen	= 1;
+ 
+-    TIXMLASSERT( sizeof( XMLComment ) == sizeof( XMLUnknown ) );		// use same memory pool
+-    TIXMLASSERT( sizeof( XMLComment ) == sizeof( XMLDeclaration ) );	// use same memory pool
++    CPPDEVTK_ASSERT( sizeof( XMLComment ) == sizeof( XMLUnknown ) );		// use same memory pool
++    CPPDEVTK_ASSERT( sizeof( XMLComment ) == sizeof( XMLDeclaration ) );	// use same memory pool
+     XMLNode* returnNode = 0;
+     if ( XMLUtil::StringEqual( p, xmlHeader, xmlHeaderLen ) ) {
+-        TIXMLASSERT( sizeof( XMLDeclaration ) == _commentPool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLDeclaration ) == _commentPool.ItemSize() );
+         returnNode = new (_commentPool.Alloc()) XMLDeclaration( this );
+         returnNode->_memPool = &_commentPool;
+         p += xmlHeaderLen;
+     }
+     else if ( XMLUtil::StringEqual( p, commentHeader, commentHeaderLen ) ) {
+-        TIXMLASSERT( sizeof( XMLComment ) == _commentPool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLComment ) == _commentPool.ItemSize() );
+         returnNode = new (_commentPool.Alloc()) XMLComment( this );
+         returnNode->_memPool = &_commentPool;
+         p += commentHeaderLen;
+     }
+     else if ( XMLUtil::StringEqual( p, cdataHeader, cdataHeaderLen ) ) {
+-        TIXMLASSERT( sizeof( XMLText ) == _textPool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLText ) == _textPool.ItemSize() );
+         XMLText* text = new (_textPool.Alloc()) XMLText( this );
+         returnNode = text;
+         returnNode->_memPool = &_textPool;
+@@ -679,26 +684,26 @@
+         text->SetCData( true );
+     }
+     else if ( XMLUtil::StringEqual( p, dtdHeader, dtdHeaderLen ) ) {
+-        TIXMLASSERT( sizeof( XMLUnknown ) == _commentPool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLUnknown ) == _commentPool.ItemSize() );
+         returnNode = new (_commentPool.Alloc()) XMLUnknown( this );
+         returnNode->_memPool = &_commentPool;
+         p += dtdHeaderLen;
+     }
+     else if ( XMLUtil::StringEqual( p, elementHeader, elementHeaderLen ) ) {
+-        TIXMLASSERT( sizeof( XMLElement ) == _elementPool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLElement ) == _elementPool.ItemSize() );
+         returnNode = new (_elementPool.Alloc()) XMLElement( this );
+         returnNode->_memPool = &_elementPool;
+         p += elementHeaderLen;
+     }
+     else {
+-        TIXMLASSERT( sizeof( XMLText ) == _textPool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLText ) == _textPool.ItemSize() );
+         returnNode = new (_textPool.Alloc()) XMLText( this );
+         returnNode->_memPool = &_textPool;
+         p = start;	// Back it up, all the text counts.
+     }
+ 
+-    TIXMLASSERT( returnNode );
+-    TIXMLASSERT( p );
++    CPPDEVTK_ASSERT( returnNode );
++    CPPDEVTK_ASSERT( p );
+     *node = returnNode;
+     return p;
+ }
+@@ -706,7 +711,7 @@
+ 
+ bool XMLDocument::Accept( XMLVisitor* visitor ) const
+ {
+-    TIXMLASSERT( visitor );
++    CPPDEVTK_ASSERT( visitor );
+     if ( visitor->VisitEnter( *this ) ) {
+         for ( const XMLNode* node=FirstChild(); node; node=node->NextSibling() ) {
+             if ( !node->Accept( visitor ) ) {
+@@ -761,7 +766,7 @@
+ void XMLNode::DeleteChildren()
+ {
+     while( _firstChild ) {
+-        TIXMLASSERT( _lastChild );
++        CPPDEVTK_ASSERT( _lastChild );
+         DeleteChild( _firstChild );
+     }
+     _firstChild = _lastChild = 0;
+@@ -770,9 +775,9 @@
+ 
+ void XMLNode::Unlink( XMLNode* child )
+ {
+-    TIXMLASSERT( child );
+-    TIXMLASSERT( child->_document == _document );
+-    TIXMLASSERT( child->_parent == this );
++    CPPDEVTK_ASSERT( child );
++    CPPDEVTK_ASSERT( child->_document == _document );
++    CPPDEVTK_ASSERT( child->_parent == this );
+     if ( child == _firstChild ) {
+         _firstChild = _firstChild->_next;
+     }
+@@ -792,9 +797,9 @@
+ 
+ void XMLNode::DeleteChild( XMLNode* node )
+ {
+-    TIXMLASSERT( node );
+-    TIXMLASSERT( node->_document == _document );
+-    TIXMLASSERT( node->_parent == this );
++    CPPDEVTK_ASSERT( node );
++    CPPDEVTK_ASSERT( node->_document == _document );
++    CPPDEVTK_ASSERT( node->_parent == this );
+     Unlink( node );
+     DeleteNode( node );
+ }
+@@ -802,16 +807,16 @@
+ 
+ XMLNode* XMLNode::InsertEndChild( XMLNode* addThis )
+ {
+-    TIXMLASSERT( addThis );
++    CPPDEVTK_ASSERT( addThis );
+     if ( addThis->_document != _document ) {
+-        TIXMLASSERT( false );
++        CPPDEVTK_ASSERT( false );
+         return 0;
+     }
+     InsertChildPreamble( addThis );
+ 
+     if ( _lastChild ) {
+-        TIXMLASSERT( _firstChild );
+-        TIXMLASSERT( _lastChild->_next == 0 );
++        CPPDEVTK_ASSERT( _firstChild );
++        CPPDEVTK_ASSERT( _lastChild->_next == 0 );
+         _lastChild->_next = addThis;
+         addThis->_prev = _lastChild;
+         _lastChild = addThis;
+@@ -819,7 +824,7 @@
+         addThis->_next = 0;
+     }
+     else {
+-        TIXMLASSERT( _firstChild == 0 );
++        CPPDEVTK_ASSERT( _firstChild == 0 );
+         _firstChild = _lastChild = addThis;
+ 
+         addThis->_prev = 0;
+@@ -832,16 +837,16 @@
+ 
+ XMLNode* XMLNode::InsertFirstChild( XMLNode* addThis )
+ {
+-    TIXMLASSERT( addThis );
++    CPPDEVTK_ASSERT( addThis );
+     if ( addThis->_document != _document ) {
+-        TIXMLASSERT( false );
++        CPPDEVTK_ASSERT( false );
+         return 0;
+     }
+     InsertChildPreamble( addThis );
+ 
+     if ( _firstChild ) {
+-        TIXMLASSERT( _lastChild );
+-        TIXMLASSERT( _firstChild->_prev == 0 );
++        CPPDEVTK_ASSERT( _lastChild );
++        CPPDEVTK_ASSERT( _firstChild->_prev == 0 );
+ 
+         _firstChild->_prev = addThis;
+         addThis->_next = _firstChild;
+@@ -850,7 +855,7 @@
+         addThis->_prev = 0;
+     }
+     else {
+-        TIXMLASSERT( _lastChild == 0 );
++        CPPDEVTK_ASSERT( _lastChild == 0 );
+         _firstChild = _lastChild = addThis;
+ 
+         addThis->_prev = 0;
+@@ -863,16 +868,16 @@
+ 
+ XMLNode* XMLNode::InsertAfterChild( XMLNode* afterThis, XMLNode* addThis )
+ {
+-    TIXMLASSERT( addThis );
++    CPPDEVTK_ASSERT( addThis );
+     if ( addThis->_document != _document ) {
+-        TIXMLASSERT( false );
++        CPPDEVTK_ASSERT( false );
+         return 0;
+     }
+ 
+-    TIXMLASSERT( afterThis );
++    CPPDEVTK_ASSERT( afterThis );
+ 
+     if ( afterThis->_parent != this ) {
+-        TIXMLASSERT( false );
++        CPPDEVTK_ASSERT( false );
+         return 0;
+     }
+ 
+@@ -1045,8 +1050,8 @@
+ 
+ void XMLNode::InsertChildPreamble( XMLNode* insertThis ) const
+ {
+-    TIXMLASSERT( insertThis );
+-    TIXMLASSERT( insertThis->_document == _document );
++    CPPDEVTK_ASSERT( insertThis );
++    CPPDEVTK_ASSERT( insertThis->_document == _document );
+ 
+     if ( insertThis->_parent )
+         insertThis->_parent->Unlink( insertThis );
+@@ -1103,7 +1108,7 @@
+ 
+ bool XMLText::Accept( XMLVisitor* visitor ) const
+ {
+-    TIXMLASSERT( visitor );
++    CPPDEVTK_ASSERT( visitor );
+     return visitor->Visit( *this );
+ }
+ 
+@@ -1144,7 +1149,7 @@
+ 
+ bool XMLComment::ShallowEqual( const XMLNode* compare ) const
+ {
+-    TIXMLASSERT( compare );
++    CPPDEVTK_ASSERT( compare );
+     const XMLComment* comment = compare->ToComment();
+     return ( comment && XMLUtil::StringEqual( comment->Value(), Value() ));
+ }
+@@ -1152,7 +1157,7 @@
+ 
+ bool XMLComment::Accept( XMLVisitor* visitor ) const
+ {
+-    TIXMLASSERT( visitor );
++    CPPDEVTK_ASSERT( visitor );
+     return visitor->Visit( *this );
+ }
+ 
+@@ -1194,7 +1199,7 @@
+ 
+ bool XMLDeclaration::ShallowEqual( const XMLNode* compare ) const
+ {
+-    TIXMLASSERT( compare );
++    CPPDEVTK_ASSERT( compare );
+     const XMLDeclaration* declaration = compare->ToDeclaration();
+     return ( declaration && XMLUtil::StringEqual( declaration->Value(), Value() ));
+ }
+@@ -1203,7 +1208,7 @@
+ 
+ bool XMLDeclaration::Accept( XMLVisitor* visitor ) const
+ {
+-    TIXMLASSERT( visitor );
++    CPPDEVTK_ASSERT( visitor );
+     return visitor->Visit( *this );
+ }
+ 
+@@ -1244,7 +1249,7 @@
+ 
+ bool XMLUnknown::ShallowEqual( const XMLNode* compare ) const
+ {
+-    TIXMLASSERT( compare );
++    CPPDEVTK_ASSERT( compare );
+     const XMLUnknown* unknown = compare->ToUnknown();
+     return ( unknown && XMLUtil::StringEqual( unknown->Value(), Value() ));
+ }
+@@ -1252,7 +1257,7 @@
+ 
+ bool XMLUnknown::Accept( XMLVisitor* visitor ) const
+ {
+-    TIXMLASSERT( visitor );
++    CPPDEVTK_ASSERT( visitor );
+     return visitor->Visit( *this );
+ }
+ 
+@@ -1610,7 +1615,7 @@
+         }
+     }
+     if ( !attrib ) {
+-        TIXMLASSERT( sizeof( XMLAttribute ) == _document->_attributePool.ItemSize() );
++        CPPDEVTK_ASSERT( sizeof( XMLAttribute ) == _document->_attributePool.ItemSize() );
+         attrib = new (_document->_attributePool.Alloc() ) XMLAttribute();
+         attrib->_memPool = &_document->_attributePool;
+         if ( last ) {
+@@ -1660,7 +1665,7 @@
+ 
+         // attribute.
+         if (XMLUtil::IsNameStartChar( *p ) ) {
+-            TIXMLASSERT( sizeof( XMLAttribute ) == _document->_attributePool.ItemSize() );
++            CPPDEVTK_ASSERT( sizeof( XMLAttribute ) == _document->_attributePool.ItemSize() );
+             XMLAttribute* attrib = new (_document->_attributePool.Alloc() ) XMLAttribute();
+             attrib->_memPool = &_document->_attributePool;
+ 			attrib->_memPool->SetTracked();
+@@ -1760,7 +1765,7 @@
+ 
+ bool XMLElement::ShallowEqual( const XMLNode* compare ) const
+ {
+-    TIXMLASSERT( compare );
++    CPPDEVTK_ASSERT( compare );
+     const XMLElement* other = compare->ToElement();
+     if ( other && XMLUtil::StringEqual( other->Name(), Name() )) {
+ 
+@@ -1786,7 +1791,7 @@
+ 
+ bool XMLElement::Accept( XMLVisitor* visitor ) const
+ {
+-    TIXMLASSERT( visitor );
++    CPPDEVTK_ASSERT( visitor );
+     if ( visitor->VisitEnter( *this, _rootAttribute ) ) {
+         for ( const XMLNode* node=FirstChild(); node; node=node->NextSibling() ) {
+             if ( !node->Accept( visitor ) ) {
+@@ -1848,7 +1853,7 @@
+ {
+     DeleteChildren();
+ 
+-#ifdef DEBUG
++#if (DEBUG)
+     const bool hadError = Error();
+ #endif
+     _errorID = XML_SUCCESS;
+@@ -1865,12 +1870,12 @@
+     _attributePool.Trace( "attribute" );
+ #endif
+     
+-#ifdef DEBUG
++#if (DEBUG)
+     if ( !hadError ) {
+-        TIXMLASSERT( _elementPool.CurrentAllocs()   == _elementPool.Untracked() );
+-        TIXMLASSERT( _attributePool.CurrentAllocs() == _attributePool.Untracked() );
+-        TIXMLASSERT( _textPool.CurrentAllocs()      == _textPool.Untracked() );
+-        TIXMLASSERT( _commentPool.CurrentAllocs()   == _commentPool.Untracked() );
++        CPPDEVTK_ASSERT( _elementPool.CurrentAllocs()   == _elementPool.Untracked() );
++        CPPDEVTK_ASSERT( _attributePool.CurrentAllocs() == _attributePool.Untracked() );
++        CPPDEVTK_ASSERT( _textPool.CurrentAllocs()      == _textPool.Untracked() );
++        CPPDEVTK_ASSERT( _commentPool.CurrentAllocs()   == _commentPool.Untracked() );
+     }
+ #endif
+ }
+@@ -1878,7 +1883,7 @@
+ 
+ XMLElement* XMLDocument::NewElement( const char* name )
+ {
+-    TIXMLASSERT( sizeof( XMLElement ) == _elementPool.ItemSize() );
++    CPPDEVTK_ASSERT( sizeof( XMLElement ) == _elementPool.ItemSize() );
+     XMLElement* ele = new (_elementPool.Alloc()) XMLElement( this );
+     ele->_memPool = &_elementPool;
+     ele->SetName( name );
+@@ -1888,7 +1893,7 @@
+ 
+ XMLComment* XMLDocument::NewComment( const char* str )
+ {
+-    TIXMLASSERT( sizeof( XMLComment ) == _commentPool.ItemSize() );
++    CPPDEVTK_ASSERT( sizeof( XMLComment ) == _commentPool.ItemSize() );
+     XMLComment* comment = new (_commentPool.Alloc()) XMLComment( this );
+     comment->_memPool = &_commentPool;
+     comment->SetValue( str );
+@@ -1898,7 +1903,7 @@
+ 
+ XMLText* XMLDocument::NewText( const char* str )
+ {
+-    TIXMLASSERT( sizeof( XMLText ) == _textPool.ItemSize() );
++    CPPDEVTK_ASSERT( sizeof( XMLText ) == _textPool.ItemSize() );
+     XMLText* text = new (_textPool.Alloc()) XMLText( this );
+     text->_memPool = &_textPool;
+     text->SetValue( str );
+@@ -1908,7 +1913,7 @@
+ 
+ XMLDeclaration* XMLDocument::NewDeclaration( const char* str )
+ {
+-    TIXMLASSERT( sizeof( XMLDeclaration ) == _commentPool.ItemSize() );
++    CPPDEVTK_ASSERT( sizeof( XMLDeclaration ) == _commentPool.ItemSize() );
+     XMLDeclaration* dec = new (_commentPool.Alloc()) XMLDeclaration( this );
+     dec->_memPool = &_commentPool;
+     dec->SetValue( str ? str : "xml version=\"1.0\" encoding=\"UTF-8\"" );
+@@ -1918,7 +1923,7 @@
+ 
+ XMLUnknown* XMLDocument::NewUnknown( const char* str )
+ {
+-    TIXMLASSERT( sizeof( XMLUnknown ) == _commentPool.ItemSize() );
++    CPPDEVTK_ASSERT( sizeof( XMLUnknown ) == _commentPool.ItemSize() );
+     XMLUnknown* unk = new (_commentPool.Alloc()) XMLUnknown( this );
+     unk->_memPool = &_commentPool;
+     unk->SetValue( str );
+@@ -1927,8 +1932,8 @@
+ 
+ static FILE* callfopen( const char* filepath, const char* mode )
+ {
+-    TIXMLASSERT( filepath );
+-    TIXMLASSERT( mode );
++    CPPDEVTK_ASSERT( filepath );
++    CPPDEVTK_ASSERT( mode );
+ #if defined(_MSC_VER) && (_MSC_VER >= 1400 ) && (!defined WINCE)
+     FILE* fp = 0;
+     errno_t err = fopen_s( &fp, filepath, mode );
+@@ -1942,8 +1947,8 @@
+ }
+     
+ void XMLDocument::DeleteNode( XMLNode* node )	{
+-    TIXMLASSERT( node );
+-    TIXMLASSERT(node->_document == this );
++    CPPDEVTK_ASSERT( node );
++    CPPDEVTK_ASSERT(node->_document == this );
+     if (node->_parent) {
+         node->_parent->DeleteChild( node );
+     }
+@@ -2012,7 +2017,7 @@
+         SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
+         return _errorID;
+     }
+-    TIXMLASSERT( filelength >= 0 );
++    CPPDEVTK_ASSERT( filelength >= 0 );
+ 
+     if ( !LongFitsIntoSizeTMinusOne<>::Fits( filelength ) ) {
+         // Cannot handle files which won't fit in buffer together with null terminator
+@@ -2026,7 +2031,7 @@
+     }
+ 
+     const size_t size = filelength;
+-    TIXMLASSERT( _charBuffer == 0 );
++    CPPDEVTK_ASSERT( _charBuffer == 0 );
+     _charBuffer = new char[size+1];
+     size_t read = fread( _charBuffer, 1, size, fp );
+     if ( read != size ) {
+@@ -2076,7 +2081,7 @@
+     if ( len == (size_t)(-1) ) {
+         len = strlen( p );
+     }
+-    TIXMLASSERT( _charBuffer == 0 );
++    CPPDEVTK_ASSERT( _charBuffer == 0 );
+     _charBuffer = new char[ len+1 ];
+     memcpy( _charBuffer, p, len );
+     _charBuffer[len] = 0;
+@@ -2110,7 +2115,7 @@
+ 
+ void XMLDocument::SetError( XMLError error, const char* str1, const char* str2 )
+ {
+-    TIXMLASSERT( error >= 0 && error < XML_ERROR_COUNT );
++    CPPDEVTK_ASSERT( error >= 0 && error < XML_ERROR_COUNT );
+     _errorID = error;
+ 	
+ 	_errorStr1.Reset();
+@@ -2124,9 +2129,9 @@
+ 
+ const char* XMLDocument::ErrorName() const
+ {
+-	TIXMLASSERT( _errorID >= 0 && _errorID < XML_ERROR_COUNT );
++	CPPDEVTK_ASSERT( _errorID >= 0 && _errorID < XML_ERROR_COUNT );
+     const char* errorName = _errorNames[_errorID];
+-    TIXMLASSERT( errorName && errorName[0] );
++    CPPDEVTK_ASSERT( errorName && errorName[0] );
+     return errorName;
+ }
+ 
+@@ -2146,7 +2151,7 @@
+ 
+         // Should check INT_MIN <= _errorID && _errorId <= INT_MAX, but that
+         // causes a clang "always true" -Wtautological-constant-out-of-range-compare warning
+-        TIXMLASSERT( 0 <= _errorID && XML_ERROR_COUNT - 1 <= INT_MAX );
++        CPPDEVTK_ASSERT( 0 <= _errorID && XML_ERROR_COUNT - 1 <= INT_MAX );
+         printf( "XMLDocument error id=%d '%s' str1=%s str2=%s\n",
+                 static_cast<int>( _errorID ), ErrorName(), buf1, buf2 );
+     }
+@@ -2154,8 +2159,8 @@
+ 
+ void XMLDocument::Parse()
+ {
+-    TIXMLASSERT( NoChildren() ); // Clear() must have been called previously
+-    TIXMLASSERT( _charBuffer );
++    CPPDEVTK_ASSERT( NoChildren() ); // Clear() must have been called previously
++    CPPDEVTK_ASSERT( _charBuffer );
+     char* p = _charBuffer;
+     p = XMLUtil::SkipWhiteSpace( p );
+     p = const_cast<char*>( XMLUtil::ReadBOM( p, &_writeBOM ) );
+@@ -2181,7 +2186,7 @@
+     }
+     for( int i=0; i<NUM_ENTITIES; ++i ) {
+         const char entityValue = entities[i].value;
+-        TIXMLASSERT( 0 <= entityValue && entityValue < ENTITY_RANGE );
++        CPPDEVTK_ASSERT( 0 <= entityValue && entityValue < ENTITY_RANGE );
+         _entityFlag[ (unsigned char)entityValue ] = true;
+     }
+     _restrictedEntityFlag[(unsigned char)'&'] = true;
+@@ -2203,9 +2208,9 @@
+         const int len = TIXML_VSCPRINTF( format, va );
+         // Close out and re-start the va-args
+         va_end( va );
+-        TIXMLASSERT( len >= 0 );
++        CPPDEVTK_ASSERT( len >= 0 );
+         va_start( va, format );
+-        TIXMLASSERT( _buffer.Size() > 0 && _buffer[_buffer.Size() - 1] == 0 );
++        CPPDEVTK_ASSERT( _buffer.Size() > 0 && _buffer[_buffer.Size() - 1] == 0 );
+         char* p = _buffer.PushArr( len ) - 1;	// back up over the null terminator.
+ 		TIXML_VSNPRINTF( p, len+1, format, va );
+     }
+@@ -2229,7 +2234,7 @@
+     if ( _processEntities ) {
+         const bool* flag = restricted ? _restrictedEntityFlag : _entityFlag;
+         while ( *q ) {
+-            TIXMLASSERT( p <= q );
++            CPPDEVTK_ASSERT( p <= q );
+             // Remember, char is sometimes signed. (How many times has that bitten me?)
+             if ( *q > 0 && *q < ENTITY_RANGE ) {
+                 // Check for entities. If one is found, flush
+@@ -2252,19 +2257,19 @@
+                         }
+                     }
+                     if ( !entityPatternPrinted ) {
+-                        // TIXMLASSERT( entityPatternPrinted ) causes gcc -Wunused-but-set-variable in release
+-                        TIXMLASSERT( false );
++                        // CPPDEVTK_ASSERT( entityPatternPrinted ) causes gcc -Wunused-but-set-variable in release
++                        CPPDEVTK_ASSERT( false );
+                     }
+                     ++p;
+                 }
+             }
+             ++q;
+-            TIXMLASSERT( p <= q );
++            CPPDEVTK_ASSERT( p <= q );
+         }
+     }
+     // Flush the remaining string. This will be the entire
+     // string if an entity wasn't found.
+-    TIXMLASSERT( p <= q );
++    CPPDEVTK_ASSERT( p <= q );
+     if ( !_processEntities || ( p < q ) ) {
+         Print( "%s", p );
+     }
+@@ -2304,7 +2309,7 @@
+ 
+ void XMLPrinter::PushAttribute( const char* name, const char* value )
+ {
+-    TIXMLASSERT( _elementJustOpened );
++    CPPDEVTK_ASSERT( _elementJustOpened );
+     Print( " %s=\"", name );
+     PrintString( value, false );
+     Print( "\"" );
+@@ -2543,4 +2548,5 @@
+ }
+ 
+ }   // namespace tinyxml2
+-
++}	// namespace util
++}	// namespace cppdevtk
+diff -U 3 -H -d -r -N -- /home/canita/work/patches/tinyxml2-master-orig/tinyxml2.h /home/canita/work/patches/tinyxml2-master/tinyxml2.h
+--- /home/canita/work/patches/tinyxml2-master-orig/tinyxml2.h	2016-09-14 20:31:10.000000000 +0300
++++ /home/canita/work/patches/tinyxml2-master/tinyxml2.h	2017-01-28 12:35:55.000000000 +0200
+@@ -21,8 +21,13 @@
+ distribution.
+ */
+ 
+-#ifndef TINYXML2_INCLUDED
+-#define TINYXML2_INCLUDED
++#ifndef CPPDEVTK_UTIL_TINYXML2_INCLUDED
++#define CPPDEVTK_UTIL_TINYXML2_INCLUDED
++
++
++#include "config.hpp"
++#include <cppdevtk/base/cassert.hpp>
++
+ 
+ #if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
+ #   include <ctype.h>
+@@ -40,7 +45,7 @@
+ #   include <cstdlib>
+ #   include <cstring>
+ #endif
+-#include <stdint.h>
++#include <cppdevtk/base/stdint.h>
+ 
+ /*
+    TODO: intern strings instead of allocation.
+@@ -64,44 +69,17 @@
+ #   pragma warning(disable: 4251)
+ #endif
+ 
+-#ifdef _WIN32
+-#   ifdef TINYXML2_EXPORT
+-#       define TINYXML2_LIB __declspec(dllexport)
+-#   elif defined(TINYXML2_IMPORT)
+-#       define TINYXML2_LIB __declspec(dllimport)
+-#   else
+-#       define TINYXML2_LIB
+-#   endif
+-#elif __GNUC__ >= 4
+-#   define TINYXML2_LIB __attribute__((visibility("default")))
+-#else
+-#   define TINYXML2_LIB
+-#endif
+-
+-
+-#if defined(DEBUG)
+-#   if defined(_MSC_VER)
+-#       // "(void)0," is for suppressing C4127 warning in "assert(false)", "assert(true)" and the like
+-#       define TIXMLASSERT( x )           if ( !((void)0,(x))) { __debugbreak(); }
+-#   elif defined (ANDROID_NDK)
+-#       include <android/log.h>
+-#       define TIXMLASSERT( x )           if ( !(x)) { __android_log_assert( "assert", "grinliz", "ASSERT in '%s' at %d.", __FILE__, __LINE__ ); }
+-#   else
+-#       include <assert.h>
+-#       define TIXMLASSERT                assert
+-#   endif
+-#else
+-#   define TIXMLASSERT( x )               {}
+-#endif
+-
+ 
+ /* Versioning, past 1.0.14:
+ 	http://semver.org/
+ */
+-static const int TIXML2_MAJOR_VERSION = 4;
+-static const int TIXML2_MINOR_VERSION = 0;
+-static const int TIXML2_PATCH_VERSION = 1;
++static const int CPPDEVTK_TIXML2_MAJOR_VERSION = 4;
++static const int CPPDEVTK_TIXML2_MINOR_VERSION = 0;
++static const int CPPDEVTK_TIXML2_PATCH_VERSION = 1;
++
+ 
++namespace cppdevtk {
++namespace util {
+ namespace tinyxml2
+ {
+ class XMLDocument;
+@@ -139,8 +117,8 @@
+     ~StrPair();
+ 
+     void Set( char* start, char* end, int flags ) {
+-        TIXMLASSERT( start );
+-        TIXMLASSERT( end );
++        CPPDEVTK_ASSERT( start );
++        CPPDEVTK_ASSERT( end );
+         Reset();
+         _start  = start;
+         _end    = end;
+@@ -209,15 +187,15 @@
+     }
+ 
+     void Push( T t ) {
+-        TIXMLASSERT( _size < INT_MAX );
++        CPPDEVTK_ASSERT( _size < INT_MAX );
+         EnsureCapacity( _size+1 );
+         _mem[_size] = t;
+         ++_size;
+     }
+ 
+     T* PushArr( int count ) {
+-        TIXMLASSERT( count >= 0 );
+-        TIXMLASSERT( _size <= INT_MAX - count );
++        CPPDEVTK_ASSERT( count >= 0 );
++        CPPDEVTK_ASSERT( _size <= INT_MAX - count );
+         EnsureCapacity( _size+count );
+         T* ret = &_mem[_size];
+         _size += count;
+@@ -225,13 +203,13 @@
+     }
+ 
+     T Pop() {
+-        TIXMLASSERT( _size > 0 );
++        CPPDEVTK_ASSERT( _size > 0 );
+         --_size;
+         return _mem[_size];
+     }
+ 
+     void PopArr( int count ) {
+-        TIXMLASSERT( _size >= count );
++        CPPDEVTK_ASSERT( _size >= count );
+         _size -= count;
+     }
+ 
+@@ -240,37 +218,37 @@
+     }
+ 
+     T& operator[](int i)				{
+-        TIXMLASSERT( i>= 0 && i < _size );
++        CPPDEVTK_ASSERT( i>= 0 && i < _size );
+         return _mem[i];
+     }
+ 
+     const T& operator[](int i) const	{
+-        TIXMLASSERT( i>= 0 && i < _size );
++        CPPDEVTK_ASSERT( i>= 0 && i < _size );
+         return _mem[i];
+     }
+ 
+     const T& PeekTop() const            {
+-        TIXMLASSERT( _size > 0 );
++        CPPDEVTK_ASSERT( _size > 0 );
+         return _mem[ _size - 1];
+     }
+ 
+     int Size() const					{
+-        TIXMLASSERT( _size >= 0 );
++        CPPDEVTK_ASSERT( _size >= 0 );
+         return _size;
+     }
+ 
+     int Capacity() const				{
+-        TIXMLASSERT( _allocated >= INITIAL_SIZE );
++        CPPDEVTK_ASSERT( _allocated >= INITIAL_SIZE );
+         return _allocated;
+     }
+ 
+     const T* Mem() const				{
+-        TIXMLASSERT( _mem );
++        CPPDEVTK_ASSERT( _mem );
+         return _mem;
+     }
+ 
+     T* Mem()							{
+-        TIXMLASSERT( _mem );
++        CPPDEVTK_ASSERT( _mem );
+         return _mem;
+     }
+ 
+@@ -279,9 +257,9 @@
+     void operator=( const DynArray& ); // not supported
+ 
+     void EnsureCapacity( int cap ) {
+-        TIXMLASSERT( cap > 0 );
++        CPPDEVTK_ASSERT( cap > 0 );
+         if ( cap > _allocated ) {
+-            TIXMLASSERT( cap <= INT_MAX / 2 );
++            CPPDEVTK_ASSERT( cap <= INT_MAX / 2 );
+             int newAllocated = cap * 2;
+             T* newMem = new T[newAllocated];
+             memcpy( newMem, _mem, sizeof(T)*_size );	// warning: not using constructors, only works for PODs
+@@ -364,7 +342,7 @@
+             _root = blockItems;
+         }
+         Item* const result = _root;
+-        TIXMLASSERT( result != 0 );
++        CPPDEVTK_ASSERT( result != 0 );
+         _root = _root->next;
+ 
+         ++_currentAllocs;
+@@ -382,7 +360,7 @@
+         }
+         --_currentAllocs;
+         Item* item = static_cast<Item*>( mem );
+-#ifdef DEBUG
++#if (DEBUG)
+         memset( item, 0xfe, sizeof( *item ) );
+ #endif
+         item->next = _root;
+@@ -456,7 +434,7 @@
+ 
+ 	@sa XMLNode::Accept()
+ */
+-class TINYXML2_LIB XMLVisitor
++class CPPDEVTK_UTIL_API XMLVisitor
+ {
+ public:
+     virtual ~XMLVisitor() {}
+@@ -531,11 +509,11 @@
+ {
+ public:
+     static const char* SkipWhiteSpace( const char* p )	{
+-        TIXMLASSERT( p );
++        CPPDEVTK_ASSERT( p );
+         while( IsWhiteSpace(*p) ) {
+             ++p;
+         }
+-        TIXMLASSERT( p );
++        CPPDEVTK_ASSERT( p );
+         return p;
+     }
+     static char* SkipWhiteSpace( char* p )				{
+@@ -626,7 +604,7 @@
+ 
+ 	@endverbatim
+ */
+-class TINYXML2_LIB XMLNode
++class CPPDEVTK_UTIL_API XMLNode
+ {
+     friend class XMLDocument;
+     friend class XMLElement;
+@@ -634,12 +612,12 @@
+ 
+     /// Get the XMLDocument that owns this XMLNode.
+     const XMLDocument* GetDocument() const	{
+-        TIXMLASSERT( _document );
++        CPPDEVTK_ASSERT( _document );
+         return _document;
+     }
+     /// Get the XMLDocument that owns this XMLNode.
+     XMLDocument* GetDocument()				{
+-        TIXMLASSERT( _document );
++        CPPDEVTK_ASSERT( _document );
+         return _document;
+     }
+ 
+@@ -923,7 +901,7 @@
+ 	you generally want to leave it alone, but you can change the output mode with
+ 	SetCData() and query it with CData().
+ */
+-class TINYXML2_LIB XMLText : public XMLNode
++class CPPDEVTK_UTIL_API XMLText : public XMLNode
+ {
+     friend class XMLDocument;
+ public:
+@@ -963,7 +941,7 @@
+ 
+ 
+ /** An XML Comment. */
+-class TINYXML2_LIB XMLComment : public XMLNode
++class CPPDEVTK_UTIL_API XMLComment : public XMLNode
+ {
+     friend class XMLDocument;
+ public:
+@@ -1002,7 +980,7 @@
+ 	The text of the declaration isn't interpreted. It is parsed
+ 	and written as a string.
+ */
+-class TINYXML2_LIB XMLDeclaration : public XMLNode
++class CPPDEVTK_UTIL_API XMLDeclaration : public XMLNode
+ {
+     friend class XMLDocument;
+ public:
+@@ -1037,7 +1015,7 @@
+ 
+ 	DTD tags get thrown into XMLUnknowns.
+ */
+-class TINYXML2_LIB XMLUnknown : public XMLNode
++class CPPDEVTK_UTIL_API XMLUnknown : public XMLNode
+ {
+     friend class XMLDocument;
+ public:
+@@ -1072,7 +1050,7 @@
+ 	@note The attributes are not XMLNodes. You may only query the
+ 	Next() attribute in a list.
+ */
+-class TINYXML2_LIB XMLAttribute
++class CPPDEVTK_UTIL_API XMLAttribute
+ {
+     friend class XMLElement;
+ public:
+@@ -1182,7 +1160,7 @@
+ 	and can contain other elements, text, comments, and unknowns.
+ 	Elements also contain an arbitrary number of attributes.
+ */
+-class TINYXML2_LIB XMLElement : public XMLNode
++class CPPDEVTK_UTIL_API XMLElement : public XMLNode
+ {
+     friend class XMLDocument;
+ public:
+@@ -1593,7 +1571,7 @@
+ 	All Nodes are connected and allocated to a Document.
+ 	If the Document is deleted, all its Nodes are also deleted.
+ */
+-class TINYXML2_LIB XMLDocument : public XMLNode
++class CPPDEVTK_UTIL_API XMLDocument : public XMLNode
+ {
+     friend class XMLElement;
+ public:
+@@ -1602,11 +1580,11 @@
+     ~XMLDocument();
+ 
+     virtual XMLDocument* ToDocument()				{
+-        TIXMLASSERT( this == _document );
++        CPPDEVTK_ASSERT( this == _document );
+         return this;
+     }
+     virtual const XMLDocument* ToDocument() const	{
+-        TIXMLASSERT( this == _document );
++        CPPDEVTK_ASSERT( this == _document );
+         return this;
+     }
+ 
+@@ -1861,7 +1839,7 @@
+ 
+ 	See also XMLConstHandle, which is the same as XMLHandle, but operates on const objects.
+ */
+-class TINYXML2_LIB XMLHandle
++class CPPDEVTK_UTIL_API XMLHandle
+ {
+ public:
+     /// Create a handle from any node (at any depth of the tree.) This can be a null pointer.
+@@ -1945,7 +1923,7 @@
+ 	A variant of the XMLHandle class for working with const XMLNodes and Documents. It is the
+ 	same in all regards, except for the 'const' qualifiers. See XMLHandle for API.
+ */
+-class TINYXML2_LIB XMLConstHandle
++class CPPDEVTK_UTIL_API XMLConstHandle
+ {
+ public:
+     XMLConstHandle( const XMLNode* node )											{
+@@ -2052,7 +2030,7 @@
+ 	printer.CloseElement();
+ 	@endverbatim
+ */
+-class TINYXML2_LIB XMLPrinter : public XMLVisitor
++class CPPDEVTK_UTIL_API XMLPrinter : public XMLVisitor
+ {
+ public:
+     /** Construct the printer. If the FILE* is specified,
+@@ -2173,9 +2151,12 @@
+ 
+ 
+ }	// tinyxml2
++}	// namespace util
++}	// namespace cppdevtk
++
+ 
+ #if defined(_MSC_VER)
+ #   pragma warning(pop)
+ #endif
+ 
+-#endif // TINYXML2_INCLUDED
++#endif // CPPDEVTK_UTIL_TINYXML2_INCLUDED
