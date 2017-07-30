@@ -140,12 +140,7 @@ CppDevTk C++ util library.
 Summary: CppDevTk jni library
 Group: System/Libraries
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: java-devel = 1:1.6.0
-%endif
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
 BuildRequires: java-devel = 1:1.7.0
-%endif
 %endif
 %if (0%{?suse_version})
 BuildRequires: java-devel = 1.8.0
@@ -248,15 +243,10 @@ developing applications that use lib%{name}-util.
 Summary: Development files for lib%{name}-jni
 Group: Development/Libraries/C and C++
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: java-devel = 1:1.6.0
-%endif
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: java-devel = 1:1.7.0
-%endif
+Requires: java-devel >= 1:1.7.0
 %endif
 %if (0%{?suse_version})
-Requires: java-devel = 1.8.0
+Requires: java-devel >= 1.8.0
 %endif
 Requires: lib%{name}-jni = %{version}
 Requires: %{name}-util-devel = %{version}
@@ -597,11 +587,12 @@ exit 0
 
 
 %changelog
-* Tue Jul 25 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Sun Jul 30 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.2.1
 - made public on GitHub: https://github.com/cososys/cppdevtk
 - packaging cleanup
 - JNI review
+- enabled JNI on Win32
 - mutex impl .NET workaround: use QMutex even if std mutex available; maybe pImpl in the future
 * Mon Jul 3 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.1.1

@@ -1144,75 +1144,83 @@ CPPDEVTK_ENABLE_STRIP_STATIC_LIB = false
 #****************************************************************************************************************************
 # JNI
 CPPDEVTK_HAVE_JNI = false
-android {
-	CPPDEVTK_HAVE_JNI = true
-}
-else {
-	!ios {
-		!static_and_shared|build_pass {
-			CONFIG(shared, static|shared) {
-				CPPDEVTK_JAVA_HOME = $$(JAVA_HOME)
-				isEmpty(CPPDEVTK_JAVA_HOME) {
-					macx {
-						# hardcoded; stupid mac and environment variables...
-						# there is no way to make JAVA_HOME available in QtCreator (gui apps), only in terminal
-						CPPDEVTK_JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
-					}
-					else {
-						error("JAVA_HOME is empty!!!")
-					}
-				}
-				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
-				unix {
-					CPPDEVTK_HAVE_JNI = true
-					linux* {
-						INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/linux
-						isEqual(QT_ARCH, "x86_64") {
-							CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/amd64/server
-							LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
-							!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-								QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
-							}
-						}
-						else {
-							CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/i386/server
-							LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
-							!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-								QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
-							}
-						}
-					}
-					else {
-						macx {
-							INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/darwin
-							CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/server
-							LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
-							!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-								#QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
-							}
-						}
-						else {
-							error("Unsupported Unix platform!!!")
-						}
-					}
-				}
-				else {
-					win32 {
-						# On Windows we build on x86_64 for both x86_64 and x86
-						# We enable JNI only for x86_64 because JDK coexistence is not tested
-						# TODO: test if install both JDK x86_64 and x86 work
-						isEqual(QMAKE_TARGET.arch, "x86_64") {
-							CPPDEVTK_HAVE_JNI = true
-							INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/win32
-							LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib
-						}
-					}
-					else {
-						error("Unsupported platform!!!")
+CPPDEVTK_JAVA_HOME = $$(JAVA_HOME)
+unix {
+	linux* {
+		CPPDEVTK_HAVE_JNI = true
+		!android {
+			isEmpty(CPPDEVTK_JAVA_HOME) {
+				error("JAVA_HOME is empty!!!")
+			}
+			
+			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
+			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/linux
+			
+			CPPDEVTK_JAVA_LIB_DIR =
+			isEqual(QT_ARCH, "x86_64") {
+				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/amd64/server
+			}
+			else {
+				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/i386/server
+			}
+			LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
+			!static_and_shared|build_pass {
+				CONFIG(shared, static|shared) {
+					!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
+						QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
 					}
 				}
 			}
 		}
+	}
+	else {
+		macx {
+			CPPDEVTK_HAVE_JNI = true
+			
+			CONFIG += cppdevtk_mac_enable_javavm_framework
+			
+			cppdevtk_mac_enable_javavm_framework {
+				INCLUDEPATH *= /System/Library/Frameworks/JavaVM.framework/Headers
+			}
+			else {
+				CPPDEVTK_JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home
+				
+				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
+				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/darwin
+				
+				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/server
+				LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
+				!static_and_shared|build_pass {
+					CONFIG(shared, static|shared) {
+						!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
+							#QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
+						}
+					}
+				}
+			}
+		}
+		else {
+			ios {
+				# nothing to do for now; no jni
+			}
+			else {
+				error("Unsupported Unix platform!!!")
+			}
+		}
+	}
+}
+else {
+	win32 {
+		isEmpty(CPPDEVTK_JAVA_HOME) {
+			error("JAVA_HOME is empty!!!")
+		}
+		
+		INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
+		INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/win32
+		LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib
+	}
+	else {
+		error("Unsupported platform!!!")
 	}
 }
 

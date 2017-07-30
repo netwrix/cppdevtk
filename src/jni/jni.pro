@@ -74,7 +74,17 @@ INSTALLS += target
 !debug_and_release|build_pass {
 	LIBS += -l$${CPPDEVTK_UTIL_TARGET} -l$${CPPDEVTK_BASE_TARGET}
 	!android {
-		LIBS *= -ljvm
+		macx {
+			cppdevtk_mac_enable_javavm_framework {
+				LIBS += -framework JavaVM
+			}
+			else {
+				LIBS *= -ljvm
+			}
+		}
+		else {
+			LIBS *= -ljvm
+		}
 	}
 	
 	!static_and_shared|build_pass {

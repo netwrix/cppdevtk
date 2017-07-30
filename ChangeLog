@@ -1,10 +1,11 @@
 Version 1.0.2.1:
-- Release date: 25 Jul 2017
+- Release date: 30 Jul 2017
 - New features:
 	- made public on GitHub: https://github.com/cososys/cppdevtk
 - Improvements:
 	- packaging cleanup
 	- JNI review
+	- enabled JNI on Win32
 - Fixed bugs:
 	- mutex impl .NET workaround: use QMutex even if std mutex available; maybe pImpl in the future
 
