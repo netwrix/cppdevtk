@@ -587,7 +587,7 @@ exit 0
 
 
 %changelog
-* Sun Jul 30 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Mon Jul 31 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.2.1
 - made public on GitHub: https://github.com/cososys/cppdevtk
 - packaging cleanup

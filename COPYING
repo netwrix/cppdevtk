@@ -613,4 +613,11 @@ thread_stack_pcs.c: http://opensource.apple.com/source/Libc/Libc-498.1.7/gen/thr
 
 
 
-Updated: 03-Jul-2017
+JDK/JRE:
+Oracle License: http://www.oracle.com/technetwork/java/javase/terms/license/index.html
+Third Party Licenses: http://www.oracle.com/technetwork/java/javase/terms/thirdpartyreadme/java-license-366168.html
+
+
+
+
+Updated: 31-Jul-2017

@@ -1211,6 +1211,8 @@ unix {
 }
 else {
 	win32 {
+		CPPDEVTK_HAVE_JNI = true
+		
 		isEmpty(CPPDEVTK_JAVA_HOME) {
 			error("JAVA_HOME is empty!!!")
 		}
