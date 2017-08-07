@@ -1177,13 +1177,13 @@ unix {
 		macx {
 			CPPDEVTK_HAVE_JNI = true
 			
-			CONFIG += cppdevtk_mac_enable_javavm_framework
+			#CONFIG += cppdevtk_mac_enable_javavm_framework
 			
 			cppdevtk_mac_enable_javavm_framework {
 				INCLUDEPATH *= /System/Library/Frameworks/JavaVM.framework/Headers
 			}
 			else {
-				CPPDEVTK_JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home
+				CPPDEVTK_JAVA_HOME = /Library/Java/Home
 				
 				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
 				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/darwin

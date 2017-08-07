@@ -10,6 +10,16 @@
 #
 
 
+# suse_version, sle_version, is_opensuse, leap_version (deprecated):
+# https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto#Detect_a_distribution_flavor_for_special_code
+# - Tumbleweed: suse_version 1330
+# - Leap 42.3: suse_version 1315, sle_version 120300, leap_version 420300
+# - Leap 42.2: suse_version 1315, sle_version 120200
+# - SLE12 SP3: sle_version 120300
+# - SLE12 SP2: sle_version 120200
+# Attention: openSUSE 13.2 has suse_version 1320
+
+
 # TODO: modify as desired
 %define _prefix /opt/cososys
 %define _datadir /usr/share
@@ -43,7 +53,7 @@
 %if (0%{?centos} || 0%{?rhel})
 # Qt5 is available on CentOS 7 >= 7.2 (EPEL) and 7.3 (official)
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-%if (0%{?centos_minor_ver} >= 2)
+%if (%{centos_minor_ver} >= 2)
 %define with_qt5 1
 %else
 %define with_qt5 0
@@ -51,7 +61,7 @@
 %endif
 # Qt5 is available on CentOS 6 >= 6.6 (EPEL)
 %if (0%{?centos} == 6 || 0%{?rhel} == 6)
-%if (0%{?centos_minor_ver} >= 6)
+%if (%{centos_minor_ver} >= 6)
 %define with_qt5 1
 %else
 %define with_qt5 0
@@ -59,7 +69,6 @@
 %endif
 %endif
 %if (0%{?suse_version})
-# Qt5 is available on all (open)SUSE we support (openSUSE >= 13.2, SLED >= 12SP1)
 %define with_qt5 1
 %endif
 
@@ -70,7 +79,7 @@
 Name: cppdevtk
 Version: 1.0.2
 %if (0%{?centos} || 0%{?rhel})
-Release: 1.el%{?rhel}_%{?centos_minor_ver}
+Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
 Release: 1
 %endif
@@ -82,7 +91,7 @@ Vendor: CoSoSys Ltd
 Packager: Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 Source: %{name}-%{version}.tar.bz2
 BuildRequires: libstdc++-devel glibc-devel
-%if (0%{?with_qt5})
+%if (%{with_qt5})
 %if (0%{?suse_version})
 BuildRequires: libqt5-qtbase-devel >= 5.6.1
 %endif
@@ -156,7 +165,7 @@ CppDevTk C++ jni library.
 Summary: CppDevTk gui library
 Group: System/Libraries
 BuildRequires: libXScrnSaver-devel libX11-devel
-%if (0%{?with_qt5})
+%if (%{with_qt5})
 %if (0%{?suse_version})
 BuildRequires: libqt5-qtx11extras-devel >= 5.6.1
 %endif
@@ -194,7 +203,7 @@ Summary: Development files for lib%{name}-base
 Group: Development/Libraries/C and C++
 Requires: libstdc++-devel glibc-devel
 Requires: boost-devel >= 1.38.0
-%if (0%{?with_qt5})
+%if (%{with_qt5})
 %if (0%{?suse_version})
 Requires: libqt5-qtbase-devel >= 5.6.1
 %endif
@@ -260,7 +269,7 @@ developing applications that use lib%{name}-jni.
 Summary: Development files for lib%{name}-gui
 Group: Development/Libraries/C and C++
 Requires: libXScrnSaver-devel libX11-devel
-%if (0%{?with_qt5})
+%if (%{with_qt5})
 %if (0%{?suse_version})
 Requires: libqt5-qtx11extras-devel >= 5.6.1
 %endif
@@ -361,12 +370,7 @@ Convenience package to install all %{name}-test packages.
 %build
 
 %if (0%{?suse_version})
-# - openSUSE Leap 42.x: suse_version == 1315 could also be SLE12; to distinguish between 42.1 (SLE12 SP1) and 42.2 (SLE12 SP2)
-# one has to consult the sle_version (120100 for 42.1/SLE12 SP1, 120200 for 42.2/SLE12 SP2)
-# - SLE 12: suse_version == 1315 could also be Leap 42.1
-# - openSUSE 13.2: suse_version == 1320
-# - SLE ServicePacks cannot be distinguished. SLE12 SP2 sets exactly the same variables as SLE12.
-%if (0%{?suse_version} < 1315)
+%if (%{suse_version} < 1315)
 echo "openSUSE < 13.2 and SLED < 12SP2 are not supported!!!"
 exit 1
 %endif
@@ -383,7 +387,7 @@ exit 1
 %endif
 
 
-%if (0%{?with_qt5})
+%if (%{with_qt5})
 qmake-qt5	\
 %else
 %if (0%{?centos} || 0%{?rhel})
@@ -394,7 +398,7 @@ qmake	\
 %endif
 %endif
 	./cppdevtk.pro -r -spec linux-g++	\
-%if %debug_build
+%if %{debug_build}
 	CONFIG*=debug CONFIG-=release CONFIG-=debug_and_release	\
 %else
 	CONFIG*=release CONFIG-=debug CONFIG-=debug_and_release	\
@@ -411,7 +415,7 @@ qmake	\
 #	CPPDEVTK_THIRD_PARTY_PREFIX=%{_prefix}
 
 # make_build is not available on all distro we support
-make %{?_smp_mflags}
+make %{_smp_mflags}
 
 
 %install
