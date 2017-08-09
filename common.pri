@@ -1180,16 +1180,16 @@ unix {
 			#CONFIG += cppdevtk_mac_enable_javavm_framework
 			
 			cppdevtk_mac_enable_javavm_framework {
-				INCLUDEPATH *= /System/Library/Frameworks/JavaVM.framework/Headers
+				INCLUDEPATH = /System/Library/Frameworks/JavaVM.framework/Headers $${INCLUDEPATH}
 			}
 			else {
 				CPPDEVTK_JAVA_HOME = /Library/Java/Home
 				
-				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
-				INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/darwin
+				INCLUDEPATH = $${CPPDEVTK_JAVA_HOME}/include $${INCLUDEPATH}
+				INCLUDEPATH = $${CPPDEVTK_JAVA_HOME}/include/darwin $${INCLUDEPATH}
 				
 				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/server
-				LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
+				LIBS = -L$${CPPDEVTK_JAVA_LIB_DIR} $${LIBS}
 				!static_and_shared|build_pass {
 					CONFIG(shared, static|shared) {
 						!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {

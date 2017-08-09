@@ -27,11 +27,17 @@
 #include <jni.h>
 
 
-// Minimum requirement: 1.6 (CentOS 6.0)
-#ifndef JNI_VERSION_1_6
-#	error("JNI >= 1.6 required")
+#if (CPPDEVTK_PLATFORM_MACOSX)
+#	ifndef JNI_VERSION_1_8
+#		error "JNI >= 1.8 required"
+#	endif
+#	define CPPDEVTK_JNI_VERSION JNI_VERSION_1_8
+#else
+#	ifndef JNI_VERSION_1_6
+#		error "JNI >= 1.6 required"
+#	endif
+#	define CPPDEVTK_JNI_VERSION JNI_VERSION_1_6
 #endif
-#define CPPDEVTK_JNI_VERSION JNI_VERSION_1_6
 
 
 #ifdef CPPDEVTK_SHARED

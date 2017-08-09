@@ -80,6 +80,12 @@ INSTALLS += target
 			}
 			else {
 				LIBS *= -ljvm
+				
+				!static_and_shared|build_pass {
+					CONFIG(shared, static|shared) {
+						QMAKE_POST_LINK += install_name_tool -add_rpath $${CPPDEVTK_JAVA_LIB_DIR}/ $${DESTDIR}/lib$${TARGET}.$${CPPDEVTK_LIB_EXT}
+					}
+				}
 			}
 		}
 		else {
