@@ -30,6 +30,18 @@
 #include <stdexcept>
 
 
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
+#	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
+#endif
+
+
+#if (!CPPDEVTK_THROWABLE_DISABLE_TERMINATE)
+#	define CPPDEVTK_THROWABLE_LOG_TERMINATE CPPDEVTK_LOG_FATAL
+#else
+#	define CPPDEVTK_THROWABLE_LOG_TERMINATE CPPDEVTK_LOG_ERROR
+#endif
+
+
 namespace cppdevtk {
 namespace base {
 
@@ -38,6 +50,8 @@ void Throwable::Throw() const {
 #	if 0	// be optimistic
 	DoThrow();
 #	else	// be pessimistic (aka realistic)
+	using ::std::terminate;
+	using ::std::runtime_error;
 	
 	try {
 		DoThrow();
@@ -66,15 +80,15 @@ void Throwable::Throw() const {
 				}
 			}
 			
-			CPPDEVTK_LOG_FATAL(QString("Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!"
+			CPPDEVTK_THROWABLE_LOG_TERMINATE(QString("Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!"
 					"\nExpected type: %1\nActual type: %2").arg(demangledExpectedName, demangledActualName));
 			
 			CPPDEVTK_ASSERT(0 && "Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!");
 			
 #			if (!CPPDEVTK_THROWABLE_DISABLE_TERMINATE)
-			::std::terminate();
+			terminate();
 #			else
-			throw ::std::runtime_error(Q2A(excMsg));
+			throw runtime_error(Q2A(excMsg));
 #			endif
 		}
 		
@@ -92,15 +106,15 @@ void Throwable::Throw() const {
 			}
 		}
 		
-		CPPDEVTK_LOG_FATAL(QString("Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!"
+		CPPDEVTK_THROWABLE_LOG_TERMINATE(QString("Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!"
 				"\nExpected type: %1\nActual type: unknown exception").arg(demangledName));
 		
 		CPPDEVTK_ASSERT(0 && "Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!");
 		
 #		if (!CPPDEVTK_THROWABLE_DISABLE_TERMINATE)
-		::std::terminate();
+		terminate();
 #		else
-		throw ::std::runtime_error(Q2A(excMsg));
+		throw runtime_error(Q2A(excMsg));
 #		endif
 	}
 	
@@ -115,14 +129,15 @@ void Throwable::Throw() const {
 		}
 	}
 	
-	CPPDEVTK_LOG_FATAL(QString("Throwable::DoThrow() did not throw!!! Not or incorrectly overridden in: %1").arg(demangledName));
+	CPPDEVTK_THROWABLE_LOG_TERMINATE(
+			QString("Throwable::DoThrow() did not throw!!! Not or incorrectly overridden in: %1").arg(demangledName));
 	
 	CPPDEVTK_ASSERT(0 && "Throwable::DoThrow() did not throw (not or incorrectly overridden).");
 	
 #	if (!CPPDEVTK_THROWABLE_DISABLE_TERMINATE)
-	::std::terminate();
+	terminate();
 #	else
-	throw ::std::runtime_error(Q2A(excMsg));
+	throw runtime_error(Q2A(excMsg));
 #	endif
 	
 #	endif

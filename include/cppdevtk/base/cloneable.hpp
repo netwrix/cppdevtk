@@ -38,7 +38,7 @@ public:
 	virtual ~Cloneable();
 	
 	/// AKA virtual copy constructor.
-	/// \attention If DoClone() is not or incorrectly overriden calls std::terminate()
+	/// \attention If DoClone() is not or incorrectly overriden calls std::abort()
 	/// (or throws std::runtime_error if CPPDEVTK_CLONEABLE_DISABLE_TERMINATE=1)
 	/// \attention Do not forget to overload in each derived class to simulate covariant return types.
 	/// Example:

@@ -76,7 +76,7 @@
 #endif
 
 
-#define CPPDEVTK_DETAIL_IPHONE_OS_VERSION_MIN_REQUIRED 60000	// __IPHONE_6_0
+#define CPPDEVTK_DETAIL_IPHONE_OS_VERSION_MIN_REQUIRED 80000	// __IPHONE_8_0
 #if (CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED < CPPDEVTK_DETAIL_IPHONE_OS_VERSION_MIN_REQUIRED)
 #	error "CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED < CPPDEVTK_DETAIL_IPHONE_OS_VERSION_MIN_REQUIRED!!!"
 #endif
@@ -205,12 +205,27 @@
 #ifndef MAC_OS_X_VERSION_10_11_4
 #   define MAC_OS_X_VERSION_10_11_4 101104
 #endif
+#ifndef MAC_OS_X_VERSION_10_12
+#	define MAC_OS_X_VERSION_10_12 101200
+#endif
+#ifndef MAC_OS_X_VERSION_10_12_1
+#	define MAC_OS_X_VERSION_10_12_1 101201
+#endif
+#ifndef MAC_OS_X_VERSION_10_12_2
+#	define MAC_OS_X_VERSION_10_12_2 101202
+#endif
+#ifndef MAC_OS_X_VERSION_10_12_4
+#	define MAC_OS_X_VERSION_10_12_4 101204
+#endif
+#ifndef MAC_OS_X_VERSION_10_13
+#	define MAC_OS_X_VERSION_10_13 101300
+#endif
 // TODO: keep updated
 
 
 #if (CPPDEVTK_PLATFORM_IOS)
-#	ifndef __IPHONE_6_0
-#		error "iOS < 6.0 is unsupported!!!"
+#	ifndef __IPHONE_8_0
+#		error "iOS < 8.0 is unsupported!!!"
 #	endif
 #	ifndef __IPHONE_6_1
 #		define __IPHONE_6_1 60100
@@ -247,6 +262,21 @@
 #	endif
 #	ifndef __IPHONE_9_3
 #		define __IPHONE_9_3 90300
+#	endif
+#	ifndef __IPHONE_10_0
+#		define __IPHONE_10_0 100000
+#	endif
+#	ifndef __IPHONE_10_1
+#		define __IPHONE_10_1 100100
+#	endif
+#	ifndef __IPHONE_10_2
+#		define __IPHONE_10_2 100200
+#	endif
+#	ifndef __IPHONE_10_3
+#		define __IPHONE_10_3 100300
+#	endif
+#	ifndef __IPHONE_11_0
+#		define __IPHONE_11_0 110000
 #	endif
 	// TODO: keep updated
 #endif

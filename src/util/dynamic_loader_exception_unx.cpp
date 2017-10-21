@@ -43,7 +43,7 @@ QString DynamicLoaderException::GetOsDynLdErrMsg() {
 	QString osDynLdErrMsg;
 	
 	{
-		base::LockGuard<base::RecursiveMutex> guard(mtx);
+		base::LockGuard<base::RecursiveMutex> lockGuard(mtx);
 		
 		const char* dlError = dlerror();
 		if (dlError == NULL) {

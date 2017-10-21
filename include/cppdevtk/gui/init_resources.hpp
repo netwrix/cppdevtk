@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 
-CPPDEVTK_GUI_API int cppdevtk_gui_init_resources();
+CPPDEVTK_GUI_API int cppdevtk_gui_init_resources(void);
 
 
 #ifdef __cplusplus

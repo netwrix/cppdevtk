@@ -20,7 +20,7 @@
 #include <cppdevtk/gui/init_resources.hpp>
 
 
-CPPDEVTK_GUI_API int cppdevtk_gui_init_resources() try {
+CPPDEVTK_GUI_API int cppdevtk_gui_init_resources(void) try {
 	CppDevTkGuiInitResources();
 	return 0;
 }

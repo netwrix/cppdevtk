@@ -26,10 +26,6 @@
 #include "logger.hpp"
 #include "dbc.hpp"
 #include "cassert.hpp"
-#if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-#include "system_exception.hpp"
-#include "unused.hpp"
-#endif
 
 #include <exception>
 #include <cstddef>
@@ -82,21 +78,8 @@ inline ThreadSharedObjLockingPtr<TThreadSharedObj, TMutex>::ThreadSharedObjLocki
 }
 
 template <typename TThreadSharedObj, class TMutex>
-#if (CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-inline
-#endif
-ThreadSharedObjLockingPtr<TThreadSharedObj, TMutex>::~ThreadSharedObjLockingPtr() {
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	try {
-#	endif
-		Reset();
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	}
-	catch (const SystemException& exc) {
-		CPPDEVTK_LOG_WARN("reset failed: " << exc.ToString());
-		SuppressUnusedWarning(exc);
-	}
-#	endif
+inline ThreadSharedObjLockingPtr<TThreadSharedObj, TMutex>::~ThreadSharedObjLockingPtr() {
+	Reset();
 }
 
 template <typename TThreadSharedObj, class TMutex>

@@ -28,15 +28,12 @@
 
 #include "config.hpp"
 #include "non_copyable.hpp"
-#include "cassert.hpp"
-#include "dbc.hpp"
 #include "lock_exception.hpp"
 #include "deadlock_exception.hpp"
-#if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-#include "system_exception.hpp"
+#include "cassert.hpp"
+#include "dbc.hpp"
 #include "logger.hpp"
 #include "unused.hpp"
-#endif
 
 #include <ctime>
 #include <cstddef>
@@ -56,17 +53,22 @@ namespace base {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Do not acquire ownership of the mutex.
 /// \sa C++ 11, 30.4.2 Locks
-struct CPPDEVTK_BASE_API DeferLock {};
+struct CPPDEVTK_BASE_API DeferLockT {};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Try to acquire ownership of the mutex without blocking.
 /// \sa C++ 11, 30.4.2 Locks
-struct CPPDEVTK_BASE_API TryToLock {};
+struct CPPDEVTK_BASE_API TryToLockT {};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Assume the calling thread has already obtained mutex ownership and manage it.
 /// \sa C++ 11, 30.4.2 Locks
-struct CPPDEVTK_BASE_API AdoptLock {};
+struct CPPDEVTK_BASE_API AdoptLockT {};
+
+
+static const DeferLockT deferLock = {};
+static const TryToLockT tryToLock = {};
+static const AdoptLockT adoptLock = {};
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +80,7 @@ public:
 	
 	
 	explicit LockGuard(MutexType& mutex);
-	LockGuard(MutexType& mutex, AdoptLock);
+	LockGuard(MutexType& mutex, AdoptLockT) throw();
 	~LockGuard();
 private:
 	MutexType& mutex_;
@@ -89,16 +91,19 @@ private:
 /// \sa C++ 11, 30.4.2.2 Class template unique_lock
 template <class TMutex>
 class UniqueLock: private NonCopyable {
+#if (!CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_HAVE_CPP11_MUTEX)
+	friend class ConditionVariable;
+#endif
 public:
 	typedef TMutex MutexType;
 	typedef void (UniqueLock::*BoolType)();
 	
 	
-	UniqueLock();
+	UniqueLock() throw();	// noexcept in std
 	explicit UniqueLock(MutexType& mutex);
-	UniqueLock(MutexType& mutex, DeferLock);
-	UniqueLock(MutexType& mutex, TryToLock);
-	UniqueLock(MutexType& mutex, AdoptLock);
+	UniqueLock(MutexType& mutex, DeferLockT) throw();	// noexcept in std
+	UniqueLock(MutexType& mutex, TryToLockT);
+	UniqueLock(MutexType& mutex, AdoptLockT) throw();
 	UniqueLock(MutexType& mutex, int relTime);
 	UniqueLock(MutexType& mutex, ::std::time_t absTime);
 	~UniqueLock();
@@ -118,15 +123,19 @@ public:
 	
 	void Unlock();
 	
-	MutexType* Release();
+	/// \remark Exception safety: nothrow guarantee.
+	MutexType* Release();	// noexcept in std
 	
-	bool OwnsLock() const;
+	/// \remark Exception safety: nothrow guarantee.
+	bool OwnsLock() const;	// noexcept in std
 	operator BoolType() const;
 	bool operator!() const;
 	
-	MutexType* GetMutex() const;
+	/// \remark Exception safety: nothrow guarantee.
+	MutexType* GetMutex() const;	// noexcept in std
 	
-	void Swap(UniqueLock& other);
+	/// \remark Exception safety: nothrow guarantee.
+	void Swap(UniqueLock& other);	// noexcept in std
 private:
 	MutexType* pMutex_;
 	bool ownsLock_;
@@ -134,7 +143,7 @@ private:
 
 
 template <class TMutex>
-void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y);
+void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y);	// noexcept in std
 
 
 /// @}	// lock
@@ -152,29 +161,16 @@ inline LockGuard<TMutex>::LockGuard(MutexType& mutex): NonCopyable(), mutex_(mut
 }
 
 template <class TMutex>
-inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLock): NonCopyable(), mutex_(mutex) {}
+inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLockT) throw(): NonCopyable(), mutex_(mutex) {}
 
 template <class TMutex>
-#if (CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-inline
-#endif
-LockGuard<TMutex>::~LockGuard() {
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	try {
-#	endif
-		mutex_.Unlock();
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	}
-	catch (const SystemException& exc) {
-		CPPDEVTK_LOG_WARN("failed to unlock mutex: " << exc.ToString());
-		SuppressUnusedWarning(exc);
-	}
-#	endif
+inline LockGuard<TMutex>::~LockGuard() {
+	mutex_.Unlock();
 }
 
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(): NonCopyable(), pMutex_(NULL), ownsLock_(false) {}
+inline UniqueLock<TMutex>::UniqueLock() throw(): NonCopyable(), pMutex_(NULL), ownsLock_(false) {}
 
 template <class TMutex>
 inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex): NonCopyable(), pMutex_(&mutex), ownsLock_(false) {
@@ -182,17 +178,17 @@ inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex): NonCopyable(), pMutex_(
 }
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, DeferLock): NonCopyable(),
+inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, DeferLockT) throw(): NonCopyable(),
 		pMutex_(&mutex), ownsLock_(false) {}
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, TryToLock): NonCopyable(),
+inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, TryToLockT): NonCopyable(),
 		pMutex_(&mutex), ownsLock_(false) {
 	TryLock();
 }
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, AdoptLock): NonCopyable(),
+inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, AdoptLockT) throw(): NonCopyable(),
 		pMutex_(&mutex), ownsLock_(true) {}
 
 template <class TMutex>
@@ -208,22 +204,16 @@ inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, ::std::time_t absTime): 
 }
 
 template <class TMutex>
-#if (CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-inline
-#endif
 UniqueLock<TMutex>::~UniqueLock() {
 	if (OwnsLock()) {
-#		if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
 		try {
-#		endif
 			Unlock();
-#		if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
 		}
-		catch (const SystemException& exc) {
-			CPPDEVTK_LOG_WARN("failed to unlock mutex: " << exc.ToString());
+		catch (const LockException& exc) {
 			SuppressUnusedWarning(exc);
+			CPPDEVTK_LOG_WARN("caught exc: " << Exception::GetDetailedInfo(exc) << "; absorbing...");
+			CPPDEVTK_ASSERT(0 && "Unlock() failed in dtor");
 		}
-#		endif
 	}
 }
 
@@ -290,7 +280,7 @@ inline void UniqueLock<TMutex>::Unlock() {
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "does not owns lock");
 	}
 	if (pMutex_ == NULL) {
-		throw CPPDEVTK_SYS_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "internal error: pMutex_ is NULL");
 	}
 	

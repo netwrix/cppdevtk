@@ -75,6 +75,21 @@
 #	error "The oldest Qt 5 supported is 5.6.1!!!"
 #endif
 
+#if (CPPDEVTK_PLATFORM_ANDROID)
+	// keep 5.6.1 until Qt bug #63407 is fixed
+	// Please see Qt bug #63407: segfault on Android when exception thrown in slot even if caught in reimplemented Application::notify()
+	// https://bugreports.qt.io/browse/QTBUG-63407
+#	if (QT_VERSION != QT_VERSION_CHECK(5, 6, 1))
+#		error "Qt 5.6.1 required!!!"
+#	endif
+#endif
+#if (CPPDEVTK_PLATFORM_IOS)
+	// Qt static lib bug: iphonesimulator builds as iphone in Qt 5.6 >= 5.6.2; fixed in 5.9.1 (did not tested 5.7.x, 5.8.x, 5.9.0)
+#	if ((QT_VERSION != QT_VERSION_CHECK(5, 6, 1)) && (QT_VERSION < QT_VERSION_CHECK(5, 9, 1)))
+#		error "Qt 5.6.1 or >= 5.9.1 required!!!"
+#	endif
+#endif
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QException>
 #include <QtCore/QUnhandledException>

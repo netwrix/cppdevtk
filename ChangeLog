@@ -1,3 +1,18 @@
+Version 1.0.3.1:
+- Release date: 17 Oct 2017
+- New features:
+	- added generic locking algorithms
+	- added condition variable
+	- added semaphore
+	- android: added GetFilesDirPath()
+- Improvements:
+	- mutex review/cleanup
+	- increased iOS minimum version from 6.0 to 8.0
+	- internal support XCode 8 & 9
+	- Mac + Win: relaxed IsValidPath()
+- Fixed bugs:
+
+
 Version 1.0.2.1:
 - Release date: 31 Jul 2017
 - New features:

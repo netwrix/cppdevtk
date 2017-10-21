@@ -58,7 +58,7 @@ else {
 # version
 CPPDEVTK_VERSION_MAJOR = 1
 CPPDEVTK_VERSION_MINOR = 0
-CPPDEVTK_VERSION_PATCH = 2
+CPPDEVTK_VERSION_PATCH = 3
 win32 {
 	CPPDEVTK_VERSION_BUILD = 1
 }
@@ -415,7 +415,8 @@ else {
 unix {
 	linux* {
 		android {
-			#ANDROID_NDK_PLATFORM = 9
+			# ignored by Qt Creator and qmake; must be set as environment variable
+			#ANDROID_NDK_PLATFORM = android-17
 		}
 	}
 	else {
@@ -1211,15 +1212,17 @@ unix {
 }
 else {
 	win32 {
-		CPPDEVTK_HAVE_JNI = true
-		
-		isEmpty(CPPDEVTK_JAVA_HOME) {
-			error("JAVA_HOME is empty!!!")
+		CONFIG(shared, static|shared) {
+			CPPDEVTK_HAVE_JNI = true
+			
+			isEmpty(CPPDEVTK_JAVA_HOME) {
+				error("JAVA_HOME is empty!!!")
+			}
+			
+			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
+			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/win32
+			LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib
 		}
-		
-		INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
-		INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/win32
-		LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib
 	}
 	else {
 		error("Unsupported platform!!!")

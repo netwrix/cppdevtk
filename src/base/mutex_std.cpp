@@ -20,34 +20,43 @@
 #include <cppdevtk/base/mutex.hpp>
 
 
-#if (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)
+#if (!CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_HAVE_CPP11_MUTEX)
 
 
+#include "throw_lock_exception.hpp"
+
+#include <system_error>
 #include <cstddef>
 
 
-using ::std::time_t;
-using ::std::time;
-using ::std::difftime;
+using ::cppdevtk::base::detail::ThrowLockException;
+using ::std::system_error;
 
 
 namespace cppdevtk {
 namespace base {
 
 
-Mutex::Mutex(): NonCopyable(), mutex_() {}
+Mutex::Mutex() try: NonCopyable(), mutex_() {
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
 Mutex::~Mutex() {}
 
-void Mutex::Lock() {
+void Mutex::Lock() try {
 	mutex_.lock();
 }
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
-bool Mutex::TryLock() {
+bool Mutex::TryLock() throw() {
 	return mutex_.try_lock();
 }
 
-void Mutex::Unlock() {
+void Mutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -56,19 +65,26 @@ Mutex::NativeHandleType Mutex::GetNativeHandle() {
 }
 
 
-RecursiveMutex::RecursiveMutex(): NonCopyable(), mutex_() {}
+RecursiveMutex::RecursiveMutex() try: NonCopyable(), mutex_() {
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
 RecursiveMutex::~RecursiveMutex() {}
 
-void RecursiveMutex::Lock() {
+void RecursiveMutex::Lock() try {
 	mutex_.lock();
 }
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
-bool RecursiveMutex::TryLock() {
+bool RecursiveMutex::TryLock() throw() {
 	return mutex_.try_lock();
 }
 
-void RecursiveMutex::Unlock() {
+void RecursiveMutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -79,27 +95,34 @@ RecursiveMutex::NativeHandleType RecursiveMutex::GetNativeHandle() {
 
 #if (!CPPDEVTK_PLATFORM_ANDROID)
 
-TimedMutex::TimedMutex(): NonCopyable(), mutex_() {}
+TimedMutex::TimedMutex() try: NonCopyable(), mutex_() {
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
 TimedMutex::~TimedMutex() {}
 
-void TimedMutex::Lock() {
+void TimedMutex::Lock() try {
 	mutex_.lock();
 }
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
-bool TimedMutex::TryLock() {
+bool TimedMutex::TryLock() throw() {
 	return mutex_.try_lock();
 }
 
-bool TimedMutex::TryLockFor(int relTime) {
+bool TimedMutex::TryLockFor(int relTime) throw() {
 	return mutex_.try_lock_for(::std::chrono::milliseconds(relTime));
 }
 
-bool TimedMutex::TryLockUntil(::std::time_t absTime) {
+bool TimedMutex::TryLockUntil(::std::time_t absTime) throw() {
 	return mutex_.try_lock_until(::std::chrono::system_clock::from_time_t(absTime));
 }
 
-void TimedMutex::Unlock() {
+void TimedMutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -112,27 +135,34 @@ TimedMutex::NativeHandleType TimedMutex::GetNativeHandle() {
 #endif
 
 
-RecursiveTimedMutex::RecursiveTimedMutex(): NonCopyable(), mutex_() {}
+RecursiveTimedMutex::RecursiveTimedMutex() try: NonCopyable(), mutex_() {
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
 RecursiveTimedMutex::~RecursiveTimedMutex() {}
 
-void RecursiveTimedMutex::Lock() {
+void RecursiveTimedMutex::Lock() try {
 	mutex_.lock();
 }
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
-bool RecursiveTimedMutex::TryLock() {
+bool RecursiveTimedMutex::TryLock() throw() {
 	return mutex_.try_lock();
 }
 
-bool RecursiveTimedMutex::TryLockFor(int relTime) {
+bool RecursiveTimedMutex::TryLockFor(int relTime) throw() {
 	return mutex_.try_lock_for(::std::chrono::milliseconds(relTime));
 }
 
-bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
+bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) throw() {
 	return mutex_.try_lock_until(::std::chrono::system_clock::from_time_t(absTime));
 }
 
-void RecursiveTimedMutex::Unlock() {
+void RecursiveTimedMutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -144,12 +174,11 @@ RecursiveTimedMutex::NativeHandleType RecursiveTimedMutex::GetNativeHandle() {
 
 #endif
 
-
-#endif	// !CPPDEVTK_PLATFORM_ANDROID
+#endif	// (!CPPDEVTK_PLATFORM_ANDROID)
 
 
 }	// namespace base
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS
+#endif	// (!CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_HAVE_CPP11_MUTEX)

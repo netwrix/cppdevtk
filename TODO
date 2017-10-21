@@ -1,10 +1,12 @@
 High priority:
 
+- thread, thread pool (executor, futures?)
 - Our own minimal thread-safe logging implementation (currently we are using qDebug() family).
-- C++ 11 style mutex (win), condition variable, thread and thread pool
 
 
 Low priority:
+
+- Our own implementation of synchronization primitives on Windows.
 
 - Our own implementation of stack trace on Windows.
 Replace third party StackWalker; maybe our implementation will use CaptureStackBackTrace() (RtlCaptureStackBackTrace()) instead of StackWalk64()

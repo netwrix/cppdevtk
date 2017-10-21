@@ -114,7 +114,6 @@ SOURCES += \
     ios.cpp \
     lockables.cpp \
     logger.cpp \
-    mutex.cpp \
     qiostream.cpp \
     source_code_info.cpp \
     stack_frame.cpp \
@@ -146,9 +145,20 @@ SOURCES += \
 	cancelable.cpp	\
 	task_canceled_exception.cpp	\
 	invalid_string_conversion_exception.cpp	\
+	mutex.cpp \
 	mutex_pthread.cpp	\
 	mutex_qt.cpp	\
-	mutex_std.cpp
+	mutex_std.cpp	\
+	condition_variable.cpp	\
+	condition_variable_pthread.cpp	\
+	condition_variable_qt.cpp	\
+	condition_variable_std.cpp	\
+	time_utils.cpp	\
+	semaphore.cpp	\
+	semaphore_pthread.cpp	\
+	semaphore_qt.cpp	\
+	semaphore_win.cpp	\
+	throw_lock_exception.cpp
 
 unix {
 	SOURCES += error_code_unx.cpp	\
@@ -340,7 +350,10 @@ HEADERS += \
     ../../include/cppdevtk/base/concurrent_run.hpp	\
 	../../include/cppdevtk/base/cancelable.hpp	\
 	../../include/cppdevtk/base/task_canceled_exception.hpp	\
-	../../include/cppdevtk/base/invalid_string_conversion_exception.hpp
+	../../include/cppdevtk/base/invalid_string_conversion_exception.hpp	\
+	../../include/cppdevtk/base/condition_variable.hpp	\
+	../../include/cppdevtk/base/semaphore.hpp	\
+	../../include/cppdevtk/base/generic_locking_algorithms.hpp
 
 unix {
 	HEADERS += ../../include/cppdevtk/base/execinfo_unx.h
@@ -371,3 +384,6 @@ win32:*msvc* {
 	HEADERS += stack_walker_win_msvc.hpp	\
 		stack_walker_wrapper_win_msvc.hpp
 }
+
+HEADERS += time_utils.hpp	\
+	throw_lock_exception.hpp

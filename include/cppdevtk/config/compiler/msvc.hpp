@@ -179,8 +179,10 @@
 // Please see Support For C++11/14/17 Features, static_assert: https://msdn.microsoft.com/en-us/library/hh567368.aspx
 #if (_MSC_VER >= 1600)	// MSVC 2010 (10.0)
 #	define CPPDEVTK_HAVE_CPP11_STATIC_ASSERT 1
+#	define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR 1
 #else
 #	define CPPDEVTK_HAVE_CPP11_STATIC_ASSERT 0
+#	define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR 0
 #endif
 
 #if (_MSC_VER >= 1700)	// MSVC 2012 (11.0)
@@ -296,6 +298,9 @@
 #if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
 #	pragma warning(disable: 4127)	// C4127: conditional expression is constant (from Qt headers)
 #	pragma warning(disable: 4512)	// C4512: assignment operator could not be generated (from Qt headers)
+#	pragma warning(disable: 4435)	// C4435: 'class1' : Object layout under /vd2 will change due to virtual base 'class2' (from Qt headers)
+#	pragma warning(disable: 4464)	// C4464: relative include path contains '..' (from Qt headers)
+#	pragma warning(disable: 4946)	// C4946: reinterpret_cast used between related classes (from Qt headers)
 #	pragma warning(disable: 4820)	// C4820: 'bytes' bytes padding added after construct 'member_name'
 #	pragma warning(disable: 4668)	// C4668: 'symbol' is not defined as a preprocessor macro, replacing with '0' for 'directives'
 #	pragma warning(disable: 4619)	// C4619: #pragma warning : there is no warning number 'number'
@@ -308,8 +313,7 @@
 #	pragma warning(disable: 4711)	// C4711: function 'function' selected for inline expansion
 #	pragma warning(disable: 4710)	// C4710: 'function' : function not inlined
 #	pragma warning(disable: 4548)	// C4548: expression before comma has no effect; expected expression with side-effect
-#	pragma warning(disable: 4435)	// C4435: 'class1' : Object layout under /vd2 will change due to virtual base 'class2' (from Qt headers)
-#	pragma warning(disable: 4464)	// C4464: relative include path contains '..' (from Qt headers)
+#	pragma warning(disable: 4371)	// C4371: 'class': layout of class may have changed from a previous version of the compiler due to better packing of member 'member' (from boost headers)
 
 #	if (_MSC_VER >= 1900)	// MSVC 2015 (14.0)
 #	pragma warning(disable: 5026)	// C5026: move constructor was implicitly defined as deleted (from Qt headers)

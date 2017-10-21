@@ -20,7 +20,7 @@
 #include <cppdevtk/base/mutex.hpp>
 
 
-#if (!(CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS) && !CPPDEVTK_HAVE_PTHREADS)
+#if (!(CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX))
 
 
 #include <cstddef>
@@ -43,11 +43,11 @@ void Mutex::Lock() {
 	mutex_.lock();
 }
 
-bool Mutex::TryLock() {
+bool Mutex::TryLock() throw() {
 	return mutex_.tryLock();
 }
 
-void Mutex::Unlock() {
+void Mutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -60,11 +60,11 @@ void RecursiveMutex::Lock() {
 	mutex_.lock();
 }
 
-bool RecursiveMutex::TryLock() {
+bool RecursiveMutex::TryLock() throw() {
 	return mutex_.tryLock();
 }
 
-void RecursiveMutex::Unlock() {
+void RecursiveMutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -77,11 +77,11 @@ void TimedMutex::Lock() {
 	mutex_.lock();
 }
 
-bool TimedMutex::TryLock() {
+bool TimedMutex::TryLock() throw() {
 	return mutex_.tryLock();
 }
 
-bool TimedMutex::TryLockFor(int relTime) {
+bool TimedMutex::TryLockFor(int relTime) throw() {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -89,7 +89,7 @@ bool TimedMutex::TryLockFor(int relTime) {
 	return mutex_.tryLock(relTime);
 }
 
-bool TimedMutex::TryLockUntil(::std::time_t absTime) {
+bool TimedMutex::TryLockUntil(::std::time_t absTime) throw() {
 	time_t currTime = time(NULL);
 	time_t seconds = difftime(absTime, currTime);
 	if (seconds <= 0) {
@@ -99,7 +99,7 @@ bool TimedMutex::TryLockUntil(::std::time_t absTime) {
 	return mutex_.tryLock(seconds * 1000);
 }
 
-void TimedMutex::Unlock() {
+void TimedMutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -112,11 +112,11 @@ void RecursiveTimedMutex::Lock() {
 	mutex_.lock();
 }
 
-bool RecursiveTimedMutex::TryLock() {
+bool RecursiveTimedMutex::TryLock() throw() {
 	return mutex_.tryLock();
 }
 
-bool RecursiveTimedMutex::TryLockFor(int relTime) {
+bool RecursiveTimedMutex::TryLockFor(int relTime) throw() {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -124,7 +124,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) {
 	return mutex_.tryLock(relTime);
 }
 
-bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
+bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) throw() {
 	time_t currTime = time(NULL);
 	time_t seconds = difftime(absTime, currTime);
 	if (seconds <= 0) {
@@ -134,7 +134,7 @@ bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
 	return mutex_.tryLock(seconds * 1000);
 }
 
-void RecursiveTimedMutex::Unlock() {
+void RecursiveTimedMutex::Unlock() throw() {
 	mutex_.unlock();
 }
 
@@ -143,4 +143,4 @@ void RecursiveTimedMutex::Unlock() {
 }	// namespace cppdevtk
 
 
-#endif	// (!(CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS) && !CPPDEVTK_HAVE_PTHREADS)
+#endif	// (!(CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX))

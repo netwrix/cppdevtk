@@ -17,8 +17,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// TODO: before releasing v1 make our Windows implementation using interlocked API or pimpl to keep binary compatibility.
-// NOTE: Please see CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK in features.hpp
+// NOTE: Android does not have timed_mutex and recursive_timed_mutex so even if CPPDEVTK_HAVE_CPP11_MUTEX,
+// pthread or Qt based mutex will be used
 
 
 #ifndef CPPDEVTK_BASE_MUTEX_HPP_INCLUDED_
@@ -28,15 +28,16 @@
 #include "config.hpp"
 #include "non_copyable.hpp"
 #include "locks.hpp"
+#include "generic_locking_algorithms.hpp"
 #include "unused.hpp"
 
-// <mutex> is not supported when compiling with /clr or /clr:pure
-#if (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)
+#if (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))
+#include <pthread.h>
+#endif
+#if (!CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_HAVE_CPP11_MUTEX)
 #include <mutex>
 #endif
-#if (CPPDEVTK_HAVE_PTHREADS)
-#include <pthread.h>
-#else
+#if (!(CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX))
 #include <QtCore/QMutex>
 #endif
 
@@ -55,11 +56,14 @@ namespace base {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa C++ 11, 30.4.1.2.1 Class mutex
 class CPPDEVTK_BASE_API Mutex: private NonCopyable {
+#if	(!CPPDEVTK_HAVE_PTHREADS)
+	friend class ConditionVariable;
+#	endif
 public:
-#	if (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)
-	typedef ::std::mutex::native_handle_type NativeHandleType;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS)
 	typedef pthread_mutex_t* NativeHandleType;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX)
+	typedef ::std::mutex::native_handle_type NativeHandleType;
 #	endif
 	
 	
@@ -67,17 +71,17 @@ public:
 	~Mutex();
 	
 	void Lock();
-	bool TryLock();
-	void Unlock();
+	bool TryLock() throw();
+	void Unlock() throw();
 	
-#	if ((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS) || CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX)
 	NativeHandleType GetNativeHandle();
 #	endif
 private:
-#	if (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)
-	::std::mutex mutex_;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS)
 	pthread_mutex_t mutex_;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX)
+	::std::mutex mutex_;
 #	else
 	QMutex mutex_;
 #	endif
@@ -97,8 +101,8 @@ public:
 	~ErrorCheckingMutex();
 	
 	void Lock();
-	bool TryLock();
-	void Unlock();
+	bool TryLock() throw();
+	void Unlock() throw();
 	
 	NativeHandleType GetNativeHandle();
 private:
@@ -112,10 +116,10 @@ private:
 /// \sa C++ 11, 30.4.1.2.2 Class recursive_mutex
 class CPPDEVTK_BASE_API RecursiveMutex: private NonCopyable {
 public:
-#	if (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)
-	typedef ::std::recursive_mutex::native_handle_type NativeHandleType;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS)
 	typedef pthread_mutex_t* NativeHandleType;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX)
+	typedef ::std::recursive_mutex::native_handle_type NativeHandleType;
 #	endif
 	
 	
@@ -123,17 +127,17 @@ public:
 	~RecursiveMutex();
 	
 	void Lock();
-	bool TryLock();
-	void Unlock();
+	bool TryLock() throw();	// noexcept in std
+	void Unlock() throw();
 	
-#	if ((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS) || CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX)
 	NativeHandleType GetNativeHandle();
 #	endif
 private:
-#	if (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)
-	::std::recursive_mutex mutex_;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS)
 	pthread_mutex_t mutex_;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX)
+	::std::recursive_mutex mutex_;
 #	else
 	QMutex mutex_;
 #	endif
@@ -144,11 +148,11 @@ private:
 /// \sa C++ 11, 30.4.1.3.1 Class timed_mutex
 class CPPDEVTK_BASE_API TimedMutex: private NonCopyable {
 public:
-#	if ((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)	\
+#	if (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))
+	typedef pthread_mutex_t* NativeHandleType;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX	\
 			&& (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX))
 	typedef ::std::timed_mutex::native_handle_type NativeHandleType;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
-	typedef pthread_mutex_t* NativeHandleType;
 #	endif
 	
 	
@@ -156,30 +160,29 @@ public:
 	~TimedMutex();
 	
 	void Lock();
-	bool TryLock();
+	bool TryLock() throw();
 	
 	/// Attempts to obtain ownership of the mutex within the relative timeout.
 	/// \arg relTime Relative timeout, in milliseconds.
 	/// If it is <= 0, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockFor(int relTime);
+	bool TryLockFor(int relTime) throw();
 	
 	/// Attempts to obtain ownership of the mutex.
 	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// If it has already passed, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockUntil(::std::time_t absTime);
+	bool TryLockUntil(::std::time_t absTime) throw();
 	
-	void Unlock();
+	void Unlock() throw();
 	
-#	if (((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)	\
-			&& (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX))	\
-			|| CPPDEVTK_HAVE_PTHREADS)
+#	if ((CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))	\
+			|| (CPPDEVTK_HAVE_CPP11_MUTEX && (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX)))
 	NativeHandleType GetNativeHandle();
 #	endif
 private:
-#	if ((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS) && !CPPDEVTK_PLATFORM_ANDROID)
-	::std::timed_mutex mutex_;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))
 	pthread_mutex_t mutex_;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_PLATFORM_ANDROID)
+	::std::timed_mutex mutex_;
 #	else
 	QMutex mutex_;
 #	endif
@@ -199,10 +202,10 @@ public:
 	~ErrorCheckingTimedMutex();
 	
 	void Lock();
-	bool TryLock();
-	bool TryLockFor(int relTime);
-	bool TryLockUntil(::std::time_t absTime);
-	void Unlock();
+	bool TryLock() throw();
+	bool TryLockFor(int relTime) throw();
+	bool TryLockUntil(::std::time_t absTime) throw();
+	void Unlock() throw();
 	
 	NativeHandleType GetNativeHandle();
 private:
@@ -216,11 +219,11 @@ private:
 /// \sa C++ 11, 30.4.1.3.2 Class recursive_timed_mutex
 class CPPDEVTK_BASE_API RecursiveTimedMutex: private NonCopyable {
 public:
-#	if ((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)	\
+#	if (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))
+	typedef pthread_mutex_t* NativeHandleType;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX	\
 			&& (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX))
 	typedef ::std::recursive_timed_mutex::native_handle_type NativeHandleType;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
-	typedef pthread_mutex_t* NativeHandleType;
 #	endif
 	
 	
@@ -228,30 +231,29 @@ public:
 	~RecursiveTimedMutex();
 	
 	void Lock();
-	bool TryLock();
+	bool TryLock() throw();
 	
 	/// Attempts to obtain ownership of the mutex within the relative timeout.
 	/// \arg relTime Relative timeout, in milliseconds.
 	/// If it is <= 0, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockFor(int relTime);
+	bool TryLockFor(int relTime) throw();
 	
 	/// Attempts to obtain ownership of the mutex.
 	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// If it has already passed, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockUntil(::std::time_t absTime);
+	bool TryLockUntil(::std::time_t absTime) throw();	// noexcept in std
 	
-	void Unlock();
+	void Unlock() throw();
 	
-#	if (((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS)	\
-			&& (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX))	\
-			|| CPPDEVTK_HAVE_PTHREADS)
+#	if ((CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))	\
+			|| (CPPDEVTK_HAVE_CPP11_MUTEX && (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX)))
 	NativeHandleType GetNativeHandle();
 #	endif
 private:
-#	if ((CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS) && !CPPDEVTK_PLATFORM_ANDROID)
-	::std::recursive_timed_mutex mutex_;
-#	elif (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))
 	pthread_mutex_t mutex_;
+#	elif (CPPDEVTK_HAVE_CPP11_MUTEX && !CPPDEVTK_PLATFORM_ANDROID)
+	::std::recursive_timed_mutex mutex_;
 #	else
 	QMutex mutex_;
 #	endif
@@ -268,8 +270,8 @@ public:
 	~NullMutex();
 	
 	void Lock();
-	bool TryLock();
-	void Unlock();
+	bool TryLock() throw();
+	void Unlock() throw();
 };
 
 
@@ -281,8 +283,8 @@ public:
 	~NullRecursiveMutex();
 	
 	void Lock();
-	bool TryLock();
-	void Unlock();
+	bool TryLock() throw();
+	void Unlock() throw();
 };
 
 
@@ -294,10 +296,10 @@ public:
 	~NullTimedMutex();
 	
 	void Lock();
-	bool TryLock();
-	bool TryLockFor(int relTime);
-	bool TryLockUntil(::std::time_t absTime);
-	void Unlock();
+	bool TryLock() throw();
+	bool TryLockFor(int relTime) throw();
+	bool TryLockUntil(::std::time_t absTime) throw();
+	void Unlock() throw();
 };
 
 
@@ -309,10 +311,10 @@ public:
 	~NullRecursiveTimedMutex();
 	
 	void Lock();
-	bool TryLock();
-	bool TryLockFor(int relTime);
-	bool TryLockUntil(::std::time_t absTime);
-	void Unlock();
+	bool TryLock() throw();
+	bool TryLockFor(int relTime) throw();
+	bool TryLockUntil(::std::time_t absTime) throw();
+	void Unlock() throw();
 };
 
 
@@ -373,11 +375,11 @@ inline NullMutex::~NullMutex() {}
 
 inline void NullMutex::Lock() {}
 
-inline bool NullMutex::TryLock() {
+inline bool NullMutex::TryLock() throw() {
 	return true;
 }
 
-inline void NullMutex::Unlock() {}
+inline void NullMutex::Unlock() throw() {}
 
 
 inline NullRecursiveMutex::NullRecursiveMutex(): NonCopyable() {}
@@ -386,11 +388,11 @@ inline NullRecursiveMutex::~NullRecursiveMutex() {}
 
 inline void NullRecursiveMutex::Lock() {}
 
-inline bool NullRecursiveMutex::TryLock() {
+inline bool NullRecursiveMutex::TryLock() throw() {
 	return true;
 }
 
-inline void NullRecursiveMutex::Unlock() {}
+inline void NullRecursiveMutex::Unlock() throw() {}
 
 
 inline NullTimedMutex::NullTimedMutex(): NonCopyable() {}
@@ -399,23 +401,23 @@ inline NullTimedMutex::~NullTimedMutex() {}
 
 inline void NullTimedMutex::Lock() {}
 
-inline bool NullTimedMutex::TryLock() {
+inline bool NullTimedMutex::TryLock() throw() {
 	return true;
 }
 
-inline bool NullTimedMutex::TryLockFor(int relTime) {
+inline bool NullTimedMutex::TryLockFor(int relTime) throw() {
 	SuppressUnusedWarning(relTime);
 	
 	return true;
 }
 
-inline bool NullTimedMutex::TryLockUntil(::std::time_t absTime) {
+inline bool NullTimedMutex::TryLockUntil(::std::time_t absTime) throw() {
 	SuppressUnusedWarning(absTime);
 	
 	return true;
 }
 
-inline void NullTimedMutex::Unlock() {}
+inline void NullTimedMutex::Unlock() throw() {}
 
 
 inline NullRecursiveTimedMutex::NullRecursiveTimedMutex(): NonCopyable() {}
@@ -424,23 +426,23 @@ inline NullRecursiveTimedMutex::~NullRecursiveTimedMutex() {}
 
 inline void NullRecursiveTimedMutex::Lock() {}
 
-inline bool NullRecursiveTimedMutex::TryLock() {
+inline bool NullRecursiveTimedMutex::TryLock() throw() {
 	return true;
 }
 
-inline bool NullRecursiveTimedMutex::TryLockFor(int relTime) {
+inline bool NullRecursiveTimedMutex::TryLockFor(int relTime) throw() {
 	SuppressUnusedWarning(relTime);
 	
 	return true;
 }
 
-inline bool NullRecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
+inline bool NullRecursiveTimedMutex::TryLockUntil(::std::time_t absTime) throw() {
 	SuppressUnusedWarning(absTime);
 	
 	return true;
 }
 
-inline void NullRecursiveTimedMutex::Unlock() {}
+inline void NullRecursiveTimedMutex::Unlock() throw() {}
 
 
 }	// namespace base

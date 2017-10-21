@@ -73,7 +73,7 @@ public:
 	void SetMaxSize(::std::size_t maxSize);
 	::std::size_t GetMaxSize() const;
 	
-	bool Capture();	///< \note Exception-safety: nothrow guarantee.
+	bool Capture() throw();
 	bool operator()();	///< Functor style (same as Capture())
 	
 	::std::size_t GetSize() const;

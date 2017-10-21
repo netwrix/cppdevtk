@@ -75,6 +75,11 @@ license you like.
 
 #include <cppdevtk/util/json/json.h>
 
+#if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4774)	// C4774: 'sprintf_s' : format string expected in argument 3 is not a string literal
+#endif
+
+
 #ifndef JSON_IS_AMALGAMATION
 #error "Compile with -I PATH_TO_JSON_DIRECTORY"
 #endif

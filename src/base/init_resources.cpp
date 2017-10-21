@@ -20,7 +20,7 @@
 #include <cppdevtk/base/init_resources.hpp>
 
 
-CPPDEVTK_BASE_API int cppdevtk_base_init_resources() try {
+CPPDEVTK_BASE_API int cppdevtk_base_init_resources(void) try {
 	CppDevTkBaseInitResources();
 	return 0;
 }

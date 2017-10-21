@@ -120,19 +120,19 @@
 
 /// \brief If enabled assert on failure, throw exception otherwise.
 #ifndef CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE
-#	define CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE 0
+#	define CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE (!CPPDEVTK_ENABLE_DBC || 0)
 #endif
 
 #ifndef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
-#	define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION 0
+#	define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION (!CPPDEVTK_ENABLE_DBC || 0)
 #endif
 
 #ifndef CPPDEVTK_DBC_DISABLE_CHECK_POSTCONDITION
-#	define CPPDEVTK_DBC_DISABLE_CHECK_POSTCONDITION 0
+#	define CPPDEVTK_DBC_DISABLE_CHECK_POSTCONDITION (!CPPDEVTK_ENABLE_DBC || 0)
 #endif
 
 #ifndef CPPDEVTK_DBC_DISABLE_CHECK_INVARIANT
-#	define CPPDEVTK_DBC_DISABLE_CHECK_INVARIANT 0
+#	define CPPDEVTK_DBC_DISABLE_CHECK_INVARIANT (!CPPDEVTK_ENABLE_DBC || 0)
 #endif
 
 
@@ -164,7 +164,7 @@
 #	if (defined(__linux__) || defined(linux) || defined(__linux))
 #		define CPPDEVTK_KERNEL_VERSION KERNEL_VERSION(2, 6, 32)	// NOTE: can not be less than 2.6.32
 #		if (defined(ANDROID) || defined(__ANDROID__))
-#			define CPPDEVTK_ANDROID_API 9
+#			define CPPDEVTK_ANDROID_API 17
 #		endif
 #	elif (defined(__APPLE__) && defined(__MACH__))
 #		if (defined(__GNUC__))
@@ -183,7 +183,7 @@
 #			error "CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED > CPPDEVTK_MAC_OS_X_VERSION_MAX_ALLOWED"
 #		endif
 
-#		define CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED 60000	// __IPHONE_6_0
+#		define CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED 80000	// __IPHONE_8_0
 #		define CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED
 #		if (CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED > CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED)
 #			error "CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED > CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED"
@@ -216,10 +216,6 @@
 
 /// Terminate or throw exception if cppdevtk::base::Cloneable::DoClone() is not or incorrectly overriden.
 #define CPPDEVTK_CLONEABLE_DISABLE_TERMINATE 0
-
-/// In C++11 std, 30.4.1 Mutex requirements, mutex.unlock() is nothrow. Why???!!!
-/// We "agree to disagree"... (please see pthread_mutex_unlock())
-#define CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK 0
 
 /// C++ 11 std, 30.4.1.2.1 Class mutex: The behavior of a program is undefined if it destroys a mutex object
 /// owned by any thread or a thread terminates while owning a mutex object.
@@ -258,12 +254,6 @@
 #	define CPPDEVTK_STACK_TRACE_ENABLE_MS_SYM_SRV 0
 #else
 #	define CPPDEVTK_STACK_TRACE_ENABLE_MS_SYM_SRV 1
-#endif
-
-#ifdef _MSC_VER
-#define CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS 0
-#else
-#define CPPDEVTK_ENABLE_DOT_NET_WORKAROUNDS 0
 #endif
 
 #define CPPDEVTK_FORCE_DBC_IN_JNI_API 1

@@ -159,7 +159,8 @@ SOURCES += \
 	jni_loader.cpp
 
 android {
-	SOURCES += get_package_name.cpp
+	SOURCES += get_package_name.cpp	\
+		get_files_dir_path.cpp
 }
 
 
@@ -174,5 +175,6 @@ HEADERS += \
 	../../include/cppdevtk/jni/jni_loader.hpp
 
 android {
-	HEADERS += ../../include/cppdevtk/jni/get_package_name.hpp
+	HEADERS += ../../include/cppdevtk/jni/get_package_name.hpp	\
+		../../include/cppdevtk/jni/get_files_dir_path.hpp
 }

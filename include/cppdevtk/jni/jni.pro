@@ -34,7 +34,8 @@ HEADERS += config.hpp	\
 	jni_loader.hpp
 
 android {
-	HEADERS += get_package_name.hpp
+	HEADERS += get_package_name.hpp	\
+		get_files_dir_path.hpp
 }
 
 

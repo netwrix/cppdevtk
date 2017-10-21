@@ -108,6 +108,7 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 		return false;
 	}
 	
+	/*
 	if (path.contains(':')) {
 		if (path.count(':') > 1) {
 			CPPDEVTK_LOG_ERROR("path '" << path << "' contains " << path.count(':') << " ':' character");
@@ -118,6 +119,7 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 			return false;
 		}
 	}
+	*/
 	
 	return ignorePathSeparator ? true : !path.contains('/');
 }

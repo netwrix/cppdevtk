@@ -27,19 +27,19 @@ namespace base {
 #if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
 
 template class CPPDEVTK_BASE_API BasicLockable<Mutex, ObjectLevelLocking>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API BasicLockable<ErrorCheckingMutex, ObjectLevelLocking>;
 #endif
 template class CPPDEVTK_BASE_API BasicLockable<RecursiveMutex, ClassLevelLocking>;
 
 template class CPPDEVTK_BASE_API Lockable<Mutex, ObjectLevelLocking>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API Lockable<ErrorCheckingMutex, ObjectLevelLocking>;
 #endif
 template class CPPDEVTK_BASE_API Lockable<RecursiveMutex, ClassLevelLocking>;
 
 template class CPPDEVTK_BASE_API TimedLockable<TimedMutex, ObjectLevelLocking>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API TimedLockable<ErrorCheckingTimedMutex, ObjectLevelLocking>;
 #endif
 template class CPPDEVTK_BASE_API TimedLockable<RecursiveTimedMutex, ClassLevelLocking>;
@@ -55,19 +55,19 @@ template class CPPDEVTK_BASE_API TimedLockable<NullRecursiveTimedMutex, ClassLev
 
 
 template class CPPDEVTK_BASE_API LockGuard<ObjectLevelBasicLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelBasicLockable>;
 #endif
 template class CPPDEVTK_BASE_API LockGuard<ClassLevelBasicLockable>;
 
 template class CPPDEVTK_BASE_API LockGuard<ObjectLevelLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelLockable>;
 #endif
 template class CPPDEVTK_BASE_API LockGuard<ClassLevelLockable>;
 
 template class CPPDEVTK_BASE_API LockGuard<ObjectLevelTimedLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelTimedLockable>;
 #endif
 template class CPPDEVTK_BASE_API LockGuard<ClassLevelTimedLockable>;
@@ -83,7 +83,7 @@ template class CPPDEVTK_BASE_API LockGuard<NullClassLevelTimedLockable>;
 
 
 template class CPPDEVTK_BASE_API UniqueLock<ObjectLevelTimedLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingObjectLevelTimedLockable>;
 #endif
 template class CPPDEVTK_BASE_API UniqueLock<ClassLevelTimedLockable>;

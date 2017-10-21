@@ -104,7 +104,10 @@ HEADERS += \
     concurrent_run.hpp	\
 	cancelable.hpp	\
 	task_canceled_exception.hpp	\
-	invalid_string_conversion_exception.hpp
+	invalid_string_conversion_exception.hpp	\
+	condition_variable.hpp	\
+	semaphore.hpp	\
+	generic_locking_algorithms.hpp
 
 unix {
 	HEADERS += execinfo_unx.h

@@ -50,7 +50,7 @@ namespace base {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Base class for locking exceptions.
+/// Base class for locking exceptions (exceptions thrown by synchronization primitives: mutex, lock etc).
 /// \remark Not in C++ 11 std.
 class CPPDEVTK_BASE_API LockException: public SystemException {
 public:

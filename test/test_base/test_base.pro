@@ -111,7 +111,11 @@ win32 {
 
 HEADERS += info.hpp \
     init_resources.hpp \
-    config.hpp
+    config.hpp	\
+	semaphores.hpp	\
+	waitconditions.hpp
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp	\
+	semaphores.cpp	\
+	waitconditions.cpp

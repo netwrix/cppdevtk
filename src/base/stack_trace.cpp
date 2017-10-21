@@ -40,7 +40,7 @@ namespace cppdevtk {
 namespace base {
 
 
-bool StackTrace::Capture() {
+bool StackTrace::Capture() throw() {
 	Clear();
 	
 	if (GetMaxSize() == 0) {
@@ -53,13 +53,13 @@ bool StackTrace::Capture() {
 		retValue = DoCapture();
 	}
 	catch (const ::std::exception& exc) {
-		CPPDEVTK_LOG_ERROR("absorbing std::exception: " << exc.what());
+		CPPDEVTK_LOG_WARN("absorbing std::exception: " << exc.what());
 		SuppressUnusedWarning(exc);
 		
 		Clear();
 	}
 	catch (...) {
-		CPPDEVTK_LOG_ERROR("absorbing unknown exception");
+		CPPDEVTK_LOG_WARN("absorbing unknown exception");
 		
 		Clear();
 	}

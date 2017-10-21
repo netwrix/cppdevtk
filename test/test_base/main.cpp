@@ -35,6 +35,10 @@
 #include <cppdevtk/base/singletons.hpp>
 #include <cppdevtk/util/core_application.hpp>
 
+#include "semaphores.hpp"
+#include "waitconditions.hpp"
+
+
 #include <QtCore/QString>
 
 #include <cstdlib>
@@ -119,7 +123,7 @@ using ::cppdevtk::base::Mutex;
 using ::cppdevtk::base::RecursiveMutex;
 using ::cppdevtk::base::TimedMutex;
 using ::cppdevtk::base::RecursiveTimedMutex;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 using ::cppdevtk::base::ErrorCheckingMutex;
 using ::cppdevtk::base::ErrorCheckingTimedMutex;
 #endif
@@ -202,6 +206,16 @@ int main(int argc, char* argv[]) try {
 			qcerr << "Singleton test: FAILED!!!" << endl;
 		}
 		
+		
+		qcout << "testing semaphore..." << endl;
+		test_sem();
+		
+		
+		qcout << "testing condition variable..." << endl;
+		test_cv();
+		
+		
+		qcout << "done!" << endl;
 		return EXIT_SUCCESS;
 	}
 	catch (const exception& exc) {
@@ -468,27 +482,7 @@ bool TestMutex() {
 	recursiveMutex.Unlock();
 	recursiveMutex.Unlock();
 	recursiveMutex.Unlock();
-	recursiveMutex.Unlock();
-#	if (CPPDEVTK_PLATFORM_UNIX)
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	caught = false;
-	try {
-		recursiveMutex.Unlock();
-	}
-	catch (const SystemException& exc) {
-		if (exc.ErrorCodeRef() == ::cppdevtk::base::errc::operation_not_permitted) {
-			caught = true;
-		}
-		else {
-			qcout << "recursiveMutex.Unlock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
-		}
-	}
-	if (!caught) {
-		qcout << "recursiveMutex.Unlock(): !caught" << endl;
-		return false;
-	}
-#	endif
-#	endif
+	recursiveMutex.Unlock();	
 	
 	
 	TimedMutex timedMutex;
@@ -509,29 +503,9 @@ bool TestMutex() {
 	recursiveTimedMutex.Unlock();
 	recursiveTimedMutex.Unlock();
 	recursiveTimedMutex.Unlock();
-#	if (CPPDEVTK_PLATFORM_UNIX)
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	caught = false;
-	try {
-		recursiveTimedMutex.Unlock();
-	}
-	catch (const SystemException& exc) {
-		if (exc.ErrorCodeRef() == ::cppdevtk::base::errc::operation_not_permitted) {
-			caught = true;
-		}
-		else {
-			qcout << "recursiveTimedMutex.Unlock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
-		}
-	}
-	if (!caught) {
-		qcout << "recursiveTimedMutex.Unlock(): !caught" << endl;
-		return false;
-	}
-#	endif
-#	endif
 	
 	
-#	if (CPPDEVTK_PLATFORM_UNIX)
+#	if (CPPDEVTK_HAVE_PTHREADS)
 	ErrorCheckingMutex errorCheckingMutex;
 	errorCheckingMutex.Lock();
 	caught = false;
@@ -551,25 +525,6 @@ bool TestMutex() {
 		return false;
 	}
 	errorCheckingMutex.Unlock();
-	
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	caught = false;
-	try {
-		errorCheckingMutex.Unlock();
-	}
-	catch (const SystemException& exc) {
-		if (exc.ErrorCodeRef() == ::cppdevtk::base::errc::operation_not_permitted) {
-			caught = true;
-		}
-		else {
-			qcout << "errorCheckingMutex.Unlock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
-		}
-	}
-	if (!caught) {
-		qcout << "errorCheckingMutex.Unlock(): !caught" << endl;
-		return false;
-	}
-#	endif
 	
 	errorCheckingMutex.Lock();
 	if (errorCheckingMutex.TryLock()) {
@@ -599,25 +554,6 @@ bool TestMutex() {
 	}
 	errorCheckingTimedMutex.Unlock();
 	
-#	if (!CPPDEVTK_MUTEX_HAVE_NOTHROW_UNLOCK)
-	caught = false;
-	try {
-		errorCheckingTimedMutex.Unlock();
-	}
-	catch (const SystemException& exc) {
-		if (exc.ErrorCodeRef() == ::cppdevtk::base::errc::operation_not_permitted) {
-			caught = true;
-		}
-		else {
-			qcout << "errorCheckingTimedMutex.Unlock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
-		}
-	}
-	if (!caught) {
-		qcout << "errorCheckingTimedMutex.Unlock(): !caught" << endl;
-		return false;
-	}
-#	endif
-	
 	errorCheckingTimedMutex.Lock();
 	if (errorCheckingTimedMutex.TryLock()) {
 		qcout << "errorCheckingTimedMutex.TryLock() succeeded" << endl;
@@ -625,6 +561,7 @@ bool TestMutex() {
 	}
 	errorCheckingTimedMutex.Unlock();
 #endif
+	
 	
 	DummyDefaultObjectLevelBasicLockable dummyDefaultObjectLevelBasicLockable;
 	::cppdevtk::base::DefaultObjectLevelBasicLockableLockGuard defaultObjectLevelBasicLockableLockGuard(

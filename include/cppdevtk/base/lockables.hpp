@@ -105,19 +105,19 @@ protected:
 #if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<Mutex, ObjectLevelLocking>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<ErrorCheckingMutex, ObjectLevelLocking>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<RecursiveMutex, ClassLevelLocking>;
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<Mutex, ObjectLevelLocking>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<ErrorCheckingMutex, ObjectLevelLocking>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<RecursiveMutex, ClassLevelLocking>;
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<TimedMutex, ObjectLevelLocking>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<ErrorCheckingTimedMutex, ObjectLevelLocking>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<RecursiveTimedMutex, ClassLevelLocking>;
@@ -136,19 +136,19 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<Null
 
 
 typedef BasicLockable<Mutex, ObjectLevelLocking> ObjectLevelBasicLockable;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef BasicLockable<ErrorCheckingMutex, ObjectLevelLocking> ErrorCheckingObjectLevelBasicLockable;
 #endif
 typedef BasicLockable<RecursiveMutex, ClassLevelLocking> ClassLevelBasicLockable;
 
 typedef Lockable<Mutex, ObjectLevelLocking> ObjectLevelLockable;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef Lockable<ErrorCheckingMutex, ObjectLevelLocking> ErrorCheckingObjectLevelLockable;
 #endif
 typedef Lockable<RecursiveMutex, ClassLevelLocking> ClassLevelLockable;
 
 typedef TimedLockable<TimedMutex, ObjectLevelLocking> ObjectLevelTimedLockable;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef TimedLockable<ErrorCheckingTimedMutex, ObjectLevelLocking> ErrorCheckingObjectLevelTimedLockable;
 #endif
 typedef TimedLockable<RecursiveTimedMutex, ClassLevelLocking> ClassLevelTimedLockable;
@@ -164,22 +164,14 @@ typedef TimedLockable<NullTimedMutex, ObjectLevelLocking> NullObjectLevelTimedLo
 typedef TimedLockable<NullRecursiveTimedMutex, ClassLevelLocking> NullClassLevelTimedLockable;
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-#ifdef NDEBUG
-typedef ObjectLevelBasicLockable DefaultObjectLevelBasicLockable;
-typedef ObjectLevelLockable DefaultObjectLevelLockable;
-typedef ObjectLevelTimedLockable DefaultObjectLevelTimedLockable;
-#else
+#if (CPPDEVTK_HAVE_PTHREADS && !defined(NDEBUG))
 typedef ErrorCheckingObjectLevelBasicLockable DefaultObjectLevelBasicLockable;
 typedef ErrorCheckingObjectLevelLockable DefaultObjectLevelLockable;
 typedef ErrorCheckingObjectLevelTimedLockable DefaultObjectLevelTimedLockable;
-#endif
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#else
 typedef ObjectLevelBasicLockable DefaultObjectLevelBasicLockable;
 typedef ObjectLevelLockable DefaultObjectLevelLockable;
 typedef ObjectLevelTimedLockable DefaultObjectLevelTimedLockable;
-#else
-#error "Unsupported platform!!!"
 #endif
 
 
@@ -188,19 +180,19 @@ typedef ObjectLevelTimedLockable DefaultObjectLevelTimedLockable;
 // guards
 
 typedef LockGuard<ObjectLevelBasicLockable> ObjectLevelBasicLockableLockGuard;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef LockGuard<ErrorCheckingObjectLevelBasicLockable> ErrorCheckingObjectLevelBasicLockableLockGuard;
 #endif
 typedef LockGuard<ClassLevelBasicLockable> ClassLevelBasicLockableLockGuard;
 
 typedef LockGuard<ObjectLevelLockable> ObjectLevelLockableLockGuard;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef LockGuard<ErrorCheckingObjectLevelLockable> ErrorCheckingObjectLevelLockableLockGuard;
 #endif
 typedef LockGuard<ClassLevelLockable> ClassLevelLockableLockGuard;
 
 typedef LockGuard<ObjectLevelTimedLockable> ObjectLevelTimedLockableLockGuard;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef LockGuard<ErrorCheckingObjectLevelTimedLockable> ErrorCheckingObjectLevelTimedLockableLockGuard;
 #endif
 typedef LockGuard<ClassLevelTimedLockable> ClassLevelTimedLockableLockGuard;
@@ -215,39 +207,31 @@ typedef LockGuard<NullClassLevelLockable> NullClassLevelLockableLockGuard;
 typedef LockGuard<NullObjectLevelTimedLockable> NullObjectLevelTimedLockableLockGuard;
 typedef LockGuard<NullClassLevelTimedLockable> NullClassLevelTimedLockableLockGuard;
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-#ifdef NDEBUG
-typedef ObjectLevelBasicLockableLockGuard DefaultObjectLevelBasicLockableLockGuard;
-typedef ObjectLevelLockableLockGuard DefaultObjectLevelLockableLockGuard;
-typedef ObjectLevelTimedLockableLockGuard DefaultObjectLevelTimedLockableLockGuard;
-#else
+#if (CPPDEVTK_HAVE_PTHREADS && !defined(NDEBUG))
 typedef ErrorCheckingObjectLevelBasicLockableLockGuard DefaultObjectLevelBasicLockableLockGuard;
 typedef ErrorCheckingObjectLevelLockableLockGuard DefaultObjectLevelLockableLockGuard;
 typedef ErrorCheckingObjectLevelTimedLockableLockGuard DefaultObjectLevelTimedLockableLockGuard;
-#endif
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#else
 typedef ObjectLevelBasicLockableLockGuard DefaultObjectLevelBasicLockableLockGuard;
 typedef ObjectLevelLockableLockGuard DefaultObjectLevelLockableLockGuard;
 typedef ObjectLevelTimedLockableLockGuard DefaultObjectLevelTimedLockableLockGuard;
-#else
-#error "Unsupported platform!!!"
 #endif
 
 
 typedef UniqueLock<ObjectLevelBasicLockable> ObjectLevelBasicLockableUniqueLock;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef UniqueLock<ErrorCheckingObjectLevelBasicLockable> ErrorCheckingObjectLevelBasicLockableUniqueLock;
 #endif
 typedef UniqueLock<ClassLevelBasicLockable> ClassLevelBasicLockableUniqueLock;
 
 typedef UniqueLock<ObjectLevelLockable> ObjectLevelLockableUniqueLock;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef UniqueLock<ErrorCheckingObjectLevelLockable> ErrorCheckingObjectLevelLockableUniqueLock;
 #endif
 typedef UniqueLock<ClassLevelLockable> ClassLevelLockableUniqueLock;
 
 typedef UniqueLock<ObjectLevelTimedLockable> ObjectLevelTimedLockableUniqueLock;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 typedef UniqueLock<ErrorCheckingObjectLevelTimedLockable> ErrorCheckingObjectLevelTimedLockableUniqueLock;
 #endif
 typedef UniqueLock<ClassLevelTimedLockable> ClassLevelTimedLockableUniqueLock;
@@ -262,41 +246,33 @@ typedef UniqueLock<NullClassLevelLockable> NullClassLevelLockableUniqueLock;
 typedef UniqueLock<NullObjectLevelTimedLockable> NullObjectLevelTimedLockableUniqueLock;
 typedef UniqueLock<NullClassLevelTimedLockable> NullClassLevelTimedLockableUniqueLock;
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-#ifdef NDEBUG
-typedef ObjectLevelBasicLockableUniqueLock DefaultObjectLevelBasicLockableUniqueLock;
-typedef ObjectLevelLockableUniqueLock DefaultObjectLevelLockableUniqueLock;
-typedef ObjectLevelTimedLockableUniqueLock DefaultObjectLevelTimedLockableUniqueLock;
-#else
+#if (CPPDEVTK_HAVE_PTHREADS && !defined(NDEBUG))
 typedef ErrorCheckingObjectLevelBasicLockableUniqueLock DefaultObjectLevelBasicLockableUniqueLock;
 typedef ErrorCheckingObjectLevelLockableUniqueLock DefaultObjectLevelLockableUniqueLock;
 typedef ErrorCheckingObjectLevelTimedLockableUniqueLock DefaultObjectLevelTimedLockableUniqueLock;
-#endif
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#else
 typedef ObjectLevelBasicLockableUniqueLock DefaultObjectLevelBasicLockableUniqueLock;
 typedef ObjectLevelLockableUniqueLock DefaultObjectLevelLockableUniqueLock;
 typedef ObjectLevelTimedLockableUniqueLock DefaultObjectLevelTimedLockableUniqueLock;
-#else
-#error "Unsupported platform!!!"
 #endif
 
 
 #if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelBasicLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelBasicLockable>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelBasicLockable>;
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelLockable>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelLockable>;
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelTimedLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelTimedLockable>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelTimedLockable>;
@@ -312,7 +288,7 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClas
 
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ObjectLevelTimedLockable>;
-#if (CPPDEVTK_PLATFORM_UNIX)
+#if (CPPDEVTK_HAVE_PTHREADS)
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingObjectLevelTimedLockable>;
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ClassLevelTimedLockable>;

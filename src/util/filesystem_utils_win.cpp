@@ -83,6 +83,7 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 		return false;
 	}
 	
+	/*
 	if (path.endsWith(' ')) {
 		CPPDEVTK_LOG_ERROR("path '" << path << "' ends with space");
 		return false;
@@ -91,6 +92,7 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 		CPPDEVTK_LOG_ERROR("path '" << path << "' ends with period");
 		return false;
 	}
+	*/
 	
 	int cnt = path.count(':');
 	if (cnt > 1) {

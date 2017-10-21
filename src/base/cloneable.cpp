@@ -28,10 +28,18 @@
 
 #include <exception>
 #include <stdexcept>
+#include <cstdlib>
 
 
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
 #	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
+#endif
+
+
+#if (!CPPDEVTK_CLONEABLE_DISABLE_TERMINATE)
+#	define CPPDEVTK_CLONEABLE_LOG_TERMINATE CPPDEVTK_LOG_FATAL
+#else
+#	define CPPDEVTK_CLONEABLE_LOG_TERMINATE CPPDEVTK_LOG_ERROR
 #endif
 
 
@@ -43,6 +51,9 @@ namespace base {
 #	if 0	// be optimistic
 	return ::std::auto_ptr<Cloneable>(DoClone());
 #	else	// be pessimistic (aka realistic)
+	using ::std::abort;
+	using ::std::runtime_error;
+	
 	::std::auto_ptr<Cloneable> pCloneable(DoClone());
 	
 	if (pCloneable.get() == NULL) {
@@ -57,14 +68,15 @@ namespace base {
 			}
 		}
 		
-		CPPDEVTK_LOG_FATAL(QString("Cloneable::DoClone() not or incorrectly overridden (returned NULL) in: %1").arg(demangledName));
+		CPPDEVTK_CLONEABLE_LOG_TERMINATE(
+				QString("Cloneable::DoClone() not or incorrectly overridden (returned NULL) in: %1").arg(demangledName));
 		
 		CPPDEVTK_ASSERT(0 && "Cloneable::DoClone() not or incorrectly overridden (returned NULL)!!!");
 		
 #		if (!CPPDEVTK_CLONEABLE_DISABLE_TERMINATE)
-		::std::terminate();
+		abort();
 #		else
-		throw ::std::runtime_error(Q2A(excMsg));
+		throw runtime_error(Q2A(excMsg));
 #		endif
 	}
 	
@@ -96,15 +108,15 @@ namespace base {
 			}
 		}
 		
-		CPPDEVTK_LOG_FATAL(QString("Cloneable::DoClone() not or incorrectly overridden (type mismatch)!!!"
+		CPPDEVTK_CLONEABLE_LOG_TERMINATE(QString("Cloneable::DoClone() not or incorrectly overridden (type mismatch)!!!"
 				 "\nExpected type: %1\nActual type: %2").arg(demangledExpectedName, demangledActualName));
 		
 		CPPDEVTK_ASSERT(0 && "Cloneable::DoClone() not or incorrectly overridden (type mismatch)!!!");
 		
 #		if (!CPPDEVTK_CLONEABLE_DISABLE_TERMINATE)
-		::std::terminate();
+		abort();
 #		else
-		throw ::std::runtime_error(Q2A(excMsg));
+		throw runtime_error(Q2A(excMsg));
 #		endif
 	}
 	

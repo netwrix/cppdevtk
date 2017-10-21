@@ -122,6 +122,8 @@
 #	define CPPDEVTK_HAVE_CPP11_STATIC_ASSERT 0
 #endif
 
+#define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR (defined(__has_include) && __has_include(<system_error>))
+
 #if ((__cplusplus >= 201103L) || defined(__GXX_EXPERIMENTAL_CXX0X__))
 #	define CPPDEVTK_HAVE_CPP11_MUTEX 1
 #	define CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE 1

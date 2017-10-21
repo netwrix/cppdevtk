@@ -41,7 +41,7 @@
 %define centos_minor_ver 9
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-%define centos_minor_ver 3
+%define centos_minor_ver 4
 %endif
 %endif
 
@@ -77,7 +77,7 @@
 
 
 Name: cppdevtk
-Version: 1.0.2
+Version: 1.0.3
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -591,6 +591,16 @@ exit 0
 
 
 %changelog
+* Tue Oct 17 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.0.3.1
+- added generic locking algorithms
+- added condition variable
+- added semaphore
+- android: added GetFilesDirPath()
+- mutex review/cleanup
+- increased iOS minimum version from 6.0 to 8.0
+- internal support XCode 8 & 9
+- Mac + Win: relaxed IsValidPath()
 * Mon Jul 31 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.2.1
 - made public on GitHub: https://github.com/cososys/cppdevtk
