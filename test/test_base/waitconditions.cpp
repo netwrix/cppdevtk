@@ -75,7 +75,7 @@ public:
     {
     }
 
-    void run() Q_DECL_OVERRIDE
+    virtual void run()
     {
         qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
@@ -106,7 +106,7 @@ public:
     {
     }
 
-    void run() Q_DECL_OVERRIDE
+    virtual void run()
     {
         for (int i = 0; i < DataSize; ++i) {
             mutex.Lock();

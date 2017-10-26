@@ -33,6 +33,7 @@
 #if (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))
 
 
+#include "pthread_ext.h"
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/lock_exception.hpp>
 #include <cppdevtk/base/deadlock_exception.hpp>
@@ -43,13 +44,6 @@
 #include <cstddef>
 #include <ctime>
 #include <exception>
-
-
-#if (CPPDEVTK_PLATFORM_MACOSX || CPPDEVTK_PLATFORM_ANDROID)
-
-static int pthread_mutex_timedlock(pthread_mutex_t* mutex, const struct timespec* abstime);
-
-#endif
 
 
 using ::cppdevtk::base::detail::RelTimeToAbsTime;
@@ -86,7 +80,7 @@ Mutex::~Mutex() {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
 	}
 }
 
@@ -156,7 +150,7 @@ ErrorCheckingMutex::~ErrorCheckingMutex() {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy error checking mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
 	}
 }
 
@@ -227,7 +221,7 @@ RecursiveMutex::~RecursiveMutex() {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy recursive mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
 	}
 }
 
@@ -306,7 +300,7 @@ TimedMutex::~TimedMutex() {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy timed mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
 	}
 }
 
@@ -425,7 +419,7 @@ ErrorCheckingTimedMutex::~ErrorCheckingTimedMutex() {
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY)
 				&& "logic error: attempt to destroy error checking timed mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
 	}
 }
 
@@ -547,7 +541,7 @@ RecursiveTimedMutex::~RecursiveTimedMutex() {
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY)
 				&& "logic error: attempt to destroy recursive timed mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
 	}
 }
 
@@ -702,53 +696,6 @@ void InitializeMutex(pthread_mutex_t& mutex, int mutexType) {
 }	// namespace detail
 }	// namespace base
 }	// namespace cppdevtk
-
-
-#if (CPPDEVTK_PLATFORM_MACOSX || CPPDEVTK_PLATFORM_ANDROID)
-
-int pthread_mutex_timedlock(pthread_mutex_t* mutex, const struct timespec* abstime) {
-	int retCode = ESUCCESS;
-	
-	struct timespec nanoSlept = {0, 0};
-	
-	while ((retCode = pthread_mutex_trylock(mutex)) == EBUSY) {
-		const long kMaxTvNSec = 999999999;
-		
-		if (/* (abstime->tv_sec < 0) || */ ((abstime->tv_nsec < 0) || (abstime->tv_nsec > kMaxTvNSec))) {
-			retCode = EINVAL;
-			break;
-		}
-		
-		timespec toNanoSleep;
-		toNanoSleep.tv_sec = 0;
-		toNanoSleep.tv_nsec = 10000000;
-		
-		if (nanoSlept.tv_nsec + toNanoSleep.tv_nsec > kMaxTvNSec) {
-			nanoSlept.tv_sec += 1;
-			nanoSlept.tv_nsec = (nanoSlept.tv_nsec + toNanoSleep.tv_nsec) - kMaxTvNSec;
-		}
-		else {
-			nanoSlept.tv_nsec += toNanoSleep.tv_nsec;
-		}
-		if ((nanoSlept.tv_sec > abstime->tv_sec) ||
-				((nanoSlept.tv_sec == abstime->tv_sec) && (nanoSlept.tv_nsec >= abstime->tv_nsec))) {
-			retCode = ETIMEDOUT;
-			break;
-		}
-		
-		int nanoSleepRetCode = ESUCCESS;
-		do {
-			nanoSleepRetCode = nanosleep(&toNanoSleep, &toNanoSleep);
-			CPPDEVTK_ASSERT((nanoSleepRetCode == ESUCCESS) || ((nanoSleepRetCode == -1) && (errno != EINVAL)));
-		}
-		while (nanoSleepRetCode != ESUCCESS);
-	}
-	
-	CPPDEVTK_ASSERT(retCode != EINTR);
-	return retCode;
-}
-
-#endif	// (CPPDEVTK_PLATFORM_MACOSX || CPPDEVTK_PLATFORM_ANDROID)
 
 
 #endif	// (CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))

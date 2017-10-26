@@ -69,7 +69,7 @@ class Producer : public QThread
 //! [1] //! [2]
 {
 public:
-    void run() Q_DECL_OVERRIDE
+    virtual void run()
     {
         qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
         for (int i = 0; i < DataSize; ++i) {
@@ -87,7 +87,7 @@ class Consumer : public QThread
 {
     Q_OBJECT
 public:
-    void run() Q_DECL_OVERRIDE
+    virtual void run()
     {
         for (int i = 0; i < DataSize; ++i) {
             usedBytes.Wait();

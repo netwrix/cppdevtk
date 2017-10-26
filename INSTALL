@@ -4,7 +4,7 @@ for CPPDEVTK_VERSION_MAJOR, CPPDEVTK_VERSION_MINOR and CPPDEVTK_VERSION_PATCH
 1.2 Search in *.plist for CFBundleShortVersionString and CFBundleVersion
 1.3 Modify in AndroidManifest.xml files versionName and versionCode
 1.4 Update in Doxyfile PROJECT_NUMBER
-1.5 Update Version in cppdevtk.spec
+1.5 Update Version in cppdevtk.spec and debian changelog
 
 2. (optional) Copy customization files (if needed)
 

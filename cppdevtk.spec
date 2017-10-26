@@ -77,7 +77,7 @@
 
 
 Name: cppdevtk
-Version: 1.0.3
+Version: 1.0.4
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -591,6 +591,9 @@ exit 0
 
 
 %changelog
+* Thu Oct 26 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.0.4.1
+- fixed internal pthread_mutex_timedlock(): absTime instead of relTime
 * Tue Oct 17 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.3.1
 - added generic locking algorithms

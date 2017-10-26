@@ -269,6 +269,10 @@ else {
 	}
 }
 
+unix {
+	SOURCES += pthread_ext.cpp
+}
+
 
 HEADERS += \
     ../../include/cppdevtk/base/architecture_types.h \
@@ -378,6 +382,10 @@ else {
 	else {
 		error("Unsupported platform!!!")
 	}
+}
+
+unix {
+	HEADERS += pthread_ext.h
 }
 
 win32:*msvc* {

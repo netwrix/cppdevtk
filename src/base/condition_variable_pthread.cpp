@@ -63,7 +63,7 @@ ConditionVariable::~ConditionVariable() {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy the condition variable while it is referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_cond_destroy() failed with undocumented error code");
+		//CPPDEVTK_ASSERT(0 && "pthread_cond_destroy() failed with undocumented error code");
 	}
 }
 

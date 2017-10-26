@@ -43,20 +43,17 @@ int cppdevtk_clock_gettime(cppdevtk_clockid_t clk_id, struct timespec* tp) {
 	
 	CPPDEVTK_ASSERT(tp != NULL);
 	
-	if (clk_id != CLOCK_REALTIME) {
+	if (clk_id == CLOCK_REALTIME) {
+		timeval tv = {0, 0};
+		retCode = gettimeofday(&tv, NULL);
+		CPPDEVTK_ASSERT(retCode == ESUCCESS);
+		
+		tp->tv_sec = tv.tv_sec;
+		tp->tv_nsec = tv.tv_usec * 1000;
+	}
+	else {
 		errno = EINVAL;
-		return retCode;
 	}
-	
-	struct timeval tv = {0, 0};
-	retCode = gettimeofday(&tv, NULL);
-	if (retCode != ESUCCESS) {
-		CPPDEVTK_ASSERT(retCode != EINTR);
-		return retCode;
-	}
-	
-	tp->tv_sec  = tv.tv_sec;
-	tp->tv_nsec = tv.tv_usec * 1000;
 	
 	return retCode;
 }

@@ -58,7 +58,7 @@ else {
 # version
 CPPDEVTK_VERSION_MAJOR = 1
 CPPDEVTK_VERSION_MINOR = 0
-CPPDEVTK_VERSION_PATCH = 3
+CPPDEVTK_VERSION_PATCH = 4
 win32 {
 	CPPDEVTK_VERSION_BUILD = 1
 }
@@ -249,8 +249,18 @@ build_pass {
 	QMAKE_CFLAGS_DEBUG *= -O0 -g3
 	QMAKE_CXXFLAGS_DEBUG *= -O0 -g3
 	
-	QMAKE_CFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
-	QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
+	QMAKE_CFLAGS_RELEASE *= -fno-inline-functions
+	QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions
+	# fno-inline-small-functions: gcc 4.3.0
+	greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
+		QMAKE_CFLAGS_RELEASE *= -fno-inline-small-functions
+		QMAKE_CXXFLAGS_RELEASE *= -fno-inline-small-functions
+	}
+	# fno-inline-functions-called-once: gcc 4.0.2
+	greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 0)|greaterThan(QT_GCC_PATCH_VERSION, 1) {
+		QMAKE_CFLAGS_RELEASE *= -fno-inline-functions-called-once
+		QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions-called-once
+	}
 	
 	QMAKE_LFLAGS *= -rdynamic
 	
@@ -1145,87 +1155,91 @@ CPPDEVTK_ENABLE_STRIP_STATIC_LIB = false
 #****************************************************************************************************************************
 # JNI
 CPPDEVTK_HAVE_JNI = false
-CPPDEVTK_JAVA_HOME = $$(JAVA_HOME)
-unix {
-	linux* {
-		CPPDEVTK_HAVE_JNI = true
-		!android {
-			isEmpty(CPPDEVTK_JAVA_HOME) {
-				error("JAVA_HOME is empty!!!")
-			}
-			
-			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
-			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/linux
-			
-			CPPDEVTK_JAVA_LIB_DIR =
-			isEqual(QT_ARCH, "x86_64") {
-				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/amd64/server
-			}
-			else {
-				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/i386/server
-			}
-			LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
-			!static_and_shared|build_pass {
-				CONFIG(shared, static|shared) {
-					!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-						QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
+!static_and_shared|build_pass {
+	CONFIG(shared, static|shared) {
+		CPPDEVTK_JAVA_HOME = $$(JAVA_HOME)
+		unix {
+			linux* {
+				CPPDEVTK_HAVE_JNI = true
+				!android {
+					isEmpty(CPPDEVTK_JAVA_HOME) {
+						error("JAVA_HOME is empty!!!")
+					}
+					
+					INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
+					INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/linux
+					
+					CPPDEVTK_JAVA_LIB_DIR =
+					isEqual(QT_ARCH, "x86_64") {
+						CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/amd64/server
+					}
+					else {
+						CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/i386/server
+					}
+					LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
+					!static_and_shared|build_pass {
+						CONFIG(shared, static|shared) {
+							!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
+								QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
+							}
+						}
 					}
 				}
 			}
-		}
-	}
-	else {
-		macx {
-			CPPDEVTK_HAVE_JNI = true
-			
-			#CONFIG += cppdevtk_mac_enable_javavm_framework
-			
-			cppdevtk_mac_enable_javavm_framework {
-				INCLUDEPATH = /System/Library/Frameworks/JavaVM.framework/Headers $${INCLUDEPATH}
-			}
 			else {
-				CPPDEVTK_JAVA_HOME = /Library/Java/Home
-				
-				INCLUDEPATH = $${CPPDEVTK_JAVA_HOME}/include $${INCLUDEPATH}
-				INCLUDEPATH = $${CPPDEVTK_JAVA_HOME}/include/darwin $${INCLUDEPATH}
-				
-				CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/server
-				LIBS = -L$${CPPDEVTK_JAVA_LIB_DIR} $${LIBS}
-				!static_and_shared|build_pass {
-					CONFIG(shared, static|shared) {
-						!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-							#QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
+				macx {
+					CPPDEVTK_HAVE_JNI = true
+					
+					#CONFIG += cppdevtk_mac_enable_javavm_framework
+					
+					cppdevtk_mac_enable_javavm_framework {
+						INCLUDEPATH = /System/Library/Frameworks/JavaVM.framework/Headers $${INCLUDEPATH}
+					}
+					else {
+						CPPDEVTK_JAVA_HOME = /Library/Java/Home
+						
+						INCLUDEPATH = $${CPPDEVTK_JAVA_HOME}/include $${INCLUDEPATH}
+						INCLUDEPATH = $${CPPDEVTK_JAVA_HOME}/include/darwin $${INCLUDEPATH}
+						
+						CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/server
+						LIBS = -L$${CPPDEVTK_JAVA_LIB_DIR} $${LIBS}
+						!static_and_shared|build_pass {
+							CONFIG(shared, static|shared) {
+								!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
+									#QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
+								}
+							}
 						}
+					}
+				}
+				else {
+					ios {
+						# nothing to do for now; no jni
+					}
+					else {
+						error("Unsupported Unix platform!!!")
 					}
 				}
 			}
 		}
 		else {
-			ios {
-				# nothing to do for now; no jni
+			win32 {
+				CONFIG(shared, static|shared) {
+					CPPDEVTK_HAVE_JNI = true
+					
+					isEmpty(CPPDEVTK_JAVA_HOME) {
+						error("JAVA_HOME is empty!!!")
+					}
+					
+					INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
+					INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/win32
+					LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib
+				}
 			}
 			else {
-				error("Unsupported Unix platform!!!")
+				error("Unsupported platform!!!")
 			}
 		}
-	}
-}
-else {
-	win32 {
-		CONFIG(shared, static|shared) {
-			CPPDEVTK_HAVE_JNI = true
-			
-			isEmpty(CPPDEVTK_JAVA_HOME) {
-				error("JAVA_HOME is empty!!!")
-			}
-			
-			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include
-			INCLUDEPATH *= $${CPPDEVTK_JAVA_HOME}/include/win32
-			LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib
-		}
-	}
-	else {
-		error("Unsupported platform!!!")
 	}
 }
 
