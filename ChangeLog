@@ -2,6 +2,8 @@ Version 1.0.4.1:
 - Release date:
 - New features:
 - Improvements:
+	- Kubuntu: updated Qt to 5.9.2
+	- moved EnableIf and IfThenElse as Conditional in type_traits.hpp
 - Fixed bugs:
 	- fixed internal pthread_mutex_timedlock(): absTime instead of relTime
 

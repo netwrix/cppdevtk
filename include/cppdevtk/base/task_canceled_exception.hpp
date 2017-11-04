@@ -22,7 +22,7 @@
 
 
 #include "config.hpp"
-#include "stdexcept.hpp"
+#include "system_exception.hpp"
 
 
 namespace cppdevtk {
@@ -37,7 +37,7 @@ namespace concurrent {
 	::cppdevtk::base::concurrent::TaskCanceledException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
-class CPPDEVTK_BASE_API TaskCanceledException: public RuntimeException {
+class CPPDEVTK_BASE_API TaskCanceledException: public SystemException {
 public:
 	TaskCanceledException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	
@@ -73,14 +73,14 @@ CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwPoint,
-		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg) {}
+inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwPoint, const QString& whatArg):
+		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint,
+		MakeErrorCode(base::errc::operation_canceled), whatArg) {}
 
 inline TaskCanceledException::~TaskCanceledException() throw() {}
 
 inline ::std::auto_ptr<TaskCanceledException> TaskCanceledException::Clone() const {
-	return ::std::auto_ptr<TaskCanceledException>(dynamic_cast<TaskCanceledException*>(
-			Cloneable::Clone().release()));
+	return ::std::auto_ptr<TaskCanceledException>(dynamic_cast<TaskCanceledException*>(Cloneable::Clone().release()));
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
@@ -93,7 +93,7 @@ inline TaskCanceledException* TaskCanceledException::clone() const {
 
 inline void TaskCanceledException::Swap(TaskCanceledException& other) {
 	if (this != &other) {
-		RuntimeException::Swap(other);
+		SystemException::Swap(other);
 		SwapOwnData(other);
 	}
 }

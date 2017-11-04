@@ -441,7 +441,7 @@ bool TestNonStdExceptions() {
 }
 
 bool TestSystemException() {
-	::cppdevtk::base::SetLastSystemErrorCode(::cppdevtk::base::MakeSystemErrorCode(::cppdevtk::base::sys_err::success));
+	::cppdevtk::base::SetLastSystemErrorCode(::cppdevtk::base::MakeSystemErrorCode(ESUCCESS));
 	
 	qcout << CPPDEVTK_SYS_EXC_W_EC(::cppdevtk::base::GetLastSystemErrorCode()).What() << endl;
 	

@@ -2,7 +2,7 @@ Source: cppdevtk
 Priority: optional
 Maintainer: Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 Build-Depends: debhelper (>=9),
-	zlib1g-dev, libudev-dev, libdbus-1-dev, libboost-all-dev, libxss-dev, libgl1-mesa-dev, default-jdk, qt-latest (>=5.9.1)
+	zlib1g-dev, libudev-dev, libdbus-1-dev, libboost-all-dev, libxss-dev, libgl1-mesa-dev, default-jdk, qt-latest (>=5.9.2)
 Standards-Version: 3.9.6
 Section: libs
 Homepage: https://github.com/cososys/cppdevtk
@@ -54,7 +54,7 @@ Package: cppdevtk-base-dev
 Section: libdevel
 Architecture: any
 Depends: libcppdevtk-base (= ${binary:Version}), ${misc:Depends},
-	libboost-all-dev, qt-latest (>=5.9.1)
+	libboost-all-dev, qt-latest (>=5.9.2)
 Description: Development files for libcppdevtk-base
  The cppdevtk-base-dev package contains libraries and header files for developing applications that use libcppdevtk-base.
 

@@ -59,7 +59,7 @@ public:
 	void SetCancelable(const QString& cancelButtonText, bool processEvents = true);
 	
 	/// \pre \a numStages >= 1
-	/// \remarks Will also set autoClose and autoReset to false
+	/// \remark Will also set autoClose and autoReset to false
 	void SetNumStages(int numStages);
 	
 	virtual void reject();

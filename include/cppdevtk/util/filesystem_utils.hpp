@@ -113,14 +113,14 @@ CPPDEVTK_UTIL_API bool MakeDirectory(const QString& dirName, bool failIfExists,
 
 /// \pre IsValidPath()
 /// \throw ::cppdevtk::util::FilesystemException
-/// \remarks Does create intermediate directories.
+/// \remark Does create intermediate directories.
 CPPDEVTK_UTIL_API void MakePath(const QString& dirPath, bool failIfExists = true);
 CPPDEVTK_UTIL_API bool MakePath(const QString& dirPath, bool failIfExists,
 		::cppdevtk::base::ErrorCode& errorCode);
 
 /// \pre IsValidPath()
 /// \throw ::cppdevtk::util::FilesystemException
-/// \remarks Directory must be empty
+/// \remark Directory must be empty
 CPPDEVTK_UTIL_API void RemoveDirectory(const QString& path, bool failIfNotExists = false);
 CPPDEVTK_UTIL_API bool RemoveDirectory(const QString& path, bool failIfNotExists,
 		::cppdevtk::base::ErrorCode& errorCode);

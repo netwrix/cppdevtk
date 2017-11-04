@@ -76,6 +76,10 @@
 #define CPPDEVTK_FUNCTION_SHORT_NAME __FUNCTION__ 
 
 
+// https://gcc.gnu.org/onlinedocs/gcc-3.3/gcc/Thread-Local.html
+#define CPPDEVTK_THREAD __thread
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compiler Features.
 

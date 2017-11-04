@@ -94,11 +94,11 @@ CPPDEVTK_BASE_API void swap(DeadlockException& x, DeadlockException& y);
 
 inline DeadlockException::DeadlockException(const SourceCodeInfo& throwPoint): Exception(throwPoint),
 		RuntimeException(throwPoint, ""), LockException(throwPoint,
-		::cppdevtk::base::errc::MakeErrorCode(::cppdevtk::base::errc::resource_deadlock_would_occur)) {}
+		MakeErrorCode(::cppdevtk::base::errc::resource_deadlock_would_occur)) {}
 
 inline DeadlockException::DeadlockException(const SourceCodeInfo& throwPoint, const QString& whatArg): Exception(throwPoint),
 		RuntimeException(throwPoint, whatArg), LockException(throwPoint,
-		::cppdevtk::base::errc::MakeErrorCode(::cppdevtk::base::errc::resource_deadlock_would_occur), whatArg) {}
+		MakeErrorCode(::cppdevtk::base::errc::resource_deadlock_would_occur), whatArg) {}
 
 inline DeadlockException::~DeadlockException() throw() {}
 

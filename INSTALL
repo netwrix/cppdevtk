@@ -53,9 +53,9 @@ Qt 5 >= 5.6.1:
 
 - Ubuntu:
 Use ppa:beineri (https://launchpad.net/~beineri)
-16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt591-xenial
-14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt591-trusty
-12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt562
+16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt592-xenial
+14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt592-trusty
+12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt563
 > sudo apt-get update
 > sudo apt-get install qt-latest qtcreator-latest
 or

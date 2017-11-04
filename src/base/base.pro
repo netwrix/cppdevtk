@@ -288,13 +288,12 @@ HEADERS += \
     ../../include/cppdevtk/base/dbc_exceptions.hpp \
     ../../include/cppdevtk/base/deadlock_exception.hpp \
     ../../include/cppdevtk/base/dynamic_byte_array.hpp \
-    ../../include/cppdevtk/base/enable_if.hpp \
+    ../../include/cppdevtk/base/type_traits.hpp \
     ../../include/cppdevtk/base/errno.h \
     ../../include/cppdevtk/base/error_category.hpp \
     ../../include/cppdevtk/base/error_code.hpp \
     ../../include/cppdevtk/base/error_condition.hpp \
     ../../include/cppdevtk/base/exception.hpp \
-    ../../include/cppdevtk/base/if_then_else.hpp \
     ../../include/cppdevtk/base/info.hpp \
     ../../include/cppdevtk/base/info_tr.hpp \
     ../../include/cppdevtk/base/init_resources.hpp \

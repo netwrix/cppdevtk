@@ -69,6 +69,10 @@
 #define CPPDEVTK_FUNCTION_SHORT_NAME __FUNCTION__ 
 
 
+// https://msdn.microsoft.com/en-us/library/6yh4a9k1.aspx
+#define CPPDEVTK_THREAD __declspec(thread)
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CRT secure C++ overloads; please see:
 // Secure Template Overloads: https://msdn.microsoft.com/en-us/library/ms175759%28v=vs.90%29.aspx

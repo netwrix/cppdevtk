@@ -70,9 +70,9 @@ namespace base {
 class CPPDEVTK_BASE_API IosFailureException: public virtual SystemException {
 public:
 	IosFailureException(const SourceCodeInfo& throwPoint, const char* whatArg,
-			const ErrorCode& errorCode = MakeErrorCode(errc::io_error));
+			const ErrorCode& errorCode = MakeErrorCode(::cppdevtk::base::errc::io_error));
 	IosFailureException(const SourceCodeInfo& throwPoint, const QString& whatArg,
-			const ErrorCode& errorCode = MakeErrorCode(errc::io_error));
+			const ErrorCode& errorCode = MakeErrorCode(::cppdevtk::base::errc::io_error));
 	
 	IosFailureException(const SourceCodeInfo& throwPoint, const char* whatArg, const ErrorCode& errorCode,
 			const Exception& cause);

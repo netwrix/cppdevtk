@@ -81,8 +81,7 @@ namespace jni {
 /// \attention
 /// - Use only in catch() block.
 /// - calls FatalError() if fails and there is no pending exception!
-/// \remarks
-/// - Except bad_alloc that maps to OutOfMemoryError (so Error) all other exceptions (including exception and unknown)
+/// \remark Except bad_alloc that maps to OutOfMemoryError (so Error) all other exceptions (including exception and unknown)
 /// maps to something that inherits from Exception, not Error.
 /// \pre \a pJniEnv != NULL
 ///

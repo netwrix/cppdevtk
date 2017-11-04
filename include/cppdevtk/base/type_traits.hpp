@@ -17,11 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_BASE_ENABLE_IF_HPP_INCLUDED_
-#define CPPDEVTK_BASE_ENABLE_IF_HPP_INCLUDED_
+#ifndef CPPDEVTK_BASE_TYPE_TRAITS_HPP_INCLUDED_
+#define CPPDEVTK_BASE_TYPE_TRAITS_HPP_INCLUDED_
 
 
 #include "config.hpp"
+#include CPPDEVTK_TR1_HEADER(type_traits)
 
 
 namespace cppdevtk {
@@ -29,23 +30,48 @@ namespace base {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief If \a enable is \c true, the member typedef \c Type shall equal \a T; otherwise, there shall be no member typedef \c Type.
-/// Primary template.
-/// \sa C++11, 20.9.7.6 Other transformations, template <bool B, class T = void> struct enable_if;
-template <bool enable, typename T = void>
-struct EnableIf {
+/// \c enable_if is missing from TR1; it was added in C++11.
+/// \sa
+/// - <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2240.html">Two missing traits: enable_if and conditional</a>
+/// - C++11, 20.9.7.6 Other transformations, \c enable_if
+template <bool condition, typename T = void>
+struct EnableIf {};
+
+template <typename T>
+struct EnableIf<true, T> {
 	typedef T Type;
 };
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Partial specialization for \a enable \c false.
+/// If \a condition is false, the member typedef \c Type shall equal \a T ; otherwise, there shall be no member typedef \c Type .
+template <bool condition, typename T = void>
+struct DisableIf {
+	typedef T Type;
+};
+
 template <typename T>
-struct EnableIf<false, T> {};
+struct DisableIf<true, T> {};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \c conditional is missing from TR1; it was added in C++11.
+/// \sa
+/// - <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2240.html">Two missing traits: enable_if and conditional</a>
+/// - C++11, 20.9.7.6 Other transformations, \c conditional
+template <bool condition, typename TIfTrue, typename TIfFalse>
+struct Conditional {
+	typedef TIfTrue Type;
+};
+
+template <typename TIfTrue, typename TIfFalse>
+struct Conditional<false, TIfTrue, TIfFalse> {
+	typedef TIfFalse Type;
+};
 
 
 }	// namespace base
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_BASE_ENABLE_IF_HPP_INCLUDED_
+#endif	// CPPDEVTK_BASE_TYPE_TRAITS_HPP_INCLUDED_

@@ -38,13 +38,12 @@ HEADERS += \
     dbc_exceptions.hpp \
     deadlock_exception.hpp \
     dynamic_byte_array.hpp \
-    enable_if.hpp \
+    type_traits.hpp \
     errno.h \
     error_category.hpp \
     error_code.hpp \
     error_condition.hpp \
     exception.hpp \
-    if_then_else.hpp \
     info.hpp \
     info_tr.hpp \
     init_resources.hpp \

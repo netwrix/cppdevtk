@@ -175,6 +175,11 @@
 #define CPPDEVTK_FUNCTION_SHORT_NAME
 #undef CPPDEVTK_FUNCTION_SHORT_NAME
 
+/// \brief Compiler thread local storage (not C++11 thread_local).
+/// \attention Must be implemented by each \ref config_compiler_supported_compilers.
+#define CPPDEVTK_THREAD
+#undef CPPDEVTK_THREAD
+
 
 /// \defgroup config_compiler_features Compiler Features
 /// Define to 1 if feature is available, 0 otherwise.
@@ -239,6 +244,10 @@
 #endif
 #ifndef CPPDEVTK_FUNCTION_SHORT_NAME
 #	error "Please define CPPDEVTK_FUNCTION_SHORT_NAME for current compiler!!!"
+#endif
+
+#ifndef CPPDEVTK_THREAD
+#	error "Please define CPPDEVTK_THREAD for current compiler!!!"
 #endif
 
 #ifndef CPPDEVTK_HAVE_STDINT_H

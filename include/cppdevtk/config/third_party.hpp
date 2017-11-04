@@ -42,7 +42,7 @@
 /// \defgroup config_third_party_supported_qt Supported Qt
 /// - Both Qt 4 and Qt 5 are supported.
 /// - The oldest Qt 4 supported is 4.6.2 (CentOS 6.0).
-/// - The oldest Qt 5 supported is 5.6.1 (CentOS 7.3, SLED12SP2); openSUSE 13.2 has 5.4.2 in updates and 5.7.1 in KDE Qt5
+/// - The oldest Qt 5 supported is 5.6.1 (Android)
 /// @{
 
 /// \cond

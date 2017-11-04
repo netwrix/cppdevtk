@@ -93,8 +93,10 @@ public:
 	bool WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime, Predicate predicate);
 	
 	
+	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	cv_status::cv_status_t WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime);
 	
+	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	template <class Predicate>
 	bool WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate);
 private:

@@ -29,7 +29,7 @@
 #include "config.hpp"
 #include "cerrno.hpp"
 #include "stringizable.hpp"
-#include "enable_if.hpp"
+#include "type_traits.hpp"
 #include "string_conv.hpp"
 #include "tostream.hpp"
 

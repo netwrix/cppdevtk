@@ -42,7 +42,7 @@
 #endif
 #include "error_condition.hpp"
 #include "stringizable.hpp"
-#include "enable_if.hpp"
+#include "type_traits.hpp"
 #include "tostream.hpp"
 #include "string_conv.hpp"
 
