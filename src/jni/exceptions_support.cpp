@@ -30,12 +30,13 @@
 #include <cppdevtk/jni/exceptions.hpp>
 #include <cppdevtk/jni/string_conv.hpp>
 
-#include <cppdevtk/base/stdexcept.hpp>
-#include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/task_canceled_exception.hpp>
-#include <cppdevtk/base/dbc_exceptions.hpp>
-#include <cppdevtk/util/filesystem_exception.hpp>
 #include <cppdevtk/util/no_such_file_or_directory_exception.hpp>
+#include <cppdevtk/base/ios.hpp>
+#include <cppdevtk/base/dbc_exceptions.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
+#include <cppdevtk/base/new.hpp>
+#include <cppdevtk/base/exception.hpp>
 
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
@@ -79,11 +80,11 @@ CPPDEVTK_JNI_API void ThrowJavaExceptionFromCatchedCppException(JNIEnv* pJniEnv)
 	}
 	
 	// CppDevTk specific exceptions
-	catch (const ::cppdevtk::util::NoSuchFileOrDirectoryException& exc) {
-		detail::ThrowJavaException(pJniEnv, "java/io/FileNotFoundException", exc.what());
-	}
 	catch (const ::cppdevtk::base::concurrent::TaskCanceledException& exc) {
 		detail::ThrowJavaException(pJniEnv, "java/util/concurrent/CancellationException", exc.what());
+	}
+	catch (const ::cppdevtk::util::NoSuchFileOrDirectoryException& exc) {
+		detail::ThrowJavaException(pJniEnv, "java/io/FileNotFoundException", exc.what());
 	}
 	catch (const ::cppdevtk::base::NullArgumentException& exc) {
 		detail::ThrowJavaException(pJniEnv, "java/lang/IllegalArgumentException", exc.what());
@@ -107,6 +108,9 @@ CPPDEVTK_JNI_API void ThrowJavaExceptionFromCatchedCppException(JNIEnv* pJniEnv)
 	}
 	catch (const ::cppdevtk::base::LogicException& exc) {
 		detail::ThrowJavaException(pJniEnv, "java/lang/RuntimeException", exc.what());
+	}
+	catch (const ::cppdevtk::base::BadAllocException& exc) {
+		detail::ThrowJavaException(pJniEnv, "java/lang/OutOfMemoryError", exc.what());
 	}
 	catch (const ::cppdevtk::base::Exception& exc) {
 		detail::ThrowJavaException(pJniEnv, "java/lang/Exception", exc.what());

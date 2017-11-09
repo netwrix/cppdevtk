@@ -213,7 +213,7 @@
 #		define CPPDEVTK_DBC_CHECK_STATE(expr, expectedState, actualState)	\
 			do {	\
 				if (!(expr)) {	\
-					throw CPPDEVTK_INVALID_STATE_EXCEPTION(expectedState, actualState, CPPDEVTK_FUNCTION_LONG_NAME);	\
+					throw CPPDEVTK_INVALID_STATE_EXCEPTION((expectedState), (actualState), CPPDEVTK_FUNCTION_LONG_NAME);	\
 				}	\
 			}	\
 			while (0)
@@ -353,14 +353,14 @@
 #	if (!CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE)
 #		define CPPDEVTK_DBC_CHECK_NON_NULL_POINTER(ptr)	\
 			do {	\
-				if (ptr == NULL) {	\
+				if ((ptr) == NULL) {	\
 					throw CPPDEVTK_NULL_POINTER_EXCEPTION();	\
 				}	\
 			}	\
 			while (0)
 #	else
 #		define CPPDEVTK_DBC_CHECK_NON_NULL_POINTER(ptr)	\
-			CPPDEVTK_ASSERT((ptr != NULL) && "NULL pointer")
+			CPPDEVTK_ASSERT(((ptr) != NULL) && "NULL pointer")
 #	endif
 #else
 #	define CPPDEVTK_DBC_CHECK_NON_NULL_POINTER(ptr)	\

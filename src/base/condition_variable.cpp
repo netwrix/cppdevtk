@@ -34,7 +34,7 @@ using ::std::terminate;
 // NOTE: violating noexcept calls terminate() not unexpected() as throw()
 
 
-void ConditionVariableAny::NotifyOne() throw() {	// noexcept in std
+void ConditionVariableAny::NotifyOne() CPPDEVTK_NOEXCEPT {
 	try {
 		LockGuard<Mutex> lockGuard(*pMtx_);
 		conditionVariable_.NotifyOne();
@@ -50,7 +50,7 @@ void ConditionVariableAny::NotifyOne() throw() {	// noexcept in std
 	}
 }
 
-void ConditionVariableAny::NotifyAll() throw() {	// noexcept in std
+void ConditionVariableAny::NotifyAll() CPPDEVTK_NOEXCEPT {
 	try {
 		LockGuard<Mutex> lockGuard(*pMtx_);
 		conditionVariable_.NotifyAll();

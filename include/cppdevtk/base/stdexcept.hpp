@@ -58,11 +58,11 @@ class CPPDEVTK_BASE_API LogicException: public virtual Exception {
 public:
 	LogicException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	LogicException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
-	LogicException(const LogicException& other) throw();
+	LogicException(const LogicException& other) CPPDEVTK_NOEXCEPT;
 	
-	virtual ~LogicException() throw();
+	virtual ~LogicException() CPPDEVTK_NOEXCEPT;
 	
-	LogicException& operator=(const LogicException& other) throw();
+	LogicException& operator=(const LogicException& other) CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<LogicException> Clone() const;
 	
@@ -72,7 +72,7 @@ public:
 	virtual LogicException* clone() const;
 #	endif
 	
-	void Swap(LogicException& other);
+	void Swap(LogicException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -84,14 +84,14 @@ protected:
 	
 	virtual QString DoOwnWhat() const;
 	
-	void SwapOwnData(LogicException& other);
+	void SwapOwnData(LogicException& other) CPPDEVTK_NOEXCEPT;
 	
 	
 	QString whatArg_;
 };
 
 
-CPPDEVTK_BASE_API void swap(LogicException& x, LogicException& y);
+CPPDEVTK_BASE_API void swap(LogicException& x, LogicException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -119,7 +119,7 @@ public:
 	DomainException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	DomainException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~DomainException() throw();
+	virtual ~DomainException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<DomainException> Clone() const;
 	
@@ -129,7 +129,7 @@ public:
 	virtual DomainException* clone() const;
 #	endif
 	
-	void Swap(DomainException& other);
+	void Swap(DomainException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -139,11 +139,11 @@ protected:
 	virtual DomainException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(DomainException& other);
+	void SwapOwnData(DomainException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(DomainException& x, DomainException& y);
+CPPDEVTK_BASE_API void swap(DomainException& x, DomainException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -171,7 +171,7 @@ public:
 	InvalidArgumentException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	InvalidArgumentException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~InvalidArgumentException() throw();
+	virtual ~InvalidArgumentException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<InvalidArgumentException> Clone() const;
 	
@@ -181,7 +181,7 @@ public:
 	virtual InvalidArgumentException* clone() const;
 #	endif
 	
-	void Swap(InvalidArgumentException& other);
+	void Swap(InvalidArgumentException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -191,11 +191,11 @@ protected:
 	virtual InvalidArgumentException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(InvalidArgumentException& other);
+	void SwapOwnData(InvalidArgumentException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(InvalidArgumentException& x, InvalidArgumentException& y);
+CPPDEVTK_BASE_API void swap(InvalidArgumentException& x, InvalidArgumentException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -223,7 +223,7 @@ public:
 	LengthException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	LengthException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~LengthException() throw();
+	virtual ~LengthException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<LengthException> Clone() const;
 	
@@ -233,7 +233,7 @@ public:
 	virtual LengthException* clone() const;
 #	endif
 	
-	void Swap(LengthException& other);
+	void Swap(LengthException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -243,11 +243,11 @@ protected:
 	virtual LengthException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(LengthException& other);
+	void SwapOwnData(LengthException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(LengthException& x, LengthException& y);
+CPPDEVTK_BASE_API void swap(LengthException& x, LengthException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -275,7 +275,7 @@ public:
 	OutOfRangeException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	OutOfRangeException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~OutOfRangeException() throw();
+	virtual ~OutOfRangeException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<OutOfRangeException> Clone() const;
 	
@@ -285,7 +285,7 @@ public:
 	virtual OutOfRangeException* clone() const;
 #	endif
 	
-	void Swap(OutOfRangeException& other);
+	void Swap(OutOfRangeException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -295,11 +295,11 @@ protected:
 	virtual OutOfRangeException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(OutOfRangeException& other);
+	void SwapOwnData(OutOfRangeException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(OutOfRangeException& x, OutOfRangeException& y);
+CPPDEVTK_BASE_API void swap(OutOfRangeException& x, OutOfRangeException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -326,11 +326,11 @@ class CPPDEVTK_BASE_API RuntimeException: public virtual Exception {
 public:
 	RuntimeException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	RuntimeException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
-	RuntimeException(const RuntimeException& other) throw();
+	RuntimeException(const RuntimeException& other) CPPDEVTK_NOEXCEPT;
 	
-	virtual ~RuntimeException() throw();
+	virtual ~RuntimeException() CPPDEVTK_NOEXCEPT;
 	
-	RuntimeException& operator=(const RuntimeException& other) throw();
+	RuntimeException& operator=(const RuntimeException& other) CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<RuntimeException> Clone() const;
 	
@@ -340,7 +340,7 @@ public:
 	virtual RuntimeException* clone() const;
 #	endif
 	
-	void Swap(RuntimeException& other);
+	void Swap(RuntimeException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -352,14 +352,14 @@ protected:
 	
 	virtual QString DoOwnWhat() const;
 	
-	void SwapOwnData(RuntimeException& other);
+	void SwapOwnData(RuntimeException& other) CPPDEVTK_NOEXCEPT;
 	
 	
 	QString whatArg_;
 };
 
 
-CPPDEVTK_BASE_API void swap(RuntimeException& x, RuntimeException& y);
+CPPDEVTK_BASE_API void swap(RuntimeException& x, RuntimeException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -387,7 +387,7 @@ public:
 	RangeException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	RangeException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~RangeException() throw();
+	virtual ~RangeException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<RangeException> Clone() const;
 	
@@ -397,7 +397,7 @@ public:
 	virtual RangeException* clone() const;
 #	endif
 	
-	void Swap(RangeException& other);
+	void Swap(RangeException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -407,11 +407,11 @@ protected:
 	virtual RangeException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(RangeException& other);
+	void SwapOwnData(RangeException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(RangeException& x, RangeException& y);
+CPPDEVTK_BASE_API void swap(RangeException& x, RangeException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -439,7 +439,7 @@ public:
 	OverflowException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	OverflowException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~OverflowException() throw();
+	virtual ~OverflowException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<OverflowException> Clone() const;
 	
@@ -449,7 +449,7 @@ public:
 	virtual OverflowException* clone() const;
 #	endif
 	
-	void Swap(OverflowException& other);
+	void Swap(OverflowException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -459,11 +459,11 @@ protected:
 	virtual OverflowException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(OverflowException& other);
+	void SwapOwnData(OverflowException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(OverflowException& x, OverflowException& y);
+CPPDEVTK_BASE_API void swap(OverflowException& x, OverflowException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -491,7 +491,7 @@ public:
 	UnderflowException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	UnderflowException(const SourceCodeInfo& throwPoint, const QString& whatArg, const Exception& cause);
 	
-	virtual ~UnderflowException() throw();
+	virtual ~UnderflowException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<UnderflowException> Clone() const;
 	
@@ -501,7 +501,7 @@ public:
 	virtual UnderflowException* clone() const;
 #	endif
 	
-	void Swap(UnderflowException& other);
+	void Swap(UnderflowException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -511,11 +511,11 @@ protected:
 	virtual UnderflowException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(UnderflowException& other);
+	void SwapOwnData(UnderflowException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(UnderflowException& x, UnderflowException& y);
+CPPDEVTK_BASE_API void swap(UnderflowException& x, UnderflowException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}	// std_exceptions
@@ -534,11 +534,11 @@ inline LogicException::LogicException(const SourceCodeInfo& throwPoint, const QS
 inline LogicException::LogicException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), whatArg_(whatArg) {}
 
-inline LogicException::LogicException(const LogicException& other) throw(): Exception(other), whatArg_(other.whatArg_) {}
+inline LogicException::LogicException(const LogicException& other) CPPDEVTK_NOEXCEPT: Exception(other), whatArg_(other.whatArg_) {}
 
-inline LogicException::~LogicException() throw() {}
+inline LogicException::~LogicException() CPPDEVTK_NOEXCEPT {}
 
-inline LogicException& LogicException::operator=(const LogicException& other) throw() {
+inline LogicException& LogicException::operator=(const LogicException& other) CPPDEVTK_NOEXCEPT {
 	LogicException tmp(other);
 	Swap(tmp);
 	return *this;
@@ -556,7 +556,7 @@ inline LogicException* LogicException::clone() const {
 	return Clone().release();
 }
 
-inline void LogicException::Swap(LogicException& other) {
+inline void LogicException::Swap(LogicException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		Exception::Swap(other);
 		SwapOwnData(other);
@@ -579,14 +579,14 @@ inline QString LogicException::DoOwnWhat() const {
 	return whatArg_;
 }
 
-inline void LogicException::SwapOwnData(LogicException& other) {
+inline void LogicException::SwapOwnData(LogicException& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	swap(whatArg_, other.whatArg_);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(LogicException& x, LogicException& y) {
+inline CPPDEVTK_BASE_API void swap(LogicException& x, LogicException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -599,7 +599,7 @@ inline DomainException::DomainException(const SourceCodeInfo& throwPoint, const 
 inline DomainException::DomainException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), LogicException(throwPoint, whatArg, cause) {}
 
-inline DomainException::~DomainException() throw() {}
+inline DomainException::~DomainException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<DomainException> DomainException::Clone() const {
 	return ::std::auto_ptr<DomainException>(dynamic_cast<DomainException*>(Cloneable::Clone().release()));
@@ -613,7 +613,7 @@ inline DomainException* DomainException::clone() const {
 	return Clone().release();
 }
 
-inline void DomainException::Swap(DomainException& other) {
+inline void DomainException::Swap(DomainException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		SwapOwnData(other);
@@ -632,12 +632,12 @@ inline DomainException* DomainException::DoClone() const {
 	return new DomainException(*this);
 }
 
-inline void DomainException::SwapOwnData(DomainException& other) {
+inline void DomainException::SwapOwnData(DomainException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(DomainException& x, DomainException& y) {
+inline CPPDEVTK_BASE_API void swap(DomainException& x, DomainException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -650,7 +650,7 @@ inline InvalidArgumentException::InvalidArgumentException(const SourceCodeInfo& 
 inline InvalidArgumentException::InvalidArgumentException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), LogicException(throwPoint, whatArg, cause) {}
 
-inline InvalidArgumentException::~InvalidArgumentException() throw() {}
+inline InvalidArgumentException::~InvalidArgumentException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<InvalidArgumentException> InvalidArgumentException::Clone() const {
 	return ::std::auto_ptr<InvalidArgumentException>(dynamic_cast<InvalidArgumentException*>(Cloneable::Clone().release()));
@@ -664,7 +664,7 @@ inline InvalidArgumentException* InvalidArgumentException::clone() const {
 	return Clone().release();
 }
 
-inline void InvalidArgumentException::Swap(InvalidArgumentException& other) {
+inline void InvalidArgumentException::Swap(InvalidArgumentException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		SwapOwnData(other);
@@ -683,12 +683,12 @@ inline InvalidArgumentException* InvalidArgumentException::DoClone() const {
 	return new InvalidArgumentException(*this);
 }
 
-inline void InvalidArgumentException::SwapOwnData(InvalidArgumentException& other) {
+inline void InvalidArgumentException::SwapOwnData(InvalidArgumentException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(InvalidArgumentException& x, InvalidArgumentException& y) {
+inline CPPDEVTK_BASE_API void swap(InvalidArgumentException& x, InvalidArgumentException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -701,7 +701,7 @@ inline LengthException::LengthException(const SourceCodeInfo& throwPoint, const 
 inline LengthException::LengthException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), LogicException(throwPoint, whatArg, cause) {}
 
-inline LengthException::~LengthException() throw() {}
+inline LengthException::~LengthException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<LengthException> LengthException::Clone() const {
 	return ::std::auto_ptr<LengthException>(dynamic_cast<LengthException*>(Cloneable::Clone().release()));
@@ -715,7 +715,7 @@ inline LengthException* LengthException::clone() const {
 	return Clone().release();
 }
 
-inline void LengthException::Swap(LengthException& other) {
+inline void LengthException::Swap(LengthException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		SwapOwnData(other);
@@ -734,12 +734,12 @@ inline LengthException* LengthException::DoClone() const {
 	return new LengthException(*this);
 }
 
-inline void LengthException::SwapOwnData(LengthException& other) {
+inline void LengthException::SwapOwnData(LengthException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(LengthException& x, LengthException& y) {
+inline CPPDEVTK_BASE_API void swap(LengthException& x, LengthException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -752,7 +752,7 @@ inline OutOfRangeException::OutOfRangeException(const SourceCodeInfo& throwPoint
 inline OutOfRangeException::OutOfRangeException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), LogicException(throwPoint, whatArg, cause) {}
 
-inline OutOfRangeException::~OutOfRangeException() throw() {}
+inline OutOfRangeException::~OutOfRangeException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<OutOfRangeException> OutOfRangeException::Clone() const {
 	return ::std::auto_ptr<OutOfRangeException>(dynamic_cast<OutOfRangeException*>(Cloneable::Clone().release()));
@@ -766,7 +766,7 @@ inline OutOfRangeException* OutOfRangeException::clone() const {
 	return Clone().release();
 }
 
-inline void OutOfRangeException::Swap(OutOfRangeException& other) {
+inline void OutOfRangeException::Swap(OutOfRangeException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		SwapOwnData(other);
@@ -785,12 +785,12 @@ inline OutOfRangeException* OutOfRangeException::DoClone() const {
 	return new OutOfRangeException(*this);
 }
 
-inline void OutOfRangeException::SwapOwnData(OutOfRangeException& other) {
+inline void OutOfRangeException::SwapOwnData(OutOfRangeException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(OutOfRangeException& x, OutOfRangeException& y) {
+inline CPPDEVTK_BASE_API void swap(OutOfRangeException& x, OutOfRangeException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -803,11 +803,11 @@ inline RuntimeException::RuntimeException(const SourceCodeInfo& throwPoint, cons
 inline RuntimeException::RuntimeException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), whatArg_(whatArg) {}
 
-inline RuntimeException::RuntimeException(const RuntimeException& other) throw(): Exception(other), whatArg_(other.whatArg_) {}
+inline RuntimeException::RuntimeException(const RuntimeException& other) CPPDEVTK_NOEXCEPT: Exception(other), whatArg_(other.whatArg_) {}
 
-inline RuntimeException::~RuntimeException() throw() {}
+inline RuntimeException::~RuntimeException() CPPDEVTK_NOEXCEPT {}
 
-inline RuntimeException& RuntimeException::operator=(const RuntimeException& other) throw() {
+inline RuntimeException& RuntimeException::operator=(const RuntimeException& other) CPPDEVTK_NOEXCEPT {
 	RuntimeException tmp(other);
 	Swap(tmp);
 	return *this;
@@ -825,7 +825,7 @@ inline RuntimeException* RuntimeException::clone() const {
 	return Clone().release();
 }
 
-inline void RuntimeException::Swap(RuntimeException& other) {
+inline void RuntimeException::Swap(RuntimeException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		Exception::Swap(other);
 		SwapOwnData(other);
@@ -848,14 +848,14 @@ inline QString RuntimeException::DoOwnWhat() const {
 	return whatArg_;
 }
 
-inline void RuntimeException::SwapOwnData(RuntimeException& other) {
+inline void RuntimeException::SwapOwnData(RuntimeException& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	swap(whatArg_, other.whatArg_);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(RuntimeException& x, RuntimeException& y) {
+inline CPPDEVTK_BASE_API void swap(RuntimeException& x, RuntimeException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -868,7 +868,7 @@ inline RangeException::RangeException(const SourceCodeInfo& throwPoint, const QS
 inline RangeException::RangeException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, whatArg, cause) {}
 
-inline RangeException::~RangeException() throw() {}
+inline RangeException::~RangeException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<RangeException> RangeException::Clone() const {
 	return ::std::auto_ptr<RangeException>(dynamic_cast<RangeException*>(Cloneable::Clone().release()));
@@ -882,7 +882,7 @@ inline RangeException* RangeException::clone() const {
 	return Clone().release();
 }
 
-inline void RangeException::Swap(RangeException& other) {
+inline void RangeException::Swap(RangeException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
@@ -901,12 +901,12 @@ inline RangeException* RangeException::DoClone() const {
 	return new RangeException(*this);
 }
 
-inline void RangeException::SwapOwnData(RangeException& other) {
+inline void RangeException::SwapOwnData(RangeException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(RangeException& x, RangeException& y) {
+inline CPPDEVTK_BASE_API void swap(RangeException& x, RangeException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -919,7 +919,7 @@ inline OverflowException::OverflowException(const SourceCodeInfo& throwPoint, co
 inline OverflowException::OverflowException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, whatArg, cause) {}
 
-inline OverflowException::~OverflowException() throw() {}
+inline OverflowException::~OverflowException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<OverflowException> OverflowException::Clone() const {
 	return ::std::auto_ptr<OverflowException>(dynamic_cast<OverflowException*>(Cloneable::Clone().release()));
@@ -933,7 +933,7 @@ inline OverflowException* OverflowException::clone() const {
 	return Clone().release();
 }
 
-inline void OverflowException::Swap(OverflowException& other) {
+inline void OverflowException::Swap(OverflowException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
@@ -952,12 +952,12 @@ inline OverflowException* OverflowException::DoClone() const {
 	return new OverflowException(*this);
 }
 
-inline void OverflowException::SwapOwnData(OverflowException& other) {
+inline void OverflowException::SwapOwnData(OverflowException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(OverflowException& x, OverflowException& y) {
+inline CPPDEVTK_BASE_API void swap(OverflowException& x, OverflowException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -970,7 +970,7 @@ inline UnderflowException::UnderflowException(const SourceCodeInfo& throwPoint, 
 inline UnderflowException::UnderflowException(const SourceCodeInfo& throwPoint, const QString& whatArg,
 		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, whatArg, cause) {}
 
-inline UnderflowException::~UnderflowException() throw() {}
+inline UnderflowException::~UnderflowException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<UnderflowException> UnderflowException::Clone() const {
 	return ::std::auto_ptr<UnderflowException>(dynamic_cast<UnderflowException*>(Cloneable::Clone().release()));
@@ -984,7 +984,7 @@ inline UnderflowException* UnderflowException::clone() const {
 	return Clone().release();
 }
 
-inline void UnderflowException::Swap(UnderflowException& other) {
+inline void UnderflowException::Swap(UnderflowException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
@@ -1003,12 +1003,12 @@ inline UnderflowException* UnderflowException::DoClone() const {
 	return new UnderflowException(*this);
 }
 
-inline void UnderflowException::SwapOwnData(UnderflowException& other) {
+inline void UnderflowException::SwapOwnData(UnderflowException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(UnderflowException& x, UnderflowException& y) {
+inline CPPDEVTK_BASE_API void swap(UnderflowException& x, UnderflowException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

@@ -55,11 +55,11 @@ catch (const system_error& exc) {
 
 ConditionVariable::~ConditionVariable() {}
 
-void ConditionVariable::NotifyOne() throw() {
+void ConditionVariable::NotifyOne() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.notify_one();
 }
 
-void ConditionVariable::NotifyAll() throw() {
+void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.notify_all();
 }
 

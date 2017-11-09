@@ -117,9 +117,10 @@ public:
 	
 	/// Format: "category: " + category().name() + "; error: " + value() + " (" + message() + ')'
 	virtual QString ToString() const;
-	
-	static void UnspecifiedBoolTrue();
 private:
+	static void UnspecifiedBoolTrue();
+	
+	
 	int value_;
 	const ErrorCategory* pErrorCategory_;
 };

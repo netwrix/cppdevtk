@@ -28,7 +28,7 @@ namespace cppdevtk {
 namespace base {
 
 
-Exception::Exception(const SourceCodeInfo& throwPoint) /* throw() */: Throwable(), Cloneable(),
+Exception::Exception(const SourceCodeInfo& throwPoint) /* CPPDEVTK_NOEXCEPT */: Throwable(), Cloneable(),
 		QStringizable(), CPPDEVTK_QT_EXCEPTION(), pStdWhatMsg_(new ::std::string()), pStackTrace_(new StackTrace(
 #		if (!defined(NDEBUG) || CPPDEVTK_EXCEPTION_ENABLE_STACK_TRACE_IN_RELEASE)
 		true
@@ -48,7 +48,7 @@ Exception::Exception(const SourceCodeInfo& throwPoint) /* throw() */: Throwable(
 #	endif
 }
 
-Exception::Exception(const SourceCodeInfo& throwPoint, const Exception& cause) /* throw() */:
+Exception::Exception(const SourceCodeInfo& throwPoint, const Exception& cause) /* CPPDEVTK_NOEXCEPT */:
 		Throwable(), Cloneable(), QStringizable(), CPPDEVTK_QT_EXCEPTION(), pStdWhatMsg_(new ::std::string()),
 		pStackTrace_(new StackTrace(
 #		if (!defined(NDEBUG) || CPPDEVTK_EXCEPTION_ENABLE_STACK_TRACE_IN_RELEASE)
@@ -104,7 +104,7 @@ QString Exception::ToString() const {
 	return stringized;
 }
 
-const char* Exception::what() const throw() {
+const char* Exception::what() const CPPDEVTK_NOEXCEPT {
 	try {
 #		if (CPPDEVTK_DISABLE_UNICODE)
 		*pStdWhatMsg_ = Q2A(What());

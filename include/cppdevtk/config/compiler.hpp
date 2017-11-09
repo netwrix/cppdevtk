@@ -194,12 +194,13 @@
 /// - CPPDEVTK_HAVE_TR1_DIR
 /// - CPPDEVTK_HAVE_TR1_NS
 /// - CPPDEVTK_HAVE_CPP11_STATIC_ASSERT
+/// - CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR
 /// - CPPDEVTK_HAVE_CPP11_MUTEX
 /// - CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE
 /// - CPPDEVTK_HAVE_CPP11_THREAD
 /// - CPPDEVTK_HAVE_CPP11_FUTURE
 /// - CPPDEVTK_HAVE_CPP11_ATOMIC
-/// - CPPDEVTK_HAVE_CPP11_EXCEPTION_PTR
+/// - CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION
 /// - CPPDEVTK_HAVE_CPP11_AT_QUICK_EXIT
 /// - CPPDEVTK_HAVE_CPP11_TLS
 /// - CPPDEVTK_HAVE_CPP11_RVALUE_REFERENCES
@@ -208,6 +209,7 @@
 /// - CPPDEVTK_HAVE_CPP11_DECLTYPE
 /// - CPPDEVTK_HAVE_CPP11_TEMPLATE_ALIAS
 /// - CPPDEVTK_HAVE_CPP11_LAMBDAS
+/// - CPPDEVTK_HAVE_CPP11_NOEXCEPT
 /// \attention Must be implemented by each \ref config_compiler_supported_compilers.
 
 // - CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI
@@ -285,6 +287,9 @@
 #ifndef CPPDEVTK_HAVE_CPP11_STATIC_ASSERT
 #	error "Please define CPPDEVTK_HAVE_CPP11_STATIC_ASSERT properly for current compiler!!!"
 #endif
+#ifndef CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR
+#	error "Please define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR properly for current compiler!!!"
+#endif
 #ifndef CPPDEVTK_HAVE_CPP11_MUTEX
 #	error "Please define CPPDEVTK_HAVE_CPP11_MUTEX properly for current compiler!!!"
 #endif
@@ -300,8 +305,8 @@
 #ifndef CPPDEVTK_HAVE_CPP11_ATOMIC
 #	error "Please define CPPDEVTK_HAVE_CPP11_ATOMIC properly for current compiler!!!"
 #endif
-#ifndef CPPDEVTK_HAVE_CPP11_EXCEPTION_PTR
-#	error "Please define CPPDEVTK_HAVE_CPP11_EXCEPTION_PTR properly for current compiler!!!"
+#ifndef CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION
+#	error "Please define CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION properly for current compiler!!!"
 #endif
 #ifndef CPPDEVTK_HAVE_CPP11_AT_QUICK_EXIT
 #	error "Please define CPPDEVTK_HAVE_CPP11_AT_QUICK_EXIT properly for current compiler!!!"
@@ -327,7 +332,9 @@
 #ifndef CPPDEVTK_HAVE_CPP11_LAMBDAS
 #	error "Please define CPPDEVTK_HAVE_CPP11_LAMBDAS properly for current compiler!!!"
 #endif
-
+#ifndef CPPDEVTK_HAVE_CPP11_NOEXCEPT
+#	error "Please define CPPDEVTK_HAVE_CPP11_NOEXCEPT properly for current compiler!!!"
+#endif
 
 #ifndef CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI
 #	error "Please define CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI properly for current compiler!!!"
@@ -385,6 +392,12 @@
 #	define CPPDEVTK_CONSTEXPR constexpr
 #else
 #	define CPPDEVTK_CONSTEXPR
+#endif
+
+#if (CPPDEVTK_HAVE_CPP11_NOEXCEPT)
+#	define CPPDEVTK_NOEXCEPT noexcept
+#else
+#	define CPPDEVTK_NOEXCEPT throw()
 #endif
 
 /// @}	// config_compiler

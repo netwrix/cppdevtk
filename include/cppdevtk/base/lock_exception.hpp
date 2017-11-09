@@ -36,17 +36,17 @@ namespace base {
 
 
 #define CPPDEVTK_LOCK_EXC_W_EC(errorCode)	\
-	::cppdevtk::base::LockException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+	::cppdevtk::base::LockException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
 #define CPPDEVTK_LOCK_EXC_W_EC_WA(errorCode, whatArg)	\
-	::cppdevtk::base::LockException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg)
+	::cppdevtk::base::LockException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
 
 #define CPPDEVTK_MAKE_LOCK_EXC_W_EC(excName, errorCode)	\
-	::cppdevtk::base::LockException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+	::cppdevtk::base::LockException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
 #define CPPDEVTK_MAKE_LOCK_EXC_W_EC_WA(excName, errorCode, whatArg)	\
-	::cppdevtk::base::LockException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg)
+	::cppdevtk::base::LockException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ public:
 	LockException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode);
 	LockException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const QString& whatArg);
 	
-	virtual ~LockException() throw();
+	virtual ~LockException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<LockException> Clone() const;
 	
@@ -67,7 +67,7 @@ public:
 	virtual LockException* clone() const;
 #	endif
 	
-	void Swap(LockException& other);
+	void Swap(LockException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -77,11 +77,11 @@ protected:
 	virtual LockException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(LockException& other);
+	void SwapOwnData(LockException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(LockException& x, LockException& y);
+CPPDEVTK_BASE_API void swap(LockException& x, LockException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -99,7 +99,7 @@ inline LockException::LockException(const SourceCodeInfo& throwPoint, const Erro
 inline LockException::LockException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint, errorCode, whatArg) {}
 
-inline LockException::~LockException() throw() {}
+inline LockException::~LockException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<LockException> LockException::Clone() const {
 	return ::std::auto_ptr<LockException>(dynamic_cast<LockException*>(Cloneable::Clone().release()));
@@ -113,7 +113,7 @@ inline LockException* LockException::clone() const {
 	return Clone().release();
 }
 
-inline void LockException::Swap(LockException& other) {
+inline void LockException::Swap(LockException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		SystemException::Swap(other);
 		SwapOwnData(other);
@@ -132,12 +132,12 @@ inline LockException* LockException::DoClone() const {
 	return new LockException(*this);
 }
 
-inline void LockException::SwapOwnData(LockException& other) {
+inline void LockException::SwapOwnData(LockException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(LockException& x, LockException& y) {
+inline CPPDEVTK_BASE_API void swap(LockException& x, LockException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

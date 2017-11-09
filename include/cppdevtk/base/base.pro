@@ -44,6 +44,12 @@ HEADERS += \
     error_code.hpp \
     error_condition.hpp \
     exception.hpp \
+	exception_propagation.hpp \
+	unknown_exception.hpp	\
+	new.hpp \
+	functional.hpp \
+	memory.hpp \
+	future.hpp \
     info.hpp \
     info_tr.hpp \
     init_resources.hpp \
@@ -106,7 +112,9 @@ HEADERS += \
 	invalid_string_conversion_exception.hpp	\
 	condition_variable.hpp	\
 	semaphore.hpp	\
-	generic_locking_algorithms.hpp
+	generic_locking_algorithms.hpp	\
+	thread_exception.hpp	\
+	thread.hpp
 
 unix {
 	HEADERS += execinfo_unx.h

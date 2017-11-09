@@ -33,36 +33,36 @@ namespace base {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \addtogroup exceptions
+/// \addtogroup std_exceptions
 /// @{
 
 
 #define CPPDEVTK_IOS_FAILURE_EXC_W_WA(whatArg)	\
-	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), whatArg)
+	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 #define CPPDEVTK_IOS_FAILURE_EXC_W_WA_EC(whatArg, errorCode)	\
-	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), whatArg, errorCode)
+	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode))
 
 
 #define CPPDEVTK_IOS_FAILURE_EXC_W_WA_CAUSE(whatArg, cause)	\
-	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), whatArg, cause)
+	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (cause))
 
 #define CPPDEVTK_IOS_FAILURE_EXC_W_WA_EC_CAUSE(whatArg, errorCode, cause)	\
-	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), whatArg, errorCode, cause)
+	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode), (cause))
 
 
 #define CPPDEVTK_MAKE_FS_EXC_W_WA(excName, whatArg)	\
-	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), whatArg)
+	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_WA_EC(excName, whatArg, errorCode)	\
-	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), whatArg, errorCode)
+	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode))
 
 
 #define CPPDEVTK_MAKE_FS_EXC_W_WA_CAUSE(excName, whatArg, cause)	\
-	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), whatArg, cause)
+	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (cause))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_WA_EC_CAUSE(excName, whatArg, errorCode, cause)	\
-	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), whatArg, errorCode, cause)
+	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode), (cause))
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ public:
 	IosFailureException(const SourceCodeInfo& throwPoint, const QString& whatArg, const ErrorCode& errorCode,
 			const Exception& cause);
 	
-	virtual ~IosFailureException() throw();
+	virtual ~IosFailureException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<IosFailureException> Clone() const;
 	
@@ -89,7 +89,7 @@ public:
 	virtual IosFailureException* clone() const;
 #	endif
 	
-	void Swap(IosFailureException& other);
+	void Swap(IosFailureException& other) CPPDEVTK_NOEXCEPT;
 	
 protected:
 	virtual void DoThrow() const;
@@ -100,11 +100,11 @@ protected:
 	virtual IosFailureException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(IosFailureException& other);
+	void SwapOwnData(IosFailureException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(IosFailureException& x, IosFailureException& y);
+CPPDEVTK_BASE_API void swap(IosFailureException& x, IosFailureException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -132,7 +132,7 @@ inline IosFailureException::IosFailureException(const SourceCodeInfo& throwPoint
 		const ErrorCode& errorCode, const Exception& cause): Exception(throwPoint), RuntimeException(throwPoint, ""),
 		SystemException(throwPoint, errorCode, whatArg, cause) {}
 
-inline IosFailureException::~IosFailureException() throw() {}
+inline IosFailureException::~IosFailureException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<IosFailureException> IosFailureException::Clone() const {
 	return ::std::auto_ptr<IosFailureException>(dynamic_cast<IosFailureException*>(Cloneable::Clone().release()));
@@ -146,7 +146,7 @@ inline IosFailureException* IosFailureException::clone() const {
 	return Clone().release();
 }
 
-inline void IosFailureException::Swap(IosFailureException& other) {
+inline void IosFailureException::Swap(IosFailureException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		SystemException::Swap(other);
 		SwapOwnData(other);
@@ -165,12 +165,12 @@ inline IosFailureException* IosFailureException::DoClone() const {
 	return new IosFailureException(*this);
 }
 
-inline void IosFailureException::SwapOwnData(IosFailureException& other) {
+inline void IosFailureException::SwapOwnData(IosFailureException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(IosFailureException& x, IosFailureException& y) {
+inline CPPDEVTK_BASE_API void swap(IosFailureException& x, IosFailureException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

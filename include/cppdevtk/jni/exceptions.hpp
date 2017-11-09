@@ -55,7 +55,7 @@ public:
 	JniException(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg,
 			const ::cppdevtk::base::Exception& cause);
 	
-	virtual ~JniException() throw();
+	virtual ~JniException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<JniException> Clone() const;
 	
@@ -65,7 +65,7 @@ public:
 	virtual JniException* clone() const;
 #	endif
 	
-	void Swap(JniException& other);
+	void Swap(JniException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -75,11 +75,11 @@ protected:
 	virtual JniException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(JniException& other);
+	void SwapOwnData(JniException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_JNI_API void swap(JniException& x, JniException& y);
+CPPDEVTK_JNI_API void swap(JniException& x, JniException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -98,7 +98,7 @@ class CPPDEVTK_JNI_API OutOfMemoryError: public JniException {
 public:
 	OutOfMemoryError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~OutOfMemoryError() throw();
+	virtual ~OutOfMemoryError() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<OutOfMemoryError> Clone() const;
 	
@@ -108,7 +108,7 @@ public:
 	virtual OutOfMemoryError* clone() const;
 #	endif
 	
-	void Swap(OutOfMemoryError& other);
+	void Swap(OutOfMemoryError& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -118,11 +118,11 @@ protected:
 	virtual OutOfMemoryError* DoClone() const;
 #	endif
 	
-	void SwapOwnData(OutOfMemoryError& other);
+	void SwapOwnData(OutOfMemoryError& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_JNI_API void swap(OutOfMemoryError& x, OutOfMemoryError& y);
+CPPDEVTK_JNI_API void swap(OutOfMemoryError& x, OutOfMemoryError& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -141,7 +141,7 @@ class CPPDEVTK_JNI_API NoClassDefFoundError: public JniException {
 public:
 	NoClassDefFoundError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~NoClassDefFoundError() throw();
+	virtual ~NoClassDefFoundError() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<NoClassDefFoundError> Clone() const;
 	
@@ -151,7 +151,7 @@ public:
 	virtual NoClassDefFoundError* clone() const;
 #	endif
 	
-	void Swap(NoClassDefFoundError& other);
+	void Swap(NoClassDefFoundError& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -161,11 +161,11 @@ protected:
 	virtual NoClassDefFoundError* DoClone() const;
 #	endif
 	
-	void SwapOwnData(NoClassDefFoundError& other);
+	void SwapOwnData(NoClassDefFoundError& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_JNI_API void swap(NoClassDefFoundError& x, NoClassDefFoundError& y);
+CPPDEVTK_JNI_API void swap(NoClassDefFoundError& x, NoClassDefFoundError& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -184,7 +184,7 @@ class CPPDEVTK_JNI_API NoSuchMethodError: public JniException {
 public:
 	NoSuchMethodError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~NoSuchMethodError() throw();
+	virtual ~NoSuchMethodError() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<NoSuchMethodError> Clone() const;
 	
@@ -194,7 +194,7 @@ public:
 	virtual NoSuchMethodError* clone() const;
 #	endif
 	
-	void Swap(NoSuchMethodError& other);
+	void Swap(NoSuchMethodError& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -204,11 +204,11 @@ protected:
 	virtual NoSuchMethodError* DoClone() const;
 #	endif
 	
-	void SwapOwnData(NoSuchMethodError& other);
+	void SwapOwnData(NoSuchMethodError& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_JNI_API void swap(NoSuchMethodError& x, NoSuchMethodError& y);
+CPPDEVTK_JNI_API void swap(NoSuchMethodError& x, NoSuchMethodError& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -227,7 +227,7 @@ class CPPDEVTK_JNI_API NoSuchFieldError: public JniException {
 public:
 	NoSuchFieldError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~NoSuchFieldError() throw();
+	virtual ~NoSuchFieldError() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<NoSuchFieldError> Clone() const;
 	
@@ -237,7 +237,7 @@ public:
 	virtual NoSuchFieldError* clone() const;
 #	endif
 	
-	void Swap(NoSuchFieldError& other);
+	void Swap(NoSuchFieldError& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -247,11 +247,11 @@ protected:
 	virtual NoSuchFieldError* DoClone() const;
 #	endif
 	
-	void SwapOwnData(NoSuchFieldError& other);
+	void SwapOwnData(NoSuchFieldError& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_JNI_API void swap(NoSuchFieldError& x, NoSuchFieldError& y);
+CPPDEVTK_JNI_API void swap(NoSuchFieldError& x, NoSuchFieldError& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -266,7 +266,7 @@ inline JniException::JniException(const ::cppdevtk::base::SourceCodeInfo& throwP
 		const ::cppdevtk::base::Exception& cause): Exception(throwPoint, cause),
 		RuntimeException(throwPoint, whatArg, cause) {}
 
-inline JniException::~JniException() throw() {}
+inline JniException::~JniException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<JniException> JniException::Clone() const {
 	return ::std::auto_ptr<JniException>(dynamic_cast<JniException*>(Cloneable::Clone().release()));
@@ -280,7 +280,7 @@ inline JniException* JniException::clone() const {
 	return Clone().release();
 }
 
-inline void JniException::Swap(JniException& other) {
+inline void JniException::Swap(JniException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
@@ -299,12 +299,12 @@ inline JniException* JniException::DoClone() const {
 	return new JniException(*this);
 }
 
-inline void JniException::SwapOwnData(JniException& other) {
+inline void JniException::SwapOwnData(JniException& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_JNI_API void swap(JniException& x, JniException& y) {
+inline CPPDEVTK_JNI_API void swap(JniException& x, JniException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -314,7 +314,7 @@ inline CPPDEVTK_JNI_API void swap(JniException& x, JniException& y) {
 inline OutOfMemoryError::OutOfMemoryError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), JniException(throwPoint, whatArg) {}
 
-inline OutOfMemoryError::~OutOfMemoryError() throw() {}
+inline OutOfMemoryError::~OutOfMemoryError() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<OutOfMemoryError> OutOfMemoryError::Clone() const {
 	return ::std::auto_ptr<OutOfMemoryError>(dynamic_cast<OutOfMemoryError*>(Cloneable::Clone().release()));
@@ -328,7 +328,7 @@ inline OutOfMemoryError* OutOfMemoryError::clone() const {
 	return Clone().release();
 }
 
-inline void OutOfMemoryError::Swap(OutOfMemoryError& other) {
+inline void OutOfMemoryError::Swap(OutOfMemoryError& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		JniException::Swap(other);
 		SwapOwnData(other);
@@ -347,12 +347,12 @@ inline OutOfMemoryError* OutOfMemoryError::DoClone() const {
 	return new OutOfMemoryError(*this);
 }
 
-inline void OutOfMemoryError::SwapOwnData(OutOfMemoryError& other) {
+inline void OutOfMemoryError::SwapOwnData(OutOfMemoryError& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_JNI_API void swap(OutOfMemoryError& x, OutOfMemoryError& y) {
+inline CPPDEVTK_JNI_API void swap(OutOfMemoryError& x, OutOfMemoryError& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -362,7 +362,7 @@ inline CPPDEVTK_JNI_API void swap(OutOfMemoryError& x, OutOfMemoryError& y) {
 inline NoClassDefFoundError::NoClassDefFoundError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), JniException(throwPoint, whatArg) {}
 
-inline NoClassDefFoundError::~NoClassDefFoundError() throw() {}
+inline NoClassDefFoundError::~NoClassDefFoundError() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<NoClassDefFoundError> NoClassDefFoundError::Clone() const {
 	return ::std::auto_ptr<NoClassDefFoundError>(dynamic_cast<NoClassDefFoundError*>(Cloneable::Clone().release()));
@@ -376,7 +376,7 @@ inline NoClassDefFoundError* NoClassDefFoundError::clone() const {
 	return Clone().release();
 }
 
-inline void NoClassDefFoundError::Swap(NoClassDefFoundError& other) {
+inline void NoClassDefFoundError::Swap(NoClassDefFoundError& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		JniException::Swap(other);
 		SwapOwnData(other);
@@ -395,12 +395,12 @@ inline NoClassDefFoundError* NoClassDefFoundError::DoClone() const {
 	return new NoClassDefFoundError(*this);
 }
 
-inline void NoClassDefFoundError::SwapOwnData(NoClassDefFoundError& other) {
+inline void NoClassDefFoundError::SwapOwnData(NoClassDefFoundError& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_JNI_API void swap(NoClassDefFoundError& x, NoClassDefFoundError& y) {
+inline CPPDEVTK_JNI_API void swap(NoClassDefFoundError& x, NoClassDefFoundError& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -410,7 +410,7 @@ inline CPPDEVTK_JNI_API void swap(NoClassDefFoundError& x, NoClassDefFoundError&
 inline NoSuchMethodError::NoSuchMethodError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), JniException(throwPoint, whatArg) {}
 
-inline NoSuchMethodError::~NoSuchMethodError() throw() {}
+inline NoSuchMethodError::~NoSuchMethodError() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<NoSuchMethodError> NoSuchMethodError::Clone() const {
 	return ::std::auto_ptr<NoSuchMethodError>(dynamic_cast<NoSuchMethodError*>(Cloneable::Clone().release()));
@@ -424,7 +424,7 @@ inline NoSuchMethodError* NoSuchMethodError::clone() const {
 	return Clone().release();
 }
 
-inline void NoSuchMethodError::Swap(NoSuchMethodError& other) {
+inline void NoSuchMethodError::Swap(NoSuchMethodError& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		JniException::Swap(other);
 		SwapOwnData(other);
@@ -443,12 +443,12 @@ inline NoSuchMethodError* NoSuchMethodError::DoClone() const {
 	return new NoSuchMethodError(*this);
 }
 
-inline void NoSuchMethodError::SwapOwnData(NoSuchMethodError& other) {
+inline void NoSuchMethodError::SwapOwnData(NoSuchMethodError& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_JNI_API void swap(NoSuchMethodError& x, NoSuchMethodError& y) {
+inline CPPDEVTK_JNI_API void swap(NoSuchMethodError& x, NoSuchMethodError& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -458,7 +458,7 @@ inline CPPDEVTK_JNI_API void swap(NoSuchMethodError& x, NoSuchMethodError& y) {
 inline NoSuchFieldError::NoSuchFieldError(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), JniException(throwPoint, whatArg) {}
 
-inline NoSuchFieldError::~NoSuchFieldError() throw() {}
+inline NoSuchFieldError::~NoSuchFieldError() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<NoSuchFieldError> NoSuchFieldError::Clone() const {
 	return ::std::auto_ptr<NoSuchFieldError>(dynamic_cast<NoSuchFieldError*>(Cloneable::Clone().release()));
@@ -472,7 +472,7 @@ inline NoSuchFieldError* NoSuchFieldError::clone() const {
 	return Clone().release();
 }
 
-inline void NoSuchFieldError::Swap(NoSuchFieldError& other) {
+inline void NoSuchFieldError::Swap(NoSuchFieldError& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		JniException::Swap(other);
 		SwapOwnData(other);
@@ -491,12 +491,12 @@ inline NoSuchFieldError* NoSuchFieldError::DoClone() const {
 	return new NoSuchFieldError(*this);
 }
 
-inline void NoSuchFieldError::SwapOwnData(NoSuchFieldError& other) {
+inline void NoSuchFieldError::SwapOwnData(NoSuchFieldError& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_JNI_API void swap(NoSuchFieldError& x, NoSuchFieldError& y) {
+inline CPPDEVTK_JNI_API void swap(NoSuchFieldError& x, NoSuchFieldError& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

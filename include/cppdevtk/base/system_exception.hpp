@@ -27,6 +27,10 @@
 #include "error_code.hpp"
 #include "error_category.hpp"
 
+#if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
+#	include <system_error>
+#endif
+
 
 namespace cppdevtk {
 namespace base {
@@ -43,55 +47,55 @@ namespace base {
 //
 
 #define CPPDEVTK_SYS_EXC_W_EC(errorCode)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
 #define CPPDEVTK_SYS_EXC_W_EC_WA(errorCode, whatArg)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg))
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
 #define CPPDEVTK_SYS_EXC_W_EV(errVal, errorCategory)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory)
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory))
 
 #define CPPDEVTK_SYS_EXC_W_EV_WA(errVal, errorCategory, whatArg)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg))
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg))
 
 
 #define CPPDEVTK_SYS_EXC_W_EC_CAUSE(errorCode, cause)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (cause))
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
 #define CPPDEVTK_SYS_EXC_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg), (cause))
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
 #define CPPDEVTK_SYS_EXC_W_EV_CAUSE(errVal, errorCategory, cause)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (cause))
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (cause))
 
 #define CPPDEVTK_SYS_EXC_W_EV_WA_CAUSE(errVal, errorCategory, whatArg, cause)	\
-	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg), (cause))
+	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg), (cause))
 
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EC(excName, errorCode)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EC_WA(excName, errorCode, whatArg)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg))
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EV(excName, errVal, errorCategory)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory)
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory))
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EV_WA(excName, errVal, errorCategory, whatArg)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg))
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg))
 
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EC_CAUSE(excName, errorCode, cause)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (cause))
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, (whatArg), (cause))
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EV_CAUSE(excName, errVal, errorCategory, cause)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (cause))
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (cause))
 
 #define CPPDEVTK_MAKE_SYS_EXC_W_EV_WA_CAUSE(excName, errVal, errorCategory, whatArg, cause)	\
-	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errVal, errorCategory, (whatArg), (cause))
+	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg), (cause))
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,11 +121,11 @@ public:
 	SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory, const QString& whatArg,
 			const Exception& cause);
 	
-	SystemException(const SystemException& other) throw();
+	SystemException(const SystemException& other) CPPDEVTK_NOEXCEPT;
 	
-	virtual ~SystemException() throw();
+	virtual ~SystemException() CPPDEVTK_NOEXCEPT;
 	
-	SystemException& operator=(const SystemException& other) throw();
+	SystemException& operator=(const SystemException& other) CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<SystemException> Clone() const;
 	
@@ -131,9 +135,9 @@ public:
 	virtual SystemException* clone() const;
 #	endif
 	
-	void Swap(SystemException& other);
+	void Swap(SystemException& other) CPPDEVTK_NOEXCEPT;
 	
-	const ErrorCode& ErrorCodeRef() const throw();
+	const ErrorCode& ErrorCodeRef() const CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -143,13 +147,13 @@ protected:
 	virtual SystemException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(SystemException& other);
+	void SwapOwnData(SystemException& other) CPPDEVTK_NOEXCEPT;
 private:
 	ErrorCode errorCode_;
 };
 
 
-CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y);
+CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}	// system_exception
@@ -229,12 +233,12 @@ inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int er
 	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
 }
 
-inline SystemException::SystemException(const SystemException& other) throw(): Exception(other), RuntimeException(other),
+inline SystemException::SystemException(const SystemException& other) CPPDEVTK_NOEXCEPT: Exception(other), RuntimeException(other),
 		errorCode_(other.errorCode_) {}
 
-inline SystemException::~SystemException() throw() {}
+inline SystemException::~SystemException() CPPDEVTK_NOEXCEPT {}
 
-inline SystemException& SystemException::operator=(const SystemException& other) throw() {
+inline SystemException& SystemException::operator=(const SystemException& other) CPPDEVTK_NOEXCEPT {
 	SystemException tmp(other);
 	Swap(tmp);
 	return *this;
@@ -252,14 +256,14 @@ inline SystemException* SystemException::clone() const {
 	return Clone().release();
 }
 
-inline void SystemException::Swap(SystemException& other) {
+inline void SystemException::Swap(SystemException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
 	}
 }
 
-inline const ErrorCode& SystemException::ErrorCodeRef() const throw() {
+inline const ErrorCode& SystemException::ErrorCodeRef() const CPPDEVTK_NOEXCEPT {
 	return errorCode_;
 }
 
@@ -275,14 +279,14 @@ inline SystemException* SystemException::DoClone() const {
 	return new SystemException(*this);
 }
 
-inline void SystemException::SwapOwnData(SystemException& other) {
+inline void SystemException::SwapOwnData(SystemException& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	swap(errorCode_, other.errorCode_);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y) {
+inline CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

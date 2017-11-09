@@ -40,7 +40,7 @@ namespace cppdevtk {
 namespace base {
 
 
-bool StackTrace::Capture() throw() {
+bool StackTrace::Capture() CPPDEVTK_NOEXCEPT {
 	Clear();
 	
 	if (GetMaxSize() == 0) {

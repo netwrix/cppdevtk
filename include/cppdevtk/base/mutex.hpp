@@ -71,8 +71,8 @@ public:
 	~Mutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 	
 #	if (CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX)
 	NativeHandleType GetNativeHandle();
@@ -101,8 +101,8 @@ public:
 	~ErrorCheckingMutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 	
 	NativeHandleType GetNativeHandle();
 private:
@@ -127,8 +127,8 @@ public:
 	~RecursiveMutex();
 	
 	void Lock();
-	bool TryLock() throw();	// noexcept in std
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 	
 #	if (CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX)
 	NativeHandleType GetNativeHandle();
@@ -160,19 +160,19 @@ public:
 	~TimedMutex();
 	
 	void Lock();
-	bool TryLock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
 	
 	/// Attempts to obtain ownership of the mutex within the relative timeout.
 	/// \arg relTime Relative timeout, in milliseconds.
 	/// If it is <= 0, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockFor(int relTime) throw();
+	bool TryLockFor(int relTime) CPPDEVTK_NOEXCEPT;
 	
 	/// Attempts to obtain ownership of the mutex.
 	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// If it has already passed, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockUntil(::std::time_t absTime) throw();
+	bool TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT;
 	
-	void Unlock() throw();
+	void Unlock() CPPDEVTK_NOEXCEPT;
 	
 #	if ((CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))	\
 			|| (CPPDEVTK_HAVE_CPP11_MUTEX && (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX)))
@@ -202,10 +202,10 @@ public:
 	~ErrorCheckingTimedMutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	bool TryLockFor(int relTime) throw();
-	bool TryLockUntil(::std::time_t absTime) throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	bool TryLockFor(int relTime) CPPDEVTK_NOEXCEPT;
+	bool TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 	
 	NativeHandleType GetNativeHandle();
 private:
@@ -231,19 +231,19 @@ public:
 	~RecursiveTimedMutex();
 	
 	void Lock();
-	bool TryLock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
 	
 	/// Attempts to obtain ownership of the mutex within the relative timeout.
 	/// \arg relTime Relative timeout, in milliseconds.
 	/// If it is <= 0, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockFor(int relTime) throw();
+	bool TryLockFor(int relTime) CPPDEVTK_NOEXCEPT;
 	
 	/// Attempts to obtain ownership of the mutex.
 	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// If it has already passed, attempts to obtain ownership without blocking (as if by calling TryLock()).
-	bool TryLockUntil(::std::time_t absTime) throw();	// noexcept in std
+	bool TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT;
 	
-	void Unlock() throw();
+	void Unlock() CPPDEVTK_NOEXCEPT;
 	
 #	if ((CPPDEVTK_HAVE_PTHREADS || (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_PLATFORM_ANDROID))	\
 			|| (CPPDEVTK_HAVE_CPP11_MUTEX && (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_ANDROID && !CPPDEVTK_PLATFORM_MACOSX)))
@@ -270,8 +270,8 @@ public:
 	~NullMutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 };
 
 
@@ -283,8 +283,8 @@ public:
 	~NullRecursiveMutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 };
 
 
@@ -296,10 +296,10 @@ public:
 	~NullTimedMutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	bool TryLockFor(int relTime) throw();
-	bool TryLockUntil(::std::time_t absTime) throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	bool TryLockFor(int relTime) CPPDEVTK_NOEXCEPT;
+	bool TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 };
 
 
@@ -311,10 +311,10 @@ public:
 	~NullRecursiveTimedMutex();
 	
 	void Lock();
-	bool TryLock() throw();
-	bool TryLockFor(int relTime) throw();
-	bool TryLockUntil(::std::time_t absTime) throw();
-	void Unlock() throw();
+	bool TryLock() CPPDEVTK_NOEXCEPT;
+	bool TryLockFor(int relTime) CPPDEVTK_NOEXCEPT;
+	bool TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT;
+	void Unlock() CPPDEVTK_NOEXCEPT;
 };
 
 
@@ -375,11 +375,11 @@ inline NullMutex::~NullMutex() {}
 
 inline void NullMutex::Lock() {}
 
-inline bool NullMutex::TryLock() throw() {
+inline bool NullMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return true;
 }
 
-inline void NullMutex::Unlock() throw() {}
+inline void NullMutex::Unlock() CPPDEVTK_NOEXCEPT {}
 
 
 inline NullRecursiveMutex::NullRecursiveMutex(): NonCopyable() {}
@@ -388,11 +388,11 @@ inline NullRecursiveMutex::~NullRecursiveMutex() {}
 
 inline void NullRecursiveMutex::Lock() {}
 
-inline bool NullRecursiveMutex::TryLock() throw() {
+inline bool NullRecursiveMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return true;
 }
 
-inline void NullRecursiveMutex::Unlock() throw() {}
+inline void NullRecursiveMutex::Unlock() CPPDEVTK_NOEXCEPT {}
 
 
 inline NullTimedMutex::NullTimedMutex(): NonCopyable() {}
@@ -401,23 +401,23 @@ inline NullTimedMutex::~NullTimedMutex() {}
 
 inline void NullTimedMutex::Lock() {}
 
-inline bool NullTimedMutex::TryLock() throw() {
+inline bool NullTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return true;
 }
 
-inline bool NullTimedMutex::TryLockFor(int relTime) throw() {
+inline bool NullTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(relTime);
 	
 	return true;
 }
 
-inline bool NullTimedMutex::TryLockUntil(::std::time_t absTime) throw() {
+inline bool NullTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(absTime);
 	
 	return true;
 }
 
-inline void NullTimedMutex::Unlock() throw() {}
+inline void NullTimedMutex::Unlock() CPPDEVTK_NOEXCEPT {}
 
 
 inline NullRecursiveTimedMutex::NullRecursiveTimedMutex(): NonCopyable() {}
@@ -426,23 +426,23 @@ inline NullRecursiveTimedMutex::~NullRecursiveTimedMutex() {}
 
 inline void NullRecursiveTimedMutex::Lock() {}
 
-inline bool NullRecursiveTimedMutex::TryLock() throw() {
+inline bool NullRecursiveTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return true;
 }
 
-inline bool NullRecursiveTimedMutex::TryLockFor(int relTime) throw() {
+inline bool NullRecursiveTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(relTime);
 	
 	return true;
 }
 
-inline bool NullRecursiveTimedMutex::TryLockUntil(::std::time_t absTime) throw() {
+inline bool NullRecursiveTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(absTime);
 	
 	return true;
 }
 
-inline void NullRecursiveTimedMutex::Unlock() throw() {}
+inline void NullRecursiveTimedMutex::Unlock() CPPDEVTK_NOEXCEPT {}
 
 
 }	// namespace base

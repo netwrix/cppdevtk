@@ -39,24 +39,24 @@ namespace util {
 	::cppdevtk::util::NoSuchFileOrDirectoryException(CPPDEVTK_SOURCE_CODE_INFO())
 
 #define CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path)	\
-	::cppdevtk::util::NoSuchFileOrDirectoryException(CPPDEVTK_SOURCE_CODE_INFO(), path)
+	::cppdevtk::util::NoSuchFileOrDirectoryException(CPPDEVTK_SOURCE_CODE_INFO(), (path))
 
 
 #define CPPDEVTK_MAKE_NO_SUCH_FILE_OR_DIRECTORY_EXC(excName)	\
 	::cppdevtk::util::NoSuchFileOrDirectoryException excName(CPPDEVTK_SOURCE_CODE_INFO())
 
 #define CPPDEVTK_MAKE_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(excName, path)	\
-	::cppdevtk::util::NoSuchFileOrDirectoryException excName(CPPDEVTK_SOURCE_CODE_INFO(), path)
+	::cppdevtk::util::NoSuchFileOrDirectoryException excName(CPPDEVTK_SOURCE_CODE_INFO(), (path))
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Thrown to indicate that file/directory does not exists.
 class CPPDEVTK_UTIL_API NoSuchFileOrDirectoryException: public FilesystemException {
 public:
-	NoSuchFileOrDirectoryException(const ::cppdevtk::base::SourceCodeInfo& throwPoint);
+	explicit NoSuchFileOrDirectoryException(const ::cppdevtk::base::SourceCodeInfo& throwPoint);
 	NoSuchFileOrDirectoryException(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& path);
 	
-	virtual ~NoSuchFileOrDirectoryException() throw();
+	virtual ~NoSuchFileOrDirectoryException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<NoSuchFileOrDirectoryException> Clone() const;
 	
@@ -66,7 +66,7 @@ public:
 	virtual NoSuchFileOrDirectoryException* clone() const;
 #	endif
 	
-	void Swap(NoSuchFileOrDirectoryException& other);
+	void Swap(NoSuchFileOrDirectoryException& other) CPPDEVTK_NOEXCEPT;
 	
 	QString GetPath() const;
 	void SetPath(const QString& path);
@@ -79,11 +79,11 @@ protected:
 	virtual NoSuchFileOrDirectoryException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(NoSuchFileOrDirectoryException& other);
+	void SwapOwnData(NoSuchFileOrDirectoryException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_UTIL_API void swap(NoSuchFileOrDirectoryException& x, NoSuchFileOrDirectoryException& y);
+CPPDEVTK_UTIL_API void swap(NoSuchFileOrDirectoryException& x, NoSuchFileOrDirectoryException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -115,7 +115,7 @@ inline NoSuchFileOrDirectoryException::NoSuchFileOrDirectoryException(const ::cp
 		FilesystemException(throwPoint, MakeErrorCode(base::errc::no_such_file_or_directory),
 		CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG, path) {}
 
-inline NoSuchFileOrDirectoryException::~NoSuchFileOrDirectoryException() throw() {}
+inline NoSuchFileOrDirectoryException::~NoSuchFileOrDirectoryException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<NoSuchFileOrDirectoryException> NoSuchFileOrDirectoryException::Clone() const {
 	return ::std::auto_ptr<NoSuchFileOrDirectoryException>(dynamic_cast<NoSuchFileOrDirectoryException*>(
@@ -130,7 +130,7 @@ inline NoSuchFileOrDirectoryException* NoSuchFileOrDirectoryException::clone() c
 	return Clone().release();
 }
 
-inline void NoSuchFileOrDirectoryException::Swap(NoSuchFileOrDirectoryException& other) {
+inline void NoSuchFileOrDirectoryException::Swap(NoSuchFileOrDirectoryException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		FilesystemException::Swap(other);
 		SwapOwnData(other);
@@ -157,12 +157,12 @@ inline NoSuchFileOrDirectoryException* NoSuchFileOrDirectoryException::DoClone()
 	return new NoSuchFileOrDirectoryException(*this);
 }
 
-inline void NoSuchFileOrDirectoryException::SwapOwnData(NoSuchFileOrDirectoryException& other) {
+inline void NoSuchFileOrDirectoryException::SwapOwnData(NoSuchFileOrDirectoryException& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_UTIL_API void swap(NoSuchFileOrDirectoryException& x, NoSuchFileOrDirectoryException& y) {
+inline CPPDEVTK_UTIL_API void swap(NoSuchFileOrDirectoryException& x, NoSuchFileOrDirectoryException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

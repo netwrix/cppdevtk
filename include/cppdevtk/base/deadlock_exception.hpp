@@ -39,24 +39,24 @@ namespace base {
 	::cppdevtk::base::DeadlockException(CPPDEVTK_SOURCE_CODE_INFO())
 
 #define CPPDEVTK_DEADLOCK_EXC_WA(whatArg)	\
-	::cppdevtk::base::DeadlockException(CPPDEVTK_SOURCE_CODE_INFO(), whatArg)
+	::cppdevtk::base::DeadlockException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
 #define CPPDEVTK_MAKE_DEADLOCK_EXC(excName)	\
 	::cppdevtk::base::DeadlockException excName(CPPDEVTK_SOURCE_CODE_INFO())
 
 #define CPPDEVTK_MAKE_DEADLOCK_EXC_WA(excName, whatArg)	\
-	::cppdevtk::base::DeadlockException excName(CPPDEVTK_SOURCE_CODE_INFO(), whatArg)
+	::cppdevtk::base::DeadlockException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \remark Not in C++ 11 std.
 class CPPDEVTK_BASE_API DeadlockException: public LockException {
 public:
-	DeadlockException(const SourceCodeInfo& throwPoint);
+	explicit DeadlockException(const SourceCodeInfo& throwPoint);
 	DeadlockException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~DeadlockException() throw();
+	virtual ~DeadlockException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<DeadlockException> Clone() const;
 	
@@ -66,7 +66,7 @@ public:
 	virtual DeadlockException* clone() const;
 #	endif
 	
-	void Swap(DeadlockException& other);
+	void Swap(DeadlockException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -76,11 +76,11 @@ protected:
 	virtual DeadlockException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(DeadlockException& other);
+	void SwapOwnData(DeadlockException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(DeadlockException& x, DeadlockException& y);
+CPPDEVTK_BASE_API void swap(DeadlockException& x, DeadlockException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -100,7 +100,7 @@ inline DeadlockException::DeadlockException(const SourceCodeInfo& throwPoint, co
 		RuntimeException(throwPoint, whatArg), LockException(throwPoint,
 		MakeErrorCode(::cppdevtk::base::errc::resource_deadlock_would_occur), whatArg) {}
 
-inline DeadlockException::~DeadlockException() throw() {}
+inline DeadlockException::~DeadlockException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<DeadlockException> DeadlockException::Clone() const {
 	return ::std::auto_ptr<DeadlockException>(dynamic_cast<DeadlockException*>(Cloneable::Clone().release()));
@@ -114,7 +114,7 @@ inline DeadlockException* DeadlockException::clone() const {
 	return Clone().release();
 }
 
-inline void DeadlockException::Swap(DeadlockException& other) {
+inline void DeadlockException::Swap(DeadlockException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LockException::Swap(other);
 		SwapOwnData(other);
@@ -133,12 +133,12 @@ inline DeadlockException* DeadlockException::DoClone() const {
 	return new DeadlockException(*this);
 }
 
-inline void DeadlockException::SwapOwnData(DeadlockException& other) {
+inline void DeadlockException::SwapOwnData(DeadlockException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(DeadlockException& x, DeadlockException& y) {
+inline CPPDEVTK_BASE_API void swap(DeadlockException& x, DeadlockException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

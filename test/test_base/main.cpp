@@ -23,6 +23,7 @@
 #include <cppdevtk/base/qiostream.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/system_exception.hpp>
+#include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/dbc_exceptions.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/cerrno.hpp>
@@ -40,6 +41,12 @@
 
 
 #include <QtCore/QString>
+#include <QtCore/QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtCore/QException>
+#else
+#include <QtCore/QtCore>
+#endif
 
 #include <cstdlib>
 #include <cstddef>
@@ -94,18 +101,36 @@ private:
 	}
 	
 	~LoggerUser() {
-		const_cast<Logger&>(Logger::GetInstance()).Log("LoggerUser destroyed");
+		::cppdevtk::base::qcout << "LoggerUser destroyed" << endl;
 	}
 };
 
 
+class DerivedFromStdRuntimeError: public ::std::runtime_error {
+public:
+	DerivedFromStdRuntimeError(const ::std::string& msg): runtime_error(msg) {}
+};
+
+class DerivedFromQtException: public CPPDEVTK_QT_EXCEPTION {
+public:
+	virtual DerivedFromQtException* clone() const {
+		return new DerivedFromQtException(*this);
+	}
+	
+	virtual void raise() const {
+		throw *this;
+	}
+};
+
+
+bool TestSafeDelete();
+bool TestSingleton();
 bool TestStackTrace();
 bool TestStdExceptions();
 bool TestNonStdExceptions();
 bool TestSystemException();
-bool TestSafeDelete();
+bool TestExceptionPropagation();
 bool TestMutex();
-bool TestSingleton();
 
 
 void TestStackTraceCppHelper1(int dummy);
@@ -150,70 +175,69 @@ int main(int argc, char* argv[]) try {
 	TestTmplExplInst testTmplExplInst;
 	
 	try {
-		qcout << "testing StackTrace..." << endl;
-		if (TestStackTrace()) {
-			qcout << "StackTrace test: PASSED" << endl;
-		}
-		else {
-			qcerr << "StackTrace test: FAILED!!!" << endl;
-		}
-		
-		qcout << "testing StdExceptions..." << endl;
-		if (TestStdExceptions()) {
-			qcout << "StdExceptions test: PASSED" << endl;
-		}
-		else {
-			qcerr << "StdExceptions test: FAILED!!!" << endl;
-		}
-		
-		qcout << "testing NonStdExceptions..." << endl;
-		if (TestNonStdExceptions()) {
-			qcout << "NonStdExceptions test: PASSED" << endl;
-		}
-		else {
-			qcerr << "NonStdExceptions test: FAILED!!!" << endl;
-		}
-		
-		qcout << "testing SystemException..." << endl;
-		if (TestSystemException()) {
-			qcout << "SystemException test: PASSED" << endl;
-		}
-		else {
-			qcerr << "SystemException test: FAILED!!!" << endl;
-		}
-		
 		qcout << "testing SafeDelete..." << endl;
-		if (TestSafeDelete()) {
-			qcout << "SafeDelete test: PASSED" << endl;
-		}
-		else {
+		if (!TestSafeDelete()) {
 			qcerr << "SafeDelete test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
 		}
-		
-		qcout << "testing Mutex..." << endl;
-		if (TestMutex()) {
-			qcout << "Mutex test: PASSED" << endl;
-		}
-		else {
-			qcerr << "Mutex test: FAILED!!!" << endl;
-		}
+		qcout << "SafeDelete test: PASSED" << endl;
 		
 		qcout << "testing Singleton..." << endl;
-		if (TestMutex()) {
-			qcout << "Singleton test: PASSED" << endl;
-		}
-		else {
+		if (!TestSingleton()) {
 			qcerr << "Singleton test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
 		}
+		qcout << "Singleton test: PASSED" << endl;
 		
+		qcout << "testing StackTrace..." << endl;
+		if (!TestStackTrace()) {
+			qcerr << "StackTrace test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		qcout << "StackTrace test: PASSED" << endl;
+		
+		qcout << "testing StdExceptions..." << endl;
+		if (!TestStdExceptions()) {
+			qcerr << "StdExceptions test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		qcout << "StdExceptions test: PASSED" << endl;
+		
+		qcout << "testing NonStdExceptions..." << endl;
+		if (!TestNonStdExceptions()) {
+			qcerr << "NonStdExceptions test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		qcout << "NonStdExceptions test: PASSED" << endl;
+		
+		qcout << "testing SystemException..." << endl;
+		if (!TestSystemException()) {
+			qcerr << "SystemException test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		qcout << "SystemException test: PASSED" << endl;
+		
+		qcout << "testing ExceptionPropagation..." << endl;
+		if (!TestExceptionPropagation()) {
+			qcerr << "ExceptionPropagation test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		qcout << "ExceptionPropagation test: PASSED" << endl;
+		
+		qcout << "testing Mutex..." << endl;
+		if (!TestMutex()) {
+			qcerr << "Mutex test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		qcout << "Mutex test: PASSED" << endl;
 		
 		qcout << "testing semaphore..." << endl;
 		test_sem();
-		
+		qcout << "semaphore test: PASSED" << endl;
 		
 		qcout << "testing condition variable..." << endl;
 		test_cv();
-		
+		qcout << "condition variable test: PASSED" << endl;
 		
 		qcout << "done!" << endl;
 		return EXIT_SUCCESS;
@@ -250,6 +274,27 @@ catch (...) {
 	return EXIT_FAILURE;
 }
 
+
+bool TestSafeDelete() {
+	using ::cppdevtk::base::DeleteCompleteType;
+	
+	// tested and passed: does not compile
+	/*
+	IncompleteType* pIncompleteType = NULL;
+	DeleteCompleteType(pIncompleteType);
+	*/
+	
+	DeleteCompleteType(new QString());
+	
+	return true;
+}
+
+bool TestSingleton() {
+	Greetings::GetInstance().Welcome();
+	const_cast<LoggerUser&>(LoggerUser::GetInstance()).UseLogger();
+	return true;
+}
+
 bool TestStackTrace() {
 	using ::cppdevtk::base::StackTrace;
 	
@@ -276,24 +321,6 @@ bool TestStackTrace() {
 	TestStackTraceCHelper1(0);
 	
 	return true;
-}
-
-void TestStackTraceCppHelper1(int dummy) {
-	TestStackTraceCppHelper2(dummy);
-}
-
-void TestStackTraceCppHelper2(int) {
-	::cppdevtk::base::StackTrace stackTrace;
-	qcout << "StackTrace from C++ function:\n" << stackTrace.ToString() << endl;
-}
-
-void TestStackTraceCHelper1(int dummy) {
-	TestStackTraceCHelper2(dummy);
-}
-
-void TestStackTraceCHelper2(int) {
-	::cppdevtk::base::StackTrace stackTrace;
-	qcout << "StackTrace from C function:\n" << stackTrace.ToString() << endl;
 }
 
 bool TestStdExceptions() {
@@ -448,16 +475,84 @@ bool TestSystemException() {
 	return true;
 }
 
-bool TestSafeDelete() {
-	using ::cppdevtk::base::DeleteCompleteType;
+bool TestExceptionPropagation() {
+	using ::std::runtime_error;
+	using ::cppdevtk::base::ExceptionPtr;
+	using ::cppdevtk::base::CurrentException;
+	using ::cppdevtk::base::RethrowException;
 	
-	// tested and passed: does not compile
-	/*
-	IncompleteType* pIncompleteType = NULL;
-	DeleteCompleteType(pIncompleteType);
-	*/
+	{
+		ExceptionPtr exceptionPtr;
+		try {
+			throw DerivedFromStdRuntimeError("some derived runtime error occurred");
+		}
+		catch (const exception&) {
+			exceptionPtr = CurrentException();
+			CPPDEVTK_ASSERT(exceptionPtr);
+		}
+		
+		if (exceptionPtr) {
+			try {
+				RethrowException(exceptionPtr);
+			}
+			catch (const DerivedFromStdRuntimeError&) {
+				qcout << "exception propagation supports classes derived from std exception classes" << endl;
+			}
+			catch (const runtime_error&) {
+				qcout << "WARN: exception propagation does not support classes derived from std exception classes" << endl;
+			}
+			catch (const exception&) {
+				qcerr << "exception propagation does not support std exception classes" << endl;
+				return false;
+			}
+		}
+	}
 	
-	DeleteCompleteType(new QString());
+	{
+		ExceptionPtr exceptionPtr;
+		try {
+			throw DerivedFromQtException();
+		}
+		catch (const exception&) {
+			exceptionPtr = CurrentException();
+		}
+		
+		if (exceptionPtr) {
+			try {
+				RethrowException(exceptionPtr);
+			}
+			catch (const DerivedFromQtException&) {
+				qcout << "exception propagation supports Qt exception classes" << endl;
+			}
+			catch (const exception&) {
+				qcerr << "exception propagation does not support Qt exception classes" << endl;
+				return false;
+			}
+		}
+	}
+	
+	{
+		ExceptionPtr exceptionPtr;
+		try {
+			throw CPPDEVTK_IOS_FAILURE_EXC_W_WA("some i/o exception occurred");
+		}
+		catch (const exception&) {
+			exceptionPtr = CurrentException();
+		}
+		
+		if (exceptionPtr) {
+			try {
+				RethrowException(exceptionPtr);
+			}
+			catch (const ::cppdevtk::base::IosFailureException&) {
+				qcout << "exception propagation supports cppdevtk exception classes" << endl;
+			}
+			catch (const exception&) {
+				qcerr << "exception propagation does not support cppdevtk exception classes" << endl;
+				return false;
+			}
+		}
+	}
 	
 	return true;
 }
@@ -575,8 +670,21 @@ bool TestMutex() {
 	return true;
 }
 
-bool TestSingleton() {
-	Greetings::GetInstance().Welcome();
-	const_cast<LoggerUser&>(LoggerUser::GetInstance()).UseLogger();
-	return true;
+
+void TestStackTraceCppHelper1(int dummy) {
+	TestStackTraceCppHelper2(dummy);
+}
+
+void TestStackTraceCppHelper2(int) {
+	::cppdevtk::base::StackTrace stackTrace;
+	qcout << "StackTrace from C++ function:\n" << stackTrace.ToString() << endl;
+}
+
+void TestStackTraceCHelper1(int dummy) {
+	TestStackTraceCHelper2(dummy);
+}
+
+void TestStackTraceCHelper2(int) {
+	::cppdevtk::base::StackTrace stackTrace;
+	qcout << "StackTrace from C function:\n" << stackTrace.ToString() << endl;
 }

@@ -262,6 +262,11 @@ build_pass {
 		QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions-called-once
 	}
 	
+	# treat as error
+	# warning: control reaches end of non-void function [-Wreturn-type]
+	QMAKE_CFLAGS *= -Werror=return-type
+	QMAKE_CXXFLAGS *= -Werror=return-type
+	
 	QMAKE_LFLAGS *= -rdynamic
 	
 	!sensitivityio_enable_debuginfo_in_release {
@@ -320,6 +325,11 @@ else {
 		#QMAKE_CFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
 		#QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
 		
+		# treat as error
+		# warning: control reaches end of non-void function [-Wreturn-type]
+		QMAKE_CFLAGS *= -Werror=return-type
+		QMAKE_CXXFLAGS *= -Werror=return-type
+		
 		QMAKE_LFLAGS -= -stdlib=libstdc++
 		QMAKE_LFLAGS *= -stdlib=libc++
 		QMAKE_LFLAGS *= -rdynamic
@@ -363,6 +373,12 @@ else {
 				QMAKE_CFLAGS_WARN_ON *= -wd4820 -wd4548 -wd4619 -wd4711 -wd4464
 				QMAKE_CXXFLAGS_WARN_ON *= -wd4820 -wd4548 -wd4619 -wd4711 -wd4464
 			}
+			
+			# treat as error
+			# C4715: function : not all control paths return a value
+			QMAKE_CFLAGS *= -we4715
+			QMAKE_CXXFLAGS *= -we4715
+			
 			
 			#QMAKE_CXXFLAGS *= -analyze
 			
@@ -1070,13 +1086,19 @@ DEPENDPATH *= $${_PRO_FILE_PWD_}
 #INCLUDEPATH = . $${INCLUDEPATH}
 #DEPENDPATH *= .
 
+DEPENDPATH *= $${PWD}/include/cppdevtk
 DEPENDPATH *= $${PWD}/include/cppdevtk/config
 DEPENDPATH *= $${PWD}/include/cppdevtk/config/compiler
 DEPENDPATH *= $${PWD}/include/cppdevtk/config/platform
 DEPENDPATH *= $${PWD}/include/cppdevtk/config/platform_compiler
 DEPENDPATH *= $${PWD}/include/cppdevtk/base
 DEPENDPATH *= $${PWD}/include/cppdevtk/util
+DEPENDPATH *= $${PWD}/include/cppdevtk/jni
 DEPENDPATH *= $${PWD}/include/cppdevtk/gui
+DEPENDPATH *= $${PWD}/src/cppdevtk/base
+DEPENDPATH *= $${PWD}/src/cppdevtk/util
+DEPENDPATH *= $${PWD}/src/cppdevtk/jni
+DEPENDPATH *= $${PWD}/src/cppdevtk/gui
 
 
 #****************************************************************************************************************************

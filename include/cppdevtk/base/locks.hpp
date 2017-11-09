@@ -80,7 +80,7 @@ public:
 	
 	
 	explicit LockGuard(MutexType& mutex);
-	LockGuard(MutexType& mutex, AdoptLockT) throw();
+	LockGuard(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT;
 	~LockGuard();
 private:
 	MutexType& mutex_;
@@ -99,11 +99,11 @@ public:
 	typedef void (UniqueLock::*BoolType)();
 	
 	
-	UniqueLock() throw();	// noexcept in std
+	UniqueLock() CPPDEVTK_NOEXCEPT;
 	explicit UniqueLock(MutexType& mutex);
-	UniqueLock(MutexType& mutex, DeferLockT) throw();	// noexcept in std
+	UniqueLock(MutexType& mutex, DeferLockT) CPPDEVTK_NOEXCEPT;
 	UniqueLock(MutexType& mutex, TryToLockT);
-	UniqueLock(MutexType& mutex, AdoptLockT) throw();
+	UniqueLock(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT;
 	UniqueLock(MutexType& mutex, int relTime);
 	UniqueLock(MutexType& mutex, ::std::time_t absTime);
 	~UniqueLock();
@@ -123,19 +123,15 @@ public:
 	
 	void Unlock();
 	
-	/// \remark Exception safety: nothrow guarantee.
-	MutexType* Release();	// noexcept in std
+	MutexType* Release() CPPDEVTK_NOEXCEPT;
 	
-	/// \remark Exception safety: nothrow guarantee.
-	bool OwnsLock() const;	// noexcept in std
+	bool OwnsLock() const CPPDEVTK_NOEXCEPT;
 	operator BoolType() const;
 	bool operator!() const;
 	
-	/// \remark Exception safety: nothrow guarantee.
-	MutexType* GetMutex() const;	// noexcept in std
+	MutexType* GetMutex() const CPPDEVTK_NOEXCEPT;
 	
-	/// \remark Exception safety: nothrow guarantee.
-	void Swap(UniqueLock& other);	// noexcept in std
+	void Swap(UniqueLock& other) CPPDEVTK_NOEXCEPT;
 private:
 	MutexType* pMutex_;
 	bool ownsLock_;
@@ -143,7 +139,7 @@ private:
 
 
 template <class TMutex>
-void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y);	// noexcept in std
+void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}	// lock
@@ -161,7 +157,7 @@ inline LockGuard<TMutex>::LockGuard(MutexType& mutex): NonCopyable(), mutex_(mut
 }
 
 template <class TMutex>
-inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLockT) throw(): NonCopyable(), mutex_(mutex) {}
+inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT: NonCopyable(), mutex_(mutex) {}
 
 template <class TMutex>
 inline LockGuard<TMutex>::~LockGuard() {
@@ -170,7 +166,7 @@ inline LockGuard<TMutex>::~LockGuard() {
 
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock() throw(): NonCopyable(), pMutex_(NULL), ownsLock_(false) {}
+inline UniqueLock<TMutex>::UniqueLock() CPPDEVTK_NOEXCEPT: NonCopyable(), pMutex_(NULL), ownsLock_(false) {}
 
 template <class TMutex>
 inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex): NonCopyable(), pMutex_(&mutex), ownsLock_(false) {
@@ -178,7 +174,7 @@ inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex): NonCopyable(), pMutex_(
 }
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, DeferLockT) throw(): NonCopyable(),
+inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, DeferLockT) CPPDEVTK_NOEXCEPT: NonCopyable(),
 		pMutex_(&mutex), ownsLock_(false) {}
 
 template <class TMutex>
@@ -188,7 +184,7 @@ inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, TryToLockT): NonCopyable
 }
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, AdoptLockT) throw(): NonCopyable(),
+inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT: NonCopyable(),
 		pMutex_(&mutex), ownsLock_(true) {}
 
 template <class TMutex>
@@ -289,7 +285,7 @@ inline void UniqueLock<TMutex>::Unlock() {
 }
 
 template <class TMutex>
-inline typename UniqueLock<TMutex>::MutexType* UniqueLock<TMutex>::Release() {
+inline typename UniqueLock<TMutex>::MutexType* UniqueLock<TMutex>::Release() CPPDEVTK_NOEXCEPT {
 	MutexType* pRetValue = pMutex_;
 	
 	pMutex_ = NULL;
@@ -299,7 +295,7 @@ inline typename UniqueLock<TMutex>::MutexType* UniqueLock<TMutex>::Release() {
 }
 
 template <class TMutex>
-inline bool UniqueLock<TMutex>::OwnsLock() const {
+inline bool UniqueLock<TMutex>::OwnsLock() const CPPDEVTK_NOEXCEPT {
 	return ownsLock_;
 }
 
@@ -314,12 +310,12 @@ inline bool UniqueLock<TMutex>::operator!() const {
 }
 
 template <class TMutex>
-inline typename UniqueLock<TMutex>::MutexType* UniqueLock<TMutex>::GetMutex() const {
+inline typename UniqueLock<TMutex>::MutexType* UniqueLock<TMutex>::GetMutex() const CPPDEVTK_NOEXCEPT {
 	return pMutex_;
 }
 
 template <class TMutex>
-inline void UniqueLock<TMutex>::Swap(UniqueLock& other) {
+inline void UniqueLock<TMutex>::Swap(UniqueLock& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	if (this != &other) {
@@ -330,7 +326,7 @@ inline void UniqueLock<TMutex>::Swap(UniqueLock& other) {
 
 
 template <class TMutex>
-inline void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y) {
+inline void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

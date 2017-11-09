@@ -35,55 +35,55 @@ namespace util {
 
 
 #define CPPDEVTK_FS_EXC_W_EC(errorCode)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
 #define CPPDEVTK_FS_EXC_W_EC_WA(errorCode, whatArg)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
 #define CPPDEVTK_FS_EXC_W_EC_WA_SRC(errorCode, whatArg, srcPath)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath))
 
 #define CPPDEVTK_FS_EXC_W_EC_WA_SRC_DST(errorCode, whatArg, srcPath, dstPath)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath, dstPath)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath))
 
 
 #define CPPDEVTK_FS_EXC_W_EC_CAUSE(errorCode, cause)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, cause)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
 #define CPPDEVTK_FS_EXC_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, cause)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
 #define CPPDEVTK_FS_EXC_W_EC_WA_SRC_CAUSE(errorCode, whatArg, srcPath, cause)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath, cause)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (cause))
 
 #define CPPDEVTK_FS_EXC_W_EC_WA_SRC_DST_CAUSE(errorCode, whatArg, srcPath, dstPath, cause)	\
-	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath, dstPath, cause)
+	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath), (cause))
 
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC(excName, errorCode)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_WA(excName, errorCode, whatArg)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC(excName, errorCode, whatArg, srcPath)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_DST(excName, errorCode, whatArg, srcPath, dstPath)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath, dstPath)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath))
 
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_CAUSE(excName, errorCode, cause)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, cause)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, cause)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_CAUSE(excName, errorCode, whatArg, srcPath, cause)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath, cause)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (cause))
 
 #define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_DST_CAUSE(excName, errorCode, whatArg, srcPath, dstPath, cause)	\
-	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), errorCode, whatArg, srcPath, dstPath, cause)
+	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath), (cause))
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,11 +108,11 @@ public:
 			const QString& whatArg, const QString& srcPath, const QString& dstPath, const ::cppdevtk::base::Exception& cause);
 	
 	
-	FilesystemException(const FilesystemException& other) throw();
+	FilesystemException(const FilesystemException& other) CPPDEVTK_NOEXCEPT;
 	
-	virtual ~FilesystemException() throw();
+	virtual ~FilesystemException() CPPDEVTK_NOEXCEPT;
 	
-	FilesystemException& operator=(const FilesystemException& other) throw();
+	FilesystemException& operator=(const FilesystemException& other) CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<FilesystemException> Clone() const;
 	
@@ -122,7 +122,7 @@ public:
 	virtual FilesystemException* clone() const;
 #	endif
 	
-	void Swap(FilesystemException& other);
+	void Swap(FilesystemException& other) CPPDEVTK_NOEXCEPT;
 	
 	QString GetSrcPath() const;
 	void SetSrcPath(const QString& srcPath);
@@ -140,14 +140,14 @@ protected:
 	
 	virtual QString DoOwnWhat() const;
 	
-	void SwapOwnData(FilesystemException& other);
+	void SwapOwnData(FilesystemException& other) CPPDEVTK_NOEXCEPT;
 private:
 	QString srcPath_;
 	QString dstPath_;
 };
 
 
-CPPDEVTK_UTIL_API void swap(FilesystemException& x, FilesystemException& y);
+CPPDEVTK_UTIL_API void swap(FilesystemException& x, FilesystemException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -203,13 +203,13 @@ inline FilesystemException::FilesystemException(const ::cppdevtk::base::SourceCo
 		RuntimeException(throwPoint, whatArg, cause), SystemException(throwPoint, errorCode, whatArg, cause),
 		IosFailureException(throwPoint, whatArg, errorCode, cause), srcPath_(srcPath), dstPath_(dstPath) {}
 
-inline FilesystemException::FilesystemException(const FilesystemException& other) throw(): Exception(other),
+inline FilesystemException::FilesystemException(const FilesystemException& other) CPPDEVTK_NOEXCEPT: Exception(other),
 		RuntimeException(other), SystemException(other), IosFailureException(other),
 		srcPath_(other.srcPath_), dstPath_(other.dstPath_) {}
 
-inline FilesystemException::~FilesystemException() throw() {}
+inline FilesystemException::~FilesystemException() CPPDEVTK_NOEXCEPT {}
 
-inline FilesystemException& FilesystemException::operator=(const FilesystemException& other) throw() {
+inline FilesystemException& FilesystemException::operator=(const FilesystemException& other) CPPDEVTK_NOEXCEPT {
 	FilesystemException tmp(other);
 	Swap(tmp);
 	return *this;
@@ -227,7 +227,7 @@ inline FilesystemException* FilesystemException::clone() const {
 	return Clone().release();
 }
 
-inline void FilesystemException::Swap(FilesystemException& other) {
+inline void FilesystemException::Swap(FilesystemException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		IosFailureException::Swap(other);
 		SwapOwnData(other);
@@ -262,7 +262,7 @@ inline FilesystemException* FilesystemException::DoClone() const {
 	return new FilesystemException(*this);
 }
 
-inline void FilesystemException::SwapOwnData(FilesystemException& other) {
+inline void FilesystemException::SwapOwnData(FilesystemException& other) CPPDEVTK_NOEXCEPT {
 #	if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
 	srcPath_.swap(other.srcPath_);
 	dstPath_.swap(other.dstPath_);
@@ -275,7 +275,7 @@ inline void FilesystemException::SwapOwnData(FilesystemException& other) {
 }
 
 
-inline CPPDEVTK_UTIL_API void swap(FilesystemException& x, FilesystemException& y) {
+inline CPPDEVTK_UTIL_API void swap(FilesystemException& x, FilesystemException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

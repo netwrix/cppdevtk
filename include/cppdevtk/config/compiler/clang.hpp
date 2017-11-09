@@ -134,7 +134,7 @@
 #	define CPPDEVTK_HAVE_CPP11_THREAD 1
 #	define CPPDEVTK_HAVE_CPP11_FUTURE 1
 #	define CPPDEVTK_HAVE_CPP11_ATOMIC 1
-#	define CPPDEVTK_HAVE_CPP11_EXCEPTION_PTR 1
+#	define CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION 1
 #	define CPPDEVTK_HAVE_CPP11_AT_QUICK_EXIT 1
 #else
 #	define CPPDEVTK_HAVE_CPP11_MUTEX 0
@@ -142,7 +142,7 @@
 #	define CPPDEVTK_HAVE_CPP11_THREAD 0
 #	define CPPDEVTK_HAVE_CPP11_FUTURE 0
 #	define CPPDEVTK_HAVE_CPP11_ATOMIC 0
-#	define CPPDEVTK_HAVE_CPP11_EXCEPTION_PTR 0
+#	define CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION 0
 #	define CPPDEVTK_HAVE_CPP11_AT_QUICK_EXIT 0
 #endif
 #if (__has_feature(cxx_thread_local))
@@ -180,7 +180,7 @@
 #else
 #	define CPPDEVTK_HAVE_CPP11_LAMBDAS 0
 #endif
-
+#define CPPDEVTK_HAVE_CPP11_NOEXCEPT 1	// introduced in Clang 3.0 and we require > 3.2
 
 // Please see Clang Language Extensions, C++ RTTI: http://clang.llvm.org/docs/LanguageExtensions.html
 #if (__has_feature(cxx_rtti))

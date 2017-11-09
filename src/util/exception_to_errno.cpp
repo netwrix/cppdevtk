@@ -20,17 +20,17 @@
 #include <cppdevtk/util/exception_to_errno.hpp>
 
 #include <cppdevtk/base/cerrno.hpp>
-#include <cppdevtk/base/stdexcept.hpp>
+
+#include <cppdevtk/base/deadlock_exception.hpp>
 #include <cppdevtk/base/task_canceled_exception.hpp>
-#include <cppdevtk/base/dbc_exceptions.hpp>
-#include <cppdevtk/base/ios.hpp>
-#include <cppdevtk/util/filesystem_exception.hpp>
 #include <cppdevtk/util/no_such_file_or_directory_exception.hpp>
+#include <cppdevtk/base/ios.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
+#include <cppdevtk/base/new.hpp>
+#include <cppdevtk/base/exception.hpp>
 
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
-
-#include <new>
 
 
 namespace cppdevtk {
@@ -38,39 +38,42 @@ namespace util {
 
 
 CPPDEVTK_UTIL_API void ExceptionToErrno() {
-	using namespace ::cppdevtk::base;
-	
-	
 	// TODO: keep updated
 	try {
 		throw;
 	}
 	catch (const ::std::exception& exc) {
-		CPPDEVTK_LOG_ERROR("caught exception (converting to errno): " << Exception::GetDetailedInfo(exc));
-		SuppressUnusedWarning(exc);
+		CPPDEVTK_LOG_ERROR("caught exception (converting to errno): " << base::Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		
 		try {
 			throw;
 		}
-		catch (const concurrent::TaskCanceledException&) {
+		catch (const base::DeadlockException&) {
+			errno = EDEADLK;
+		}
+		catch (const base::concurrent::TaskCanceledException&) {
 			errno = ECANCELED;
 		}
-		catch (const NoSuchFileOrDirectoryException&) {
+		catch (const util::NoSuchFileOrDirectoryException&) {
 			errno = ENOENT;
 		}
-		catch (const IosFailureException&) {
+		catch (const base::IosFailureException&) {
 			errno = EIO;
 		}
-		catch (const RuntimeException&) {
+		catch (const base::RuntimeException&) {
 			errno = ENODATA;
 		}
-		catch (const InvalidArgumentException&) {
+		catch (const base::InvalidArgumentException&) {
 			errno = EINVAL;
 		}
-		catch (const LogicException&) {
+		catch (const base::LogicException&) {
 			errno = ENODATA;
 		}
-		catch (const Exception&) {
+		catch (const base::BadAllocException&) {
+			errno = ENOMEM;
+		}
+		catch (const base::Exception&) {
 			errno = ENODATA;
 		}
 		

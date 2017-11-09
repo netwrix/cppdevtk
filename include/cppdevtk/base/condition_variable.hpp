@@ -75,8 +75,8 @@ public:
 	~ConditionVariable();
 	
 	
-	void NotifyOne() throw();	// noexcept in std
-	void NotifyAll() throw();	// noexcept in std
+	void NotifyOne() CPPDEVTK_NOEXCEPT;
+	void NotifyAll() CPPDEVTK_NOEXCEPT;
 	
 	
 	void Wait(UniqueLock<Mutex>& uniqueLock);
@@ -119,8 +119,8 @@ public:
 	ConditionVariableAny();
 	~ConditionVariableAny();
 	
-	void NotifyOne() throw();	// noexcept in std
-	void NotifyAll() throw();	// noexcept in std
+	void NotifyOne() CPPDEVTK_NOEXCEPT;
+	void NotifyAll() CPPDEVTK_NOEXCEPT;
 	
 	template <class Lock>
 	void Wait(Lock& lock);

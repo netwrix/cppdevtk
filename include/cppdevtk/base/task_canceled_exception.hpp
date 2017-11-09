@@ -41,7 +41,7 @@ class CPPDEVTK_BASE_API TaskCanceledException: public SystemException {
 public:
 	TaskCanceledException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~TaskCanceledException() throw();
+	virtual ~TaskCanceledException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<TaskCanceledException> Clone() const;
 	
@@ -51,7 +51,7 @@ public:
 	virtual TaskCanceledException* clone() const;
 #	endif
 	
-	void Swap(TaskCanceledException& other);
+	void Swap(TaskCanceledException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -61,11 +61,11 @@ protected:
 	virtual TaskCanceledException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(TaskCanceledException& other);
+	void SwapOwnData(TaskCanceledException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y);
+CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -77,7 +77,7 @@ inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwP
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint,
 		MakeErrorCode(base::errc::operation_canceled), whatArg) {}
 
-inline TaskCanceledException::~TaskCanceledException() throw() {}
+inline TaskCanceledException::~TaskCanceledException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<TaskCanceledException> TaskCanceledException::Clone() const {
 	return ::std::auto_ptr<TaskCanceledException>(dynamic_cast<TaskCanceledException*>(Cloneable::Clone().release()));
@@ -91,7 +91,7 @@ inline TaskCanceledException* TaskCanceledException::clone() const {
 	return Clone().release();
 }
 
-inline void TaskCanceledException::Swap(TaskCanceledException& other) {
+inline void TaskCanceledException::Swap(TaskCanceledException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		SystemException::Swap(other);
 		SwapOwnData(other);
@@ -110,12 +110,12 @@ inline TaskCanceledException* TaskCanceledException::DoClone() const {
 	return new TaskCanceledException(*this);
 }
 
-inline void TaskCanceledException::SwapOwnData(TaskCanceledException& other) {
+inline void TaskCanceledException::SwapOwnData(TaskCanceledException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y) {
+inline CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

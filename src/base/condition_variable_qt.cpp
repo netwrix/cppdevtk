@@ -34,11 +34,11 @@ ConditionVariable::ConditionVariable(): NonCopyable(), conditionVariable_() {}
 
 ConditionVariable::~ConditionVariable() {}
 
-void ConditionVariable::NotifyOne() throw() {
+void ConditionVariable::NotifyOne() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.wakeOne();
 }
 
-void ConditionVariable::NotifyAll() throw() {
+void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.wakeAll();
 }
 

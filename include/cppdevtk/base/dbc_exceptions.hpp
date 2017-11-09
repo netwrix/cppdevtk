@@ -61,7 +61,7 @@ public:
 	explicit NullPointerException(const SourceCodeInfo& throwPoint);
 	NullPointerException(const SourceCodeInfo& throwPoint, const Exception& cause);
 	
-	virtual ~NullPointerException() throw();
+	virtual ~NullPointerException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<NullPointerException> Clone() const;
 	
@@ -71,7 +71,7 @@ public:
 	virtual NullPointerException* clone() const;
 #	endif
 	
-	void Swap(NullPointerException& other);
+	void Swap(NullPointerException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -81,11 +81,11 @@ protected:
 	virtual NullPointerException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(NullPointerException& other);
+	void SwapOwnData(NullPointerException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(NullPointerException& x, NullPointerException& y);
+CPPDEVTK_BASE_API void swap(NullPointerException& x, NullPointerException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -118,7 +118,7 @@ public:
 	InvalidStateException(const SourceCodeInfo& throwPoint, const QString& expectedState, const QString& actualState,
 			const QString& requestedOperation, const Exception& cause);
 	
-	virtual ~InvalidStateException() throw();
+	virtual ~InvalidStateException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<InvalidStateException> Clone() const;
 	
@@ -128,7 +128,7 @@ public:
 	virtual InvalidStateException* clone() const;
 #	endif
 	
-	void Swap(InvalidStateException& other);
+	void Swap(InvalidStateException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -138,11 +138,11 @@ protected:
 	virtual InvalidStateException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(InvalidStateException& other);
+	void SwapOwnData(InvalidStateException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(InvalidStateException& x, InvalidStateException& y);
+CPPDEVTK_BASE_API void swap(InvalidStateException& x, InvalidStateException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -169,7 +169,7 @@ public:
 	EmptyArgumentException(const SourceCodeInfo& throwPoint, const QString& argName);
 	EmptyArgumentException(const SourceCodeInfo& throwPoint, const QString& argName, const Exception& cause);
 	
-	virtual ~EmptyArgumentException() throw();
+	virtual ~EmptyArgumentException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<EmptyArgumentException> Clone() const;
 	
@@ -179,7 +179,7 @@ public:
 	virtual EmptyArgumentException* clone() const;
 #	endif
 	
-	void Swap(EmptyArgumentException& other);
+	void Swap(EmptyArgumentException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -189,11 +189,11 @@ protected:
 	virtual EmptyArgumentException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(EmptyArgumentException& other);
+	void SwapOwnData(EmptyArgumentException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(EmptyArgumentException& x, EmptyArgumentException& y);
+CPPDEVTK_BASE_API void swap(EmptyArgumentException& x, EmptyArgumentException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -221,7 +221,7 @@ public:
 	NullArgumentException(const SourceCodeInfo& throwPoint, const QString& argName);
 	NullArgumentException(const SourceCodeInfo& throwPoint, const QString& argName, const Exception& cause);
 	
-	virtual ~NullArgumentException() throw();
+	virtual ~NullArgumentException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<NullArgumentException> Clone() const;
 	
@@ -231,7 +231,7 @@ public:
 	virtual NullArgumentException* clone() const;
 #	endif
 	
-	void Swap(NullArgumentException& other);
+	void Swap(NullArgumentException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -241,11 +241,11 @@ protected:
 	virtual NullArgumentException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(NullArgumentException& other);
+	void SwapOwnData(NullArgumentException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(NullArgumentException& x, NullArgumentException& y);
+CPPDEVTK_BASE_API void swap(NullArgumentException& x, NullArgumentException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -265,7 +265,7 @@ inline NullPointerException::NullPointerException(const SourceCodeInfo& throwPoi
 inline NullPointerException::NullPointerException(const SourceCodeInfo& throwPoint, const Exception& cause):
 		Exception(throwPoint, cause), LogicException(throwPoint, CPPDEVTK_DETAIL_NULL_POINTER_EXCEPTION_MSG, cause) {}
 
-inline NullPointerException::~NullPointerException() throw() {}
+inline NullPointerException::~NullPointerException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<NullPointerException> NullPointerException::Clone() const {
 	return ::std::auto_ptr<NullPointerException>(dynamic_cast<NullPointerException*>(Cloneable::Clone().release()));
@@ -279,7 +279,7 @@ inline NullPointerException* NullPointerException::clone() const {
 	return Clone().release();
 }
 
-inline void NullPointerException::Swap(NullPointerException& other) {
+inline void NullPointerException::Swap(NullPointerException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		SwapOwnData(other);
@@ -298,12 +298,12 @@ inline NullPointerException* NullPointerException::DoClone() const {
 	return new NullPointerException(*this);
 }
 
-inline void NullPointerException::SwapOwnData(NullPointerException& other) {
+inline void NullPointerException::SwapOwnData(NullPointerException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(NullPointerException& x, NullPointerException& y) {
+inline CPPDEVTK_BASE_API void swap(NullPointerException& x, NullPointerException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -324,7 +324,7 @@ inline InvalidStateException::InvalidStateException(const SourceCodeInfo& throwP
 		LogicException(throwPoint, QString(CPPDEVTK_DETAIL_INVALID_STATE_EXCEPTION_FMT_MSG).arg(
 		expectedState, actualState, requestedOperation), cause) {}
 
-inline InvalidStateException::~InvalidStateException() throw() {}
+inline InvalidStateException::~InvalidStateException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<InvalidStateException> InvalidStateException::Clone() const {
 	return ::std::auto_ptr<InvalidStateException>(dynamic_cast<InvalidStateException*>(Cloneable::Clone().release()));
@@ -338,7 +338,7 @@ inline InvalidStateException* InvalidStateException::clone() const {
 	return Clone().release();
 }
 
-inline void InvalidStateException::Swap(InvalidStateException& other) {
+inline void InvalidStateException::Swap(InvalidStateException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		SwapOwnData(other);
@@ -357,12 +357,12 @@ inline InvalidStateException* InvalidStateException::DoClone() const {
 	return new InvalidStateException(*this);
 }
 
-inline void InvalidStateException::SwapOwnData(InvalidStateException& other) {
+inline void InvalidStateException::SwapOwnData(InvalidStateException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(InvalidStateException& x, InvalidStateException& y) {
+inline CPPDEVTK_BASE_API void swap(InvalidStateException& x, InvalidStateException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -380,7 +380,7 @@ inline EmptyArgumentException::EmptyArgumentException(const SourceCodeInfo& thro
 		LogicException(throwPoint, QString(CPPDEVTK_DETAIL_EMPTY_ARGUMENT_EXCEPTION_FMT_MSG).arg(argName), cause),
 		InvalidArgumentException(throwPoint, "", cause) {}
 
-inline EmptyArgumentException::~EmptyArgumentException() throw() {}
+inline EmptyArgumentException::~EmptyArgumentException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<EmptyArgumentException> EmptyArgumentException::Clone() const {
 	return ::std::auto_ptr<EmptyArgumentException>(
@@ -395,7 +395,7 @@ inline EmptyArgumentException* EmptyArgumentException::clone() const {
 	return Clone().release();
 }
 
-inline void EmptyArgumentException::Swap(EmptyArgumentException& other) {
+inline void EmptyArgumentException::Swap(EmptyArgumentException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		InvalidArgumentException::Swap(other);
 		SwapOwnData(other);
@@ -414,12 +414,12 @@ inline EmptyArgumentException* EmptyArgumentException::DoClone() const {
 	return new EmptyArgumentException(*this);
 }
 
-inline void EmptyArgumentException::SwapOwnData(EmptyArgumentException& other) {
+inline void EmptyArgumentException::SwapOwnData(EmptyArgumentException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(EmptyArgumentException& x, EmptyArgumentException& y) {
+inline CPPDEVTK_BASE_API void swap(EmptyArgumentException& x, EmptyArgumentException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
@@ -437,7 +437,7 @@ inline NullArgumentException::NullArgumentException(const SourceCodeInfo& throwP
 		LogicException(throwPoint, QString(CPPDEVTK_DETAIL_NULL_ARGUMENT_EXCEPTION_FMT_MSG).arg(argName), cause),
 		NullPointerException(throwPoint, cause), InvalidArgumentException(throwPoint, "", cause) {}
 
-inline NullArgumentException::~NullArgumentException() throw() {}
+inline NullArgumentException::~NullArgumentException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<NullArgumentException> NullArgumentException::Clone() const {
 	return ::std::auto_ptr<NullArgumentException>(
@@ -452,7 +452,7 @@ inline NullArgumentException* NullArgumentException::clone() const {
 	return Clone().release();
 }
 
-inline void NullArgumentException::Swap(NullArgumentException& other) {
+inline void NullArgumentException::Swap(NullArgumentException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		LogicException::Swap(other);
 		NullPointerException::SwapOwnData(other);
@@ -482,12 +482,12 @@ inline NullArgumentException* NullArgumentException::DoClone() const {
 	return new NullArgumentException(*this);
 }
 
-inline void NullArgumentException::SwapOwnData(NullArgumentException& other) {
+inline void NullArgumentException::SwapOwnData(NullArgumentException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(NullArgumentException& x, NullArgumentException& y) {
+inline CPPDEVTK_BASE_API void swap(NullArgumentException& x, NullArgumentException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

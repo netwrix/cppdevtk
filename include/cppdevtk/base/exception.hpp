@@ -22,6 +22,7 @@
 
 
 #include "config.hpp"
+#include "exception_propagation.hpp"
 #include "throwable.hpp"
 #include "cloneable.hpp"
 #include "stringizable.hpp"
@@ -30,7 +31,6 @@
 #include "name_mangling.hpp"
 #include "unused.hpp"
 #include "tstring.hpp"
-#include "typeinfo.hpp"
 
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -40,6 +40,7 @@
 #endif
 
 #include <exception>
+#include <typeinfo>
 #include <algorithm>	// swap(), C++98
 #include <utility>	// swap(), C++11
 #include <new>
@@ -65,7 +66,7 @@ namespace base {
 /// - stack trace
 /// - cause
 /// - polymorphically throw
-/// \attention In derived classes declare/define dtor (with throw()) even if empty.
+/// \attention In derived classes declare/define dtor (with CPPDEVTK_NOEXCEPT) even if empty.
 /// Compiler generated dtor will correctly trigger with gcc: "looser throw specifier for"
 /// Clever is that gcc does trigger this only if derived class adds data members
 /// (ex for LogicException that adds whatArg_ and not for InvalidArgumentException that does not add any data member).
@@ -102,14 +103,14 @@ public:
 	typedef CPPDEVTK_TR1_NS::shared_ptr<const Exception> CausePtrType;
 	
 	
-	explicit Exception(const SourceCodeInfo& throwPoint) /* throw() */;
-	Exception(const SourceCodeInfo& throwPoint, const Exception& cause) /* throw() */;
+	explicit Exception(const SourceCodeInfo& throwPoint) /* CPPDEVTK_NOEXCEPT */;
+	Exception(const SourceCodeInfo& throwPoint, const Exception& cause) /* CPPDEVTK_NOEXCEPT */;
 	
-	Exception(const Exception& other) throw();
+	Exception(const Exception& other) CPPDEVTK_NOEXCEPT;
 	
-	virtual ~Exception() throw();
+	virtual ~Exception() CPPDEVTK_NOEXCEPT;
 	
-	Exception& operator=(const Exception& other) throw();
+	Exception& operator=(const Exception& other) CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<Exception> Clone() const;
 	
@@ -125,7 +126,7 @@ public:
 	
 	virtual void raise() const; ///< \attention Do not override in derived classes (is inherited virtual, but our implementation is OK)
 	
-	virtual const char* what() const throw();	///< \attention Do not override in derived classes; override DoOwnWhat() if needed.
+	virtual const char* what() const CPPDEVTK_NOEXCEPT;	///< \attention Do not override in derived classes; override DoOwnWhat() if needed.
 
 	QString What() const;	///< \attention Non-virtual; in derived classes override DoOwnWhat() if needed.
 	
@@ -134,9 +135,8 @@ public:
 	CausePtrType GetCause() const;
 	CausePtrType GetInitialCause() const;
 	
-	/// \remark Exception safety: nothrow guarantee.
-	/// \attention Must be overloaded in all derived classes (also nothrow guarantee).
-	void Swap(Exception& other);
+	/// \attention Must be overloaded in all derived classes.
+	void Swap(Exception& other) CPPDEVTK_NOEXCEPT;
 	
 	/// If exc is derived from Exception returns ToString(), runtime type plus what() otherwise.
 	static QString GetDetailedInfo(const ::std::exception& exc);
@@ -152,9 +152,8 @@ protected:
 	QString DoWhat(bool includeCause) const;
 	virtual QString DoOwnWhat() const;	///< \attention Override in derived classes if needed.
 	
-	/// \remark Exception safety: nothrow guarantee.
-	/// \attention Must be overloaded in all derived classes (also nothrow guarantee).
-	void SwapOwnData(Exception& other);
+	/// \attention Must be overloaded in all derived classes.
+	void SwapOwnData(Exception& other) CPPDEVTK_NOEXCEPT;
 private:
 	mutable CPPDEVTK_TR1_NS::shared_ptr< ::std::string> pStdWhatMsg_;	// shared_ptr because std::string copy ctor may throw
 	StackTracePtrType pStackTrace_;	// shared_ptr because StackTrace copy ctor may throw
@@ -163,9 +162,53 @@ private:
 };
 
 
-/// \remark Exception safety: nothrow guarantee.
-/// \attention Must be overloaded for all Exception derived classes (also nothrow guarantee).
-CPPDEVTK_BASE_API void swap(Exception& x, Exception& y);
+/// \attention Must be overloaded for all Exception derived classes.
+CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) CPPDEVTK_NOEXCEPT;
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BadException
+
+#define CPPDEVTK_BAD_EXCEPTION()	\
+	::cppdevtk::base::BadException(CPPDEVTK_SOURCE_CODE_INFO())
+
+#define CPPDEVTK_MAKE_BAD_EXCEPTION(excName)	\
+	::cppdevtk::base::BadException excName(CPPDEVTK_SOURCE_CODE_INFO())
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \sa C++ 03, 18.6.2.1 Class bad_exception
+class CPPDEVTK_BASE_API BadException: public Exception {
+public:
+	explicit BadException(const SourceCodeInfo& throwPoint);
+	
+	virtual ~BadException() CPPDEVTK_NOEXCEPT;
+	
+	::std::auto_ptr<BadException> Clone() const;
+	
+#	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+#	else
+	virtual BadException* clone() const;
+#	endif
+	
+	void Swap(BadException& other) CPPDEVTK_NOEXCEPT;
+protected:
+	virtual void DoThrow() const;
+	
+#	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+	virtual Cloneable* DoClone() const;
+#	else
+	virtual BadException* DoClone() const;
+#	endif
+	
+	void SwapOwnData(BadException& other) CPPDEVTK_NOEXCEPT;
+};
+
+
+CPPDEVTK_BASE_API void swap(BadException& x, BadException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}	// std_exceptions
@@ -179,13 +222,13 @@ CPPDEVTK_BASE_API void swap(Exception& x, Exception& y);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline Exception::Exception(const Exception& other) throw(): Throwable(other), Cloneable(other), QStringizable(other),
+inline Exception::Exception(const Exception& other) CPPDEVTK_NOEXCEPT: Throwable(other), Cloneable(other), QStringizable(other),
 		CPPDEVTK_QT_EXCEPTION(other), pStdWhatMsg_(other.pStdWhatMsg_), pStackTrace_(other.pStackTrace_),
 		throwPoint_(other.throwPoint_), pCause_(other.pCause_) {}
 
-inline Exception::~Exception() throw() {}
+inline Exception::~Exception() CPPDEVTK_NOEXCEPT {}
 
-inline Exception& Exception::operator=(const Exception& other) throw() {
+inline Exception& Exception::operator=(const Exception& other) CPPDEVTK_NOEXCEPT {
 	Exception tmp(other);
 	Swap(tmp);
 	return *this;
@@ -224,7 +267,7 @@ inline Exception::CausePtrType Exception::GetCause() const {
 	return pCause_;
 }
 
-inline void Exception::Swap(Exception& other) {
+inline void Exception::Swap(Exception& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	
@@ -272,7 +315,7 @@ inline QString Exception::DoOwnWhat() const {
 	return demangledName;
 }
 
-inline void Exception::SwapOwnData(Exception& other) {
+inline void Exception::SwapOwnData(Exception& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	
@@ -283,8 +326,50 @@ inline void Exception::SwapOwnData(Exception& other) {
 }
 
 
-inline CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) {
+inline CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
+}
+
+
+
+
+inline BadException::BadException(const SourceCodeInfo& throwPoint): Exception(throwPoint) {}
+
+inline BadException::~BadException() CPPDEVTK_NOEXCEPT {}
+
+inline ::std::auto_ptr<BadException> BadException::Clone() const {
+	return ::std::auto_ptr<BadException>(dynamic_cast<BadException*>(Cloneable::Clone().release()));
+}
+
+#if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+inline CPPDEVTK_QT_EXCEPTION* BadException::clone() const {
+#else
+inline BadException* BadException::clone() const {
+#endif
+	return Clone().release();
+}
+
+inline void BadException::Swap(BadException& other) CPPDEVTK_NOEXCEPT {
+	if (this != &other) {
+		Exception::Swap(other);
+		SwapOwnData(other);
+	}
+}
+
+inline void BadException::DoThrow() const {
+	throw *this;
+}
+
+#if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
+inline Cloneable* BadException::DoClone() const {
+#else
+inline BadException* BadException::DoClone() const {
+#endif
+	return new BadException(*this);
+}
+
+inline void BadException::SwapOwnData(BadException& other) CPPDEVTK_NOEXCEPT {
+	SuppressUnusedWarning(other);
 }
 
 

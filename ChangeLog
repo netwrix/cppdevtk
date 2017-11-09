@@ -1,9 +1,13 @@
 Version 1.0.4.1:
 - Release date:
 - New features:
+	- added exception propagation
+	- added CPPDEVTK_NOEXCEPT
 - Improvements:
 	- Kubuntu: updated Qt to 5.9.2
 	- moved EnableIf and IfThenElse as Conditional in type_traits.hpp
+	- added more std exception classes equivalents
+	- treat warning "not all control paths return a value" as error
 - Fixed bugs:
 	- fixed internal pthread_mutex_timedlock(): absTime instead of relTime
 

@@ -68,7 +68,7 @@ ConditionVariable::~ConditionVariable() {
 }
 
 
-void ConditionVariable::NotifyOne() throw() {	// noexcept in std
+void ConditionVariable::NotifyOne() CPPDEVTK_NOEXCEPT {
 	const int kRetCode = pthread_cond_signal(&conditionVariable_);
 	if (kRetCode != ESUCCESS) {
 		CPPDEVTK_LOG_FATAL("condition variable failed to notify one; error code: " << MakeSystemErrorCode(kRetCode).ToString());
@@ -78,7 +78,7 @@ void ConditionVariable::NotifyOne() throw() {	// noexcept in std
 	}
 }
 
-void ConditionVariable::NotifyAll() throw() {	// noexcept in std
+void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	const int kRetCode = pthread_cond_broadcast(&conditionVariable_);
 	if (kRetCode != ESUCCESS) {
 		CPPDEVTK_LOG_FATAL("condition variable failed to notify all; error code: " << MakeSystemErrorCode(kRetCode).ToString());

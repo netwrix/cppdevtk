@@ -52,7 +52,7 @@ public:
 	InvalidStringConversionException(const SourceCodeInfo& throwPoint, const QString& from, const QString& to,
 			const Exception& cause);
 	
-	virtual ~InvalidStringConversionException() throw();
+	virtual ~InvalidStringConversionException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<InvalidStringConversionException> Clone() const;
 	
@@ -62,7 +62,7 @@ public:
 	virtual InvalidStringConversionException* clone() const;
 #	endif
 	
-	void Swap(InvalidStringConversionException& other);
+	void Swap(InvalidStringConversionException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -72,11 +72,11 @@ protected:
 	virtual InvalidStringConversionException* DoClone() const;
 #	endif
 	
-	void SwapOwnData(InvalidStringConversionException& other);
+	void SwapOwnData(InvalidStringConversionException& other) CPPDEVTK_NOEXCEPT;
 };
 
 
-CPPDEVTK_BASE_API void swap(InvalidStringConversionException& x, InvalidStringConversionException& y);
+CPPDEVTK_BASE_API void swap(InvalidStringConversionException& x, InvalidStringConversionException& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -97,7 +97,7 @@ inline InvalidStringConversionException::InvalidStringConversionException(const 
 		RuntimeException(throwPoint, QString(CPPDEVTK_DETAIL_INVALID_STRING_CONVERSION_EXCEPTION_FMT_MSG).arg(from, to),
 		cause) {}
 
-inline InvalidStringConversionException::~InvalidStringConversionException() throw() {}
+inline InvalidStringConversionException::~InvalidStringConversionException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<InvalidStringConversionException> InvalidStringConversionException::Clone() const {
 	return ::std::auto_ptr<InvalidStringConversionException>(
@@ -112,7 +112,7 @@ inline InvalidStringConversionException* InvalidStringConversionException::clone
 	return Clone().release();
 }
 
-inline void InvalidStringConversionException::Swap(InvalidStringConversionException& other) {
+inline void InvalidStringConversionException::Swap(InvalidStringConversionException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
@@ -131,12 +131,12 @@ inline InvalidStringConversionException* InvalidStringConversionException::DoClo
 	return new InvalidStringConversionException(*this);
 }
 
-inline void InvalidStringConversionException::SwapOwnData(InvalidStringConversionException& other) {
+inline void InvalidStringConversionException::SwapOwnData(InvalidStringConversionException& other) CPPDEVTK_NOEXCEPT {
 	SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_BASE_API void swap(InvalidStringConversionException& x, InvalidStringConversionException& y) {
+inline CPPDEVTK_BASE_API void swap(InvalidStringConversionException& x, InvalidStringConversionException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

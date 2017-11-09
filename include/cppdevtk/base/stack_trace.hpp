@@ -63,7 +63,7 @@ public:
 	
 	StackTrace& operator=(const StackTrace& other);	///< \throw whatever copy ctor throws
 	
-	void Swap(StackTrace& other);
+	void Swap(StackTrace& other) CPPDEVTK_NOEXCEPT;
 	
 	/// \note
 	/// - glibc docs says that: "even complicated programs rather seldom have a nesting level of more than, say, 50
@@ -73,7 +73,7 @@ public:
 	void SetMaxSize(::std::size_t maxSize);
 	::std::size_t GetMaxSize() const;
 	
-	bool Capture() throw();
+	bool Capture() CPPDEVTK_NOEXCEPT;
 	bool operator()();	///< Functor style (same as Capture())
 	
 	::std::size_t GetSize() const;
@@ -101,7 +101,7 @@ private:
 };
 
 
-CPPDEVTK_BASE_API void swap(StackTrace& x, StackTrace& y);
+CPPDEVTK_BASE_API void swap(StackTrace& x, StackTrace& y) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -121,7 +121,7 @@ inline StackTrace& StackTrace::operator=(const StackTrace& other) {
 	return *this;
 }
 
-inline void StackTrace::Swap(StackTrace& other) {
+inline void StackTrace::Swap(StackTrace& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
 	if (this != &other) {
@@ -159,7 +159,7 @@ inline StackTrace::StackFrames StackTrace::GetStackFrames() const {
 }
 
 
-inline CPPDEVTK_BASE_API void swap(StackTrace& x, StackTrace& y) {
+inline CPPDEVTK_BASE_API void swap(StackTrace& x, StackTrace& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 

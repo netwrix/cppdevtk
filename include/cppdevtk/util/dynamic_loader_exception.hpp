@@ -36,18 +36,18 @@ namespace util {
 
 
 #define CPPDEVTK_DYNAMIC_LOADER_EXCEPTION(whatArg)	\
-	::cppdevtk::util::DynamicLoaderException(CPPDEVTK_SOURCE_CODE_INFO(), whatArg)
+	::cppdevtk::util::DynamicLoaderException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
 #define CPPDEVTK_MAKE_DYNAMIC_LOADER_EXCEPTION(excName, whatArg)	\
-	::cppdevtk::util::DynamicLoaderException excName(CPPDEVTK_SOURCE_CODE_INFO(), whatArg)
+	::cppdevtk::util::DynamicLoaderException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
 class CPPDEVTK_UTIL_API DynamicLoaderException: public ::cppdevtk::base::RuntimeException {
 public:
 	DynamicLoaderException(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg);
 	
-	virtual ~DynamicLoaderException() throw();
+	virtual ~DynamicLoaderException() CPPDEVTK_NOEXCEPT;
 	
 	::std::auto_ptr<DynamicLoaderException> Clone() const;
 	
@@ -57,7 +57,7 @@ public:
 	virtual DynamicLoaderException* clone() const;
 #	endif
 		
-	void Swap(DynamicLoaderException& other);
+	void Swap(DynamicLoaderException& other) CPPDEVTK_NOEXCEPT;
 protected:
 	virtual void DoThrow() const;
 	
@@ -67,13 +67,13 @@ protected:
 	virtual DynamicLoaderException* DoClone() const;
 #	endif
 		
-	void SwapOwnData(DynamicLoaderException& other);
+	void SwapOwnData(DynamicLoaderException& other) CPPDEVTK_NOEXCEPT;
 private:
 	static QString GetOsDynLdErrMsg();
 };
 
 
-CPPDEVTK_UTIL_API void swap(DynamicLoaderException& x, DynamicLoaderException& y);
+CPPDEVTK_UTIL_API void swap(DynamicLoaderException& x, DynamicLoaderException& y) CPPDEVTK_NOEXCEPT;
 
 
 /// @}
@@ -89,7 +89,7 @@ inline DynamicLoaderException::DynamicLoaderException(const ::cppdevtk::base::So
 		const QString& whatArg): Exception(throwPoint),
 		RuntimeException(throwPoint, (whatArg + "; dynamic loader error message: " + GetOsDynLdErrMsg())) {}
 
-inline DynamicLoaderException::~DynamicLoaderException() throw() {}
+inline DynamicLoaderException::~DynamicLoaderException() CPPDEVTK_NOEXCEPT {}
 
 inline ::std::auto_ptr<DynamicLoaderException> DynamicLoaderException::Clone() const {
 	return ::std::auto_ptr<DynamicLoaderException>(dynamic_cast<DynamicLoaderException*>(Cloneable::Clone().release()));
@@ -103,7 +103,7 @@ inline DynamicLoaderException* DynamicLoaderException::clone() const {
 	return Clone().release();
 }
 
-inline void DynamicLoaderException::Swap(DynamicLoaderException& other) {
+inline void DynamicLoaderException::Swap(DynamicLoaderException& other) CPPDEVTK_NOEXCEPT {
 	if (this != &other) {
 		RuntimeException::Swap(other);
 		SwapOwnData(other);
@@ -122,12 +122,12 @@ inline DynamicLoaderException* DynamicLoaderException::DoClone() const {
 	return new DynamicLoaderException(*this);
 }
 
-inline void DynamicLoaderException::SwapOwnData(DynamicLoaderException& other) {
+inline void DynamicLoaderException::SwapOwnData(DynamicLoaderException& other) CPPDEVTK_NOEXCEPT {
 	::cppdevtk::base::SuppressUnusedWarning(other);
 }
 
 
-inline CPPDEVTK_UTIL_API void swap(DynamicLoaderException& x, DynamicLoaderException& y) {
+inline CPPDEVTK_UTIL_API void swap(DynamicLoaderException& x, DynamicLoaderException& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
 }
 
