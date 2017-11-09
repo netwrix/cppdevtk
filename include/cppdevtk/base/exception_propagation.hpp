@@ -264,7 +264,11 @@ inline CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NO
 template <typename TException>
 inline ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT {
 #if (CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
+#if (!CPPDEVTK_COMPILER_GCC || (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 6, 0)))
 	return ::std::make_exception_ptr(exc);
+#else
+	return ::std::copy_exception(exc);
+#endif
 #else
 	try {
 		throw exc;

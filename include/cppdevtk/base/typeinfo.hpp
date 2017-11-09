@@ -37,24 +37,24 @@ namespace base {
 /// \sa <a href="http://loki-lib.sourceforge.net/index.php?n=Main.HomePage">Loki, TypeInfo</a>
 class CPPDEVTK_BASE_API TypeInfo {
 public:
-	TypeInfo();	///< \note Needed for containers.
-	TypeInfo(const ::std::type_info& stdTypeInfo);	///< \remark Non-explicit (conversion ctor).
+	TypeInfo() CPPDEVTK_NOEXCEPT;	///< \note Needed for containers.
+	TypeInfo(const ::std::type_info& stdTypeInfo) CPPDEVTK_NOEXCEPT;	///< \remark Non-explicit (conversion ctor).
 	
-	bool Before(const TypeInfo& other) const;
-	const char* Name() const;
+	bool Before(const TypeInfo& other) const CPPDEVTK_NOEXCEPT;
+	const char* Name() const CPPDEVTK_NOEXCEPT;
 	
-	const ::std::type_info& Peek() const;
+	const ::std::type_info& Peek() const CPPDEVTK_NOEXCEPT;
 private:
 	const ::std::type_info* pStdTypeInfo_;
 };
 
 
-CPPDEVTK_BASE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs);
-CPPDEVTK_BASE_API bool operator<(const TypeInfo& lhs, const TypeInfo& rhs);
-CPPDEVTK_BASE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs);
-CPPDEVTK_BASE_API bool operator>(const TypeInfo& lhs, const TypeInfo& rhs);
-CPPDEVTK_BASE_API bool operator<=(const TypeInfo& lhs, const TypeInfo& rhs);
-CPPDEVTK_BASE_API bool operator>=(const TypeInfo& lhs, const TypeInfo& rhs);
+CPPDEVTK_BASE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API bool operator<(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API bool operator>(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API bool operator<=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API bool operator>=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
 
 
 
@@ -161,11 +161,11 @@ CPPDEVTK_BASE_API void swap(BadCastException& x, BadCastException& y) CPPDEVTK_N
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-inline TypeInfo::TypeInfo(): pStdTypeInfo_(&typeid(*this)) {}
+inline TypeInfo::TypeInfo() CPPDEVTK_NOEXCEPT: pStdTypeInfo_(&typeid(*this)) {}
 
-inline TypeInfo::TypeInfo(const ::std::type_info& stdTypeInfo): pStdTypeInfo_(&stdTypeInfo) {}
+inline TypeInfo::TypeInfo(const ::std::type_info& stdTypeInfo) CPPDEVTK_NOEXCEPT: pStdTypeInfo_(&stdTypeInfo) {}
 
-inline bool TypeInfo::Before(const TypeInfo& other) const {
+inline bool TypeInfo::Before(const TypeInfo& other) const CPPDEVTK_NOEXCEPT {
 #if (CPPDEVTK_COMPILER_MSVC)
 	// As usually for Ms standards are made to be broken (::std::type_info::before() returns int...)
 	// Please see: https://msdn.microsoft.com/en-us/library/70ky2y6k%28v=vs.90%29.aspx
@@ -175,36 +175,36 @@ inline bool TypeInfo::Before(const TypeInfo& other) const {
 #endif
 }
 
-inline const char* TypeInfo::Name() const {
+inline const char* TypeInfo::Name() const CPPDEVTK_NOEXCEPT {
 	return pStdTypeInfo_->name();
 }
 
-inline const ::std::type_info& TypeInfo::Peek() const {
+inline const ::std::type_info& TypeInfo::Peek() const CPPDEVTK_NOEXCEPT {
 	return *pStdTypeInfo_;
 }
 
 
-inline CPPDEVTK_BASE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs) {
+inline CPPDEVTK_BASE_API bool operator==(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return (lhs.Peek() == rhs.Peek());
 }
 
-inline CPPDEVTK_BASE_API bool operator<(const TypeInfo& lhs, const TypeInfo& rhs) {
+inline CPPDEVTK_BASE_API bool operator<(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return lhs.Before(rhs);
 }
 
-inline CPPDEVTK_BASE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs) {
+inline CPPDEVTK_BASE_API bool operator!=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return !(lhs == rhs);
 }
 
-inline CPPDEVTK_BASE_API bool operator>(const TypeInfo& lhs, const TypeInfo& rhs) {
+inline CPPDEVTK_BASE_API bool operator>(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return rhs < lhs;
 }
 
-inline CPPDEVTK_BASE_API bool operator<=(const TypeInfo& lhs, const TypeInfo& rhs) {
+inline CPPDEVTK_BASE_API bool operator<=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return !(rhs < lhs);
 }
 
-inline CPPDEVTK_BASE_API bool operator>=(const TypeInfo& lhs, const TypeInfo& rhs) {
+inline CPPDEVTK_BASE_API bool operator>=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return !(lhs < rhs);
 }
 

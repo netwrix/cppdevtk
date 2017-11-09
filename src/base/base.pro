@@ -164,9 +164,7 @@ SOURCES += \
 	semaphore_pthread.cpp	\
 	semaphore_qt.cpp	\
 	semaphore_win.cpp	\
-	throw_lock_exception.cpp	\
-	thread_exception.cpp	\
-	thread.cpp
+	throw_lock_exception.cpp
 
 unix {
 	SOURCES += error_code_unx.cpp	\
@@ -278,18 +276,6 @@ else {
 }
 
 unix {
-	SOURCES += thread_unx.cpp
-}
-else {
-	win32 {
-		SOURCES += thread_win.cpp
-	}
-	else {
-		error("Unsupported platform!!!")
-	}
-}
-
-unix {
 	SOURCES += pthread_ext.cpp
 }
 
@@ -382,9 +368,7 @@ HEADERS += \
 	../../include/cppdevtk/base/invalid_string_conversion_exception.hpp	\
 	../../include/cppdevtk/base/condition_variable.hpp	\
 	../../include/cppdevtk/base/semaphore.hpp	\
-	../../include/cppdevtk/base/generic_locking_algorithms.hpp	\
-	../../include/cppdevtk/base/thread_exception.hpp	\
-	../../include/cppdevtk/base/thread.hpp
+	../../include/cppdevtk/base/generic_locking_algorithms.hpp
 
 unix {
 	HEADERS += ../../include/cppdevtk/base/execinfo_unx.h

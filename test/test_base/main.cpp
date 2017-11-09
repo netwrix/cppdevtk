@@ -488,10 +488,10 @@ bool TestExceptionPropagation() {
 		}
 		catch (const exception&) {
 			exceptionPtr = CurrentException();
-			CPPDEVTK_ASSERT(exceptionPtr);
+			CPPDEVTK_ASSERT(exceptionPtr != NULL);
 		}
 		
-		if (exceptionPtr) {
+		if (exceptionPtr != NULL) {
 			try {
 				RethrowException(exceptionPtr);
 			}
@@ -517,7 +517,7 @@ bool TestExceptionPropagation() {
 			exceptionPtr = CurrentException();
 		}
 		
-		if (exceptionPtr) {
+		if (exceptionPtr != NULL) {
 			try {
 				RethrowException(exceptionPtr);
 			}
@@ -540,7 +540,7 @@ bool TestExceptionPropagation() {
 			exceptionPtr = CurrentException();
 		}
 		
-		if (exceptionPtr) {
+		if (exceptionPtr != NULL) {
 			try {
 				RethrowException(exceptionPtr);
 			}

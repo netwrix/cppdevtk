@@ -270,7 +270,7 @@ QString SystemErrorCategory::GetMessage(int errVal, const QLocale& locale) const
 	return sysErrMsg;
 }
 
-ErrorCondition SystemErrorCategory::GetDefaultErrorCondition(int errVal) const {
+ErrorCondition SystemErrorCategory::GetDefaultErrorCondition(int errVal) const CPPDEVTK_NOEXCEPT {
 	using namespace ::cppdevtk::base::errc;
 
 	switch (errVal) {

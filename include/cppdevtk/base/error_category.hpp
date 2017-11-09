@@ -55,32 +55,32 @@ namespace base {
 /// \sa C++11, 19.5.1 Class error_category
 class CPPDEVTK_BASE_API ErrorCategory: private NonCopyable, public QStringizable {
 public:
-	ErrorCategory();	// needed for default initialization of an object of const type
-	virtual ~ErrorCategory();
+	ErrorCategory() CPPDEVTK_NOEXCEPT;	// needed for default initialization of an object of const type
+	virtual ~ErrorCategory() CPPDEVTK_NOEXCEPT;
 	
 	virtual QString GetName() const = 0;
 	virtual QString GetMessage(int errVal, const QLocale& locale = QLocale::c()) const = 0;
 	
-	virtual ErrorCondition GetDefaultErrorCondition(int errVal) const;
+	virtual ErrorCondition GetDefaultErrorCondition(int errVal) const CPPDEVTK_NOEXCEPT;
 	
-	virtual bool IsEquivalent(int code, const ErrorCondition& condition) const;
-	virtual bool IsEquivalent(const ErrorCode& code, int condition) const;
+	virtual bool IsEquivalent(int code, const ErrorCondition& condition) const CPPDEVTK_NOEXCEPT;
+	virtual bool IsEquivalent(const ErrorCode& code, int condition) const CPPDEVTK_NOEXCEPT;
 	
-	bool operator==(const ErrorCategory& other) const;
-	bool operator!=(const ErrorCategory& other) const;
-	bool operator<(const ErrorCategory& other) const;
+	bool operator==(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT;
+	bool operator!=(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT;
+	bool operator<(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT;
 	
 	virtual QString ToString() const;	///< Same as GetName()
 };
 
 
-CPPDEVTK_BASE_API const ErrorCategory& GetGenericCategory();
-CPPDEVTK_BASE_API const ErrorCategory& GetSystemCategory();
+CPPDEVTK_BASE_API const ErrorCategory& GetGenericCategory() CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API const ErrorCategory& GetSystemCategory() CPPDEVTK_NOEXCEPT;
 
 
 class CPPDEVTK_BASE_API GenericErrorCategory: public ErrorCategory {
 public:
-	GenericErrorCategory();	// needed for default initialization of an object of const type
+	GenericErrorCategory() CPPDEVTK_NOEXCEPT;	// needed for default initialization of an object of const type
 	virtual QString GetName() const;
 	virtual QString GetMessage(int errVal, const QLocale& locale = QLocale::c()) const;
 };
@@ -88,7 +88,7 @@ public:
 
 class CPPDEVTK_BASE_API SystemErrorCategory: public ErrorCategory {
 public:
-	SystemErrorCategory();	// needed for default initialization of an object of const type
+	SystemErrorCategory() CPPDEVTK_NOEXCEPT;	// needed for default initialization of an object of const type
 	virtual QString GetName() const;
 	virtual QString GetMessage(int errVal, const QLocale& locale = QLocale::c()) const;
 	
@@ -96,7 +96,7 @@ public:
 	// If the argument ev corresponds to a POSIX errno value posv, the function shall return
 	// error_condition(posv, generic_category()).
 	// Otherwise, the function shall return error_condition(ev, system_category()).
-	virtual ErrorCondition GetDefaultErrorCondition(int errVal) const;
+	virtual ErrorCondition GetDefaultErrorCondition(int errVal) const CPPDEVTK_NOEXCEPT;
 };
 
 
@@ -109,31 +109,31 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline ErrorCategory::ErrorCategory(): NonCopyable(), QStringizable() {}
+inline ErrorCategory::ErrorCategory() CPPDEVTK_NOEXCEPT: NonCopyable(), QStringizable() {}
 
-inline ErrorCategory::~ErrorCategory() {}
+inline ErrorCategory::~ErrorCategory() CPPDEVTK_NOEXCEPT {}
 
-inline ErrorCondition ErrorCategory::GetDefaultErrorCondition(int errVal) const {
+inline ErrorCondition ErrorCategory::GetDefaultErrorCondition(int errVal) const CPPDEVTK_NOEXCEPT {
 	return ErrorCondition(errVal, *this);
 }
 
-inline bool ErrorCategory::IsEquivalent(int code, const ErrorCondition& condition) const {
+inline bool ErrorCategory::IsEquivalent(int code, const ErrorCondition& condition) const CPPDEVTK_NOEXCEPT {
 	return GetDefaultErrorCondition(code) == condition;
 }
 
-inline bool ErrorCategory::IsEquivalent(const ErrorCode& code, int condition) const {
+inline bool ErrorCategory::IsEquivalent(const ErrorCode& code, int condition) const CPPDEVTK_NOEXCEPT {
 	return (*this == code.GetCategory()) && (code.GetValue() == condition);
 }
 
-inline bool ErrorCategory::operator==(const ErrorCategory& other) const {
+inline bool ErrorCategory::operator==(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT {
 	return this == &other;
 }
 
-inline bool ErrorCategory::operator!=(const ErrorCategory& other) const {
+inline bool ErrorCategory::operator!=(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT {
 	return this != &other;
 }
 
-inline bool ErrorCategory::operator<(const ErrorCategory& other) const {
+inline bool ErrorCategory::operator<(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT {
 	return ::std::less<const ErrorCategory*>()(this, &other);
 }
 
@@ -142,14 +142,14 @@ inline QString ErrorCategory::ToString() const {
 }
 
 
-inline GenericErrorCategory::GenericErrorCategory(): ErrorCategory() {}
+inline GenericErrorCategory::GenericErrorCategory() CPPDEVTK_NOEXCEPT: ErrorCategory() {}
 
 inline QString GenericErrorCategory::GetName() const {
 	return QString("generic");
 }
 
 
-inline SystemErrorCategory::SystemErrorCategory(): ErrorCategory() {}
+inline SystemErrorCategory::SystemErrorCategory() CPPDEVTK_NOEXCEPT: ErrorCategory() {}
 
 inline QString SystemErrorCategory::GetName() const {
 	return QString("system");

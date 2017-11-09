@@ -25,14 +25,14 @@ namespace cppdevtk {
 namespace base {
 
 
-ErrorCondition::ErrorCondition(): value_(errc::success), pErrorCategory_(&GetGenericCategory()) {}
+ErrorCondition::ErrorCondition() CPPDEVTK_NOEXCEPT: value_(errc::success), pErrorCategory_(&GetGenericCategory()) {}
 
-void ErrorCondition::Clear() {
+void ErrorCondition::Clear() CPPDEVTK_NOEXCEPT {
 	value_ = errc::success;
 	pErrorCategory_ = &GetGenericCategory();
 }
 
-const ErrorCategory& ErrorCondition::GetCategory() const {
+const ErrorCategory& ErrorCondition::GetCategory() const CPPDEVTK_NOEXCEPT {
 	return *pErrorCategory_;
 }
 
@@ -48,23 +48,23 @@ QString ErrorCondition::ToString() const {
 namespace errc {
 
 
-CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(errc_t errCond) {
+CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(errc_t errCond) CPPDEVTK_NOEXCEPT {
 	return ErrorCondition(errCond, GetGenericCategory());
 }
 
 
 }	// namespace errc
 
-CPPDEVTK_BASE_API ErrorCondition MakeGenericErrorCondition(int value) {
+CPPDEVTK_BASE_API ErrorCondition MakeGenericErrorCondition(int value) CPPDEVTK_NOEXCEPT {
 	return ErrorCondition(value, GetGenericCategory());
 }
 
 
-CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCondition& rhs) {
+CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT {
 	return (lhs.GetCategory() == rhs.GetCategory()) && (lhs.GetValue() == rhs.GetValue());
 }
 
-CPPDEVTK_BASE_API bool operator<(const ErrorCondition& lhs, const ErrorCondition& rhs) {
+CPPDEVTK_BASE_API bool operator<(const ErrorCondition& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT {
 	return (lhs.GetCategory() < rhs.GetCategory())
 			|| ((lhs.GetCategory() == rhs.GetCategory()) && (lhs.GetValue() < rhs.GetValue()));
 }

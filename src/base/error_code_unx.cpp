@@ -30,7 +30,7 @@ namespace cppdevtk {
 namespace base {
 
 
-CPPDEVTK_BASE_API ErrorCode GetLastSystemErrorCode() {
+CPPDEVTK_BASE_API ErrorCode GetLastSystemErrorCode() CPPDEVTK_NOEXCEPT {
 	return MakeSystemErrorCode(errno);
 }
 

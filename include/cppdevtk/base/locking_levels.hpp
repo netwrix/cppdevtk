@@ -47,7 +47,7 @@ protected:
 	ObjectLevelLocking();
 	/* virtual */ ~ObjectLevelLocking();	///< \remark Not virtual.
 	
-	TMutex& GetMutexRef() const;
+	TMutex& GetMutexRef() const CPPDEVTK_NOEXCEPT;
 private:
 	mutable MutexType mutex_;
 };
@@ -65,7 +65,7 @@ protected:
 	ClassLevelLocking();
 	/* virtual */ ~ClassLevelLocking();	///< \remark Not virtual.
 	
-	static TMutex& GetMutexRef();
+	static TMutex& GetMutexRef() CPPDEVTK_NOEXCEPT;
 private:
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 	static TMutex mutex_;
@@ -89,7 +89,7 @@ template <class TMutex>
 inline ObjectLevelLocking<TMutex>::~ObjectLevelLocking() {}
 
 template <class TMutex>
-inline TMutex& ObjectLevelLocking<TMutex>::GetMutexRef() const {
+inline TMutex& ObjectLevelLocking<TMutex>::GetMutexRef() const CPPDEVTK_NOEXCEPT {
 	return mutex_;
 }
 
@@ -106,7 +106,7 @@ template <class TMutex>
 inline ClassLevelLocking<TMutex>::~ClassLevelLocking() {}
 
 template <class TMutex>
-inline TMutex& ClassLevelLocking<TMutex>::GetMutexRef() {
+inline TMutex& ClassLevelLocking<TMutex>::GetMutexRef() CPPDEVTK_NOEXCEPT {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 	return mutex_;
 #	else

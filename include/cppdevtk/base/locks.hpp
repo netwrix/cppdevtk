@@ -80,7 +80,7 @@ public:
 	
 	
 	explicit LockGuard(MutexType& mutex);
-	LockGuard(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT;
+	LockGuard(MutexType& mutex, AdoptLockT);
 	~LockGuard();
 private:
 	MutexType& mutex_;
@@ -103,7 +103,7 @@ public:
 	explicit UniqueLock(MutexType& mutex);
 	UniqueLock(MutexType& mutex, DeferLockT) CPPDEVTK_NOEXCEPT;
 	UniqueLock(MutexType& mutex, TryToLockT);
-	UniqueLock(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT;
+	UniqueLock(MutexType& mutex, AdoptLockT);
 	UniqueLock(MutexType& mutex, int relTime);
 	UniqueLock(MutexType& mutex, ::std::time_t absTime);
 	~UniqueLock();
@@ -126,8 +126,8 @@ public:
 	MutexType* Release() CPPDEVTK_NOEXCEPT;
 	
 	bool OwnsLock() const CPPDEVTK_NOEXCEPT;
-	operator BoolType() const;
-	bool operator!() const;
+	operator BoolType() const CPPDEVTK_NOEXCEPT;
+	bool operator!() const CPPDEVTK_NOEXCEPT;
 	
 	MutexType* GetMutex() const CPPDEVTK_NOEXCEPT;
 	
@@ -157,7 +157,7 @@ inline LockGuard<TMutex>::LockGuard(MutexType& mutex): NonCopyable(), mutex_(mut
 }
 
 template <class TMutex>
-inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT: NonCopyable(), mutex_(mutex) {}
+inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLockT): NonCopyable(), mutex_(mutex) {}
 
 template <class TMutex>
 inline LockGuard<TMutex>::~LockGuard() {
@@ -184,7 +184,7 @@ inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, TryToLockT): NonCopyable
 }
 
 template <class TMutex>
-inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, AdoptLockT) CPPDEVTK_NOEXCEPT: NonCopyable(),
+inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, AdoptLockT): NonCopyable(),
 		pMutex_(&mutex), ownsLock_(true) {}
 
 template <class TMutex>
@@ -300,12 +300,12 @@ inline bool UniqueLock<TMutex>::OwnsLock() const CPPDEVTK_NOEXCEPT {
 }
 
 template <class TMutex>
-inline UniqueLock<TMutex>::operator BoolType() const {
+inline UniqueLock<TMutex>::operator BoolType() const CPPDEVTK_NOEXCEPT {
 	return OwnsLock() ? &UniqueLock::Lock : NULL;
 }
 
 template <class TMutex>
-inline bool UniqueLock<TMutex>::operator!() const {
+inline bool UniqueLock<TMutex>::operator!() const CPPDEVTK_NOEXCEPT {
 	return !OwnsLock();
 }
 

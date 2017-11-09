@@ -43,11 +43,11 @@ void Mutex::Lock() {
 	mutex_.lock();
 }
 
-bool Mutex::TryLock() CPPDEVTK_NOEXCEPT {
+bool Mutex::TryLock() {
 	return mutex_.tryLock();
 }
 
-void Mutex::Unlock() CPPDEVTK_NOEXCEPT {
+void Mutex::Unlock() {
 	mutex_.unlock();
 }
 
@@ -64,7 +64,7 @@ bool RecursiveMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return mutex_.tryLock();
 }
 
-void RecursiveMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void RecursiveMutex::Unlock() {
 	mutex_.unlock();
 }
 
@@ -77,11 +77,11 @@ void TimedMutex::Lock() {
 	mutex_.lock();
 }
 
-bool TimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
+bool TimedMutex::TryLock() {
 	return mutex_.tryLock();
 }
 
-bool TimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
+bool TimedMutex::TryLockFor(int relTime) {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -89,7 +89,7 @@ bool TimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	return mutex_.tryLock(relTime);
 }
 
-bool TimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
+bool TimedMutex::TryLockUntil(::std::time_t absTime) {
 	time_t currTime = time(NULL);
 	time_t seconds = difftime(absTime, currTime);
 	if (seconds <= 0) {
@@ -99,7 +99,7 @@ bool TimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
 	return mutex_.tryLock(seconds * 1000);
 }
 
-void TimedMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void TimedMutex::Unlock() {
 	mutex_.unlock();
 }
 
@@ -116,7 +116,7 @@ bool RecursiveTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return mutex_.tryLock();
 }
 
-bool RecursiveTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
+bool RecursiveTimedMutex::TryLockFor(int relTime) {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -124,7 +124,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	return mutex_.tryLock(relTime);
 }
 
-bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
+bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
 	time_t currTime = time(NULL);
 	time_t seconds = difftime(absTime, currTime);
 	if (seconds <= 0) {
@@ -134,7 +134,7 @@ bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT 
 	return mutex_.tryLock(seconds * 1000);
 }
 
-void RecursiveTimedMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void RecursiveTimedMutex::Unlock() {
 	mutex_.unlock();
 }
 

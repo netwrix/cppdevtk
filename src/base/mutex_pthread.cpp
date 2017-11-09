@@ -98,7 +98,7 @@ void Mutex::Lock() {
 	}
 }
 
-bool Mutex::TryLock() CPPDEVTK_NOEXCEPT {
+bool Mutex::TryLock() {
 	const int kRetCode = pthread_mutex_trylock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -113,7 +113,7 @@ bool Mutex::TryLock() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-void Mutex::Unlock() CPPDEVTK_NOEXCEPT {
+void Mutex::Unlock() {
 	const int kRetCode = pthread_mutex_unlock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -168,7 +168,7 @@ void ErrorCheckingMutex::Lock() {
 	}
 }
 
-bool ErrorCheckingMutex::TryLock() CPPDEVTK_NOEXCEPT {
+bool ErrorCheckingMutex::TryLock() {
 	const int kRetCode = pthread_mutex_trylock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -184,7 +184,7 @@ bool ErrorCheckingMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-void ErrorCheckingMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void ErrorCheckingMutex::Unlock() {
 	const int kRetCode = pthread_mutex_unlock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -260,7 +260,7 @@ bool RecursiveMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-void RecursiveMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void RecursiveMutex::Unlock() {
 	const int kRetCode = pthread_mutex_unlock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -318,7 +318,7 @@ void TimedMutex::Lock() {
 	}
 }
 
-bool TimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
+bool TimedMutex::TryLock() {
 	const int kRetCode = pthread_mutex_trylock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -333,7 +333,7 @@ bool TimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-bool TimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
+bool TimedMutex::TryLockFor(int relTime) {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -362,7 +362,7 @@ bool TimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	}
 }
 
-bool TimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
+bool TimedMutex::TryLockUntil(::std::time_t absTime) {
 	time_t currTime = time(NULL);
 	if (currTime == (time_t)-1) {
 		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << MakeSystemErrorCode(errno).ToString());
@@ -377,7 +377,7 @@ bool TimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
 	return TryLockFor(seconds * 1000);
 }
 
-void TimedMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void TimedMutex::Unlock() {
 	const int kRetCode = pthread_mutex_unlock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -437,7 +437,7 @@ void ErrorCheckingTimedMutex::Lock() {
 	}
 }
 
-bool ErrorCheckingTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
+bool ErrorCheckingTimedMutex::TryLock() {
 	const int kRetCode = pthread_mutex_trylock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -453,7 +453,7 @@ bool ErrorCheckingTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-bool ErrorCheckingTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
+bool ErrorCheckingTimedMutex::TryLockFor(int relTime) {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -484,7 +484,7 @@ bool ErrorCheckingTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	}
 }
 
-bool ErrorCheckingTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
+bool ErrorCheckingTimedMutex::TryLockUntil(::std::time_t absTime) {
 	time_t currTime = time(NULL);
 	if (currTime == (time_t)-1) {
 		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << MakeSystemErrorCode(errno).ToString());
@@ -499,7 +499,7 @@ bool ErrorCheckingTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXC
 	return TryLockFor(seconds * 1000);
 }
 
-void ErrorCheckingTimedMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void ErrorCheckingTimedMutex::Unlock() {
 	const int kRetCode = pthread_mutex_unlock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:
@@ -580,7 +580,7 @@ bool RecursiveTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-bool RecursiveTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
+bool RecursiveTimedMutex::TryLockFor(int relTime) {
 	if (relTime <= 0) {
 		return TryLock();
 	}
@@ -609,7 +609,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) CPPDEVTK_NOEXCEPT {
 	}
 }
 
-bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT {
+bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
 	time_t currTime = time(NULL);
 	if (currTime == (time_t)-1) {
 		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << MakeSystemErrorCode(errno).ToString());
@@ -624,7 +624,7 @@ bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) CPPDEVTK_NOEXCEPT 
 	return TryLockFor(seconds * 1000);
 }
 
-void RecursiveTimedMutex::Unlock() CPPDEVTK_NOEXCEPT {
+void RecursiveTimedMutex::Unlock() {
 	const int kRetCode = pthread_mutex_unlock(&mutex_);
 	switch (kRetCode) {
 		case ESUCCESS:

@@ -171,32 +171,32 @@ public:
 	typedef void (*UnspecifiedBoolType)();
 	
 	
-	ErrorCondition();
-	ErrorCondition(int value, const ErrorCategory& errorCategory);
+	ErrorCondition() CPPDEVTK_NOEXCEPT;
+	ErrorCondition(int value, const ErrorCategory& errorCategory) CPPDEVTK_NOEXCEPT;
 	
 	template <typename ErrorConditionEnum>
 	ErrorCondition(ErrorConditionEnum errorConditionEnum,
-			typename EnableIf<IsErrorConditionEnum<ErrorConditionEnum>::value>::Type* = NULL);
+			typename EnableIf<IsErrorConditionEnum<ErrorConditionEnum>::value>::Type* = NULL) CPPDEVTK_NOEXCEPT;
 	
-	void Assign(int value, const ErrorCategory& errorCategory);
+	void Assign(int value, const ErrorCategory& errorCategory) CPPDEVTK_NOEXCEPT;
 	
 	template <typename ErrorConditionEnum>
 	typename EnableIf<IsErrorConditionEnum<ErrorConditionEnum>::value, ErrorConditionEnum>::Type& operator=(
-			ErrorConditionEnum errorConditionEnum);
+			ErrorConditionEnum errorConditionEnum) CPPDEVTK_NOEXCEPT;
 	
-	void Clear();
+	void Clear() CPPDEVTK_NOEXCEPT;
 	
-	int GetValue() const;
-	const ErrorCategory& GetCategory() const;
+	int GetValue() const CPPDEVTK_NOEXCEPT;
+	const ErrorCategory& GetCategory() const CPPDEVTK_NOEXCEPT;
 	QString GetMessage() const;
 	
-	operator UnspecifiedBoolType() const;
-	bool operator!() const;
+	operator UnspecifiedBoolType() const CPPDEVTK_NOEXCEPT;
+	bool operator!() const CPPDEVTK_NOEXCEPT;
 	
 	/// Format: "category: " + category().name() + "; error: " + value() + " (" + message() + ')'
 	virtual QString ToString() const;
 private:
-	static void UnspecifiedBoolTrue();
+	static void UnspecifiedBoolTrue() CPPDEVTK_NOEXCEPT;
 	
 	
 	int value_;
@@ -209,19 +209,21 @@ namespace errc {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa C++11, 19.5.3.5 Class error_condition non-member functions
-CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(errc_t errCond);
+CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(errc_t errCond) CPPDEVTK_NOEXCEPT;
 
 
 }	// namespace errc
 
 
-CPPDEVTK_BASE_API ErrorCondition MakeGenericErrorCondition(int value);	///< \note Not in std.
+CPPDEVTK_BASE_API ErrorCondition MakeGenericErrorCondition(int value) CPPDEVTK_NOEXCEPT;	///< \note Not in std.
 
 
-CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCondition& rhs);	///< \sa C++11, 19.5.4 Comparison operators
-CPPDEVTK_BASE_API bool operator!=(const ErrorCondition& lhs, const ErrorCondition& rhs);	///< \sa C++11, 19.5.4 Comparison operators
-CPPDEVTK_BASE_API bool operator<(const ErrorCondition& lhs, const ErrorCondition& rhs);	///< \sa C++11, 19.5.3.5 non-member functions
-
+/// \sa C++11, 19.5.4 Comparison operators
+CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT;
+/// \sa C++11, 19.5.4 Comparison operators
+CPPDEVTK_BASE_API bool operator!=(const ErrorCondition& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT;
+/// \sa C++11, 19.5.3.5 non-member functions
+CPPDEVTK_BASE_API bool operator<(const ErrorCondition& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT;
 
 ::std::ostream& operator<<(::std::ostream& os, const ErrorCondition& errorCondition);	///< \remark Non-std extension
 ::std::wostream& operator<<(::std::wostream& os, const ErrorCondition& errorCondition);	///< \remark Non-std extension
@@ -237,43 +239,43 @@ CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, const ErrorCondition&
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline ErrorCondition::ErrorCondition(int value, const ErrorCategory& errorCategory): value_(value),
+inline ErrorCondition::ErrorCondition(int value, const ErrorCategory& errorCategory) CPPDEVTK_NOEXCEPT: value_(value),
 		pErrorCategory_(&errorCategory) {}
 
 template <typename ErrorConditionEnum>
 inline ErrorCondition::ErrorCondition(ErrorConditionEnum errorConditionEnum,
-		typename EnableIf<IsErrorConditionEnum<ErrorConditionEnum>::value>::Type*) {
+		typename EnableIf<IsErrorConditionEnum<ErrorConditionEnum>::value>::Type*) CPPDEVTK_NOEXCEPT {
 	*this = MakeErrorCondition(errorConditionEnum);
 }
 
-inline void ErrorCondition::Assign(int value, const ErrorCategory& errorCategory) {
+inline void ErrorCondition::Assign(int value, const ErrorCategory& errorCategory) CPPDEVTK_NOEXCEPT {
 	value_ = value;
 	pErrorCategory_ = &errorCategory;
 }
 
 template <typename ErrorConditionEnum>
 inline typename EnableIf<IsErrorConditionEnum<ErrorConditionEnum>::value, ErrorConditionEnum>::Type& ErrorCondition::operator=(
-		ErrorConditionEnum errorConditionEnum) {
+		ErrorConditionEnum errorConditionEnum) CPPDEVTK_NOEXCEPT {
 	*this = MakeErrorCondition(errorConditionEnum);
 	return *this;
 }
 
-inline int ErrorCondition::GetValue() const {
+inline int ErrorCondition::GetValue() const CPPDEVTK_NOEXCEPT {
 	return value_;
 }
 
-inline ErrorCondition::operator UnspecifiedBoolType() const {
+inline ErrorCondition::operator UnspecifiedBoolType() const CPPDEVTK_NOEXCEPT {
 	return (value_ == errc::success) ? NULL : &UnspecifiedBoolTrue;
 }
 
-inline bool ErrorCondition::operator!() const {
+inline bool ErrorCondition::operator!() const CPPDEVTK_NOEXCEPT {
 	return value_ == errc::success;
 }
 
-inline void ErrorCondition::UnspecifiedBoolTrue() {}
+inline void ErrorCondition::UnspecifiedBoolTrue() CPPDEVTK_NOEXCEPT {}
 
 
-inline CPPDEVTK_BASE_API bool operator!=(const ErrorCondition& lhs, const ErrorCondition& rhs) {
+inline CPPDEVTK_BASE_API bool operator!=(const ErrorCondition& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT {
 	return !(lhs == rhs);
 }
 

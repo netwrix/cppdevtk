@@ -25,18 +25,18 @@ namespace cppdevtk {
 namespace base {
 
 
-ErrorCode::ErrorCode(): value_(sys_err::success), pErrorCategory_(&GetSystemCategory()) {}
+ErrorCode::ErrorCode() CPPDEVTK_NOEXCEPT: value_(sys_err::success), pErrorCategory_(&GetSystemCategory()) {}
 
-void ErrorCode::Clear() {
+void ErrorCode::Clear() CPPDEVTK_NOEXCEPT {
 	value_ = sys_err::success;
 	pErrorCategory_ = &GetSystemCategory();
 }
 
-const ErrorCategory& ErrorCode::GetCategory() const {
+const ErrorCategory& ErrorCode::GetCategory() const CPPDEVTK_NOEXCEPT {
 	return *pErrorCategory_;
 }
 
-ErrorCondition ErrorCode::GetDefaultErrorCondition() const {
+ErrorCondition ErrorCode::GetDefaultErrorCondition() const CPPDEVTK_NOEXCEPT {
 	return pErrorCategory_->GetDefaultErrorCondition(value_);
 }
 
@@ -52,7 +52,7 @@ QString ErrorCode::ToString() const {
 namespace sys_err {
 
 
-CPPDEVTK_BASE_API ErrorCode MakeErrorCode(sys_err_t sysErr) {
+CPPDEVTK_BASE_API ErrorCode MakeErrorCode(sys_err_t sysErr) CPPDEVTK_NOEXCEPT {
 	return ErrorCode(sysErr, GetSystemCategory());
 }
 
@@ -63,7 +63,7 @@ CPPDEVTK_BASE_API ErrorCode MakeErrorCode(sys_err_t sysErr) {
 namespace errc {
 
 
-CPPDEVTK_BASE_API ErrorCode MakeErrorCode(errc_t errCond) {
+CPPDEVTK_BASE_API ErrorCode MakeErrorCode(errc_t errCond) CPPDEVTK_NOEXCEPT {
 	return ErrorCode(errCond, GetGenericCategory());
 }
 
@@ -71,27 +71,27 @@ CPPDEVTK_BASE_API ErrorCode MakeErrorCode(errc_t errCond) {
 }	// namespace errc
 
 
-CPPDEVTK_BASE_API ErrorCode MakeSystemErrorCode(int value) {
+CPPDEVTK_BASE_API ErrorCode MakeSystemErrorCode(int value) CPPDEVTK_NOEXCEPT {
 	return ErrorCode(value, GetSystemCategory());
 }
 
 
-CPPDEVTK_BASE_API bool operator==(const ErrorCode& lhs, const ErrorCode& rhs) {
+CPPDEVTK_BASE_API bool operator==(const ErrorCode& lhs, const ErrorCode& rhs) CPPDEVTK_NOEXCEPT {
 	return (lhs.GetCategory() == rhs.GetCategory()) && (lhs.GetValue() == rhs.GetValue());
 }
 
-CPPDEVTK_BASE_API bool operator<(const ErrorCode& lhs, const ErrorCode& rhs) {
+CPPDEVTK_BASE_API bool operator<(const ErrorCode& lhs, const ErrorCode& rhs) CPPDEVTK_NOEXCEPT {
 	return (lhs.GetCategory() < rhs.GetCategory())
 			|| ((lhs.GetCategory() == rhs.GetCategory()) && (lhs.GetValue() < rhs.GetValue()));
 }
 
 
-CPPDEVTK_BASE_API bool operator==(const ErrorCode& lhs, const ErrorCondition& rhs) {
+CPPDEVTK_BASE_API bool operator==(const ErrorCode& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT {
 	return lhs.GetCategory().IsEquivalent(lhs.GetValue(), rhs)
 			|| rhs.GetCategory().IsEquivalent(lhs, rhs.GetValue());
 }
 
-CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCode& rhs) {
+CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCode& rhs) CPPDEVTK_NOEXCEPT {
 	return lhs.GetCategory().IsEquivalent(rhs, lhs.GetValue())
 			|| rhs.GetCategory().IsEquivalent(rhs.GetValue(), lhs);
 }

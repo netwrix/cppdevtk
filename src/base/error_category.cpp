@@ -24,7 +24,7 @@ namespace cppdevtk {
 namespace base {
 
 
-CPPDEVTK_BASE_API const ErrorCategory& GetGenericCategory() {
+CPPDEVTK_BASE_API const ErrorCategory& GetGenericCategory() CPPDEVTK_NOEXCEPT {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 	CPPDEVTK_COMPILER_WARNING("local static variable initialization is not thread safe!");
 #	endif
@@ -34,7 +34,7 @@ CPPDEVTK_BASE_API const ErrorCategory& GetGenericCategory() {
 	return kGenericErrorCategory;
 }
 
-CPPDEVTK_BASE_API const ErrorCategory& GetSystemCategory() {
+CPPDEVTK_BASE_API const ErrorCategory& GetSystemCategory() CPPDEVTK_NOEXCEPT {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 	CPPDEVTK_COMPILER_WARNING("local static variable initialization is not thread safe!");
 #	endif
