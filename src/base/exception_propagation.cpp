@@ -93,10 +93,10 @@ ExceptionPtr ThrowableCurrentException() {
 	catch (const ::std::bad_cast& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(detail::PolymorphicStdBadCast(exc).clone()));
 	}
-	catch (const ::std::bad_weak_ptr& exc) {
+	catch (const CPPDEVTK_TR1_NS::bad_weak_ptr& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(detail::PolymorphicStdBadWeakPtr(exc).clone()));
 	}
-	catch (const ::std::bad_function_call& exc) {
+	catch (const CPPDEVTK_TR1_NS::bad_function_call& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(detail::PolymorphicStdBadFunctionCall(exc).clone()));
 	}
 	catch (const ::std::bad_exception& exc) {

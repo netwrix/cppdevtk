@@ -117,8 +117,8 @@ typedef PolymorphicException< ::std::runtime_error> PolymorphicStdRuntimeError;
 
 typedef PolymorphicException< ::std::bad_typeid> PolymorphicStdBadTypeid;
 typedef PolymorphicException< ::std::bad_cast> PolymorphicStdBadCast;
-typedef PolymorphicException< ::std::bad_weak_ptr> PolymorphicStdBadWeakPtr;
-typedef PolymorphicException< ::std::bad_function_call> PolymorphicStdBadFunctionCall;
+typedef PolymorphicException< CPPDEVTK_TR1_NS::bad_weak_ptr> PolymorphicStdBadWeakPtr;
+typedef PolymorphicException< CPPDEVTK_TR1_NS::bad_function_call> PolymorphicStdBadFunctionCall;
 typedef PolymorphicException< ::std::bad_exception> PolymorphicStdBadException;
 typedef PolymorphicException< ::std::bad_alloc> PolymorphicStdBadAlloc;
 
@@ -264,7 +264,9 @@ inline CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NO
 template <typename TException>
 inline ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT {
 #if (CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
-#if (!CPPDEVTK_COMPILER_GCC || (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 6, 0)))
+#if (!CPPDEVTK_COMPILER_GCC)
+	return ::std::make_exception_ptr(exc);
+#elif (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 6, 0))
 	return ::std::make_exception_ptr(exc);
 #else
 	return ::std::copy_exception(exc);

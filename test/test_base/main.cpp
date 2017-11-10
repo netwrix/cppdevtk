@@ -488,7 +488,6 @@ bool TestExceptionPropagation() {
 		}
 		catch (const exception&) {
 			exceptionPtr = CurrentException();
-			CPPDEVTK_ASSERT(exceptionPtr != NULL);
 		}
 		
 		if (exceptionPtr != NULL) {
