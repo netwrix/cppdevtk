@@ -56,14 +56,14 @@ ConditionVariable::ConditionVariable(): NonCopyable(), conditionVariable_() {
 	}
 }
 
-ConditionVariable::~ConditionVariable() {
+ConditionVariable::~ConditionVariable() CPPDEVTK_NOEXCEPT {
 	const int kRetCode = pthread_cond_destroy(&conditionVariable_);
 	if (kRetCode != ESUCCESS) {
 		CPPDEVTK_LOG_WARN("failed to destroy condition variable; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy the condition variable while it is referenced");
-		//CPPDEVTK_ASSERT(0 && "pthread_cond_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_cond_destroy() failed with undocumented error code");
 	}
 }
 
@@ -105,7 +105,7 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 	
 	timespec absTime;
 	if (!detail::RelTimeToAbsTime(relTime, absTime)) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(MakeSystemErrorCode(errno), "condition variable failed to convert time");
+		throw CPPDEVTK_LOCK_EXC_W_EC_WA(GetLastSystemErrorCode(), "condition variable failed to convert time");
 	}
 	
 	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &absTime);

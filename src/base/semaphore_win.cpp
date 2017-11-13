@@ -43,9 +43,10 @@ Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), semaphore_(CreateSemapho
 	}
 }
 
-Semaphore::~Semaphore() {
+Semaphore::~Semaphore() CPPDEVTK_NOEXCEPT {
 	if (!CloseHandle(semaphore_)) {
-		CPPDEVTK_LOG_WARN("failed to close semaphore handle, absorbing... error code: " << GetLastSystemErrorCode().ToString());
+		CPPDEVTK_LOG_WARN("failed to close semaphore handle; error code: " << GetLastSystemErrorCode().ToString());
+		CPPDEVTK_ASSERT(0 && "failed to close semaphore handle");
 	}
 }
 

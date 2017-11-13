@@ -81,7 +81,7 @@ public:
 	
 	explicit LockGuard(MutexType& mutex);
 	LockGuard(MutexType& mutex, AdoptLockT);
-	~LockGuard();
+	~LockGuard() CPPDEVTK_NOEXCEPT;
 private:
 	MutexType& mutex_;
 };
@@ -106,7 +106,7 @@ public:
 	UniqueLock(MutexType& mutex, AdoptLockT);
 	UniqueLock(MutexType& mutex, int relTime);
 	UniqueLock(MutexType& mutex, ::std::time_t absTime);
-	~UniqueLock();
+	~UniqueLock() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -160,7 +160,7 @@ template <class TMutex>
 inline LockGuard<TMutex>::LockGuard(MutexType& mutex, AdoptLockT): NonCopyable(), mutex_(mutex) {}
 
 template <class TMutex>
-inline LockGuard<TMutex>::~LockGuard() {
+inline LockGuard<TMutex>::~LockGuard() CPPDEVTK_NOEXCEPT {
 	mutex_.Unlock();
 }
 
@@ -200,16 +200,9 @@ inline UniqueLock<TMutex>::UniqueLock(MutexType& mutex, ::std::time_t absTime): 
 }
 
 template <class TMutex>
-UniqueLock<TMutex>::~UniqueLock() {
+UniqueLock<TMutex>::~UniqueLock() CPPDEVTK_NOEXCEPT {
 	if (OwnsLock()) {
-		try {
-			Unlock();
-		}
-		catch (const LockException& exc) {
-			SuppressUnusedWarning(exc);
-			CPPDEVTK_LOG_WARN("caught exc: " << Exception::GetDetailedInfo(exc) << "; absorbing...");
-			CPPDEVTK_ASSERT(0 && "Unlock() failed in dtor");
-		}
+		Unlock();
 	}
 }
 

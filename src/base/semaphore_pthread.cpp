@@ -50,7 +50,7 @@ Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), semaphore_() {
 	}
 }
 
-Semaphore::~Semaphore() {
+Semaphore::~Semaphore() CPPDEVTK_NOEXCEPT {
 	const int kRetCode = sem_destroy(&semaphore_);
 	if (kRetCode != ESUCCESS) {
 		const ErrorCode kLastErrorCode = GetLastSystemErrorCode();

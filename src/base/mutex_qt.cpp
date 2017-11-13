@@ -37,7 +37,7 @@ namespace base {
 
 Mutex::Mutex(): NonCopyable(), mutex_(QMutex::NonRecursive) {}
 
-Mutex::~Mutex() {}
+Mutex::~Mutex() CPPDEVTK_NOEXCEPT {}
 
 void Mutex::Lock() {
 	mutex_.lock();
@@ -54,7 +54,7 @@ void Mutex::Unlock() {
 
 RecursiveMutex::RecursiveMutex(): NonCopyable(), mutex_(QMutex::Recursive) {}
 
-RecursiveMutex::~RecursiveMutex() {}
+RecursiveMutex::~RecursiveMutex() CPPDEVTK_NOEXCEPT {}
 
 void RecursiveMutex::Lock() {
 	mutex_.lock();
@@ -71,7 +71,7 @@ void RecursiveMutex::Unlock() {
 
 TimedMutex::TimedMutex(): NonCopyable(), mutex_(QMutex::NonRecursive) {}
 
-TimedMutex::~TimedMutex() {}
+TimedMutex::~TimedMutex() CPPDEVTK_NOEXCEPT {}
 
 void TimedMutex::Lock() {
 	mutex_.lock();
@@ -106,7 +106,7 @@ void TimedMutex::Unlock() {
 
 RecursiveTimedMutex::RecursiveTimedMutex(): NonCopyable(), mutex_(QMutex::Recursive) {}
 
-RecursiveTimedMutex::~RecursiveTimedMutex() {}
+RecursiveTimedMutex::~RecursiveTimedMutex() CPPDEVTK_NOEXCEPT {}
 
 void RecursiveTimedMutex::Lock() {
 	mutex_.lock();

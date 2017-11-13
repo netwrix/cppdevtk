@@ -29,7 +29,7 @@ namespace base {
 
 Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), semaphore_(cnt) {}
 
-Semaphore::~Semaphore() {}
+Semaphore::~Semaphore() CPPDEVTK_NOEXCEPT {}
 
 void Semaphore::Notify() {
 	semaphore_.release();

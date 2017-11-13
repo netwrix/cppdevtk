@@ -43,7 +43,7 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-Mutex::~Mutex() {}
+Mutex::~Mutex() CPPDEVTK_NOEXCEPT {}
 
 void Mutex::Lock() try {
 	mutex_.lock();
@@ -71,7 +71,7 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-RecursiveMutex::~RecursiveMutex() {}
+RecursiveMutex::~RecursiveMutex() CPPDEVTK_NOEXCEPT {}
 
 void RecursiveMutex::Lock() try {
 	mutex_.lock();
@@ -101,7 +101,7 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-TimedMutex::~TimedMutex() {}
+TimedMutex::~TimedMutex() CPPDEVTK_NOEXCEPT {}
 
 void TimedMutex::Lock() try {
 	mutex_.lock();
@@ -141,7 +141,7 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-RecursiveTimedMutex::~RecursiveTimedMutex() {}
+RecursiveTimedMutex::~RecursiveTimedMutex() CPPDEVTK_NOEXCEPT {}
 
 void RecursiveTimedMutex::Lock() try {
 	mutex_.lock();

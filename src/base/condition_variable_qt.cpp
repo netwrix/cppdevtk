@@ -32,7 +32,7 @@ namespace base {
 
 ConditionVariable::ConditionVariable(): NonCopyable(), conditionVariable_() {}
 
-ConditionVariable::~ConditionVariable() {}
+ConditionVariable::~ConditionVariable() CPPDEVTK_NOEXCEPT {}
 
 void ConditionVariable::NotifyOne() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.wakeOne();

@@ -32,7 +32,7 @@ namespace base {
 
 Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), cnt_(cnt), mutex_(), conditionVariable_() {}
 
-Semaphore::~Semaphore() {}
+Semaphore::~Semaphore() CPPDEVTK_NOEXCEPT {}
 
 void Semaphore::Notify() {
 	LockGuard<Mutex> lockGuard(mutex_);

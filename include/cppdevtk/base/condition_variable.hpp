@@ -72,7 +72,7 @@ public:
 	
 	
 	ConditionVariable();
-	~ConditionVariable();
+	~ConditionVariable() CPPDEVTK_NOEXCEPT;
 	
 	
 	void NotifyOne() CPPDEVTK_NOEXCEPT;
@@ -117,7 +117,7 @@ private:
 class CPPDEVTK_BASE_API ConditionVariableAny: private NonCopyable {
 public:
 	ConditionVariableAny();
-	~ConditionVariableAny();
+	~ConditionVariableAny() CPPDEVTK_NOEXCEPT;
 	
 	void NotifyOne() CPPDEVTK_NOEXCEPT;
 	void NotifyAll() CPPDEVTK_NOEXCEPT;
@@ -195,7 +195,7 @@ inline bool ConditionVariable::WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::t
 
 inline ConditionVariableAny::ConditionVariableAny(): NonCopyable(), pMtx_(new Mutex()), conditionVariable_() {}
 
-inline ConditionVariableAny::~ConditionVariableAny() {}
+inline ConditionVariableAny::~ConditionVariableAny() CPPDEVTK_NOEXCEPT {}
 
 
 template <class Lock>

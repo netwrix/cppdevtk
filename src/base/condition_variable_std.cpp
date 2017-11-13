@@ -53,7 +53,7 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-ConditionVariable::~ConditionVariable() {}
+ConditionVariable::~ConditionVariable() CPPDEVTK_NOEXCEPT {}
 
 void ConditionVariable::NotifyOne() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.notify_one();

@@ -68,7 +68,7 @@ public:
 	
 	
 	Mutex();
-	~Mutex();
+	~Mutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -98,7 +98,7 @@ public:
 	
 	
 	ErrorCheckingMutex();
-	~ErrorCheckingMutex();
+	~ErrorCheckingMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -124,7 +124,7 @@ public:
 	
 	
 	RecursiveMutex();
-	~RecursiveMutex();
+	~RecursiveMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock() CPPDEVTK_NOEXCEPT;
@@ -157,7 +157,7 @@ public:
 	
 	
 	TimedMutex();
-	~TimedMutex();
+	~TimedMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -199,7 +199,7 @@ public:
 	
 	
 	ErrorCheckingTimedMutex();
-	~ErrorCheckingTimedMutex();
+	~ErrorCheckingTimedMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -228,7 +228,7 @@ public:
 	
 	
 	RecursiveTimedMutex();
-	~RecursiveTimedMutex();
+	~RecursiveTimedMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock() CPPDEVTK_NOEXCEPT;
@@ -267,7 +267,7 @@ private:
 class CPPDEVTK_BASE_API NullMutex: private NonCopyable {
 public:
 	NullMutex();
-	~NullMutex();
+	~NullMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -280,7 +280,7 @@ public:
 class CPPDEVTK_BASE_API NullRecursiveMutex: private NonCopyable {
 public:
 	NullRecursiveMutex();
-	~NullRecursiveMutex();
+	~NullRecursiveMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock() CPPDEVTK_NOEXCEPT;
@@ -293,7 +293,7 @@ public:
 class CPPDEVTK_BASE_API NullTimedMutex: private NonCopyable {
 public:
 	NullTimedMutex();
-	~NullTimedMutex();
+	~NullTimedMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock();
@@ -308,7 +308,7 @@ public:
 class CPPDEVTK_BASE_API NullRecursiveTimedMutex: private NonCopyable {
 public:
 	NullRecursiveTimedMutex();
-	~NullRecursiveTimedMutex();
+	~NullRecursiveTimedMutex() CPPDEVTK_NOEXCEPT;
 	
 	void Lock();
 	bool TryLock() CPPDEVTK_NOEXCEPT;
@@ -371,7 +371,7 @@ typedef UniqueLock<DefaultTimedMutex> DefaultUniqueLock;
 
 inline NullMutex::NullMutex(): NonCopyable() {}
 
-inline NullMutex::~NullMutex() {}
+inline NullMutex::~NullMutex() CPPDEVTK_NOEXCEPT {}
 
 inline void NullMutex::Lock() {}
 
@@ -384,7 +384,7 @@ inline void NullMutex::Unlock() {}
 
 inline NullRecursiveMutex::NullRecursiveMutex(): NonCopyable() {}
 
-inline NullRecursiveMutex::~NullRecursiveMutex() {}
+inline NullRecursiveMutex::~NullRecursiveMutex() CPPDEVTK_NOEXCEPT {}
 
 inline void NullRecursiveMutex::Lock() {}
 
@@ -397,7 +397,7 @@ inline void NullRecursiveMutex::Unlock() {}
 
 inline NullTimedMutex::NullTimedMutex(): NonCopyable() {}
 
-inline NullTimedMutex::~NullTimedMutex() {}
+inline NullTimedMutex::~NullTimedMutex() CPPDEVTK_NOEXCEPT {}
 
 inline void NullTimedMutex::Lock() {}
 
@@ -422,7 +422,7 @@ inline void NullTimedMutex::Unlock() {}
 
 inline NullRecursiveTimedMutex::NullRecursiveTimedMutex(): NonCopyable() {}
 
-inline NullRecursiveTimedMutex::~NullRecursiveTimedMutex() {}
+inline NullRecursiveTimedMutex::~NullRecursiveTimedMutex() CPPDEVTK_NOEXCEPT {}
 
 inline void NullRecursiveTimedMutex::Lock() {}
 

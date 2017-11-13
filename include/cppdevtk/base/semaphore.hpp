@@ -52,7 +52,7 @@ namespace base {
 class CPPDEVTK_BASE_API Semaphore: private NonCopyable {
 public:
 	Semaphore(::std::size_t cnt = 1);
-	~Semaphore();
+	~Semaphore() CPPDEVTK_NOEXCEPT;
 	
 	
 	void Notify();	///< \sa POSIX sem_post()
