@@ -243,10 +243,10 @@ CPPDEVTK_JNI_API void ThrowCppExceptionFromJavaPendingException(JNIEnv* pJniEnv,
 		throw CPPDEVTK_TASK_CANCELED_EXCEPTION(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/io/FileNotFoundException", jThrowableClass)) {
-		throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(qThrowableMsg);
+		throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/io/IOException", jThrowableClass)) {
-		throw CPPDEVTK_IOS_FAILURE_EXC_W_WA(qThrowableMsg);
+		throw CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/Exception", jThrowableClass)) {
 		throw CPPDEVTK_JNI_EXCEPTION(qThrowableMsg);

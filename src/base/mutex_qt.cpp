@@ -22,6 +22,8 @@
 
 #if (!(CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX))
 
+#include <cppdevtk/base/system_exception.hpp>
+#include <cppdevtk/base/logger.hpp>
 
 #include <cstddef>
 
@@ -90,13 +92,15 @@ bool TimedMutex::TryLockFor(int relTime) {
 }
 
 bool TimedMutex::TryLockUntil(::std::time_t absTime) {
-	time_t currTime = time(NULL);
-	time_t seconds = difftime(absTime, currTime);
-	if (seconds <= 0) {
-		return TryLock();
+	const time_t kCurrTime = time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
+		return false;
 	}
 	
-	return mutex_.tryLock(seconds * 1000);
+	const time_t kSeconds = difftime(absTime, kCurrTime);
+	
+	return (kSeconds <= 0) ? TryLock() : mutex_.tryLock(kSeconds * 1000);
 }
 
 void TimedMutex::Unlock() {
@@ -125,13 +129,15 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) {
 }
 
 bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
-	time_t currTime = time(NULL);
-	time_t seconds = difftime(absTime, currTime);
-	if (seconds <= 0) {
-		return TryLock();
+	const time_t kCurrTime = time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
+		return false;
 	}
 	
-	return mutex_.tryLock(seconds * 1000);
+	const time_t kSeconds = difftime(absTime, kCurrTime);
+	
+	return (kSeconds <= 0) ? TryLock() : mutex_.tryLock(kSeconds * 1000);
 }
 
 void RecursiveTimedMutex::Unlock() {

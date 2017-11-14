@@ -52,7 +52,7 @@ ConditionVariable::ConditionVariable(): NonCopyable(), conditionVariable_() {
 		default:
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			throw CPPDEVTK_LOCK_EXC_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to initialize condition variable");
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to initialize condition variable");
 	}
 }
 
@@ -96,7 +96,7 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 	if (kRetCode != ESUCCESS) {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(MakeSystemErrorCode(kRetCode), "condition variable failed to wait");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "condition variable failed to wait");
 	}
 }
 
@@ -105,7 +105,7 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 	
 	timespec absTime;
 	if (!detail::RelTimeToAbsTime(relTime, absTime)) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(GetLastSystemErrorCode(), "condition variable failed to convert time");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "condition variable failed to convert time");
 	}
 	
 	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &absTime);
@@ -116,7 +116,7 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 			return ::cppdevtk::base::cv_status::timeout;
 		default:
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
-			throw CPPDEVTK_LOCK_EXC_W_EC_WA(MakeSystemErrorCode(kRetCode), "condition variable failed to timedwait");
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "condition variable failed to timedwait");
 	}
 }
 

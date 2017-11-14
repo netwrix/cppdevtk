@@ -164,10 +164,10 @@ CPPDEVTK_UTIL_API void DeleteFile(const QString& fileName, bool failIfNotExists)
 		}
 		
 		if ((kErrorCode.GetValue() == ERROR_FILE_NOT_FOUND) || (kErrorCode.GetValue() == ERROR_PATH_NOT_FOUND)) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(fileName);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(fileName);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(kErrorCode, "failed to delete file", fileName);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "failed to delete file", fileName);
 		}
 	}
 }
@@ -226,7 +226,7 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 		::CopyFileW
 #		endif
 			(CPPDEVTK_Q2T(nativeSrcFileName).c_str(), CPPDEVTK_Q2T(nativeDstFileName).c_str(), failIfExists)) {
-		throw CPPDEVTK_FS_EXC_W_EC_WA_SRC_DST(GetLastSystemErrorCode(), "failed to copy file",
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(GetLastSystemErrorCode(), "failed to copy file",
 				srcFileName, dstFileName);
 	}
 }
@@ -256,7 +256,7 @@ CPPDEVTK_UTIL_API void MakeDirectory(const QString& dirName, bool failIfExists) 
 			}
 		}
 		
-		throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(kErrorCode, "failed to make directory", dirName);
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "failed to make directory", dirName);
 	}
 }
 
@@ -312,10 +312,10 @@ CPPDEVTK_UTIL_API void RemoveDirectory(const QString& path, bool failIfNotExists
 		}
 		
 		if ((kErrorCode.GetValue() == ERROR_FILE_NOT_FOUND) /*|| (kErrorCode.GetValue() == ERROR_PATH_NOT_FOUND)*/) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(kErrorCode, "failed to remove directory", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "failed to remove directory", path);
 		}
 	}
 }
@@ -358,10 +358,10 @@ CPPDEVTK_UTIL_API void GetFileSystemSpaceInfo(const QString& path, FileSystemSpa
 			&totalNumberOfFreeBytes)) {
 		const ErrorCode kErrorCode = GetLastSystemErrorCode();
 		if ((kErrorCode.GetValue() == ERROR_FILE_NOT_FOUND) || (kErrorCode.GetValue() == ERROR_PATH_NOT_FOUND)) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "GetDiskFreeSpaceEx() failed", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "GetDiskFreeSpaceEx() failed", path);
 		}
 	}
 	

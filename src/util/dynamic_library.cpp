@@ -42,7 +42,8 @@ DynamicLibrary::~DynamicLibrary() {
 			DynamicLoader::Unload(handle_);
 		}
 		catch (const ::std::exception& exc) {
-			CPPDEVTK_LOG_WARN(base::Exception::GetDetailedInfo(exc));
+			CPPDEVTK_LOG_WARN("unload failed: " << base::Exception::GetDetailedInfo(exc));
+			CPPDEVTK_ASSERT(0 && "unload failed");
 			base::SuppressUnusedWarning(exc);
 		}
 	}

@@ -25,6 +25,7 @@
 #include "non_copyable.hpp"
 #include "mutex.hpp"
 #include "dbc.hpp"
+#include "lock_exception.hpp"
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 #include <pthread.h>
@@ -176,18 +177,28 @@ bool ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime, Pred
 
 inline cv_status::cv_status_t ConditionVariable::WaitUntil(UniqueLock<Mutex>& uniqueLock,
 		::std::time_t absTime) {
-	::std::time_t currTime = ::std::time(NULL);
-	::std::time_t seconds = ::std::difftime(absTime, currTime);
+	using ::std::time_t;
 	
-	return WaitFor(uniqueLock, (seconds * 1000));
+	const time_t kCurrTime = ::std::time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
+	}
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	
+	return WaitFor(uniqueLock, (kSeconds * 1000));
 }
 
 template <class Predicate>
 inline bool ConditionVariable::WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate) {
-	::std::time_t currTime = ::std::time(NULL);
-	::std::time_t seconds = ::std::difftime(absTime, currTime);
+	using ::std::time_t;
 	
-	return WaitFor(uniqueLock, (seconds * 1000), predicate);
+	const time_t kCurrTime = ::std::time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
+	}
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	
+	return WaitFor(uniqueLock, (kSeconds * 1000), predicate);
 }
 
 
@@ -238,7 +249,7 @@ void ConditionVariableAny::Wait(Lock& lock) {
 }
 
 template <class Lock, class Predicate>
-void ConditionVariableAny::Wait(Lock& lock, Predicate predicate) {
+inline void ConditionVariableAny::Wait(Lock& lock, Predicate predicate) {
 	while (!predicate()) {
 		Wait(lock);
 	}
@@ -285,7 +296,7 @@ cv_status::cv_status_t ConditionVariableAny::WaitFor(Lock& lock, int relTime) {
 }
 
 template <class Lock, class Predicate>
-bool ConditionVariableAny::WaitFor(Lock& lock, int relTime, Predicate predicate) {
+inline bool ConditionVariableAny::WaitFor(Lock& lock, int relTime, Predicate predicate) {
 	while (!predicate()) {
 		if (WaitFor(lock, relTime) == ::cppdevtk::base::cv_status::timeout) {
 			return predicate();
@@ -297,19 +308,29 @@ bool ConditionVariableAny::WaitFor(Lock& lock, int relTime, Predicate predicate)
 
 
 template <class Lock>
-cv_status::cv_status_t ConditionVariableAny::WaitUntil(Lock& lock, ::std::time_t absTime) {
-	::std::time_t currTime = ::std::time(NULL);
-	::std::time_t seconds = ::std::difftime(absTime, currTime);
+inline cv_status::cv_status_t ConditionVariableAny::WaitUntil(Lock& lock, ::std::time_t absTime) {
+	using ::std::time_t;
 	
-	return WaitFor(lock, (seconds * 1000));
+	const time_t kCurrTime = ::std::time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
+	}
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	
+	return WaitFor(lock, (kSeconds * 1000));
 }
 
 template <class Lock, class Predicate>
-bool ConditionVariableAny::WaitUntil(Lock& lock, ::std::time_t absTime, Predicate predicate) {
-	::std::time_t currTime = ::std::time(NULL);
-	::std::time_t seconds = ::std::difftime(absTime, currTime);
+inline bool ConditionVariableAny::WaitUntil(Lock& lock, ::std::time_t absTime, Predicate predicate) {
+	using ::std::time_t;
 	
-	return WaitFor(lock, (seconds * 1000), predicate);
+	const time_t kCurrTime = ::std::time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
+	}
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	
+	return WaitFor(lock, (kSeconds * 1000), predicate);
 }
 
 

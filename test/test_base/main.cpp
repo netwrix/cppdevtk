@@ -470,7 +470,7 @@ bool TestNonStdExceptions() {
 bool TestSystemException() {
 	::cppdevtk::base::SetLastSystemErrorCode(::cppdevtk::base::MakeSystemErrorCode(ESUCCESS));
 	
-	qcout << CPPDEVTK_SYS_EXC_W_EC(::cppdevtk::base::GetLastSystemErrorCode()).What() << endl;
+	qcout << CPPDEVTK_SYSTEM_EXCEPTION_W_EC(::cppdevtk::base::GetLastSystemErrorCode()).What() << endl;
 	
 	return true;
 }
@@ -533,7 +533,7 @@ bool TestExceptionPropagation() {
 	{
 		ExceptionPtr exceptionPtr;
 		try {
-			throw CPPDEVTK_IOS_FAILURE_EXC_W_WA("some i/o exception occurred");
+			throw CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA("some i/o exception occurred");
 		}
 		catch (const exception&) {
 			exceptionPtr = CurrentException();

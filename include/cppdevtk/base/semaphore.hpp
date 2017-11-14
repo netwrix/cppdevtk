@@ -23,6 +23,7 @@
 
 #include "config.hpp"
 #include "non_copyable.hpp"
+#include "lock_exception.hpp"
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 #include <semaphore.h>
@@ -89,10 +90,15 @@ private:
 #if (!(CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_PLATFORM_MACOSX))
 
 inline bool Semaphore::WaitUntil(::std::time_t absTime) {
-	::std::time_t currTime = ::std::time(NULL);
-	::std::time_t seconds = ::std::difftime(absTime, currTime);
+	using ::std::time_t;
 	
-	return WaitFor(seconds * 1000);
+	const time_t kCurrTime = ::std::time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
+	}
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	
+	return WaitFor(kSeconds * 1000);
 }
 
 #endif

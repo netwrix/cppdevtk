@@ -111,16 +111,16 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path) {
 	if (stat(kNativePath.c_str(), &statPath) != ESUCCESS) {
 		CPPDEVTK_ASSERT(errno != EINTR);
 		if (errno == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "stat() failed", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "stat() failed", path);
 		}
 	}
 	
 	FILE* pMTabFile = setmntent(_PATH_MOUNTED, "r");
 	if (pMTabFile == NULL) {
-		throw CPPDEVTK_FS_EXC_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pMTabFile)) {
 		CPPDEVTK_ASSERT(pMTabFile != NULL);
@@ -188,7 +188,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& device
 	
 	FILE* pMTabFile = setmntent(_PATH_MOUNTED, "r");
 	if (pMTabFile == NULL) {
-		throw CPPDEVTK_FS_EXC_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pMTabFile)) {
 		CPPDEVTK_ASSERT(pMTabFile != NULL);
@@ -430,7 +430,7 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 	
 	FILE* pMTabFile = setmntent(_PATH_MOUNTED, "r");
 	if (pMTabFile == NULL) {
-		throw CPPDEVTK_FS_EXC_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pMTabFile)) {
 		CPPDEVTK_ASSERT(pMTabFile != NULL);

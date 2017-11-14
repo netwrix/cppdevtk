@@ -924,8 +924,8 @@ namespace base {
 			langId = MAKELANGID(LANG_YORUBA, SUBLANG_YORUBA_NIGERIA);
 			break;
 		default:
-			//CPPDEVTK_ASSERT(0 && "unknown locale.language()");
 			CPPDEVTK_LOG_WARN("unsupported locale.language(): " << locale.language());
+			//CPPDEVTK_ASSERT(0 && "unsupported locale.language()");
 			
 			//langId = MAKELANGID(LANG_NEUTRAL, SUBLANG_SYS_DEFAULT);	// LANG_SYSTEM_DEFAULT
 			langId = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);	// LANG_USER_DEFAULT

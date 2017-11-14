@@ -35,17 +35,17 @@ namespace base {
 /// @{
 
 
-#define CPPDEVTK_DEADLOCK_EXC()	\
+#define CPPDEVTK_DEADLOCK_EXCEPTION()	\
 	::cppdevtk::base::DeadlockException(CPPDEVTK_SOURCE_CODE_INFO())
 
-#define CPPDEVTK_DEADLOCK_EXC_WA(whatArg)	\
+#define CPPDEVTK_DEADLOCK_EXCEPTION_WA(whatArg)	\
 	::cppdevtk::base::DeadlockException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
-#define CPPDEVTK_MAKE_DEADLOCK_EXC(excName)	\
+#define CPPDEVTK_MAKE_DEADLOCK_EXCEPTION(excName)	\
 	::cppdevtk::base::DeadlockException excName(CPPDEVTK_SOURCE_CODE_INFO())
 
-#define CPPDEVTK_MAKE_DEADLOCK_EXC_WA(excName, whatArg)	\
+#define CPPDEVTK_MAKE_DEADLOCK_EXCEPTION_WA(excName, whatArg)	\
 	::cppdevtk::base::DeadlockException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 

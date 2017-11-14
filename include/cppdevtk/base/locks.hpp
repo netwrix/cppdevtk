@@ -209,11 +209,11 @@ UniqueLock<TMutex>::~UniqueLock() CPPDEVTK_NOEXCEPT {
 template <class TMutex>
 inline void UniqueLock<TMutex>::Lock() {
 	if (pMutex_ == NULL) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "pMutex_ is NULL");
 	}
 	if (ownsLock_) {
-		throw CPPDEVTK_DEADLOCK_EXC_WA("lock owns lock");
+		throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("lock owns lock");
 	}
 	
 	pMutex_->Lock();
@@ -223,11 +223,11 @@ inline void UniqueLock<TMutex>::Lock() {
 template <class TMutex>
 inline bool UniqueLock<TMutex>::TryLock() {
 	if (pMutex_ == NULL) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "pMutex_ is NULL");
 	}
 	if (ownsLock_) {
-		throw CPPDEVTK_DEADLOCK_EXC_WA("lock owns lock");
+		throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("lock owns lock");
 	}
 		
 	ownsLock_ = pMutex_->TryLock();
@@ -237,11 +237,11 @@ inline bool UniqueLock<TMutex>::TryLock() {
 template <class TMutex>
 inline bool UniqueLock<TMutex>::TryLockFor(int relTime) {
 	if (pMutex_ == NULL) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "pMutex_ is NULL");
 	}
 	if (ownsLock_) {
-		throw CPPDEVTK_DEADLOCK_EXC_WA("lock owns lock");
+		throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("lock owns lock");
 	}
 	
 	ownsLock_ = pMutex_->TryLockFor(relTime);
@@ -251,11 +251,11 @@ inline bool UniqueLock<TMutex>::TryLockFor(int relTime) {
 template <class TMutex>
 inline bool UniqueLock<TMutex>::TryLockUntil(::std::time_t absTime) {
 	if (pMutex_ == NULL) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "pMutex_ is NULL");
 	}
 	if (ownsLock_) {
-		throw CPPDEVTK_DEADLOCK_EXC_WA("lock owns lock");
+		throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("lock owns lock");
 	}
 	
 	ownsLock_ = pMutex_->TryLockUntil(absTime);
@@ -265,11 +265,11 @@ inline bool UniqueLock<TMutex>::TryLockUntil(::std::time_t absTime) {
 template <class TMutex>
 inline void UniqueLock<TMutex>::Unlock() {
 	if (!ownsLock_) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "does not owns lock");
 	}
 	if (pMutex_ == NULL) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(
 				MakeErrorCode(::cppdevtk::base::errc::operation_not_permitted), "internal error: pMutex_ is NULL");
 	}
 	

@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) try {
 	::cppdevtk::test_util::InitResources();
 	
 	
-	CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_DST(fsExc, ::cppdevtk::base::MakeSystemErrorCode(0),
+	CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(fsExc, ::cppdevtk::base::MakeSystemErrorCode(0),
 			"testing fs exc", "aSrcPath", "aDstPath");
 	qDebug() << "fsExc.What(): " << fsExc.What();
 	qDebug() << "fsExc.ToString(): " << fsExc.ToString();

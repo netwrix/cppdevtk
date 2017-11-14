@@ -135,10 +135,10 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path) {
 	if (statfs(kNativePath.c_str(), &statFs) != ESUCCESS) {
 		CPPDEVTK_ASSERT(errno != EINTR);
 		if (errno == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "statfs() failed", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "statfs() failed", path);
 		}
 	}
 	
@@ -281,7 +281,7 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 	int retCode = getfsstat(NULL, 0, MNT_WAIT);
 	if (retCode == -1) {
 		CPPDEVTK_ASSERT(errno != EINTR);
-		throw CPPDEVTK_FS_EXC_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
 	}
 	if (retCode == 0) {
 		CPPDEVTK_LOG_WARN("no mounted file system found");
@@ -297,7 +297,7 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 	retCode = getfsstat(&buf[0], (buf.size() * sizeof(struct statfs)), MNT_WAIT);
 	if (retCode == -1) {
 		CPPDEVTK_ASSERT(errno != EINTR);
-		throw CPPDEVTK_FS_EXC_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
 	}
 	if (retCode == 0) {
 		CPPDEVTK_LOG_WARN("no mounted file system found");

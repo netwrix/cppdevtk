@@ -39,7 +39,7 @@ namespace base {
 
 Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), semaphore_(CreateSemaphore(NULL, (LONG)cnt, LONG_MAX, NULL)) {
 	if (semaphore_ == NULL) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(GetLastSystemErrorCode(), "failed to initialize semaphore");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to initialize semaphore");
 	}
 }
 
@@ -52,13 +52,13 @@ Semaphore::~Semaphore() CPPDEVTK_NOEXCEPT {
 
 void Semaphore::Notify() {
 	if (!ReleaseSemaphore(semaphore_, 1, NULL)) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to release");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to release");
 	}
 }
 
 void Semaphore::Wait() {
 	if (WaitForSingleObject(semaphore_, INFINITE) != WAIT_OBJECT_0) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to WaitForSingleObject");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to WaitForSingleObject");
 	}
 }
 

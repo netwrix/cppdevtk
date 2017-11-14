@@ -46,7 +46,7 @@ Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), semaphore_() {
 		CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINTR);
 		CPPDEVTK_ASSERT((kLastErrorCode.GetValue() != EINVAL) && "cnt exceeds SEM_VALUE_MAX");
 		CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(kLastErrorCode, "failed to initialize semaphore");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(kLastErrorCode, "failed to initialize semaphore");
 	}
 }
 
@@ -71,7 +71,7 @@ void Semaphore::Notify() {
 		CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINTR);
 		CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 		CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(kLastErrorCode, "semaphore failed to post");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(kLastErrorCode, "semaphore failed to post");
 	}
 }
 
@@ -81,11 +81,11 @@ void Semaphore::Wait() {
 		const ErrorCode kLastErrorCode = GetLastSystemErrorCode();
 		switch (kLastErrorCode.GetValue()) {
 			case EDEADLK:
-				throw CPPDEVTK_DEADLOCK_EXC_WA("semaphore failed to wait");
+				throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("semaphore failed to wait");
 			default:
 				CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 				CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
-				throw CPPDEVTK_LOCK_EXC_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to wait");
+				throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to wait");
 		}
 	}
 }
@@ -108,6 +108,7 @@ bool Semaphore::TryWait() {
 			CPPDEVTK_LOG_WARN("semaphore failed to trywait; error code: " << kLastErrorCode.ToString());
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
+			CPPDEVTK_ASSERT(0 && "semaphore failed to trywait");
 			break;
 	}
 	
@@ -142,6 +143,7 @@ bool Semaphore::WaitFor(int relTime) {
 		default:
 			CPPDEVTK_LOG_WARN("semaphore failed to timedwait; error code: " << kLastErrorCode.ToString());
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
+			CPPDEVTK_ASSERT(0 && "semaphore failed to timedwait");
 			break;
 	}
 	

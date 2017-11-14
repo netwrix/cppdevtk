@@ -37,31 +37,31 @@ namespace base {
 /// @{
 
 
-#define CPPDEVTK_IOS_FAILURE_EXC_W_WA(whatArg)	\
+#define CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA(whatArg)	\
 	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
-#define CPPDEVTK_IOS_FAILURE_EXC_W_WA_EC(whatArg, errorCode)	\
+#define CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA_EC(whatArg, errorCode)	\
 	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode))
 
 
-#define CPPDEVTK_IOS_FAILURE_EXC_W_WA_CAUSE(whatArg, cause)	\
+#define CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA_CAUSE(whatArg, cause)	\
 	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (cause))
 
-#define CPPDEVTK_IOS_FAILURE_EXC_W_WA_EC_CAUSE(whatArg, errorCode, cause)	\
+#define CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA_EC_CAUSE(whatArg, errorCode, cause)	\
 	::cppdevtk::base::IosFailureException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode), (cause))
 
 
-#define CPPDEVTK_MAKE_FS_EXC_W_WA(excName, whatArg)	\
+#define CPPDEVTK_MAKE_IOS_FAILURE_EXCEPTION_W_WA(excName, whatArg)	\
 	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_WA_EC(excName, whatArg, errorCode)	\
+#define CPPDEVTK_MAKE_IOS_FAILURE_EXCEPTION_W_WA_EC(excName, whatArg, errorCode)	\
 	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode))
 
 
-#define CPPDEVTK_MAKE_FS_EXC_W_WA_CAUSE(excName, whatArg, cause)	\
+#define CPPDEVTK_MAKE_IOS_FAILURE_EXCEPTION_W_WA_CAUSE(excName, whatArg, cause)	\
 	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (cause))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_WA_EC_CAUSE(excName, whatArg, errorCode, cause)	\
+#define CPPDEVTK_MAKE_IOS_FAILURE_EXCEPTION_W_WA_EC_CAUSE(excName, whatArg, errorCode, cause)	\
 	::cppdevtk::base::IosFailureException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg), (errorCode), (cause))
 
 

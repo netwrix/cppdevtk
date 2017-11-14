@@ -34,55 +34,55 @@ namespace util {
 /// @{
 
 
-#define CPPDEVTK_FS_EXC_W_EC(errorCode)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC(errorCode)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
-#define CPPDEVTK_FS_EXC_W_EC_WA(errorCode, whatArg)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(errorCode, whatArg)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
-#define CPPDEVTK_FS_EXC_W_EC_WA_SRC(errorCode, whatArg, srcPath)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(errorCode, whatArg, srcPath)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath))
 
-#define CPPDEVTK_FS_EXC_W_EC_WA_SRC_DST(errorCode, whatArg, srcPath, dstPath)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(errorCode, whatArg, srcPath, dstPath)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath))
 
 
-#define CPPDEVTK_FS_EXC_W_EC_CAUSE(errorCode, cause)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_CAUSE(errorCode, cause)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
-#define CPPDEVTK_FS_EXC_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
-#define CPPDEVTK_FS_EXC_W_EC_WA_SRC_CAUSE(errorCode, whatArg, srcPath, cause)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_CAUSE(errorCode, whatArg, srcPath, cause)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (cause))
 
-#define CPPDEVTK_FS_EXC_W_EC_WA_SRC_DST_CAUSE(errorCode, whatArg, srcPath, dstPath, cause)	\
+#define CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST_CAUSE(errorCode, whatArg, srcPath, dstPath, cause)	\
 	::cppdevtk::util::FilesystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath), (cause))
 
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC(excName, errorCode)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC(excName, errorCode)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_WA(excName, errorCode, whatArg)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA(excName, errorCode, whatArg)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC(excName, errorCode, whatArg, srcPath)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(excName, errorCode, whatArg, srcPath)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_DST(excName, errorCode, whatArg, srcPath, dstPath)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(excName, errorCode, whatArg, srcPath, dstPath)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath))
 
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_CAUSE(excName, errorCode, cause)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_CAUSE(excName, errorCode, cause)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_CAUSE(excName, errorCode, whatArg, srcPath, cause)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_CAUSE(excName, errorCode, whatArg, srcPath, cause)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (cause))
 
-#define CPPDEVTK_MAKE_FS_EXC_W_EC_WA_SRC_DST_CAUSE(excName, errorCode, whatArg, srcPath, dstPath, cause)	\
+#define CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST_CAUSE(excName, errorCode, whatArg, srcPath, dstPath, cause)	\
 	::cppdevtk::util::FilesystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (srcPath), (dstPath), (cause))
 
 

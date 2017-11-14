@@ -88,10 +88,10 @@ CPPDEVTK_UTIL_API void DeleteFile(const QString& fileName, bool failIfNotExists)
 		}
 		
 		if (kErrorCode.GetValue() == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(fileName);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(fileName);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(kErrorCode, "failed to delete file", fileName);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "failed to delete file", fileName);
 		}
 	}
 }
@@ -108,10 +108,10 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	const int kSrcFd = TEMP_FAILURE_RETRY(open(CPPDEVTK_Q2U(kNativeSrcFileName).c_str(), O_RDONLY));
 	if (kSrcFd == -1) {
 		if (errno == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(srcFileName);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(srcFileName);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to open file for reading", srcFileName);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to open file for reading", srcFileName);
 		}
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((kSrcFd)(&kNativeSrcFileName)) {
@@ -127,17 +127,17 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	//Zeroize(&srcStat, sizeof(srcStat));
 	if (fstat(kSrcFd, &srcStat) != ESUCCESS) {
 		CPPDEVTK_ASSERT(errno != EINTR);
-		throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "fstat() failed", srcFileName);
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "fstat() failed", srcFileName);
 	}
 	
 	const int kDstFlags = O_WRONLY | O_APPEND | O_CREAT | (failIfExists ? O_EXCL : O_TRUNC);
 	const int kDstFd = TEMP_FAILURE_RETRY(open(CPPDEVTK_Q2U(kNativeDstFileName).c_str(), kDstFlags, srcStat.st_mode));
 	if (kDstFd == -1) {
 		if (errno == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(dstFileName);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(dstFileName);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to open file for writing", dstFileName);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to open file for writing", dstFileName);
 		}
 	}
 	bool closeDstFd = true;
@@ -164,7 +164,7 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 			CPPDEVTK_ASSERT(errno != EFAULT);
 			CPPDEVTK_ASSERT(errno != EINVAL);
 			
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to read from file", srcFileName);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to read from file", srcFileName);
 		}
 		
 		if (kReaded == 0) {	// EOF
@@ -181,11 +181,11 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 				CPPDEVTK_ASSERT((errno != EAGAIN) && (errno != EWOULDBLOCK));
 				CPPDEVTK_ASSERT(errno != EBADF);
 				
-				throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to write to file", dstFileName);
+				throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to write to file", dstFileName);
 			}
 			
 			if (kCurrentWritten == 0) {	// this should never happen...
-				throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(),
+				throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(),
 						"failed to write to file (write() returned 0 for count > 0 and blocking)", dstFileName);
 			}
 			
@@ -207,7 +207,7 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	if (close(kDstFd) == -1) {
 		if (errno != EINTR) {
 			CPPDEVTK_ASSERT(errno != EBADF);
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to close file", dstFileName);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to close file", dstFileName);
 		}
 		
 		const ErrorCode kErrorCode = GetLastSystemErrorCode();
@@ -231,7 +231,7 @@ CPPDEVTK_UTIL_API void MakeDirectory(const QString& dirName, bool failIfExists) 
 			}
 		}
 		
-		throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(kErrorCode, "failed to make directory", dirName);
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "failed to make directory", dirName);
 	}
 }
 
@@ -274,10 +274,10 @@ CPPDEVTK_UTIL_API void RemoveDirectory(const QString& path, bool failIfNotExists
 		}
 		
 		if (kErrorCode.GetValue() == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(kErrorCode, "failed to remove directory", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "failed to remove directory", path);
 		}
 	}
 }
@@ -296,10 +296,10 @@ CPPDEVTK_UTIL_API void GetFileSystemSpaceInfo(const QString& path, FileSystemSpa
 	const int kRetCode = TEMP_FAILURE_RETRY(statvfs(CPPDEVTK_Q2U(kNativeAbsPath).c_str(), &statVfs));
 	if (kRetCode != ESUCCESS) {
 		if (GetLastSystemErrorCode().GetValue() == ENOENT) {
-			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path);
+			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FS_EXC_W_EC_WA_SRC(GetLastSystemErrorCode(), "statvfs() failed", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "statvfs() failed", path);
 		}
 	}
 	

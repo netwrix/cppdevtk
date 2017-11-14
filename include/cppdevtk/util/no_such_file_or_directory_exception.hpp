@@ -35,17 +35,17 @@ namespace util {
 /// @{
 
 
-#define CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC()	\
+#define CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION()	\
 	::cppdevtk::util::NoSuchFileOrDirectoryException(CPPDEVTK_SOURCE_CODE_INFO())
 
-#define CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(path)	\
+#define CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path)	\
 	::cppdevtk::util::NoSuchFileOrDirectoryException(CPPDEVTK_SOURCE_CODE_INFO(), (path))
 
 
-#define CPPDEVTK_MAKE_NO_SUCH_FILE_OR_DIRECTORY_EXC(excName)	\
+#define CPPDEVTK_MAKE_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION(excName)	\
 	::cppdevtk::util::NoSuchFileOrDirectoryException excName(CPPDEVTK_SOURCE_CODE_INFO())
 
-#define CPPDEVTK_MAKE_NO_SUCH_FILE_OR_DIRECTORY_EXC_W_P(excName, path)	\
+#define CPPDEVTK_MAKE_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(excName, path)	\
 	::cppdevtk::util::NoSuchFileOrDirectoryException excName(CPPDEVTK_SOURCE_CODE_INFO(), (path))
 
 

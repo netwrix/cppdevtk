@@ -46,55 +46,55 @@ namespace base {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-#define CPPDEVTK_SYS_EXC_W_EC(errorCode)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EC(errorCode)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
-#define CPPDEVTK_SYS_EXC_W_EC_WA(errorCode, whatArg)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(errorCode, whatArg)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
-#define CPPDEVTK_SYS_EXC_W_EV(errVal, errorCategory)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EV(errVal, errorCategory)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory))
 
-#define CPPDEVTK_SYS_EXC_W_EV_WA(errVal, errorCategory, whatArg)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EV_WA(errVal, errorCategory, whatArg)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg))
 
 
-#define CPPDEVTK_SYS_EXC_W_EC_CAUSE(errorCode, cause)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EC_CAUSE(errorCode, cause)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
-#define CPPDEVTK_SYS_EXC_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA_CAUSE(errorCode, whatArg, cause)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
-#define CPPDEVTK_SYS_EXC_W_EV_CAUSE(errVal, errorCategory, cause)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EV_CAUSE(errVal, errorCategory, cause)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (cause))
 
-#define CPPDEVTK_SYS_EXC_W_EV_WA_CAUSE(errVal, errorCategory, whatArg, cause)	\
+#define CPPDEVTK_SYSTEM_EXCEPTION_W_EV_WA_CAUSE(errVal, errorCategory, whatArg, cause)	\
 	::cppdevtk::base::SystemException(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg), (cause))
 
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EC(excName, errorCode)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EC(excName, errorCode)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode))
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EC_WA(excName, errorCode, whatArg)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EC_WA(excName, errorCode, whatArg)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg))
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EV(excName, errVal, errorCategory)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EV(excName, errVal, errorCategory)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory))
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EV_WA(excName, errVal, errorCategory, whatArg)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EV_WA(excName, errVal, errorCategory, whatArg)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg))
 
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EC_CAUSE(excName, errorCode, cause)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EC_CAUSE(excName, errorCode, cause)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (cause))
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EC_WA_CAUSE(excName, errorCode, whatArg, cause)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errorCode), (whatArg), (cause))
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EV_CAUSE(excName, errVal, errorCategory, cause)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EV_CAUSE(excName, errVal, errorCategory, cause)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (cause))
 
-#define CPPDEVTK_MAKE_SYS_EXC_W_EV_WA_CAUSE(excName, errVal, errorCategory, whatArg, cause)	\
+#define CPPDEVTK_MAKE_SYSTEM_EXCEPTION_W_EV_WA_CAUSE(excName, errVal, errorCategory, whatArg, cause)	\
 	::cppdevtk::base::SystemException excName(CPPDEVTK_SOURCE_CODE_INFO(), (errVal), (errorCategory), (whatArg), (cause))
 
 

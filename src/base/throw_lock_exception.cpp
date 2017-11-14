@@ -34,15 +34,15 @@ void ThrowLockException(const ::std::system_error& exc) {
 	const ::std::error_code& kErrorCode = exc.code();
 	
 	if (kErrorCode == ::std::errc::resource_deadlock_would_occur) {
-		throw CPPDEVTK_DEADLOCK_EXC_WA(exc.what());
+		throw CPPDEVTK_DEADLOCK_EXCEPTION_WA(exc.what());
 	}
 	
 	if (kErrorCode.category() == ::std::system_category()) {
-		throw CPPDEVTK_LOCK_EXC_W_EC_WA(ErrorCode(kErrorCode.value(), GetSystemCategory()), exc.what());
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(ErrorCode(kErrorCode.value(), GetSystemCategory()), exc.what());
 	}
 	
 	CPPDEVTK_ASSERT(kErrorCode.category() == ::std::generic_category());
-	throw CPPDEVTK_LOCK_EXC_W_EC_WA(ErrorCode(kErrorCode.value(), GetGenericCategory()), exc.what());
+	throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(ErrorCode(kErrorCode.value(), GetGenericCategory()), exc.what());
 }
 
 #endif
