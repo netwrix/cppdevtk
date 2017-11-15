@@ -28,42 +28,38 @@ namespace base {
 
 
 using ::std::exception;
-using ::std::terminate;
-
-
-// NOTE: violating noexcept calls terminate() not unexpected() as throw()
 
 
 void ConditionVariableAny::NotifyOne() CPPDEVTK_NOEXCEPT {
+	UniqueLock<Mutex> uniqueLock(*pMtx_, deferLock);
 	try {
-		LockGuard<Mutex> lockGuard(*pMtx_);
-		conditionVariable_.NotifyOne();
+		uniqueLock.Lock();
 	}
 	catch (const exception& exc) {
 		SuppressUnusedWarning(exc);
-		CPPDEVTK_LOG_FATAL("condition variable any failed to notify one; exc: " << Exception::GetDetailedInfo(exc));
-		terminate();
+		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; exc: " << Exception::GetDetailedInfo(exc));
 	}
 	catch (...) {
-		CPPDEVTK_LOG_FATAL("condition variable any failed to notify one; caught unknown exception");
-		terminate();
+		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; (caught unknown exception)");
 	}
+	
+	conditionVariable_.NotifyOne();
 }
 
 void ConditionVariableAny::NotifyAll() CPPDEVTK_NOEXCEPT {
+	UniqueLock<Mutex> uniqueLock(*pMtx_, deferLock);
 	try {
-		LockGuard<Mutex> lockGuard(*pMtx_);
-		conditionVariable_.NotifyAll();
+		uniqueLock.Lock();
 	}
 	catch (const exception& exc) {
 		SuppressUnusedWarning(exc);
-		CPPDEVTK_LOG_FATAL("condition variable any failed to notify all; exc: " << Exception::GetDetailedInfo(exc));
-		terminate();
+		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; exc: " << Exception::GetDetailedInfo(exc));
 	}
 	catch (...) {
-		CPPDEVTK_LOG_FATAL("condition variable any failed to notify all; caught unknown exception");
-		terminate();
+		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; (caught unknown exception)");
 	}
+	
+	conditionVariable_.NotifyAll();
 }
 
 

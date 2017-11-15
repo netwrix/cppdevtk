@@ -74,6 +74,8 @@ bool RelTimeToAbsTime(int relTime, timespec& absTime) {
 	if (kRetCode != ESUCCESS) {
 		CPPDEVTK_LOG_ERROR("clock_gettime() failed; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
+		
+		errno = kRetCode;
 		return false;
 	}
 	

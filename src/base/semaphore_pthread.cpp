@@ -81,7 +81,7 @@ void Semaphore::Wait() {
 		const ErrorCode kLastErrorCode = GetLastSystemErrorCode();
 		switch (kLastErrorCode.GetValue()) {
 			case EDEADLK:
-				throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("semaphore failed to wait");
+				throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when semaphore wait");
 			default:
 				CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 				CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
@@ -101,15 +101,11 @@ bool Semaphore::TryWait() {
 		case EAGAIN:
 			break;
 		case EDEADLK:
-			CPPDEVTK_LOG_WARN("semaphore failed to trywait (EDEADLK: a deadlock condition was detected)");
-			CPPDEVTK_ASSERT(0 && "semaphore failed to trywait (EDEADLK: a deadlock condition was detected)");
-			break;
+			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when trywait semaphore");
 		default:
-			CPPDEVTK_LOG_WARN("semaphore failed to trywait; error code: " << kLastErrorCode.ToString());
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
-			CPPDEVTK_ASSERT(0 && "semaphore failed to trywait");
-			break;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "semaphore failed to trywait");
 	}
 	
 	return false;
@@ -124,7 +120,7 @@ bool Semaphore::WaitFor(int relTime) {
 	
 	timespec absTime;
 	if (!RelTimeToAbsTime(relTime, absTime)) {
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
 	}
 	
 	const int kRetCode = TEMP_FAILURE_RETRY(sem_timedwait(&semaphore_, &absTime));
@@ -137,14 +133,10 @@ bool Semaphore::WaitFor(int relTime) {
 		case ETIMEDOUT:
 			break;
 		case EDEADLK:
-			CPPDEVTK_LOG_WARN("semaphore failed to timedwait (EDEADLK: a deadlock condition was detected)");
-			CPPDEVTK_ASSERT(0 && "semaphore failed to timedwait (EDEADLK: a deadlock condition was detected)");
-			break;
+			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when timedwait semaphore");
 		default:
-			CPPDEVTK_LOG_WARN("semaphore failed to timedwait; error code: " << kLastErrorCode.ToString());
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
-			CPPDEVTK_ASSERT(0 && "semaphore failed to timedwait");
-			break;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "semaphore failed to timedwait");
 	}
 	
 	return false;

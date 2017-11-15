@@ -52,16 +52,25 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-bool Mutex::TryLock() {
+bool Mutex::TryLock() try {
 	return mutex_.try_lock();
 }
-
-void Mutex::Unlock() {
-	mutex_.unlock();
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
-Mutex::NativeHandleType Mutex::GetNativeHandle() {
+void Mutex::Unlock() try {
+	mutex_.unlock();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
+
+Mutex::NativeHandleType Mutex::GetNativeHandle() try {
 	return mutex_.native_handle();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
 
@@ -84,12 +93,18 @@ bool RecursiveMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return mutex_.try_lock();
 }
 
-void RecursiveMutex::Unlock() {
+void RecursiveMutex::Unlock() try {
 	mutex_.unlock();
 }
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
-RecursiveMutex::NativeHandleType RecursiveMutex::GetNativeHandle() {
+RecursiveMutex::NativeHandleType RecursiveMutex::GetNativeHandle() try {
 	return mutex_.native_handle();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
 
@@ -110,26 +125,41 @@ catch (const system_error& exc) {
 	ThrowLockException(exc);
 }
 
-bool TimedMutex::TryLock() {
+bool TimedMutex::TryLock() try {
 	return mutex_.try_lock();
 }
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
 
-bool TimedMutex::TryLockFor(int relTime) {
+bool TimedMutex::TryLockFor(int relTime) try {
 	return mutex_.try_lock_for(::std::chrono::milliseconds(relTime));
 }
-
-bool TimedMutex::TryLockUntil(::std::time_t absTime) {
-	return mutex_.try_lock_until(::std::chrono::system_clock::from_time_t(absTime));
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
-void TimedMutex::Unlock() {
+bool TimedMutex::TryLockUntil(::std::time_t absTime) try {
+	return mutex_.try_lock_until(::std::chrono::system_clock::from_time_t(absTime));
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
+
+void TimedMutex::Unlock() try {
 	mutex_.unlock();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
 #if (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_MACOSX)
 
-TimedMutex::NativeHandleType TimedMutex::GetNativeHandle() {
+TimedMutex::NativeHandleType TimedMutex::GetNativeHandle() try {
 	return mutex_.native_handle();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
 #endif
@@ -154,22 +184,34 @@ bool RecursiveTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	return mutex_.try_lock();
 }
 
-bool RecursiveTimedMutex::TryLockFor(int relTime) {
+bool RecursiveTimedMutex::TryLockFor(int relTime) try {
 	return mutex_.try_lock_for(::std::chrono::milliseconds(relTime));
 }
-
-bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
-	return mutex_.try_lock_until(::std::chrono::system_clock::from_time_t(absTime));
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
-void RecursiveTimedMutex::Unlock() {
+bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) try {
+	return mutex_.try_lock_until(::std::chrono::system_clock::from_time_t(absTime));
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
+}
+
+void RecursiveTimedMutex::Unlock() try {
 	mutex_.unlock();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
 #if (!CPPDEVTK_COMPILER_MSVC && !CPPDEVTK_PLATFORM_MACOSX)
 
-RecursiveTimedMutex::NativeHandleType RecursiveTimedMutex::GetNativeHandle() {
+RecursiveTimedMutex::NativeHandleType RecursiveTimedMutex::GetNativeHandle() try {
 	return mutex_.native_handle();
+}
+catch (const system_error& exc) {
+	ThrowLockException(exc);
 }
 
 #endif

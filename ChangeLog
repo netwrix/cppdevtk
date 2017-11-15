@@ -8,6 +8,7 @@ Version 1.0.4.1:
 	- moved EnableIf and IfThenElse as Conditional in type_traits.hpp
 	- added more std exception classes equivalents
 	- treat warning "not all control paths return a value" as error
+	- uniform error reporting/handling in synchronization primitives
 - Fixed bugs:
 	- fixed internal pthread_mutex_timedlock(): absTime instead of relTime
 

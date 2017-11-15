@@ -33,9 +33,6 @@
 #include <exception>
 
 
-using ::std::terminate;
-
-
 namespace cppdevtk {
 namespace base {
 
@@ -71,20 +68,20 @@ ConditionVariable::~ConditionVariable() CPPDEVTK_NOEXCEPT {
 void ConditionVariable::NotifyOne() CPPDEVTK_NOEXCEPT {
 	const int kRetCode = pthread_cond_signal(&conditionVariable_);
 	if (kRetCode != ESUCCESS) {
-		CPPDEVTK_LOG_FATAL("condition variable failed to notify one; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+		CPPDEVTK_LOG_ERROR("condition variable failed to notify one; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
-		terminate();
+		CPPDEVTK_ASSERT(0 && "pthread_cond_signal() failed with undocumented error code");
 	}
 }
 
 void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	const int kRetCode = pthread_cond_broadcast(&conditionVariable_);
 	if (kRetCode != ESUCCESS) {
-		CPPDEVTK_LOG_FATAL("condition variable failed to notify all; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+		CPPDEVTK_LOG_ERROR("condition variable failed to notify all; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
-		terminate();
+		CPPDEVTK_ASSERT(0 && "pthread_cond_broadcast() failed with undocumented error code");
 	}
 }
 
@@ -105,7 +102,7 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 	
 	timespec absTime;
 	if (!detail::RelTimeToAbsTime(relTime, absTime)) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "condition variable failed to convert time");
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
 	}
 	
 	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &absTime);

@@ -80,7 +80,7 @@ Mutex::~Mutex() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code for mutex");
 	}
 }
 
@@ -106,10 +106,9 @@ bool Mutex::TryLock() {
 		case EBUSY:
 			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to try lock mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock' mutex");
 	}
 }
 
@@ -125,11 +124,10 @@ void Mutex::Unlock() {
 			//		"failed to unlock mutex (EPERM: the current thread does not own the mutex)");
 			break;
 		default:
-			CPPDEVTK_LOG_FATAL("failed to unlock mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+			CPPDEVTK_LOG_ERROR("failed to unlock mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			CPPDEVTK_ASSERT(0 && "failed to unlock mutex");
-			//throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to unlock mutex");
+			CPPDEVTK_ASSERT(0 && "pthread_mutex_unlock() failed with undocumented error code for mutex");
 			break;
 	}
 }
@@ -150,7 +148,7 @@ ErrorCheckingMutex::~ErrorCheckingMutex() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy error checking mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code for error checking mutex");
 	}
 }
 
@@ -176,11 +174,9 @@ bool ErrorCheckingMutex::TryLock() {
 		case EBUSY:
 			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to try lock error checking mutex; error code: "
-					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock' error checking mutex");
 	}
 }
 
@@ -196,11 +192,10 @@ void ErrorCheckingMutex::Unlock() {
 			//		"failed to unlock error checking mutex (EPERM: the current thread does not own the mutex)");
 			break;
 		default:
-			CPPDEVTK_LOG_FATAL("failed to unlock error checking mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+			CPPDEVTK_LOG_ERROR("failed to unlock error checking mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			CPPDEVTK_ASSERT(0 && "failed to unlock error checking mutex");
-			//throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to unlock error checking mutex");
+			CPPDEVTK_ASSERT(0 && "pthread_mutex_unlock() failed with undocumented error code for error checking mutex");
 			break;
 	}
 }
@@ -221,7 +216,7 @@ RecursiveMutex::~RecursiveMutex() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy recursive mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code for recursive mutex");
 	}
 }
 
@@ -245,14 +240,14 @@ bool RecursiveMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	switch (kRetCode) {
 		case ESUCCESS:
 			return true;
-		case EAGAIN:
-			CPPDEVTK_LOG_ERROR("failed to try lock recursive mutex "
-					"(EAGAIN: the maximum number of recursive locks for mutex has been exceeded)");
-			return false;
 		case EBUSY:
 			return false;
+		case EAGAIN:
+			CPPDEVTK_LOG_ERROR("failed to 'try lock' recursive mutex "
+					"(EAGAIN: the maximum number of recursive locks for mutex has been exceeded)");
+			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to try lock recursive mutex; error code: "
+			CPPDEVTK_LOG_ERROR("failed to 'try lock' recursive mutex; error code: "
 					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
@@ -272,11 +267,10 @@ void RecursiveMutex::Unlock() {
 			//		"failed to unlock recursive mutex (EPERM: the current thread does not own the mutex)");
 			break;
 		default:
-			CPPDEVTK_LOG_FATAL("failed to unlock recursive mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+			CPPDEVTK_LOG_ERROR("failed to unlock recursive mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			CPPDEVTK_ASSERT(0 && "failed to unlock recursive mutex");
-			//throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to unlock recursive mutex");
+			CPPDEVTK_ASSERT(0 && "pthread_mutex_unlock() failed with undocumented error code for recursive mutex");
 			break;
 	}
 }
@@ -300,7 +294,7 @@ TimedMutex::~TimedMutex() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY) && "logic error: attempt to destroy timed mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code for timed mutex");
 	}
 }
 
@@ -326,10 +320,9 @@ bool TimedMutex::TryLock() {
 		case EBUSY:
 			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to try lock timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock' timed mutex");
 	}
 }
 
@@ -340,33 +333,28 @@ bool TimedMutex::TryLockFor(int relTime) {
 	
 	timespec absTime;
 	if (!RelTimeToAbsTime(relTime, absTime)) {
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
 	}
 	
 	const int kRetCode = pthread_mutex_timedlock(&mutex_, &absTime);
 	switch (kRetCode) {
 		case ESUCCESS:
 			return true;
-		case EDEADLK:
-			CPPDEVTK_LOG_ERROR("failed to 'try lock for' timed mutex (EDEADLK: a deadlock condition was detected)");
-			CPPDEVTK_ASSERT(0 && "failed to 'try lock for' timed mutex (EDEADLK: a deadlock condition was detected)");
-			return false;
 		case ETIMEDOUT:
 			return false;
+		case EDEADLK:
+			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when 'try lock for' timed mutex");
 		default:
-			CPPDEVTK_LOG_ERROR("failed to 'try lock for' timed mutex; error code: "
-					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock for' timed mutex");
 	}
 }
 
 bool TimedMutex::TryLockUntil(::std::time_t absTime) {
 	const time_t kCurrTime = time(NULL);
 	if (kCurrTime == (time_t)-1) {
-		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
 	}
 	
 	const time_t kSeconds = difftime(absTime, kCurrTime);
@@ -386,11 +374,10 @@ void TimedMutex::Unlock() {
 			//		"failed to unlock timed mutex (EPERM: the current thread does not own the mutex)");
 			break;
 		default:
-			CPPDEVTK_LOG_FATAL("failed to unlock timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+			CPPDEVTK_LOG_ERROR("failed to unlock timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			CPPDEVTK_ASSERT(0 && "failed to unlock timed mutex");
-			//throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to unlock timed mutex");
+			CPPDEVTK_ASSERT(0 && "pthread_mutex_unlock() failed with undocumented error code for timed mutex");
 			break;
 	}
 }
@@ -416,7 +403,7 @@ ErrorCheckingTimedMutex::~ErrorCheckingTimedMutex() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY)
 				&& "logic error: attempt to destroy error checking timed mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code for error checking timed mutex");
 	}
 }
 
@@ -442,11 +429,9 @@ bool ErrorCheckingTimedMutex::TryLock() {
 		case EBUSY:
 			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to try lock error checking timed mutex; error code: "
-					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock' error checking timed mutex");
 	}
 }
 
@@ -457,35 +442,28 @@ bool ErrorCheckingTimedMutex::TryLockFor(int relTime) {
 	
 	timespec absTime;
 	if (!RelTimeToAbsTime(relTime, absTime)) {
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
 	}
 	
 	const int kRetCode = pthread_mutex_timedlock(&mutex_, &absTime);
 	switch (kRetCode) {
 		case ESUCCESS:
 			return true;
-		case EDEADLK:
-			CPPDEVTK_LOG_ERROR("failed to 'try lock for' error checking timed mutex "
-					"(EDEADLK: a deadlock condition was detected)");
-			CPPDEVTK_ASSERT(0 && "failed to 'try lock for' error checking timed mutex "
-					"(EDEADLK: a deadlock condition was detected)");
-			return false;
 		case ETIMEDOUT:
 			return false;
+		case EDEADLK:
+			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when 'try lock for' error checking timed mutex");
 		default:
-			CPPDEVTK_LOG_ERROR("failed to 'try lock for' error checking timed mutex; error code: "
-					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock for' error checking timed mutex");
 	}
 }
 
 bool ErrorCheckingTimedMutex::TryLockUntil(::std::time_t absTime) {
 	const time_t kCurrTime = time(NULL);
 	if (kCurrTime == (time_t)-1) {
-		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
 	}
 	
 	const time_t kSeconds = difftime(absTime, kCurrTime);
@@ -505,11 +483,10 @@ void ErrorCheckingTimedMutex::Unlock() {
 			//		"failed to unlock error checking timed mutex (EPERM: the current thread does not own the mutex)");
 			break;
 		default:
-			CPPDEVTK_LOG_FATAL("failed to unlock error checking timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+			CPPDEVTK_LOG_ERROR("failed to unlock error checking timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			CPPDEVTK_ASSERT(0 && "failed to unlock error checking timed mutex");
-			//throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to unlock error checking timed mutex");
+			CPPDEVTK_ASSERT(0 && "pthread_mutex_unlock() failed with undocumented error code for error checking timed mutex");
 			break;
 	}
 }
@@ -535,7 +512,7 @@ RecursiveTimedMutex::~RecursiveTimedMutex() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_ASSERT(kRetCode != EINVAL);
 		CPPDEVTK_ASSERT((kRetCode != EBUSY)
 				&& "logic error: attempt to destroy recursive timed mutex while it is locked or referenced");
-		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code");
+		CPPDEVTK_ASSERT(0 && "pthread_mutex_destroy() failed with undocumented error code for recursive timed mutex");
 	}
 }
 
@@ -559,14 +536,14 @@ bool RecursiveTimedMutex::TryLock() CPPDEVTK_NOEXCEPT {
 	switch (kRetCode) {
 		case ESUCCESS:
 			return true;
-		case EAGAIN:
-			CPPDEVTK_LOG_ERROR("failed to try lock recursive timed mutex "
-					"(EAGAIN: the maximum number of recursive locks for mutex has been exceeded)");
-			return false;
 		case EBUSY:
 			return false;
+		case EAGAIN:
+			CPPDEVTK_LOG_ERROR("failed to 'try lock' recursive timed mutex "
+					"(EAGAIN: the maximum number of recursive locks for mutex has been exceeded)");
+			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to try lock recursive timed mutex; error code: "
+			CPPDEVTK_LOG_ERROR("failed to 'try lock' recursive timed mutex; error code: "
 					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
@@ -581,7 +558,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) {
 	
 	timespec absTime;
 	if (!RelTimeToAbsTime(relTime, absTime)) {
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
 	}
 	
 	const int kRetCode = pthread_mutex_timedlock(&mutex_, &absTime);
@@ -591,23 +568,19 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) {
 		case ETIMEDOUT:
 			return false;
 		case EAGAIN:
-			CPPDEVTK_LOG_ERROR("failed to 'try lock for' recursive timed mutex "
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock for' recursive timed mutex "
 					"(EAGAIN: the maximum number of recursive locks for mutex has been exceeded");
-			return false;
 		default:
-			CPPDEVTK_LOG_ERROR("failed to 'try lock for' recursive timed mutex; error code: "
-					<< MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to 'try lock for' recursive timed mutex");
 	}
 }
 
 bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
 	const time_t kCurrTime = time(NULL);
 	if (kCurrTime == (time_t)-1) {
-		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
 	}
 	
 	const time_t kSeconds = difftime(absTime, kCurrTime);
@@ -627,11 +600,10 @@ void RecursiveTimedMutex::Unlock() {
 			//		"failed to unlock recursive timed mutex (EPERM: the current thread does not own the mutex)");
 			break;
 		default:
-			CPPDEVTK_LOG_FATAL("failed to unlock recursive timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
+			CPPDEVTK_LOG_ERROR("failed to unlock recursive timed mutex; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
-			CPPDEVTK_ASSERT(0 && "failed to unlock recursive timed mutex");
-			//throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "failed to unlock recursive timed mutex");
+			CPPDEVTK_ASSERT(0 && "pthread_mutex_unlock() failed with undocumented error code for recursive timed mutex");
 			break;
 	}
 }

@@ -23,6 +23,7 @@
 #if (!(CPPDEVTK_HAVE_PTHREADS || CPPDEVTK_HAVE_CPP11_MUTEX))
 
 #include <cppdevtk/base/system_exception.hpp>
+#include <cppdevtk/base/lock_exception.hpp>
 #include <cppdevtk/base/logger.hpp>
 
 #include <cstddef>
@@ -94,8 +95,7 @@ bool TimedMutex::TryLockFor(int relTime) {
 bool TimedMutex::TryLockUntil(::std::time_t absTime) {
 	const time_t kCurrTime = time(NULL);
 	if (kCurrTime == (time_t)-1) {
-		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
 	}
 	
 	const time_t kSeconds = difftime(absTime, kCurrTime);
@@ -131,8 +131,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) {
 bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
 	const time_t kCurrTime = time(NULL);
 	if (kCurrTime == (time_t)-1) {
-		CPPDEVTK_LOG_ERROR("failed to get time; error code: " << GetLastSystemErrorCode().ToString());
-		return false;
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
 	}
 	
 	const time_t kSeconds = difftime(absTime, kCurrTime);

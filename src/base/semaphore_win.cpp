@@ -70,12 +70,11 @@ bool Semaphore::TryWait() {
 		case WAIT_TIMEOUT:
 			return false;
 		case WAIT_ABANDONED:
-			CPPDEVTK_LOG_ERROR("semaphore failed to WaitForSingleObject; error code: WAIT_ABANDONED");
-			CPPDEVTK_ASSERT(0 && "semaphore failed to WaitForSingleObject; error code: WAIT_ABANDONED");
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(WAIT_ABANDONED),
+					"semaphore failed to WaitForSingleObject; error code: WAIT_ABANDONED");
 		default:
-			CPPDEVTK_LOG_ERROR("semaphore failed to WaitForSingleObject; error code: " << GetLastSystemErrorCode().ToString());
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(),
+					"semaphore failed to WaitForSingleObject");
 	}
 }
 
@@ -87,12 +86,11 @@ bool Semaphore::WaitFor(int relTime) {
 		case WAIT_TIMEOUT:
 			return false;
 		case WAIT_ABANDONED:
-			CPPDEVTK_LOG_ERROR("semaphore failed to WaitForSingleObject; error code: WAIT_ABANDONED");
-			CPPDEVTK_ASSERT(0 && "semaphore failed to WaitForSingleObject; error code: WAIT_ABANDONED");
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(WAIT_ABANDONED),
+					"semaphore failed to WaitForSingleObject; error code: WAIT_ABANDONED");
 		default:
-			CPPDEVTK_LOG_ERROR("semaphore failed to WaitForSingleObject; error code: " << GetLastSystemErrorCode().ToString());
-			return false;
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(),
+					"semaphore failed to WaitForSingleObject");
 	}
 }
 

@@ -76,7 +76,7 @@ namespace detail {
 #if (CPPDEVTK_HAVE_PTHREADS)
 
 
-bool RelTimeToAbsTime(int relTime, timespec& absTime);
+bool RelTimeToAbsTime(int relTime, timespec& absTime);	///< \remark If fails sets \c errno
 
 
 #endif
