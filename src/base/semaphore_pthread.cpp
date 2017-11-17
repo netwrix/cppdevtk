@@ -36,9 +36,6 @@ namespace cppdevtk {
 namespace base {
 
 
-using detail::RelTimeToAbsTime;
-
-
 Semaphore::Semaphore(::std::size_t cnt): NonCopyable(), semaphore_() {
 	const int kRetCode = sem_init(&semaphore_, 0, cnt);
 	if (kRetCode != ESUCCESS) {
@@ -99,7 +96,7 @@ bool Semaphore::TryWait() {
 	const ErrorCode kLastErrorCode = GetLastSystemErrorCode();
 	switch (kLastErrorCode.GetValue()) {
 		case EAGAIN:
-			break;
+			return false;
 		case EDEADLK:
 			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when trywait semaphore");
 		default:
@@ -107,8 +104,6 @@ bool Semaphore::TryWait() {
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
 			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "semaphore failed to trywait");
 	}
-	
-	return false;
 }
 
 #if (!CPPDEVTK_PLATFORM_MACOSX)
@@ -118,12 +113,8 @@ bool Semaphore::WaitFor(int relTime) {
 		return TryWait();
 	}
 	
-	timespec absTime;
-	if (!RelTimeToAbsTime(relTime, absTime)) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
-	}
-	
-	const int kRetCode = TEMP_FAILURE_RETRY(sem_timedwait(&semaphore_, &absTime));
+	const timespec kAbsTime = detail::RelTimeToAbsTime(relTime);
+	const int kRetCode = TEMP_FAILURE_RETRY(sem_timedwait(&semaphore_, &kAbsTime));
 	if (kRetCode == ESUCCESS) {
 		return true;
 	}
@@ -131,15 +122,13 @@ bool Semaphore::WaitFor(int relTime) {
 	const ErrorCode kLastErrorCode = GetLastSystemErrorCode();
 	switch (kLastErrorCode.GetValue()) {
 		case ETIMEDOUT:
-			break;
+			return false;
 		case EDEADLK:
 			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when timedwait semaphore");
 		default:
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "semaphore failed to timedwait");
 	}
-	
-	return false;
 }
 
 #endif

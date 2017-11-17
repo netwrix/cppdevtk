@@ -69,14 +69,13 @@ namespace detail {
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 
-bool RelTimeToAbsTime(int relTime, timespec& absTime) {
+timespec RelTimeToAbsTime(int relTime) {
+	timespec absTime;
+	
 	const int kRetCode = clock_gettime(CLOCK_REALTIME, &absTime);
 	if (kRetCode != ESUCCESS) {
-		CPPDEVTK_LOG_ERROR("clock_gettime() failed; error code: " << MakeSystemErrorCode(kRetCode).ToString());
 		CPPDEVTK_ASSERT(kRetCode != EINTR);
-		
-		errno = kRetCode;
-		return false;
+		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "clock_gettime() failed");
 	}
 	
 	absTime.tv_sec += relTime / 1000;
@@ -86,7 +85,7 @@ bool RelTimeToAbsTime(int relTime, timespec& absTime) {
 		absTime.tv_nsec = absTime.tv_nsec % 1000000000;
 	}
 	
-	return true;
+	return absTime;
 }
 
 #endif	// (CPPDEVTK_HAVE_PTHREADS)

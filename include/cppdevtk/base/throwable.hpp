@@ -39,7 +39,7 @@ namespace base {
 class CPPDEVTK_BASE_API Throwable {
 public:
 	/// \attention If DoThrow() does not throw an exception, or if thrown exception is not of expected type
-	/// calls std::terminate() (or throws std::runtime_error if CPPDEVTK_THROWABLE_DISABLE_TERMINATE=1)
+	/// calls \c ::std::terminate() (or throws \c ::std::runtime_error if CPPDEVTK_THROWABLE_DISABLE_TERMINATE=1)
 	void Throw() const;
 protected:
 	Throwable();

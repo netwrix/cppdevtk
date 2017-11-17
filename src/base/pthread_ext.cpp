@@ -65,15 +65,15 @@
 		}
 		CPPDEVTK_ASSERT((timeSpec.tv_sec >= 0) && ((timeSpec.tv_nsec >= 0) && (timeSpec.tv_nsec < 1000000000)));
 		
-		const long kNSecToNanoSleep = 1000000;	// 1 ms
+		const long kNanoSecToNanoSleep = CPPDEVTK_CHECK_INTERRUPT_REL_TIME * 1000000;
 		if ((absTime->tv_sec < timeSpec.tv_sec)
-				|| ((absTime->tv_sec == timeSpec.tv_sec) && (absTime->tv_nsec <= (timeSpec.tv_nsec + kNSecToNanoSleep)))) {
+				|| ((absTime->tv_sec == timeSpec.tv_sec) && (absTime->tv_nsec <= (timeSpec.tv_nsec + kNanoSecToNanoSleep)))) {
 			retCode = ETIMEDOUT;
 			break;
 		}
 		
 		timeSpec.tv_sec = 0;
-		timeSpec.tv_nsec = kNSecToNanoSleep;
+		timeSpec.tv_nsec = kNanoSecToNanoSleep;
 		retCode = nanosleep(&timeSpec, NULL);
 		CPPDEVTK_ASSERT((retCode == ESUCCESS) || ((retCode == -1) && (errno != EINVAL)));
 	}

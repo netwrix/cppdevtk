@@ -41,11 +41,9 @@ ConditionVariable::ConditionVariable(): NonCopyable(), conditionVariable_() {
 	const int kRetCode = pthread_cond_init(&conditionVariable_, NULL);
 	switch (kRetCode) {
 		case ESUCCESS:
-			break;
-		/*
+			return;
 		case ENOMEM:
 			throw ::std::bad_alloc();
-		*/
 		default:
 			CPPDEVTK_ASSERT(kRetCode != EINTR);
 			CPPDEVTK_ASSERT(kRetCode != EINVAL);
@@ -100,12 +98,8 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
 	
-	timespec absTime;
-	if (!detail::RelTimeToAbsTime(relTime, absTime)) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to convert relative time to absolute time");
-	}
-	
-	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &absTime);
+	const timespec kAbsTime = detail::RelTimeToAbsTime(relTime);
+	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &kAbsTime);
 	switch (kRetCode) {
 		case ESUCCESS:
 			return ::cppdevtk::base::cv_status::no_timeout;

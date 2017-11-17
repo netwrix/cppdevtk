@@ -175,11 +175,11 @@ CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NOEXCEPT;
 template <typename TException>
 ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT;
 
-/// \attention If ::std::current_exception() is not available then:
+/// \attention If \c ::std::current_exception() is not available then:
 /// - Qt based (including CppDevTk) exceptions work as expected.
-/// - only exceptions that inherit from ::std::exception are supported; other exceptions will be reported as unknown exception.
+/// - only exceptions that inherit from \c ::std::exception are supported; other exceptions will be reported as unknown exception.
 /// - user defined exceptions, other than Qt, that inherit from std exceptions will be reported as their std exception base
-/// (ex: if FooError inherits from ::std::runtime_error then runtime_error will be reported, not FooError, so slicing...).
+/// (ex: if FooError inherits from \c ::std::runtime_error then \c runtime_error will be reported, not FooError, so slicing...).
 /// - it will work only if there is a handled exception (called in a catch clause).
 /// - it may fail, in this case it returns a null exception pointer.
 CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT;
