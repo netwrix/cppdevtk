@@ -26,7 +26,6 @@
 // This is why we use PTHREAD_MUTEX_NORMAL and not PTHREAD_MUTEX_DEFAULT.
 
 
-#include "time_utils.hpp"
 #include <cppdevtk/base/mutex.hpp>
 
 
@@ -40,6 +39,7 @@
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/time_utils.hpp>
 
 #include <cstddef>
 #include <ctime>
@@ -47,7 +47,6 @@
 #include <new>
 
 
-using ::cppdevtk::base::detail::RelTimeToAbsTime;
 using ::std::time_t;
 using ::std::time;
 using ::std::difftime;
@@ -349,11 +348,7 @@ bool TimedMutex::TryLockFor(int relTime) {
 }
 
 bool TimedMutex::TryLockUntil(::std::time_t absTime) {
-	const time_t kCurrTime = time(NULL);
-	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
-	}
-	
+	const time_t kCurrTime = GetCurrentTime();
 	const time_t kSeconds = difftime(absTime, kCurrTime);
 	
 	return (kSeconds <= 0) ? TryLock() : TryLockFor(kSeconds * 1000);
@@ -454,11 +449,7 @@ bool ErrorCheckingTimedMutex::TryLockFor(int relTime) {
 }
 
 bool ErrorCheckingTimedMutex::TryLockUntil(::std::time_t absTime) {
-	const time_t kCurrTime = time(NULL);
-	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
-	}
-	
+	const time_t kCurrTime = GetCurrentTime();
 	const time_t kSeconds = difftime(absTime, kCurrTime);
 	
 	return (kSeconds <= 0) ? TryLock() : TryLockFor(kSeconds * 1000);
@@ -567,11 +558,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) {
 }
 
 bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
-	const time_t kCurrTime = time(NULL);
-	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
-	}
-	
+	const time_t kCurrTime = GetCurrentTime();
 	const time_t kSeconds = difftime(absTime, kCurrTime);
 	
 	return (kSeconds <= 0) ? TryLock() : TryLockFor(kSeconds * 1000);

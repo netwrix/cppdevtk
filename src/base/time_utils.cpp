@@ -17,7 +17,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include "time_utils.hpp"
+#include "time_utils.h"	// must be included first!
+#include <cppdevtk/base/time_utils.hpp>
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
 #include <cppdevtk/base/errno.h>
@@ -30,13 +31,15 @@
 #if (CPPDEVTK_HAVE_PTHREADS)
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/logger.hpp>
-#include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #endif
 
+#include <cppdevtk/base/system_exception.hpp>
+
+#include <cstddef>
+
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
-
 
 int cppdevtk_clock_gettime(cppdevtk_clockid_t clk_id, struct timespec* tp) {
 	int retCode = -1;
@@ -58,18 +61,27 @@ int cppdevtk_clock_gettime(cppdevtk_clockid_t clk_id, struct timespec* tp) {
 	return retCode;
 }
 
-
 #endif	// CPPDEVTK_PLATFORM_MACOSX
 
 
 namespace cppdevtk {
 namespace base {
-namespace detail {
+
+
+CPPDEVTK_BASE_API ::std::time_t GetCurrentTime() {
+	using ::std::time_t;
+	
+	const time_t kCurrTime = ::std::time(NULL);
+	if (kCurrTime == (time_t)-1) {
+		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "time() failed");
+	}
+	return kCurrTime;
+}
 
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 
-timespec RelTimeToAbsTime(int relTime) {
+CPPDEVTK_BASE_API timespec RelTimeToAbsTime(int relTime) {
 	timespec absTime;
 	
 	const int kRetCode = clock_gettime(CLOCK_REALTIME, &absTime);
@@ -91,6 +103,5 @@ timespec RelTimeToAbsTime(int relTime) {
 #endif	// (CPPDEVTK_HAVE_PTHREADS)
 
 
-}	// namespace detail
 }	// namespace base
 }	// namespace cppdevtk

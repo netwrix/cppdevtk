@@ -344,6 +344,7 @@ HEADERS += \
     ../../include/cppdevtk/base/tfstream.hpp \
     ../../include/cppdevtk/base/thread_shared_obj_locking_ptr.hpp \
     ../../include/cppdevtk/base/throwable.hpp \
+    ../../include/cppdevtk/base/time_utils.hpp	\
     ../../include/cppdevtk/base/tios.hpp \
     ../../include/cppdevtk/base/tiostream.hpp \
     ../../include/cppdevtk/base/tistream.hpp \
@@ -404,5 +405,5 @@ win32:*msvc* {
 		stack_walker_wrapper_win_msvc.hpp
 }
 
-HEADERS += time_utils.hpp	\
+HEADERS += time_utils.h	\
 	throw_lock_exception.hpp

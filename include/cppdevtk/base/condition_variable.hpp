@@ -26,6 +26,7 @@
 #include "mutex.hpp"
 #include "dbc.hpp"
 #include "lock_exception.hpp"
+#include "time_utils.hpp"
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 #include <pthread.h>
@@ -179,10 +180,7 @@ inline cv_status::cv_status_t ConditionVariable::WaitUntil(UniqueLock<Mutex>& un
 		::std::time_t absTime) {
 	using ::std::time_t;
 	
-	const time_t kCurrTime = ::std::time(NULL);
-	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
-	}
+	const time_t kCurrTime = GetCurrentTime();
 	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
 	
 	return WaitFor(uniqueLock, (kSeconds * 1000));
@@ -192,10 +190,7 @@ template <class Predicate>
 inline bool ConditionVariable::WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate) {
 	using ::std::time_t;
 	
-	const time_t kCurrTime = ::std::time(NULL);
-	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
-	}
+	const time_t kCurrTime = GetCurrentTime();
 	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
 	
 	return WaitFor(uniqueLock, (kSeconds * 1000), predicate);

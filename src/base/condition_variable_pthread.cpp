@@ -17,7 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include "time_utils.hpp"
 #include <cppdevtk/base/condition_variable.hpp>
 
 
@@ -27,6 +26,7 @@
 #include <cppdevtk/base/lock_exception.hpp>
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/time_utils.hpp>
 
 #include <cstddef>
 #include <new>
@@ -98,7 +98,7 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
 	
-	const timespec kAbsTime = detail::RelTimeToAbsTime(relTime);
+	const timespec kAbsTime = RelTimeToAbsTime(relTime);
 	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &kAbsTime);
 	switch (kRetCode) {
 		case ESUCCESS:

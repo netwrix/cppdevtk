@@ -88,6 +88,7 @@ HEADERS += \
     tfstream.hpp \
     thread_shared_obj_locking_ptr.hpp \
     throwable.hpp \
+    time_utils.hpp	\
     tios.hpp \
     tiostream.hpp \
     tistream.hpp \

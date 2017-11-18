@@ -24,6 +24,7 @@
 #include "config.hpp"
 #include "non_copyable.hpp"
 #include "lock_exception.hpp"
+#include "time_utils.hpp"
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 #include <semaphore.h>
@@ -92,10 +93,7 @@ private:
 inline bool Semaphore::WaitUntil(::std::time_t absTime) {
 	using ::std::time_t;
 	
-	const time_t kCurrTime = ::std::time(NULL);
-	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get time");
-	}
+	const time_t kCurrTime = GetCurrentTime();
 	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
 	
 	return WaitFor(kSeconds * 1000);

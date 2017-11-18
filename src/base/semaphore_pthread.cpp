@@ -17,7 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include "time_utils.hpp"
 #include <cppdevtk/base/semaphore.hpp>
 
 
@@ -113,7 +112,7 @@ bool Semaphore::WaitFor(int relTime) {
 		return TryWait();
 	}
 	
-	const timespec kAbsTime = detail::RelTimeToAbsTime(relTime);
+	const timespec kAbsTime = RelTimeToAbsTime(relTime);
 	const int kRetCode = TEMP_FAILURE_RETRY(sem_timedwait(&semaphore_, &kAbsTime));
 	if (kRetCode == ESUCCESS) {
 		return true;
