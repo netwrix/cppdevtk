@@ -30,6 +30,11 @@
 #include <algorithm>
 
 
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
+
 namespace cppdevtk {
 namespace base {
 

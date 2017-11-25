@@ -57,6 +57,7 @@ bool Mutex::TryLock() try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return false;
 }
 
 void Mutex::Unlock() try {
@@ -71,6 +72,7 @@ Mutex::NativeHandleType Mutex::GetNativeHandle() try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return NULL;
 }
 
 
@@ -105,6 +107,7 @@ RecursiveMutex::NativeHandleType RecursiveMutex::GetNativeHandle() try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return NULL;
 }
 
 
@@ -137,6 +140,7 @@ bool TimedMutex::TryLockFor(int relTime) try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return false;
 }
 
 bool TimedMutex::TryLockUntil(::std::time_t absTime) try {
@@ -144,6 +148,7 @@ bool TimedMutex::TryLockUntil(::std::time_t absTime) try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return false;
 }
 
 void TimedMutex::Unlock() try {
@@ -189,6 +194,7 @@ bool RecursiveTimedMutex::TryLockFor(int relTime) try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return false;
 }
 
 bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) try {
@@ -196,6 +202,7 @@ bool RecursiveTimedMutex::TryLockUntil(::std::time_t absTime) try {
 }
 catch (const system_error& exc) {
 	ThrowLockException(exc);
+	return false;
 }
 
 void RecursiveTimedMutex::Unlock() try {

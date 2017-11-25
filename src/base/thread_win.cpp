@@ -80,7 +80,7 @@ void Thread::Create() {
 	CPPDEVTK_ASSERT(!pData_->GetStartInfoRef().IsStarted());
 	
 	detail::ThreadData::NativeIdType nativeId = 0;
-	NativeHandleType nativeHandle = _beginthreadex(NULL, kAttributes_.GetStackSize(), &Thread::Run, pData_.get(),
+	NativeHandleType nativeHandle = _beginthreadex(NULL, (unsigned)kAttributes_.GetStackSize(), &Thread::Run, pData_.get(),
 			STACK_SIZE_PARAM_IS_A_RESERVATION, &nativeId);
 	if (nativeHandle == NULL) {
 		throw CPPDEVTK_THREAD_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to create thread");
@@ -119,7 +119,7 @@ CPPDEVTK_BASE_API void SleepFor(int relTime) {
 		return;
 	}
 	
-	const DWORD kStep = ::std::min(kAdjustedRelTime, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
+	const DWORD kStep = ::std::min(kAdjustedRelTime, (DWORD)CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
 	DWORD slept = 0;
 	while ((slept + kStep) <= kAdjustedRelTime) {
 		::Sleep(kStep);

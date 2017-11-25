@@ -149,8 +149,9 @@ public:
 	InterruptibleSleepHelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
-		for (int cnt = 0; cnt < 20; ++cnt) {
-			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId() << endl;
+		for (int cnt = 0; cnt < 40; ++cnt) {
+			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
 			::cppdevtk::base::this_thread::SleepFor(250);
 		}
 		
@@ -163,13 +164,16 @@ public:
 	InterruptibleCondVarHelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
-		const QTime kMaxTime = QTime::currentTime().addMSecs(5000);	// use time due to spurious wakeups
+		int cnt = 0;
+		const QTime kMaxTime = QTime::currentTime().addMSecs(10000);	// use time due to spurious wakeups
 		do {
-			::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId() << endl;
+			::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
 			::cppdevtk::base::Mutex mtx;
 			::cppdevtk::base::UniqueLock< ::cppdevtk::base::Mutex> uniqueLock(mtx);
 			::cppdevtk::base::ConditionVariable condVar;
 			condVar.WaitFor(uniqueLock, 250);
+			++cnt;
 		}
 		while (QTime::currentTime() < kMaxTime);
 		
@@ -765,6 +769,8 @@ bool TestMutex() {
 }
 
 bool TestThread() {
+	qcout << "hardwareConcurrency: " << Thread::GetHardwareConcurrency() << endl;
+	
 	int retCode = EXIT_FAILURE;
 	Thread delegationThread(&ThreadMainFunctionHelloWorld);
 	delegationThread.Start();

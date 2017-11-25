@@ -39,7 +39,7 @@ namespace detail {
 ThreadData::~ThreadData() {
 	if (nativeHandle_ != NULL) {
 		// NOTE: Closing a thread handle does not terminate the associated thread or remove the thread object.
-		if (!CloseHandle(nativeHandle_)) {
+		if (!CloseHandle((HANDLE)nativeHandle_)) {
 			CPPDEVTK_LOG_WARN("failed to close thread handle; error code: " << GetLastSystemErrorCode().ToString());
 			CPPDEVTK_ASSERT(0 && "failed to close thread handle");
 		}

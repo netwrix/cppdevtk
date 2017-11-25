@@ -33,6 +33,11 @@
 #include <exception>
 
 
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
+
 namespace cppdevtk {
 namespace base {
 
@@ -326,7 +331,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	pData->GetStartInfoRef().SetStartAndNotifyOne();
 	
 	pThreadLocalData = pData.get();
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pThreadLocalData)) {
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
 		pThreadLocalData = NULL;
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
