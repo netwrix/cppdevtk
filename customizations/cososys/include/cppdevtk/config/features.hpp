@@ -95,7 +95,11 @@
 /// \brief Log level.
 /// \sa ::cppdevtk::base::LogLevel
 #ifndef CPPDEVTK_LOG_LEVEL
-#	define CPPDEVTK_LOG_LEVEL ::cppdevtk::base::llDebug
+#	ifdef NDEBUG
+#		define CPPDEVTK_LOG_LEVEL ::cppdevtk::base::llError
+#	else
+#		define CPPDEVTK_LOG_LEVEL ::cppdevtk::base::llDebug
+#	endif
 #endif
 
 /// \brief Date format in log record.
@@ -262,8 +266,6 @@
 /// If not needed disable for performance
 #define CPPDEVTK_ENABLE_THREAD_INTERRUPTION 1
 
-/// Thread interruption check, in milliseconds [1 - 999]
-#define CPPDEVTK_CHECK_INTERRUPT_REL_TIME 1
 
 /// @}	// config_features_compile_time
 

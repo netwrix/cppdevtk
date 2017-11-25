@@ -286,6 +286,8 @@
 // Platform Features.
 #define CPPDEVTK_HAVE_SIGACTION 1
 
+#define CPPDEVTK_CHECK_INTERRUPT_REL_TIME 50
+
 
 /// \endcond
 

@@ -48,6 +48,27 @@
 
 
 CPPDEVTK_STATIC_ASSERT((1 <= CPPDEVTK_CHECK_INTERRUPT_REL_TIME) && (CPPDEVTK_CHECK_INTERRUPT_REL_TIME <= 999));
+#if (CPPDEVTK_PLATFORM_UNIX)
+#	if (CPPDEVTK_PLATFORM_LINUX)
+#		if (CPPDEVTK_PLATFORM_ANDROID)
+			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 10), "(severe) performance issue");
+#		else
+			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 10), "(severe) performance issue");
+#		endif
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
+#		if (CPPDEVTK_PLATFORM_IOS)
+			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 50), "(severe) performance issue");
+#		else
+			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 50), "(severe) performance issue");
+#		endif
+#	else
+#		error "Unsupported Unix platform!!!"
+#	endif
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
+	CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 100), "(severe) performance issue");
+#else
+#	error "Unsupported platform!!!"
+#endif
 
 
 namespace cppdevtk {

@@ -149,11 +149,18 @@ public:
 	InterruptibleSleepHelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
-		for (int cnt = 0; cnt < 40; ++cnt) {
+		::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world entering main from thread with id: "
+				<< ::cppdevtk::base::this_thread::GetId() << endl;
+		
+		// parent thread waits 2.5 sec before requesting interrupt; child thread loops max 5 sec
+		for (int cnt = 0; cnt < 50; ++cnt) {
 			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world from thread with id: "
 					<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
-			::cppdevtk::base::this_thread::SleepFor(250);
+			::cppdevtk::base::this_thread::SleepFor(100);
 		}
+		
+		::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world leaving main from thread with id: "
+				<< ::cppdevtk::base::this_thread::GetId() << endl;
 		
 		return EXIT_SUCCESS;
 	}
@@ -164,18 +171,22 @@ public:
 	InterruptibleCondVarHelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
-		int cnt = 0;
-		const QTime kMaxTime = QTime::currentTime().addMSecs(10000);	// use time due to spurious wakeups
-		do {
+		::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world entering main from thread with id: "
+				<< ::cppdevtk::base::this_thread::GetId() << endl;
+		
+		// parent thread waits 2.5 sec before requesting interrupt; child thread loops max 5 sec
+		const int kMaxCnt = (5 * 1000) / CPPDEVTK_CHECK_INTERRUPT_REL_TIME;
+		for (int cnt = 0; cnt < kMaxCnt; ++cnt) {
 			::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world from thread with id: "
 					<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
 			::cppdevtk::base::Mutex mtx;
 			::cppdevtk::base::UniqueLock< ::cppdevtk::base::Mutex> uniqueLock(mtx);
 			::cppdevtk::base::ConditionVariable condVar;
-			condVar.WaitFor(uniqueLock, 250);
-			++cnt;
+			condVar.WaitFor(uniqueLock, 100);	// no predicate so CPPDEVTK_CHECK_INTERRUPT_REL_TIME spurious wakeups
 		}
-		while (QTime::currentTime() < kMaxTime);
+		
+		::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world leaving main from thread with id: "
+				<< ::cppdevtk::base::this_thread::GetId() << endl;
 		
 		return EXIT_SUCCESS;
 	}
@@ -199,6 +210,8 @@ void TestStackTraceCppHelper2(int);
 
 extern "C" void TestStackTraceCHelper1(int dummy);
 extern "C" void TestStackTraceCHelper2(int);
+
+void PrintTime(int milliseconds);
 
 
 using ::cppdevtk::base::qcerr;
@@ -683,6 +696,12 @@ bool TestMutex() {
 			qcout << "errorCheckingMutex.Lock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
 	}
+	catch (const exception& exc) {
+		qcout << "errorCheckingMutex.Lock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+	}
+	catch (...) {
+		qcerr << "errorCheckingMutex.Lock(): caught unknown exception" << endl;
+	}
 	if (!caught) {
 		qcerr << "errorCheckingMutex.Lock(): !caught" << endl;
 		return false;
@@ -696,6 +715,7 @@ bool TestMutex() {
 			qcerr << "errorCheckingMutex.TryLock() succeeded" << endl;
 			return false;
 		}
+		caught = true;
 	}
 	catch (const SystemException& exc) {
 		if (exc.ErrorCodeRef() == ::cppdevtk::base::errc::resource_deadlock_would_occur) {
@@ -704,6 +724,12 @@ bool TestMutex() {
 		else {
 			qcout << "errorCheckingMutex.TryLock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
+	}
+	catch (const exception& exc) {
+		qcout << "errorCheckingMutex.TryLock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+	}
+	catch (...) {
+		qcerr << "errorCheckingMutex.TryLock(): caught unknown exception" << endl;
 	}
 	if (!caught) {
 		qcerr << "errorCheckingMutex.TryLock(): !caught" << endl;
@@ -726,6 +752,12 @@ bool TestMutex() {
 			qcout << "errorCheckingTimedMutex.Lock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
 	}
+	catch (const exception& exc) {
+		qcout << "errorCheckingTimedMutex.Lock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+	}
+	catch (...) {
+		qcerr << "errorCheckingTimedMutex.Lock(): caught unknown exception" << endl;
+	}
 	if (!caught) {
 		qcerr << "errorCheckingTimedMutex.Lock(): !caught" << endl;
 		return false;
@@ -739,6 +771,7 @@ bool TestMutex() {
 			qcerr << "errorCheckingTimedMutex.TryLock() succeeded" << endl;
 			return false;
 		}
+		caught = true;
 	}
 	catch (const SystemException& exc) {
 		if (exc.ErrorCodeRef() == ::cppdevtk::base::errc::resource_deadlock_would_occur) {
@@ -747,6 +780,12 @@ bool TestMutex() {
 		else {
 			qcout << "errorCheckingTimedMutex.TryLock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
+	}
+	catch (const exception& exc) {
+		qcout << "errorCheckingTimedMutex.TryLock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+	}
+	catch (...) {
+		qcerr << "errorCheckingTimedMutex.TryLock(): caught unknown exception" << endl;
 	}
 	if (!caught) {
 		qcerr << "errorCheckingTimedMutex.TryLock(): !caught" << endl;
@@ -783,9 +822,14 @@ bool TestThread() {
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	
+	QTime time;
+	time.start();
+	
 	InterruptibleSleepHelloWorldThread interruptibleSleepHelloWorldThread;
 	interruptibleSleepHelloWorldThread.Start();
+	qcout << "letting child interruptibleSleepHelloWorldThread to work a little..." << endl;
 	::cppdevtk::base::this_thread::SleepFor(2500);
+	qcout << "done waiting for child interruptibleSleepHelloWorldThread" << endl;
 	interruptibleSleepHelloWorldThread.RequestInterruption();
 	bool caught = false;
 	try {
@@ -800,9 +844,17 @@ bool TestThread() {
 		return false;
 	}
 	
+	qcout << "interruptibleSleepHelloWorldThread took: ";
+	PrintTime(time.elapsed());
+	
+	
+	time.restart();
+	
 	InterruptibleCondVarHelloWorldThread interruptibleCondVarHelloWorldThread;
 	interruptibleCondVarHelloWorldThread.Start();
+	qcout << "letting child interruptibleCondVarHelloWorldThread to work a little..." << endl;
 	::cppdevtk::base::this_thread::SleepFor(2500);
+	qcout << "done waiting for child interruptibleCondVarHelloWorldThread" << endl;
 	interruptibleCondVarHelloWorldThread.RequestInterruption();
 	caught = false;
 	try {
@@ -816,6 +868,9 @@ bool TestThread() {
 		qcerr << "failed to catch thread interrupted for interruptibleCondVarHelloWorldThread" << endl;
 		return false;
 	}
+	
+	qcout << "interruptibleCondVarHelloWorldThread took: ";
+	PrintTime(time.elapsed());
 	
 #	endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	
@@ -839,4 +894,15 @@ void TestStackTraceCHelper1(int dummy) {
 void TestStackTraceCHelper2(int) {
 	::cppdevtk::base::StackTrace stackTrace;
 	qcout << "StackTrace from C function:\n" << stackTrace.ToString() << endl;
+}
+
+
+void PrintTime(int milliseconds) {
+	int seconds = milliseconds / 1000;
+	milliseconds %= 1000;
+	int minutes = seconds / 60;
+	seconds %= 60;
+	int hours = minutes / 60;
+	minutes %= 60;
+	qcout << QTime(hours, minutes, seconds, milliseconds).toString("hh:mm:ss.zzz") << endl;
 }

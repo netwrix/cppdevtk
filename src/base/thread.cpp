@@ -30,6 +30,10 @@
 #include <cppdevtk/base/logger.hpp>
 #include "thread_local_data_ptr.hpp"
 
+#if (CPPDEVTK_PLATFORM_MACOSX)
+#include <QtCore/QTextStream>
+#endif
+
 #include <exception>
 
 
@@ -73,7 +77,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 				CPPDEVTK_LOG_DEBUG("thread destructor: joined; child thread retCode: " << retCode);
 			}
 			catch (const ThreadInterruptedException& exc) {
-				CPPDEVTK_LOG_DEBUG("thread destructor: child thread interrupted: " << Exception::GetDetailedInfo(exc));
+				CPPDEVTK_LOG_DEBUG("thread destructor: child thread interrupted: " << exc.What());
 			}
 			catch (const exception& exc) {
 				if (IsJoinable()) {
@@ -132,7 +136,9 @@ void Thread::Start() {
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	DisableInterruptionGuard disableInterruptionGuard;
 #	endif
+	CPPDEVTK_LOG_TRACE("waiting for child thread to start...");
 	pTmpData->GetStartInfoRef().WaitToStart();	// FIXME: problems if throws. (retry and) terminate?
+	CPPDEVTK_LOG_TRACE("child thread started");
 	
 	if (kAttributes_.GetDetached()) {
 		pData_.reset();
@@ -328,7 +334,9 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	CPPDEVTK_ASSERT(pThreadLocalData == NULL);
 	
 	DataPtr pData = static_cast<Data*>(pVoidData)->shared_from_this();
+	CPPDEVTK_LOG_TRACE("notifying parent thread that child thread started...");
 	pData->GetStartInfoRef().SetStartAndNotifyOne();
+	CPPDEVTK_LOG_TRACE("parent thread notified that child thread started");
 	
 	pThreadLocalData = pData.get();
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
@@ -345,9 +353,12 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 #	endif
 	
 	try {
-		pData->SetRetCode(pData->GetMainFunctionRef()());
+		const MainFunctionType::result_type kRetCode = pData->GetMainFunctionRef()();
+		CPPDEVTK_LOG_DEBUG("thread main function returned: " << kRetCode);
+		pData->SetRetCode(kRetCode);
 	}
 	catch (...) {
+		CPPDEVTK_LOG_DEBUG("thread main function threw");
 		pData->SetExceptionPtr(CurrentException());
 #		if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 		pData->SetThrowStdBadException(true);
@@ -362,8 +373,8 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 				RethrowException(kExceptionPtr);
 			}
 #			if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-			catch (const ThreadInterruptedException&) {
-				CPPDEVTK_LOG_INFO("detached thread interrupted");
+			catch (const ThreadInterruptedException& exc) {
+				CPPDEVTK_LOG_INFO("detached thread interrupted: " << exc.What());
 			}
 #			endif
 			catch (const exception& exc) {
@@ -479,7 +490,14 @@ namespace detail {
 Thread::Id::Id() CPPDEVTK_NOEXCEPT: nativeId_(0) {}
 
 QString Thread::Id::ToString() const {
+#	if (CPPDEVTK_PLATFORM_MACOSX)
+	QString id;
+	QTextStream textStream(&id);
+	textStream << nativeId_;
+	return id;
+#	else
 	return QString::number(nativeId_);
+#	endif
 }
 
 bool Thread::Id::operator<(const Id& other) const CPPDEVTK_NOEXCEPT {

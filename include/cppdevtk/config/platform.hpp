@@ -213,6 +213,24 @@
 /// \cond
 
 
+// CPPDEVTK_CHECK_INTERRUPT_REL_TIME performance impact (CPPDEVTK_CHECK_INTERRUPT_REL_TIME in ms, runtime in sec)
+// Please see test app; parent thread waits 2.5s then ask child thread to interrupt:
+// 1. Sleep
+// CPPDEVTK_CHECK_INTERRUPT_REL_TIME	|	1		|	5		|	10		|	25		|	50		|	100		|
+// Linux								|	02.752	|	02.556	|	02.536	|	02.511	|	02.555	|	02.604	|
+// Windows								|	39.027	|	07.809	|	03.919	|	03.122	|	03.184	|	02.841	|
+// Mac (in VM)							|	03.620	|	03.205	|	03.131	|	02.964	|	02.760	|	02.715	|
+// 2. Condition variable
+// CPPDEVTK_CHECK_INTERRUPT_REL_TIME	|	1		|	5		|	10		|	25		|	50		|	100		|
+// Linux								|	02.756	|	02.552	|	02.527	|	02.514	|	02.506	|	02.503	|
+// Windows								|	38.996	|	07.808	|	03.917	|	03.121	|	03.121	|	02.730	|
+// Mac (in VM)							|	03.608	|	03.189	|	03.146	|	02.911	|	02.736	|	02.649	|
+
+/// Thread interruption check, in milliseconds [1 - 999]. Modify as desired in platform specific files.
+#define CPPDEVTK_CHECK_INTERRUPT_REL_TIME 1
+#undef CPPDEVTK_CHECK_INTERRUPT_REL_TIME
+
+
 #ifndef RC_INVOKED	// for RC4011: identifier truncated to 'identifier'...
 
 #if (CPPDEVTK_PLATFORM_UNIX)
@@ -275,6 +293,10 @@
 #endif
 #ifndef CPPDEVTK_HAVE_SIGACTION
 #	error "Please define CPPDEVTK_HAVE_SIGACTION properly for current platform!!!"
+#endif
+
+#ifndef CPPDEVTK_CHECK_INTERRUPT_REL_TIME
+#	error "Please define CPPDEVTK_CHECK_INTERRUPT_REL_TIME properly for current platform!!!"
 #endif
 
 
