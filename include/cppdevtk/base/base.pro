@@ -113,7 +113,11 @@ HEADERS += \
 	invalid_string_conversion_exception.hpp	\
 	condition_variable.hpp	\
 	semaphore.hpp	\
-	generic_locking_algorithms.hpp
+	generic_locking_algorithms.hpp	\
+	thread_exception.hpp	\
+	thread.hpp	\
+	thread_data.hpp	\
+	thread_data_types.hpp
 
 unix {
 	HEADERS += execinfo_unx.h

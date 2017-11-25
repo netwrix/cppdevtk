@@ -20,10 +20,15 @@
 #include <cppdevtk/base/semaphore.hpp>
 
 
-#if (!CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_PLATFORM_WINDOWS && (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE))
+#if (!(CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)	\
+		&& !(CPPDEVTK_PLATFORM_WINDOWS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)	\
+		&& (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE))
 
 
 #include <cppdevtk/base/cassert.hpp>
+#if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+#include <cppdevtk/base/thread.hpp>
+#endif
 
 
 namespace cppdevtk {
@@ -43,13 +48,25 @@ void Semaphore::Notify() {
 }
 
 void Semaphore::Wait() {
+#	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
+
 	UniqueLock<Mutex> uniqueLock(mutex_);
+	
+#	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
 	
 	while (cnt_ == 0) {
 		conditionVariable_.Wait(uniqueLock);
 	}
 	
 	--cnt_;
+	
+#	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
 }
 
 bool Semaphore::TryWait() {
@@ -64,7 +81,15 @@ bool Semaphore::TryWait() {
 }
 
 bool Semaphore::WaitFor(int relTime) {
+#	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
+	
 	UniqueLock<Mutex> uniqueLock(mutex_);
+	
+#	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
 	
 	while (cnt_ == 0) {
 		if (conditionVariable_.WaitFor(uniqueLock, relTime) == ::cppdevtk::base::cv_status::timeout) {
@@ -78,6 +103,11 @@ bool Semaphore::WaitFor(int relTime) {
 	
 	CPPDEVTK_ASSERT(cnt_ > 0);
 	--cnt_;
+	
+#	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
+	
 	return true;
 }
 
@@ -86,4 +116,4 @@ bool Semaphore::WaitFor(int relTime) {
 }	// namespace cppdevtk
 
 
-#endif	// (!CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_PLATFORM_WINDOWS && (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE)
+#endif

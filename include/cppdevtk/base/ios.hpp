@@ -117,19 +117,19 @@ CPPDEVTK_BASE_API void swap(IosFailureException& x, IosFailureException& y) CPPD
 // Inline functions
 
 inline IosFailureException::IosFailureException(const SourceCodeInfo& throwPoint, const char* whatArg,
-		const ErrorCode& errorCode): Exception(throwPoint), RuntimeException(throwPoint, ""),
+		const ErrorCode& errorCode): Exception(throwPoint), RuntimeException(throwPoint, whatArg),
 		SystemException(throwPoint, errorCode, whatArg) {}
 
 inline IosFailureException::IosFailureException(const SourceCodeInfo& throwPoint, const QString& whatArg,
-		const ErrorCode& errorCode): Exception(throwPoint), RuntimeException(throwPoint, ""),
+		const ErrorCode& errorCode): Exception(throwPoint), RuntimeException(throwPoint, whatArg),
 		SystemException(throwPoint, errorCode, whatArg) {}
 
 inline IosFailureException::IosFailureException(const SourceCodeInfo& throwPoint, const char* whatArg,
-		const ErrorCode& errorCode, const Exception& cause): Exception(throwPoint), RuntimeException(throwPoint, ""),
+		const ErrorCode& errorCode, const Exception& cause): Exception(throwPoint), RuntimeException(throwPoint, whatArg),
 		SystemException(throwPoint, errorCode, whatArg, cause) {}
 
 inline IosFailureException::IosFailureException(const SourceCodeInfo& throwPoint, const QString& whatArg,
-		const ErrorCode& errorCode, const Exception& cause): Exception(throwPoint), RuntimeException(throwPoint, ""),
+		const ErrorCode& errorCode, const Exception& cause): Exception(throwPoint), RuntimeException(throwPoint, whatArg),
 		SystemException(throwPoint, errorCode, whatArg, cause) {}
 
 inline IosFailureException::~IosFailureException() CPPDEVTK_NOEXCEPT {}

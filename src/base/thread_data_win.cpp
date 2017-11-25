@@ -17,32 +17,36 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/util/sleep.hpp>
-#include <cppdevtk/base/cerrno.hpp>
-#if (!CPPDEVTK_PLATFORM_UNIX)
-#	error "This file is Unix specific!!!"
+#include <cppdevtk/base/thread_data.hpp>
+#if (!CPPDEVTK_PLATFORM_WINDOWS)
+#	error "This file is Windows specific!!!"
 #endif
+
+#include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/system_exception.hpp>
+#include <cppdevtk/base/cassert.hpp>
+
+#include <windows.h>
+
+#include <cstddef>
 
 
 namespace cppdevtk {
-namespace util {
+namespace base {
+namespace detail {
 
 
-CPPDEVTK_UTIL_API void Sleep(sec_t sec) {
-	::sleep(sec);
-}
-
-CPPDEVTK_UTIL_API void MSleep(msec_t msec) {
-	USleep(msec * 1000);
-}
-
-CPPDEVTK_UTIL_API void USleep(usec_t usec) {
-	if (::usleep(usec) == EINVAL) {
-		::sleep(usec / 1000000);
-		::usleep(usec % 1000000);
+ThreadData::~ThreadData() {
+	if (nativeHandle_ != NULL) {
+		// NOTE: Closing a thread handle does not terminate the associated thread or remove the thread object.
+		if (!CloseHandle(nativeHandle_)) {
+			CPPDEVTK_LOG_WARN("failed to close thread handle; error code: " << GetLastSystemErrorCode().ToString());
+			CPPDEVTK_ASSERT(0 && "failed to close thread handle");
+		}
 	}
 }
 
 
-}	// namespace util
+}	// namespace detail
+}	// namespace base
 }	// namespace cppdevtk

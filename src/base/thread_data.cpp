@@ -17,47 +17,36 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_SLEEP_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_SLEEP_HPP_INCLUDED_
-
-
-#include "config.hpp"
-#if (CPPDEVTK_PLATFORM_UNIX)
-#	include <unistd.h>
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	include <windows.h>
-#else
-#error "Unsupported platform!!!"
-#endif
+#include <cppdevtk/base/thread_data.hpp>
+#include "thread_local_data_ptr.hpp"
 
 
 namespace cppdevtk {
-namespace util {
+namespace base {
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-typedef unsigned int sec_t;
-typedef useconds_t msec_t;
-typedef useconds_t usec_t;
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-typedef DWORD sec_t;
-typedef DWORD msec_t;
-typedef DWORD usec_t;
-#else
-#error "Unsupported platform!!!"
+namespace detail {
+
+
+}	// namespace detail
+
+
+namespace this_thread {
+namespace detail {
+
+
+#if (!CPPDEVTK_DETAIL_DISABLE_GET_THREAD_LOCAL_DATA_PTR)
+
+/* CPPDEVTK_BASE_API */ ::cppdevtk::base::detail::ThreadData* GetThreadLocalDataPtr() {
+	return pThreadLocalData;
+}
+
 #endif
 
 
-CPPDEVTK_UTIL_API void Sleep(sec_t sec);
-
-CPPDEVTK_UTIL_API void MSleep(msec_t msec);
-
-/// \arg usec_t may be greater than 1000000
-CPPDEVTK_UTIL_API void USleep(usec_t usec);
+}	// namespace detail
+}	// namespace this_thread
 
 
-}	// namespace util
+}	// namespace base
 }	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_UTIL_SLEEP_HPP_INCLUDED_

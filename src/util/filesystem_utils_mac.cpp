@@ -22,7 +22,6 @@
 #	error "This file is Mac OS X specific!!!"
 #endif
 #include <cppdevtk/util/no_such_file_or_directory_exception.hpp>
-#include <cppdevtk/util/sleep.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/tstring_conv.hpp>

@@ -17,22 +17,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/base/future.hpp>
+#include "thread_local_data_ptr.hpp"
+
+#include <cstddef>
 
 
 namespace cppdevtk {
 namespace base {
+namespace this_thread {
+namespace detail {
 
 
-QString FutureException::DoOwnWhat() const {
-	QString ownWhat = LogicException::DoOwnWhat();
-	if (ownWhat.isEmpty()) {
-		ownWhat = Exception::DoOwnWhat();
-	}
-	ownWhat += QString("; error code: %1").arg(errorCode_.ToString());
-	return ownWhat;
-}
+CPPDEVTK_THREAD ::cppdevtk::base::detail::ThreadData* pThreadLocalData = NULL;
 
 
+}	// namespace detail
+}	// namespace this_thread
 }	// namespace base
 }	// namespace cppdevtk

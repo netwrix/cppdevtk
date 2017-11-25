@@ -17,19 +17,16 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/base/future.hpp>
+#include <cppdevtk/base/thread_exception.hpp>
 
 
 namespace cppdevtk {
 namespace base {
 
 
-QString FutureException::DoOwnWhat() const {
-	QString ownWhat = LogicException::DoOwnWhat();
-	if (ownWhat.isEmpty()) {
-		ownWhat = Exception::DoOwnWhat();
-	}
-	ownWhat += QString("; error code: %1").arg(errorCode_.ToString());
+QString ThreadException::DoOwnWhat() const {
+	QString ownWhat = SystemException::DoOwnWhat();
+	ownWhat += QString("; threadId: '%1'").arg(threadId_.ToString());
 	return ownWhat;
 }
 

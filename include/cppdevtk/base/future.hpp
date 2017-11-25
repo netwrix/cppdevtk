@@ -81,6 +81,8 @@ protected:
 	virtual FutureException* DoClone() const;
 #	endif
 	
+	virtual QString DoOwnWhat() const;
+	
 	void SwapOwnData(FutureException& other) CPPDEVTK_NOEXCEPT;
 private:
 	ErrorCode errorCode_;
@@ -100,9 +102,7 @@ CPPDEVTK_BASE_API void swap(FutureException& x, FutureException& y) CPPDEVTK_NOE
 // Inline functions
 
 inline FutureException::FutureException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode):
-		Exception(throwPoint), LogicException(throwPoint, ""), errorCode_(errorCode) {
-	whatArg_ = QString("%1; error code: %2").arg(Exception::DoOwnWhat(), errorCode_.ToString());
-}
+		Exception(throwPoint), LogicException(throwPoint, ""), errorCode_(errorCode) {}
 
 inline FutureException::FutureException(const FutureException& other) CPPDEVTK_NOEXCEPT: Exception(other), LogicException(other),
 		errorCode_(other.errorCode_) {}

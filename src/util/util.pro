@@ -194,7 +194,6 @@ unix {
 		qt_service_unx.cpp \
 		qt_unix_server_socket_unx.cpp \
 		qt_unix_socket_unx.cpp	\
-		sleep_unx.cpp	\
 		socket_pair_unx.cpp	\
 		filesystem_utils_unx.cpp	\
 		get_user_name_unx.cpp	\
@@ -221,7 +220,6 @@ else {
 	win32 {
 		SOURCES += qt_locked_file_win.cpp \
 			qt_service_win.cpp	\
-			sleep_win.cpp	\
 			socket_pair_win.cpp	\
 			filesystem_utils_win.cpp	\
 			get_user_name_win.cpp	\
@@ -259,7 +257,6 @@ HEADERS += \
     ../../include/cppdevtk/util/qt_single_core_application.hpp \
     ../../include/cppdevtk/util/single_core_application.hpp \
     ../../include/cppdevtk/util/socket_pair.hpp \
-    ../../include/cppdevtk/util/sleep.hpp	\
 	../../include/cppdevtk/util/tinyxml2.h	\
 	../../include/cppdevtk/util/json/json.h	\
 	../../include/cppdevtk/util/json/json-forwards.h	\

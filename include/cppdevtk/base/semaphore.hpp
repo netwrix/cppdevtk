@@ -21,20 +21,26 @@
 #define CPPDEVTK_BASE_SEMAPHORE_HPP_INCLUDED_
 
 
+#define CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION ((CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE)	\
+		&& CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+
+
 #include "config.hpp"
 #include "non_copyable.hpp"
 #include "lock_exception.hpp"
 #include "time_utils.hpp"
 
-#if (CPPDEVTK_HAVE_PTHREADS)
+#if (CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 #include <semaphore.h>
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#elif (CPPDEVTK_PLATFORM_WINDOWS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 #include <windows.h>
 #elif (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE)
 #include "mutex.hpp"
 #include "condition_variable.hpp"
-#else
+#elif (!CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 #include <QtCore/QSemaphore>
+#else
+#error "internal error: CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION for Qt based semaphore"
 #endif
 
 #include <ctime>
@@ -51,6 +57,7 @@ namespace base {
 /// \details
 /// - Take ownership with wait (decrement (lock) the semaphore)
 /// - Release ownership with notify (increment (unlock) the semaphore)
+/// \attention Interruption is supported only if C++11 mutex and condition variable are available.
 class CPPDEVTK_BASE_API Semaphore: private NonCopyable {
 public:
 	Semaphore(::std::size_t cnt = 1);
@@ -59,19 +66,27 @@ public:
 	
 	void Notify();	///< \sa POSIX sem_post()
 	
-	void Wait();	///< \sa POSIX sem_wait()
+	/// \attention Interruption point
+	/// \sa POSIX sem_wait()
+	void Wait();
+	
 	bool TryWait();	///< \sa POSIX sem_trywait()
 	
-#	if (!(CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_PLATFORM_MACOSX))	// sem_timedwait() not available on Mac OS X & iOS
+	// sem_timedwait() not available on Mac OS X & iOS
+#	if (!((CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
 	/// \arg relTime Relative timeout, in milliseconds.
+	/// \attention Interruption point
 	/// \sa POSIX sem_timedwait()
 	bool WaitFor(int relTime);
-	bool WaitUntil(::std::time_t absTime);	///< \sa POSIX sem_timedwait()
+	
+	/// \attention Interruption point
+	/// \sa POSIX sem_timedwait()
+	bool WaitUntil(::std::time_t absTime);
 #	endif
 private:
-#	if (CPPDEVTK_HAVE_PTHREADS)
+#	if (CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 	sem_t semaphore_;
-#	elif (CPPDEVTK_PLATFORM_WINDOWS)
+#	elif (CPPDEVTK_PLATFORM_WINDOWS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 	HANDLE semaphore_;
 #	elif (CPPDEVTK_HAVE_CPP11_MUTEX && CPPDEVTK_HAVE_CPP11_CONDITION_VARIABLE)
 	volatile ::std::size_t cnt_;
@@ -88,7 +103,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-#if (!(CPPDEVTK_HAVE_PTHREADS && CPPDEVTK_PLATFORM_MACOSX))
+#if (!((CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
 
 inline bool Semaphore::WaitUntil(::std::time_t absTime) {
 	using ::std::time_t;

@@ -25,6 +25,7 @@
 
 #include "throw_lock_exception.hpp"
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/cassert.hpp>
 
 #include <system_error>
 #include <mutex>
@@ -63,8 +64,8 @@ void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.notify_all();
 }
 
-void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
+void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
+	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	{
 		unique_lock<mutex> stdUniqueLock(uniqueLock.GetMutex()->mutex_, adopt_lock);
@@ -86,8 +87,8 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 	}
 }
 
-cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
+cv_status::cv_status_t ConditionVariable::UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
+	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	::std::cv_status stdCvStatus = ::std::cv_status::timeout;
 	{

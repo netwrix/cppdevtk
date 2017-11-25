@@ -184,7 +184,7 @@ ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT;
 /// - it may fail, in this case it returns a null exception pointer.
 CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT;
 
-CPPDEVTK_BASE_API void RethrowException(ExceptionPtr exceptionPtr);
+CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr);
 
 /// @}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,7 +288,7 @@ inline CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT {
 	return ::std::current_exception();
 }
 
-inline CPPDEVTK_BASE_API void RethrowException(ExceptionPtr exceptionPtr) {
+inline CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr) {
 	::std::rethrow_exception(exceptionPtr);
 }
 

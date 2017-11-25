@@ -19,6 +19,7 @@
 
 #include <cppdevtk/base/exception_propagation.hpp>
 #include <cppdevtk/base/unknown_exception.hpp>
+#include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/logger.hpp>
@@ -40,6 +41,9 @@ ExceptionPtr ThrowableCurrentException() {
 	
 	try {
 		throw;
+	}
+	catch (const Exception& exc) {
+		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.Clone()));
 	}
 	catch (const detail::PolymorphicExceptionBase& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.clone()));
@@ -158,7 +162,7 @@ CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT {
 	}
 }
 
-CPPDEVTK_BASE_API void RethrowException(ExceptionPtr exceptionPtr) {
+CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr) {
 	CPPDEVTK_DBC_CHECK_NON_NULL_ARGUMENT(exceptionPtr);
 	CPPDEVTK_ASSERT(exceptionPtr.pImpl_);
 	

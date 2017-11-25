@@ -26,6 +26,7 @@
 #include <cppdevtk/base/lock_exception.hpp>
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/time_utils.hpp>
 
 #include <cstddef>
@@ -84,8 +85,8 @@ void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 }
 
 
-void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
+void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
+	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	const int kRetCode = pthread_cond_wait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle());
 	if (kRetCode != ESUCCESS) {
@@ -95,8 +96,8 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 	}
 }
 
-cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
+cv_status::cv_status_t ConditionVariable::UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
+	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	const timespec kAbsTime = RelTimeToAbsTime(relTime);
 	const int kRetCode = pthread_cond_timedwait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle(), &kAbsTime);

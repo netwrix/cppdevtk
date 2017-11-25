@@ -17,40 +17,26 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/util/sleep.hpp>
-#if (!CPPDEVTK_PLATFORM_WINDOWS)
-#	error "This file is Windows specific!!!"
-#endif
+#ifndef CPPDEVTK_BASE_THREAD_LOCAL_DATA_PTR_HPP_INCLUDED_
+#define CPPDEVTK_BASE_THREAD_LOCAL_DATA_PTR_HPP_INCLUDED_
+
+
+#include <cppdevtk/base/thread_data.hpp>
 
 
 namespace cppdevtk {
-namespace util {
+namespace base {
+namespace this_thread {
+namespace detail {
 
 
-CPPDEVTK_UTIL_API void Sleep(sec_t sec) {
-	MSleep(sec * 1000);
-}
-
-CPPDEVTK_UTIL_API void MSleep(msec_t msec) {
-	::Sleep(msec);
-}
-
-CPPDEVTK_UTIL_API void USleep(usec_t usec) {
-	if (usec > 500) {
-		::Sleep((usec + 500) / 1000);
-		
-		return;
-	}
-	
-	if (usec > 0) {
-		::Sleep(1);
-		
-		return;
-	}
-	
-	::Sleep(0);
-}
+extern CPPDEVTK_THREAD ::cppdevtk::base::detail::ThreadData* pThreadLocalData;	// Non-NULL only during execution of thread main function!
 
 
-}	// namespace util
+}	// namespace detail
+}	// namespace this_thread
+}	// namespace base
 }	// namespace cppdevtk
+
+
+#endif	// CPPDEVTK_BASE_THREAD_LOCAL_DATA_PTR_HPP_INCLUDED_

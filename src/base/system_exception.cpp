@@ -24,5 +24,15 @@ namespace cppdevtk {
 namespace base {
 
 
+QString SystemException::DoOwnWhat() const {
+	QString ownWhat = RuntimeException::DoOwnWhat();
+	if (ownWhat.isEmpty()) {
+		ownWhat = Exception::DoOwnWhat();
+	}
+	ownWhat += QString("; error code: %1").arg(errorCode_.ToString());
+	return ownWhat;
+}
+
+
 }	// namespace base
 }	// namespace cppdevtk

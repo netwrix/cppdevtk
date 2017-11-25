@@ -48,7 +48,6 @@ HEADERS += \
     qt_single_core_application.hpp \
     single_core_application.hpp \
     socket_pair.hpp \
-    sleep.hpp	\
 	tinyxml2.h	\
 	exception_to_errno.hpp
 

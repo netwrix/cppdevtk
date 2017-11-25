@@ -20,7 +20,7 @@
 #include <cppdevtk/base/semaphore.hpp>
 
 
-#if (CPPDEVTK_HAVE_PTHREADS)
+#if (CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 
 
 #include <cppdevtk/base/cerrno.hpp>
@@ -137,4 +137,4 @@ bool Semaphore::WaitFor(int relTime) {
 }	// namespace cppdevtk
 
 
-#endif	// (CPPDEVTK_HAVE_PTHREADS)
+#endif	// (CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)

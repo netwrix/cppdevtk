@@ -147,6 +147,8 @@ protected:
 	virtual SystemException* DoClone() const;
 #	endif
 	
+	virtual QString DoOwnWhat() const;
+	
 	void SwapOwnData(SystemException& other) CPPDEVTK_NOEXCEPT;
 private:
 	ErrorCode errorCode_;
@@ -165,73 +167,47 @@ CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y) CPPDEVTK_NOE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-#define CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG "%1; error code: %2"
-
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode):
-		Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
-}
+		Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
-		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
-		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory):
-		Exception(throwPoint), RuntimeException(throwPoint,""), errorCode_(errVal, errorCategory) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
-}
+		Exception(throwPoint), RuntimeException(throwPoint,""), errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
-		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errVal, errorCategory) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
-		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errVal, errorCategory) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
 		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
-		errorCode_(errorCode) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
-}
+		errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
-		const char* whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
-		errorCode_(errorCode) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const char* whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, whatArg, cause),
+		errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
 		const QString& whatArg, const Exception& cause): Exception(throwPoint, cause),
-		RuntimeException(throwPoint, "", cause), errorCode_(errorCode) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		RuntimeException(throwPoint, whatArg, cause), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
 		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint,"", cause),
-		errorCode_(errVal, errorCategory) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(Exception::DoOwnWhat(), errorCode_.ToString());
-}
+		errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
-		const char* whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
-		errorCode_(errVal, errorCategory) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const char* whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, whatArg, cause),
+		errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
-		const QString& whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
-		errorCode_(errVal, errorCategory) {
-	whatArg_ = QString(CPPDEVTK_DETAIL_SYSTEM_EXCEPTION_FMT_MSG).arg(whatArg, errorCode_.ToString());
-}
+		const QString& whatArg, const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, whatArg, cause),
+		errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SystemException& other) CPPDEVTK_NOEXCEPT: Exception(other), RuntimeException(other),
 		errorCode_(other.errorCode_) {}

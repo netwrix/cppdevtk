@@ -258,7 +258,11 @@
 
 #define CPPDEVTK_FORCE_DBC_IN_JNI_API 1
 
-/// Thread interruption check, in milliseconds
+
+/// If not needed disable for performance
+#define CPPDEVTK_ENABLE_THREAD_INTERRUPTION 1
+
+/// Thread interruption check, in milliseconds [1 - 999]
 #define CPPDEVTK_CHECK_INTERRUPT_REL_TIME 1
 
 /// @}	// config_features_compile_time

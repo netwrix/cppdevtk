@@ -24,6 +24,7 @@
 
 
 #include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/cassert.hpp>
 
 
 namespace cppdevtk {
@@ -42,14 +43,14 @@ void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.wakeAll();
 }
 
-void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
+void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
+	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	CPPDEVTK_VERIFY(conditionVariable_.wait(&(uniqueLock.GetMutex()->mutex_)));
 }
 
-cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
+cv_status::cv_status_t ConditionVariable::UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
+	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	return conditionVariable_.wait(&(uniqueLock.GetMutex()->mutex_), relTime)
 			? ::cppdevtk::base::cv_status::no_timeout : ::cppdevtk::base::cv_status::timeout;
