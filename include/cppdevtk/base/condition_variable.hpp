@@ -40,7 +40,6 @@
 
 #include <ctime>
 #include <new>
-#include <algorithm>
 #include CPPDEVTK_TR1_HEADER(memory)
 
 
@@ -91,19 +90,23 @@ public:
 	
 	
 	/// \arg relTime Relative timeout, in milliseconds.
-	cv_status::cv_status_t WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime);	///< \attention Interruption point
+	/// \attention Interruption point
+	cv_status::cv_status_t WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime);
 	
 	/// \arg relTime Relative timeout, in milliseconds.
+	/// \attention Interruption point
 	template <class Predicate>
-	bool WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime, Predicate predicate);	///< \attention Interruption point
+	bool WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime, Predicate predicate);
 	
 	
 	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
-	cv_status::cv_status_t WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime);	///< \attention Interruption point
+	/// \attention Interruption point
+	cv_status::cv_status_t WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime);
 	
 	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+	/// \attention Interruption point
 	template <class Predicate>
-	bool WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate);	///< \attention Interruption point
+	bool WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate);
 private:
 	void UninterruptibleWait(UniqueLock<Mutex>& uniqueLock);
 	cv_status::cv_status_t UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime);
@@ -196,43 +199,28 @@ bool ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime, Pred
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	
 	using this_thread::InterruptionPoint;
-	using this_thread::detail::SetInterruptionWaitingConditionVariable;
-	
 	
 	InterruptionPoint();
+#	endif
 	
-	SetInterruptionWaitingConditionVariable(this);
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
-		SetInterruptionWaitingConditionVariable(NULL);
-	}
-	CPPDEVTK_ON_BLOCK_EXIT_END
-	
-	while (!(this_thread::IsInterruptionEnabled() && this_thread::IsInterruptionRequested()) && !predicate()) {
-		if (UninterruptibleWaitFor(uniqueLock, ::std::min(relTime, CPPDEVTK_CHECK_INTERRUPT_REL_TIME)) ==
-				::cppdevtk::base::cv_status::timeout) {
+	while (!predicate()) {
+		if (WaitFor(uniqueLock, relTime) == ::cppdevtk::base::cv_status::timeout) {
+#			if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 			const bool kRetValue = predicate();
 			InterruptionPoint();
 			return kRetValue;
-		}
-	}
-	
-	InterruptionPoint();
-	
-	return true;
-	
-#	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	
-	while (!predicate()) {
-		if (UninterruptibleWaitFor(uniqueLock, relTime) == ::cppdevtk::base::cv_status::timeout) {
+#			else
 			return predicate();
+#			endif
 		}
 	}
 	
-	return true;
-	
+#	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+	InterruptionPoint();
 #	endif
+	
+	return true;
 }
 
 

@@ -27,6 +27,7 @@
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/dbc.hpp>
 #include "thread_local_data_ptr.hpp"
 
 #if (CPPDEVTK_PLATFORM_LINUX)
@@ -40,8 +41,6 @@
 #endif
 #endif
 #include <sched.h>
-
-#include <algorithm>
 
 
 namespace cppdevtk {
@@ -177,6 +176,8 @@ CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */ {
 }
 
 CPPDEVTK_BASE_API void SleepFor(int relTime) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT((relTime >= 0), "relTime must be >= 0");
+	
 	const int kAdjustedRelTime = (relTime >= 0) ? relTime : 0;
 	timespec timeSpecRelTime = {0, 0};
 	timeSpecRelTime.tv_sec = kAdjustedRelTime / 1000;
@@ -198,26 +199,17 @@ CPPDEVTK_BASE_API void SleepFor(int relTime) {
 		return;
 	}
 	
-	const int kStep = ::std::min(kAdjustedRelTime, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
 	int slept = 0;
-	while ((slept + kStep) <= kAdjustedRelTime) {
-		timespec toNanoSleep = {0, (kStep * 1000000)};
-		const int kRetCode = TEMP_FAILURE_RETRY(nanosleep(&toNanoSleep, &toNanoSleep));
-		if (kRetCode != ESUCCESS) {
-			throw CPPDEVTK_THREAD_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "nanosleep() failed");
-		}
-		slept += kStep;
-		InterruptionPoint();
-	}
-	if (slept < kAdjustedRelTime) {
-		CPPDEVTK_ASSERT(kAdjustedRelTime - slept < kStep);
-		timespec toNanoSleep = {0, ((kAdjustedRelTime - slept) * 1000000)};
+	do {
+		timespec toNanoSleep = {0, (CPPDEVTK_CHECK_INTERRUPT_REL_TIME * 1000000)};
 		const int kRetCode = TEMP_FAILURE_RETRY(nanosleep(&toNanoSleep, &toNanoSleep));
 		if (kRetCode != ESUCCESS) {
 			throw CPPDEVTK_THREAD_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "nanosleep() failed");
 		}
 		InterruptionPoint();
+		slept += CPPDEVTK_CHECK_INTERRUPT_REL_TIME;
 	}
+	while ((slept + CPPDEVTK_CHECK_INTERRUPT_REL_TIME) < kAdjustedRelTime);
 	
 #	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	const int kRetCode = TEMP_FAILURE_RETRY(nanosleep(&timeSpecRelTime, &timeSpecRelTime));

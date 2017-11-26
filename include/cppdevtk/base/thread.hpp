@@ -30,7 +30,6 @@
 #include "non_copyable.hpp"
 #include "stringizable.hpp"
 #include "exception_propagation.hpp"
-#include "time_utils.hpp"
 #include "static_assert.hpp"
 
 #include <QtCore/QTextStream>
@@ -47,13 +46,14 @@
 #endif
 
 
+// Please see CPPDEVTK_CHECK_INTERRUPT_REL_TIME performance impact table in cppdevtk/config/platform.hpp
 CPPDEVTK_STATIC_ASSERT((1 <= CPPDEVTK_CHECK_INTERRUPT_REL_TIME) && (CPPDEVTK_CHECK_INTERRUPT_REL_TIME <= 999));
 #if (CPPDEVTK_PLATFORM_UNIX)
 #	if (CPPDEVTK_PLATFORM_LINUX)
 #		if (CPPDEVTK_PLATFORM_ANDROID)
-			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 10), "(severe) performance issue");
+			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 25), "(severe) performance issue");
 #		else
-			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 10), "(severe) performance issue");
+			CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_CHECK_INTERRUPT_REL_TIME >= 25), "(severe) performance issue");
 #		endif
 #	elif (CPPDEVTK_PLATFORM_MACOSX)
 #		if (CPPDEVTK_PLATFORM_IOS)
@@ -146,7 +146,7 @@ public:
 	
 	/// \name Constructor
 	/// \note
-	/// - Constructed Thread object does not represent a thread of execution.
+	/// - Constructed \c Thread object does not represent a thread of execution.
 	/// - It may be tempting to add autoStart but this may lead to the problem that a virtual function, \c Main()
 	/// may be called in child thread before the derived object is fully constructed in parent thread.
 	///@{
@@ -202,12 +202,14 @@ public:
 	/// \remark If child thread exits with exception then \a exceptionPtr is set, otherwise \a retCode is set.
 	bool TryJoin(ExceptionPtr& exceptionPtr, MainFunctionType::result_type& retCode);
 	
+	/// \arg relTime Relative timeout, in milliseconds. If it is <= 0 calls \c TryJoin()
 	/// \attention
 	/// - calls \c ::std::terminate() if fails to propagate child thread exception, if any, in \a exceptionPtr
 	/// - Interruption point (if parent thread is interrupted child thread is not joined).
 	/// \remark If child thread exits with exception then \a exceptionPtr is set, otherwise \a retCode is set.
 	bool TryJoinFor(int relTime, ExceptionPtr& exceptionPtr, MainFunctionType::result_type& retCode);
 	
+	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC. If it is not in the future calls \c TryJoin()
 	/// \attention
 	/// - calls \c ::std::terminate() if fails to propagate child thread exception, if any, in \a exceptionPtr
 	/// - Interruption point (if parent thread is interrupted child thread is not joined).
@@ -308,10 +310,12 @@ CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */;
 
 /// Blocks the calling thread for the relative timeout specified by \a relTime.
 /// \arg relTime In milliseconds.
+/// \pre \a relTime >= 0
 CPPDEVTK_BASE_API void SleepFor(int relTime);
 
 /// Blocks the calling thread for the absolute timeout specified by \a absTime.
-/// \arg absTime In seconds.
+/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+/// \pre \a absTime is not in the past.
 CPPDEVTK_BASE_API void SleepUntil(::std::time_t absTime);
 
 ///@}
@@ -431,16 +435,6 @@ template <typename TChar>
 
 
 namespace this_thread {
-
-
-inline CPPDEVTK_BASE_API void SleepUntil(::std::time_t absTime) {
-	using ::std::time_t;
-	
-	const time_t kCurrTime = GetCurrentTime();
-	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
-	
-	SleepFor(kSeconds * 1000);
-}
 
 
 }	// namespace this_thread

@@ -127,7 +127,10 @@ public:
 };
 
 
+::cppdevtk::base::DefaultMutex gQCOutMtx;
+
 int ThreadMainFunctionHelloWorld() {
+	::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
 	::cppdevtk::base::qcout << "Function Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId() << endl;
 	return EXIT_SUCCESS;
 }
@@ -137,6 +140,7 @@ public:
 	HelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
+		::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
 		::cppdevtk::base::qcout << "Thread Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId() << endl;
 		return EXIT_SUCCESS;
 	}
@@ -149,18 +153,27 @@ public:
 	InterruptibleSleepHelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
-		::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world entering main from thread with id: "
-				<< ::cppdevtk::base::this_thread::GetId() << endl;
+		{
+			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
+			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world entering main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId() << endl;
+		}
 		
 		// parent thread waits 2.5 sec before requesting interrupt; child thread loops max 5 sec
 		for (int cnt = 0; cnt < 50; ++cnt) {
-			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world from thread with id: "
-					<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
+			{
+				::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
+				::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world from thread with id: "
+						<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
+			}
 			::cppdevtk::base::this_thread::SleepFor(100);
 		}
 		
-		::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world leaving main from thread with id: "
-				<< ::cppdevtk::base::this_thread::GetId() << endl;
+		{
+			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
+			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world leaving main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId() << endl;
+		}
 		
 		return EXIT_SUCCESS;
 	}
@@ -171,22 +184,31 @@ public:
 	InterruptibleCondVarHelloWorldThread(): Thread() {}
 protected:
 	virtual int Main() {
-		::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world entering main from thread with id: "
-				<< ::cppdevtk::base::this_thread::GetId() << endl;
+		{
+			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
+			::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world entering main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId() << endl;
+		}
 		
 		// parent thread waits 2.5 sec before requesting interrupt; child thread loops max 5 sec
 		const int kMaxCnt = (5 * 1000) / CPPDEVTK_CHECK_INTERRUPT_REL_TIME;
 		for (int cnt = 0; cnt < kMaxCnt; ++cnt) {
-			::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world from thread with id: "
-					<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
+			{
+				::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
+				::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world from thread with id: "
+						<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
+			}
 			::cppdevtk::base::Mutex mtx;
 			::cppdevtk::base::UniqueLock< ::cppdevtk::base::Mutex> uniqueLock(mtx);
 			::cppdevtk::base::ConditionVariable condVar;
 			condVar.WaitFor(uniqueLock, 100);	// no predicate so CPPDEVTK_CHECK_INTERRUPT_REL_TIME spurious wakeups
 		}
 		
+		{
+		::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
 		::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world leaving main from thread with id: "
 				<< ::cppdevtk::base::this_thread::GetId() << endl;
+		}
 		
 		return EXIT_SUCCESS;
 	}
@@ -808,6 +830,9 @@ bool TestMutex() {
 }
 
 bool TestThread() {
+	using ::cppdevtk::base::DefaultLockGuard;
+	
+	
 	qcout << "hardwareConcurrency: " << Thread::GetHardwareConcurrency() << endl;
 	
 	int retCode = EXIT_FAILURE;
@@ -827,9 +852,15 @@ bool TestThread() {
 	
 	InterruptibleSleepHelloWorldThread interruptibleSleepHelloWorldThread;
 	interruptibleSleepHelloWorldThread.Start();
-	qcout << "letting child interruptibleSleepHelloWorldThread to work a little..." << endl;
+	{
+		DefaultLockGuard lockGuard(gQCOutMtx);
+		qcout << "letting child interruptibleSleepHelloWorldThread to work a little..." << endl;
+	}
 	::cppdevtk::base::this_thread::SleepFor(2500);
-	qcout << "done waiting for child interruptibleSleepHelloWorldThread" << endl;
+	{
+		DefaultLockGuard lockGuard(gQCOutMtx);
+		qcout << "done waiting for child interruptibleSleepHelloWorldThread" << endl;
+	}
 	interruptibleSleepHelloWorldThread.RequestInterruption();
 	bool caught = false;
 	try {
@@ -852,9 +883,15 @@ bool TestThread() {
 	
 	InterruptibleCondVarHelloWorldThread interruptibleCondVarHelloWorldThread;
 	interruptibleCondVarHelloWorldThread.Start();
-	qcout << "letting child interruptibleCondVarHelloWorldThread to work a little..." << endl;
+	{
+		DefaultLockGuard lockGuard(gQCOutMtx);
+		qcout << "letting child interruptibleCondVarHelloWorldThread to work a little..." << endl;
+	}
 	::cppdevtk::base::this_thread::SleepFor(2500);
-	qcout << "done waiting for child interruptibleCondVarHelloWorldThread" << endl;
+	{
+		DefaultLockGuard lockGuard(gQCOutMtx);
+		qcout << "done waiting for child interruptibleCondVarHelloWorldThread" << endl;
+	}
 	interruptibleCondVarHelloWorldThread.RequestInterruption();
 	caught = false;
 	try {

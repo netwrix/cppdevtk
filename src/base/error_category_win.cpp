@@ -232,7 +232,7 @@ QString SystemErrorCategory::GetMessage(int errVal, const QLocale& locale) const
 		if ((lastError == ERROR_RESOURCE_LANG_NOT_FOUND)
 				|| (lastError == ERROR_MUI_FILE_NOT_FOUND)
 				|| (lastError == ERROR_MUI_FILE_NOT_LOADED)) {
-			CPPDEVTK_LOG_WARN("FormatMessage() failed; retrying with langId 0"
+			CPPDEVTK_LOG_INFO("FormatMessage() failed; retrying with langId 0"
 					<< "; errVal: " << errVal << "; locale.name(): " << locale.name() << "; lastError: " << lastError);
 			
 			if (pTSysErrMsg != NULL) {

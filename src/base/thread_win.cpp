@@ -26,12 +26,11 @@
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/dbc.hpp>
 #include "thread_local_data_ptr.hpp"
 
 #include <windows.h>
 #include <process.h>
-
-#include <algorithm>
 
 
 namespace cppdevtk {
@@ -104,6 +103,8 @@ CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */ {
 }
 
 CPPDEVTK_BASE_API void SleepFor(int relTime) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT((relTime >= 0), "relTime must be >= 0");
+	
 	const DWORD kAdjustedRelTime = (relTime >= 0) ? relTime : 0;
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
@@ -119,18 +120,13 @@ CPPDEVTK_BASE_API void SleepFor(int relTime) {
 		return;
 	}
 	
-	const DWORD kStep = ::std::min(kAdjustedRelTime, (DWORD)CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
 	DWORD slept = 0;
-	while ((slept + kStep) <= kAdjustedRelTime) {
-		::Sleep(kStep);
-		slept += kStep;
+	do {
+		::Sleep(CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
 		InterruptionPoint();
+		slept += CPPDEVTK_CHECK_INTERRUPT_REL_TIME;
 	}
-	if (slept < kAdjustedRelTime) {
-		CPPDEVTK_ASSERT(kAdjustedRelTime - slept < kStep);
-		::Sleep(kAdjustedRelTime - slept);
-		InterruptionPoint();
-	}
+	while ((slept + CPPDEVTK_CHECK_INTERRUPT_REL_TIME) < kAdjustedRelTime);
 	
 #	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	::Sleep(kAdjustedRelTime);

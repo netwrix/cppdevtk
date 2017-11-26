@@ -79,6 +79,10 @@ bool Semaphore::TryWait() {
 }
 
 bool Semaphore::WaitFor(int relTime) {
+	if (relTime <= 0) {
+		return TryWait();
+	}
+	
 	const DWORD kRetCode = WaitForSingleObject(semaphore_, relTime);
 	switch (kRetCode) {
 		case WAIT_OBJECT_0:

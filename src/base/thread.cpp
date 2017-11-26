@@ -24,10 +24,12 @@
 #include <cppdevtk/base/mutex.hpp>
 #include <cppdevtk/base/condition_variable.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/time_utils.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/unused.hpp>
 #include "thread_local_data_ptr.hpp"
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
@@ -78,6 +80,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 			}
 			catch (const ThreadInterruptedException& exc) {
 				CPPDEVTK_LOG_DEBUG("thread destructor: child thread interrupted: " << exc.What());
+				SuppressUnusedWarning(exc);
 			}
 			catch (const exception& exc) {
 				if (IsJoinable()) {
@@ -87,6 +90,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 				else {
 					CPPDEVTK_LOG_INFO("thread destructor: join threw exception: " << Exception::GetDetailedInfo(exc));
 				}
+				SuppressUnusedWarning(exc);
 			}
 			catch (...) {
 				if (IsJoinable()) {
@@ -106,6 +110,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 	}
 	catch (const exception& exc) {
 		CPPDEVTK_LOG_FATAL("thread destructor: caught exception: " << Exception::GetDetailedInfo(exc));
+		SuppressUnusedWarning(exc);
 		terminate();
 	}
 	catch (...) {
@@ -137,7 +142,22 @@ void Thread::Start() {
 	DisableInterruptionGuard disableInterruptionGuard;
 #	endif
 	CPPDEVTK_LOG_TRACE("waiting for child thread to start...");
-	pTmpData->GetStartInfoRef().WaitToStart();	// FIXME: problems if throws. (retry and) terminate?
+	try {
+		pTmpData->GetStartInfoRef().WaitToStart();
+	}
+	catch (const exception& exc) {
+		CPPDEVTK_LOG_WARN("failed to wait for child thread to start; retrying... exc: " << Exception::GetDetailedInfo(exc));
+		try {	// last chance...
+			this_thread::SleepFor(CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
+			pTmpData->GetStartInfoRef().WaitToStart();
+		}
+		catch (const exception& exc1) {
+			CPPDEVTK_LOG_FATAL("failed to wait for child thread to start; exc1: " << Exception::GetDetailedInfo(exc));
+			SuppressUnusedWarning(exc1);
+			terminate();
+		}
+		SuppressUnusedWarning(exc);
+	}
 	CPPDEVTK_LOG_TRACE("child thread started");
 	
 	if (kAttributes_.GetDetached()) {
@@ -218,6 +238,10 @@ bool Thread::TryJoinFor(int relTime, ExceptionPtr& exceptionPtr, MainFunctionTyp
 	InterruptionPoint();
 #	endif
 	
+	if (relTime <= 0) {
+		return TryJoin(exceptionPtr, retCode);
+	}
+	
 	CPPDEVTK_ASSERT(pData_);
 	DataPtr pTmpData = pData_;
 	
@@ -238,6 +262,9 @@ bool Thread::TryJoinFor(int relTime, ExceptionPtr& exceptionPtr, MainFunctionTyp
 }
 
 bool Thread::TryJoinUntil(::std::time_t absTime, ExceptionPtr& exceptionPtr, MainFunctionType::result_type& retCode) {
+	using ::std::time_t;
+	
+	
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(IsJoinable(), "thread must be joinable");
 	
 	if (GetId() == this_thread::GetId()) {
@@ -248,23 +275,9 @@ bool Thread::TryJoinUntil(::std::time_t absTime, ExceptionPtr& exceptionPtr, Mai
 	InterruptionPoint();
 #	endif
 	
-	CPPDEVTK_ASSERT(pData_);
-	DataPtr pTmpData = pData_;
-	
-	if (!pTmpData->GetJoinedOrDetachedInfoRef().WaitToJoinUntil(absTime)) {
-		return false;
-	}
-	
-	pData_.reset();
-	CPPDEVTK_ASSERT(!IsJoinable());
-	
-	exceptionPtr = GetTryJoinExceptionPtr(pTmpData);
-	
-	if (!exceptionPtr) {
-		retCode = pTmpData->GetRetCode();
-	}
-	
-	return true;
+	const time_t kCurrTime = GetCurrentTime();
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	return (kSeconds <= 0) ? TryJoin(exceptionPtr, retCode) : TryJoinFor(kSeconds, exceptionPtr, retCode);
 }
 
 void Thread::Detach() {
@@ -375,10 +388,12 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 #			if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 			catch (const ThreadInterruptedException& exc) {
 				CPPDEVTK_LOG_INFO("detached thread interrupted: " << exc.What());
+				SuppressUnusedWarning(exc);
 			}
 #			endif
 			catch (const exception& exc) {
 				CPPDEVTK_LOG_FATAL("detached thread threw exception: " << Exception::GetDetailedInfo(exc));
+				SuppressUnusedWarning(exc);
 				terminate();
 			}
 			catch (...) {
@@ -400,6 +415,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 }
 catch (const exception& exc) {
 	CPPDEVTK_LOG_FATAL("thread Run() C routine threw: " << Exception::GetDetailedInfo(exc));
+	SuppressUnusedWarning(exc);
 	terminate();
 	return 0;
 }
@@ -417,6 +433,17 @@ CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, Thread::Id threadId) 
 
 namespace this_thread {
 
+
+CPPDEVTK_BASE_API void SleepUntil(::std::time_t absTime) {
+	using ::std::time_t;
+	
+	const time_t kCurrTime = GetCurrentTime();
+	const time_t kSeconds = ::std::difftime(absTime, kCurrTime);
+	
+	CPPDEVTK_DBC_CHECK_ARGUMENT((kSeconds >= 0), "absTime is in the past");
+	
+	SleepFor(kSeconds * 1000);
+}
 
 #if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 
@@ -485,7 +512,7 @@ namespace detail {
 }	// namespace this_thread
 
 
-// NOTE: do not inline: nativeId_ and pThread_ are not exported!
+// NOTE: do not inline: nativeId_ and are not exported!
 
 Thread::Id::Id() CPPDEVTK_NOEXCEPT: nativeId_(0) {}
 

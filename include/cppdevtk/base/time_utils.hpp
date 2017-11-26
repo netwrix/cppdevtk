@@ -35,6 +35,7 @@ CPPDEVTK_BASE_API ::std::time_t GetCurrentTime();
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 
+/// \arg relTime Relative time, in milliseconds.
 CPPDEVTK_BASE_API timespec RelTimeToAbsTime(int relTime);
 
 #endif

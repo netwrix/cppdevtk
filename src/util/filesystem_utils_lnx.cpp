@@ -144,7 +144,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path) {
 		char buf[(CPPDEVTK_NAME_MAX + 1) + CPPDEVTK_PATH_MAX + 32 + 64] = {0};
 		
 		if (getmntent_r(pMTabFile, &mntEntry, buf, sizeof(buf)) == NULL) {
-			CPPDEVTK_LOG_WARN("getmntent_r() returned NULL; assuming end of mntent");
+			CPPDEVTK_LOG_DEBUG("getmntent_r() returned NULL; assuming end of mntent");
 			break;
 		}
 		CPPDEVTK_ASSERT(mntEntry.mnt_dir != NULL);
@@ -212,7 +212,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& device
 		char buf[(CPPDEVTK_NAME_MAX + 1) + CPPDEVTK_PATH_MAX + 32 + 64] = {0};
 		
 		if (getmntent_r(pMTabFile, &mntEntry, buf, sizeof(buf)) == NULL) {
-			CPPDEVTK_LOG_WARN("getmntent_r() returned NULL; assuming end of mntent");
+			CPPDEVTK_LOG_DEBUG("getmntent_r() returned NULL; assuming end of mntent");
 			break;
 		}
 		CPPDEVTK_ASSERT(mntEntry.mnt_fsname != NULL);
@@ -258,7 +258,7 @@ CPPDEVTK_UTIL_API QString GetDeviceName(DeviceType deviceType, const QString& se
 		pLibUDev.reset(new LibUDev1());
 	}
 	catch (const exception& exc) {
-		CPPDEVTK_LOG_WARN("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_LOG_INFO("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
 		pLibUDev.reset(new LibUDev0());
 	}
 	CPPDEVTK_ASSERT(pLibUDev.get() != NULL);
@@ -454,7 +454,7 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 		char buf[(CPPDEVTK_NAME_MAX + 1) + CPPDEVTK_PATH_MAX + 32 + 64] = {0};
 		
 		if (getmntent_r(pMTabFile, &mntEntry, buf, sizeof(buf)) == NULL) {
-			CPPDEVTK_LOG_WARN("getmntent_r() returned NULL; assuming end of mntent");
+			CPPDEVTK_LOG_DEBUG("getmntent_r() returned NULL; assuming end of mntent");
 			break;
 		}
 		CPPDEVTK_ASSERT(mntEntry.mnt_fsname != NULL);
@@ -502,7 +502,7 @@ void PrintUDevDevice(const udev_device& udevDevice) {
 		pLibUDev.reset(new LibUDev1());
 	}
 	catch (const exception& exc) {
-		CPPDEVTK_LOG_WARN("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_LOG_INFO("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
 		pLibUDev.reset(new LibUDev0());
 	}
 	CPPDEVTK_ASSERT(pLibUDev.get() != NULL);
@@ -581,7 +581,7 @@ void PrintUDevListEntry(const udev_list_entry& udevListEntry) {
 		pLibUDev.reset(new LibUDev1());
 	}
 	catch (const exception& exc) {
-		CPPDEVTK_LOG_WARN("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_LOG_INFO("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
 		pLibUDev.reset(new LibUDev0());
 	}
 	CPPDEVTK_ASSERT(pLibUDev.get() != NULL);

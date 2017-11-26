@@ -85,6 +85,10 @@ bool Semaphore::WaitFor(int relTime) {
 	this_thread::InterruptionPoint();
 #	endif
 	
+	if (relTime <= 0) {
+		return TryWait();
+	}
+	
 	UniqueLock<Mutex> uniqueLock(mutex_);
 	
 #	if (CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)

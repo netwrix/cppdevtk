@@ -45,6 +45,10 @@ bool Semaphore::TryWait() {
 }
 
 bool Semaphore::WaitFor(int relTime) {
+	if (relTime <= 0) {
+		return TryWait();
+	}
+	
 	return semaphore_.tryAcquire(1, relTime);
 }
 

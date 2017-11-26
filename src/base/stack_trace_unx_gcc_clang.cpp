@@ -57,7 +57,7 @@ bool StackTrace::DoCapture() {
 		return false;
 	}
 	if ((StackFrameReturnAddresses::size_type)kNumStackFrameReturnAddresses == stackFrameReturnAddresses.size()) {
-		CPPDEVTK_LOG_WARN("backtrace may have been truncated");
+		CPPDEVTK_LOG_INFO("backtrace may have been truncated");
 	}
 	stackFrameReturnAddresses.resize(kNumStackFrameReturnAddresses);
 	

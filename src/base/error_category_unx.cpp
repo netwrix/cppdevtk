@@ -72,7 +72,7 @@ QString GenericErrorCategory::GetMessage(int errVal, const QLocale& locale) cons
 	
 	if (!detail::DoGetMessage(errVal, locale, message)) {
 		if (locale != QLocale::c()) {
-			CPPDEVTK_LOG_WARN("DoGetMessage() failed; retrying with QLocale::c()"
+			CPPDEVTK_LOG_INFO("DoGetMessage() failed; retrying with QLocale::c()"
 				<< "; errVal: " << errVal << "; locale.name(): " << locale.name());
 			if (!detail::DoGetMessage(errVal, QLocale::c(), message)) {
 				CPPDEVTK_LOG_ERROR("DoGetMessage() failed with QLocale::c(); give up..."
@@ -210,7 +210,7 @@ bool DoGetMessage(int errVal, const QLocale& locale, QString& message) {
 	
 	const char* pOldLocale = setlocale(LC_MESSAGES, CPPDEVTK_Q2U(locale.name()).c_str());
 	if (pOldLocale == NULL) {
-		CPPDEVTK_LOG_WARN("setlocale() failed for: " << locale.name());
+		CPPDEVTK_LOG_INFO("setlocale() failed for: " << locale.name());
 	}
 	
 	char buf[1024] = { '\0' };
@@ -229,7 +229,7 @@ bool DoGetMessage(int errVal, const QLocale& locale, QString& message) {
 		
 #		if 0
 		if (kErrNo == EINVAL) {
-			CPPDEVTK_LOG_WARN("strerror_r() failed; it returned: " << kRetCode << "; errno: " << kErrNo << " EINVAL");
+			CPPDEVTK_LOG_INFO("strerror_r() failed; it returned: " << kRetCode << "; errno: " << kErrNo << " EINVAL");
 			
 			message = QString("Unknown error %1").arg(errVal);
 			retValue = true;
@@ -262,7 +262,7 @@ bool DoGetMessage(int errVal, const QLocale& locale, QString& message) {
 	
 	if (pOldLocale != NULL) {
 		if (setlocale(LC_MESSAGES, pOldLocale) == NULL) {
-			CPPDEVTK_LOG_WARN("setlocale() failed; failed to restore locale: " << pOldLocale);
+			CPPDEVTK_LOG_INFO("setlocale() failed; failed to restore locale: " << pOldLocale);
 		}
 	}
 	

@@ -27,7 +27,6 @@
 #include "thread_local_data_ptr.hpp"
 
 #include <cstddef>
-#include <algorithm>
 
 
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
@@ -73,12 +72,25 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 	
 	InterruptionPoint();
 	
-	const cv_status::cv_status_t kRetValue = UninterruptibleWaitFor(uniqueLock,
-			::std::min(relTime, CPPDEVTK_CHECK_INTERRUPT_REL_TIME));
+	cv_status::cv_status_t retValue = base::cv_status::timeout;
+	if (relTime <= 0) {
+		retValue = UninterruptibleWaitFor(uniqueLock, relTime);
+		InterruptionPoint();
+	}
+	else {
+		int waited = 0;
+		do {
+			retValue = UninterruptibleWaitFor(uniqueLock, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
+			InterruptionPoint();
+			if (retValue == base::cv_status::no_timeout) {
+				break;
+			}
+			waited += CPPDEVTK_CHECK_INTERRUPT_REL_TIME;
+		}
+		while ((waited + CPPDEVTK_CHECK_INTERRUPT_REL_TIME) < relTime);
+	}
 	
-	InterruptionPoint();
-	
-	return kRetValue;
+	return retValue;
 	
 #	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	return UninterruptibleWaitFor(uniqueLock, relTime);
