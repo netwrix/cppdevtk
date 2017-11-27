@@ -612,16 +612,16 @@ else {
 				error("Qt must set _MSC_VER in QMAKE_COMPILER_DEFINES")
 			}
 			if(isEqual(CPPDEVTK_MSC_VER, "1700")|greaterThan(CPPDEVTK_MSC_VER, 1700)):contains(DEFINES, _USING_V110_SDK71_) {
-				INCLUDEPATH = "%ProgramFiles(x86)%/Microsoft SDKs/Windows/7.1A/Include" $${INCLUDEPATH}
+				INCLUDEPATH = "C:/Program Files (x86)/Microsoft SDKs/Windows/7.1A/Include" $${INCLUDEPATH}
 				isEqual(QMAKE_TARGET.arch, "x86_64") {
 					QMAKE_LFLAGS_WINDOWS *= /SUBSYSTEM:WINDOWS,5.02
 					QMAKE_LFLAGS_CONSOLE *= /SUBSYSTEM:CONSOLE,5.02
-					LIBS = -L"%ProgramFiles(x86)%/Microsoft SDKs/Windows/7.1A/Lib/x64" $${LIBS}
+					LIBS = -L"C:/Program Files (x86)/Microsoft SDKs/Windows/7.1A/Lib/x64" $${LIBS}
 				}
 				else {
 					QMAKE_LFLAGS_WINDOWS *= /SUBSYSTEM:WINDOWS,5.01
 					QMAKE_LFLAGS_CONSOLE *= /SUBSYSTEM:CONSOLE,5.01
-					LIBS = -L"%ProgramFiles(x86)%/Microsoft SDKs/Windows/7.1A/Lib" $${LIBS}
+					LIBS = -L"C:/Program Files (x86)/Microsoft SDKs/Windows/7.1A/Lib" $${LIBS}
 				}
 			}
 		}
