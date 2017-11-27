@@ -358,7 +358,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	
 	pThreadLocalData = pData.get();
 #	if (BOOST_VERSION >= 105000)
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((void)) {
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
 		pThreadLocalData = NULL;
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
