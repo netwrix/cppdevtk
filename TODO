@@ -1,6 +1,6 @@
 High priority:
 
-- thread, thread pool (executor, futures?)
+- thread pool (executor, futures?)
 - Our own minimal thread-safe logging implementation (currently we are using qDebug() family).
 
 
