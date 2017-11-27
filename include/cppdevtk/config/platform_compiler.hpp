@@ -46,6 +46,7 @@
 /// - CPPDEVTK_HAVE_EXECINFO_H
 /// - CPPDEVTK_HAVE_BACKTRACE
 /// - CPPDEVTK_HAVE_BACKTRACE_SYMBOLS
+/// - CPPDEVTK_HAVE_THREAD_STORAGE
 /// - CPPDEVTK_ENABLE_TMPL_EXPL_INST
 /// - CPPDEVTK_ENABLE_TSTRING_EXPL_INST
 /// - CPPDEVTK_ENABLE_TSTREAMBUF_EXPL_INST
@@ -130,6 +131,9 @@
 #endif
 #ifndef CPPDEVTK_HAVE_BACKTRACE_SYMBOLS
 #	error "Please define CPPDEVTK_HAVE_BACKTRACE_SYMBOLS properly for current platform/compiler!!!"
+#endif
+#ifndef CPPDEVTK_HAVE_THREAD_STORAGE
+#	error "Please define CPPDEVTK_HAVE_THREAD_STORAGE properly for current platform/compiler!!!"
 #endif
 #ifndef CPPDEVTK_ENABLE_TMPL_EXPL_INST
 #	error "Please define CPPDEVTK_ENABLE_TMPL_EXPL_INST properly for current platform/compiler!!!"

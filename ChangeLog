@@ -1,9 +1,9 @@
 Version 1.0.4.1:
-- Release date:
+- Release date: 27 Nov 2017
 - New features:
 	- added CPPDEVTK_NOEXCEPT
 	- added exception propagation
-	- added thread
+	- added thread (not available on iOS < 9.0 and Mac OS X < 10.7 because __thread is not supported)
 	- added interruption support to condition variable
 	- added interruption support to semaphore
 - Improvements:
@@ -14,6 +14,7 @@ Version 1.0.4.1:
 	- uniform error reporting/handling in synchronization primitives
 	- added time utils
 	- removed sleep.hpp (replaced by this_thread sleep API)
+	- enabled console test apps on Android and iOS
 - Fixed bugs:
 	- fixed internal pthread_mutex_timedlock(): absTime instead of relTime
 

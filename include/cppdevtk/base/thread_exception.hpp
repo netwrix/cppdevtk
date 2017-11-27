@@ -58,7 +58,9 @@ namespace base {
 /// \remark Not in C++ 11 std.
 class CPPDEVTK_BASE_API ThreadException: public SystemException {
 public:
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	typedef Thread::Id ThreadId;
+#	endif
 	
 	
 	ThreadException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode);
@@ -76,7 +78,9 @@ public:
 	
 	void Swap(ThreadException& other) CPPDEVTK_NOEXCEPT;
 	
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	ThreadId GetThreadId() const;
+#	endif
 protected:
 	virtual void DoThrow() const;
 	
@@ -90,7 +94,9 @@ protected:
 	
 	void SwapOwnData(ThreadException& other) CPPDEVTK_NOEXCEPT;
 private:
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	ThreadId threadId_;
+#	endif
 };
 
 
@@ -164,11 +170,18 @@ CPPDEVTK_BASE_API void swap(ThreadInterruptedException& x, ThreadInterruptedExce
 // Inline functions
 
 inline ThreadException::ThreadException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode): Exception(throwPoint),
-		RuntimeException(throwPoint, ""), SystemException(throwPoint, errorCode), threadId_(this_thread::GetId()) {}
+		RuntimeException(throwPoint, ""), SystemException(throwPoint, errorCode)
+#		if (CPPDEVTK_HAVE_THREAD_STORAGE)
+		, threadId_(this_thread::GetId())
+#		endif
+		{}
 
 inline ThreadException::ThreadException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const QString& whatArg):
-		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint, errorCode, whatArg),
-		threadId_(this_thread::GetId()) {}
+		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint, errorCode, whatArg)
+#		if (CPPDEVTK_HAVE_THREAD_STORAGE)
+		, threadId_(this_thread::GetId())
+#		endif
+		{}
 
 inline ThreadException::~ThreadException() CPPDEVTK_NOEXCEPT {}
 
@@ -191,9 +204,13 @@ inline void ThreadException::Swap(ThreadException& other) CPPDEVTK_NOEXCEPT {
 	}
 }
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 inline ThreadException::ThreadId ThreadException::GetThreadId() const {
 	return threadId_;
 }
+
+#endif
 
 inline void ThreadException::DoThrow() const {
 	throw *this;
@@ -210,7 +227,9 @@ inline ThreadException* ThreadException::DoClone() const {
 inline void ThreadException::SwapOwnData(ThreadException& other) CPPDEVTK_NOEXCEPT {
 	using ::std::swap;
 	
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	swap(threadId_, other.threadId_);
+#	endif
 }
 
 

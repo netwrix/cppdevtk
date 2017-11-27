@@ -162,8 +162,10 @@ namespace detail {
 
 #define CPPDEVTK_DETAIL_DISABLE_GET_THREAD_LOCAL_DATA_PTR 1
 #if (!CPPDEVTK_DETAIL_DISABLE_GET_THREAD_LOCAL_DATA_PTR)
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 // Returned pointer is non-NULL only during execution of thread main function and must not be freed!
 /* CPPDEVTK_BASE_API */ const ::cppdevtk::base::detail::ThreadData* GetThreadLocalDataPtr();
+#endif
 #endif
 
 
@@ -300,7 +302,7 @@ inline void ThreadData::InterruptionInfo::InterruptionRequest() {
 #endif
 
 
-inline ThreadData::ThreadData(const MainFunctionType& mainFunction, bool detached): enable_shared_from_this(), NonCopyable(),
+inline ThreadData::ThreadData(const MainFunctionType& mainFunction, bool detached): CPPDEVTK_TR1_NS::enable_shared_from_this<ThreadData>(), NonCopyable(),
 		nativeHandle_(0),
 #		if (CPPDEVTK_PLATFORM_WINDOWS)
 		nativeId_(0),

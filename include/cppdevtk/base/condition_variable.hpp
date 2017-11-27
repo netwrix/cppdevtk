@@ -108,8 +108,8 @@ public:
 	template <class Predicate>
 	bool WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate);
 private:
-	void UninterruptibleWait(UniqueLock<Mutex>& uniqueLock);
-	cv_status::cv_status_t UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime);
+	void DoWait(UniqueLock<Mutex>& uniqueLock);
+	cv_status::cv_status_t DoWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime);
 	
 	
 #	if (CPPDEVTK_HAVE_PTHREADS)
@@ -168,29 +168,15 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock, Predicate predicate)
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
 	
-	using this_thread::InterruptionPoint;
-	using this_thread::detail::SetInterruptionWaitingConditionVariable;
-	
-	
-	InterruptionPoint();
-	
-	SetInterruptionWaitingConditionVariable(this);
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
-		SetInterruptionWaitingConditionVariable(NULL);
-	}
-	CPPDEVTK_ON_BLOCK_EXIT_END
-	
-	while (!(this_thread::IsInterruptionEnabled() && this_thread::IsInterruptionRequested()) && !predicate()) {
-		UninterruptibleWaitFor(uniqueLock, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
-	}
-	
-	InterruptionPoint();
-	
-#	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	while (!predicate()) {
 		Wait(uniqueLock);
 	}
+	
+#	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+	this_thread::InterruptionPoint();
 #	endif
 }
 
@@ -292,6 +278,10 @@ void ConditionVariableAny::Wait(Lock& lock) {
 	}
 	
 	lock.Lock();
+	
+#	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
 }
 
 template <class Lock, class Predicate>
@@ -351,6 +341,10 @@ cv_status::cv_status_t ConditionVariableAny::WaitFor(Lock& lock, int relTime) {
 	}
 	
 	lock.Lock();
+	
+#	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+	this_thread::InterruptionPoint();
+#	endif
 }
 
 template <class Lock, class Predicate>

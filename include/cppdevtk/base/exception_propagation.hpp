@@ -138,7 +138,7 @@ class CPPDEVTK_BASE_API ExceptionPtr {
 private:
 	friend CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT;
 	friend ExceptionPtr detail::ThrowableCurrentException();
-	friend CPPDEVTK_BASE_API void RethrowException(ExceptionPtr exceptionPtr);
+	friend CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr);
 	
 	typedef CPPDEVTK_TR1_NS::shared_ptr<const detail::PolymorphicExceptionBase> ImplPtrType;
 public:

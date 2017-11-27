@@ -43,13 +43,13 @@ void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.wakeAll();
 }
 
-void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
+void ConditionVariable::DoWait(UniqueLock<Mutex>& uniqueLock) {
 	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	CPPDEVTK_VERIFY(conditionVariable_.wait(&(uniqueLock.GetMutex()->mutex_)));
 }
 
-cv_status::cv_status_t ConditionVariable::UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
+cv_status::cv_status_t ConditionVariable::DoWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
 	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	return conditionVariable_.wait(&(uniqueLock.GetMutex()->mutex_), relTime)

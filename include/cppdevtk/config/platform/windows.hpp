@@ -130,6 +130,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Platform Features.
 #define CPPDEVTK_HAVE_PTHREADS 0
+#define CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE 0
 #define CPPDEVTK_HAVE_UNISTD_H 0
 #define CPPDEVTK_HAVE_SIGACTION 0
 

@@ -36,11 +36,13 @@ namespace detail {
 
 
 #if (!CPPDEVTK_DETAIL_DISABLE_GET_THREAD_LOCAL_DATA_PTR)
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 /* CPPDEVTK_BASE_API */ ::cppdevtk::base::detail::ThreadData* GetThreadLocalDataPtr() {
 	return pThreadLocalData;
 }
 
+#endif
 #endif
 
 

@@ -202,6 +202,7 @@
 /// \defgroup config_platform_features Platform Features
 /// Define to 1 if feature is available, 0 otherwise.
 /// - CPPDEVTK_HAVE_PTHREADS
+/// - CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE
 /// - CPPDEVTK_HAVE_UNISTD_H
 /// - CPPDEVTK_HAVE_SIGACTION
 /// \attention Must be implemented by each \ref config_platform_supported_platforms.
@@ -288,6 +289,12 @@
 #endif
 
 
+#ifndef CPPDEVTK_HAVE_PTHREADS
+#	error "Please define CPPDEVTK_HAVE_PTHREADS properly for current platform!!!"
+#endif
+#ifndef CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE
+#	error "Please define CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE properly for current platform!!!"
+#endif
 #ifndef CPPDEVTK_HAVE_UNISTD_H
 #	error "Please define CPPDEVTK_HAVE_UNISTD_H properly for current platform!!!"
 #endif

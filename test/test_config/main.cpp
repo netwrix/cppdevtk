@@ -25,11 +25,22 @@
 #include <cppdevtk/base/qiostream.hpp>
 
 #include <QtCore/QString>
+#include <QtCore/QtDebug>
 
 #include <cstdlib>
 
 
+#if (!CPPDEVTK_PLATFORM_ANDROID)
+#define CPPDEVTK_COUT ::cppdevtk::base::qcout
+#define CPPDEVTK_CERR ::cppdevtk::base::qcerr
+#else
+#define CPPDEVTK_COUT qDebug()
+#define CPPDEVTK_CERR qInfo()
+#endif
+
+
 using ::cppdevtk::base::qcerr;
+using ::cppdevtk::base::qcout;
 using ::cppdevtk::base::Exception;
 using ::std::exception;
 
@@ -39,6 +50,10 @@ int main(int argc, char* argv[]) try {
 	
 	::cppdevtk::util::CoreApplication coreApplication(argc, argv);
 	
+#	if 1
+	CPPDEVTK_COUT << "done!" << endl;
+	return EXIT_SUCCESS;
+#	else
 	try {
 		return coreApplication.exec();
 	}
@@ -46,30 +61,31 @@ int main(int argc, char* argv[]) try {
 		const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
 				exc.what(), Exception::GetDetailedInfo(exc));
 		CPPDEVTK_LOG_ERROR(kErrMsg);
-		qcerr << "Error: " << kErrMsg << endl;
+		CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 		
 		return EXIT_FAILURE;
 	}
 	catch (...) {
 		const QString kErrMsg("caught unknown exception!!!");
 		CPPDEVTK_LOG_ERROR(kErrMsg);
-		qcerr << "Error: " << kErrMsg << endl;
+		CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 		
 		return EXIT_FAILURE;
 	}
+#	endif
 }
 catch (const exception& exc) {
 	const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
 			exc.what(), Exception::GetDetailedInfo(exc));
 	CPPDEVTK_LOG_FATAL(kErrMsg);
-	qcerr << "Fatal Error: " << kErrMsg << endl;
+	CPPDEVTK_CERR << "Fatal Error: " << kErrMsg << endl;
 	
 	return EXIT_FAILURE;
 }
 catch (...) {
 	const QString kErrMsg("caught unknown exception!!!");
 	CPPDEVTK_LOG_FATAL(kErrMsg);
-	qcerr << "Fatal Error: " << kErrMsg << endl;
+	CPPDEVTK_CERR << "Fatal Error: " << kErrMsg << endl;
 	
 	return EXIT_FAILURE;
 }

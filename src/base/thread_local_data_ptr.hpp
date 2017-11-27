@@ -30,7 +30,9 @@ namespace this_thread {
 namespace detail {
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 extern CPPDEVTK_THREAD ::cppdevtk::base::detail::ThreadData* pThreadLocalData;	// Non-NULL only during execution of thread main function!
+#endif
 
 
 }	// namespace detail

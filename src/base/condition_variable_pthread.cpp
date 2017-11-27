@@ -85,7 +85,7 @@ void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 }
 
 
-void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
+void ConditionVariable::DoWait(UniqueLock<Mutex>& uniqueLock) {
 	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	const int kRetCode = pthread_cond_wait(&conditionVariable_, uniqueLock.GetMutex()->GetNativeHandle());
@@ -96,7 +96,7 @@ void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
 	}
 }
 
-cv_status::cv_status_t ConditionVariable::UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
+cv_status::cv_status_t ConditionVariable::DoWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
 	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	const timespec kAbsTime = RelTimeToAbsTime(relTime);

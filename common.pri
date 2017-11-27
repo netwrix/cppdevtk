@@ -264,8 +264,10 @@ build_pass {
 	
 	# treat as error
 	# warning: control reaches end of non-void function [-Wreturn-type]
-	QMAKE_CFLAGS *= -Werror=return-type
-	QMAKE_CXXFLAGS *= -Werror=return-type
+	greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
+		QMAKE_CFLAGS *= -Werror=return-type
+		QMAKE_CXXFLAGS *= -Werror=return-type
+	}
 	
 	QMAKE_LFLAGS *= -rdynamic
 	

@@ -26,7 +26,9 @@ namespace base {
 
 QString ThreadException::DoOwnWhat() const {
 	QString ownWhat = SystemException::DoOwnWhat();
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	ownWhat += QString("; threadId: '%1'").arg(threadId_.ToString());
+#	endif
 	return ownWhat;
 }
 

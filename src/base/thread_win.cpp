@@ -22,6 +22,10 @@
 #	error "This file is Windows specific!!!"
 #endif
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 #include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
@@ -144,3 +148,6 @@ bool Thread::Id::operator==(const Id& other) const CPPDEVTK_NOEXCEPT {
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)

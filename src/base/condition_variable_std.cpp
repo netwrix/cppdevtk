@@ -64,7 +64,7 @@ void ConditionVariable::NotifyAll() CPPDEVTK_NOEXCEPT {
 	conditionVariable_.notify_all();
 }
 
-void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
+void ConditionVariable::DoWait(UniqueLock<Mutex>& uniqueLock) {
 	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	{
@@ -87,7 +87,7 @@ void ConditionVariable::UninterruptibleWait(UniqueLock<Mutex>& uniqueLock) {
 	}
 }
 
-cv_status::cv_status_t ConditionVariable::UninterruptibleWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
+cv_status::cv_status_t ConditionVariable::DoWaitFor(UniqueLock<Mutex>& uniqueLock, int relTime) {
 	CPPDEVTK_ASSERT(uniqueLock.OwnsLock());
 	
 	::std::cv_status stdCvStatus = ::std::cv_status::timeout;

@@ -54,7 +54,7 @@ typedef unsigned ThreadNativeIdType;
 /// - Return type is \c int same as \c main()
 /// - A generic ReturnType will transform \c Thread class in template because it is needed by constructor and join
 /// and this is not acceptable.
-typedef ::std::function<int ()> ThreadMainFunctionType;
+typedef CPPDEVTK_TR1_NS::function<int ()> ThreadMainFunctionType;
 
 
 }	// namespace detail

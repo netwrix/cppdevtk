@@ -264,7 +264,7 @@
 
 
 /// If not needed disable for performance
-#define CPPDEVTK_ENABLE_THREAD_INTERRUPTION 1
+#define CPPDEVTK_ENABLE_THREAD_INTERRUPTION (CPPDEVTK_HAVE_THREAD_STORAGE && 1)
 
 
 /// @}	// config_features_compile_time

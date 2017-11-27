@@ -38,8 +38,12 @@ namespace cppdevtk {
 namespace base {
 
 
+#if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 using this_thread::InterruptionPoint;
+#endif
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 using this_thread::detail::pThreadLocalData;
+#endif
 using ::std::exception;
 
 
@@ -47,9 +51,27 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(uniqueLock.OwnsLock(), "uniqueLock must own mutex");
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	WaitFor(uniqueLock, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
+	
+	InterruptionPoint();
+	
+	if (pThreadLocalData != NULL) {
+		pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(this);
+	}
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
+		if (pThreadLocalData != NULL) {
+			pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(NULL);
+		}
+	}
+	CPPDEVTK_ON_BLOCK_EXIT_END
+	
+	InterruptionPoint();
+	
+	DoWaitFor(uniqueLock, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
+	
+	InterruptionPoint();
+	
 #	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	UninterruptibleWait(uniqueLock);
+	DoWait(uniqueLock);
 #	endif
 }
 
@@ -72,28 +94,15 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 	
 	InterruptionPoint();
 	
-	cv_status::cv_status_t retValue = base::cv_status::timeout;
-	if (relTime <= 0) {
-		retValue = UninterruptibleWaitFor(uniqueLock, relTime);
-		InterruptionPoint();
-	}
-	else {
-		int waited = 0;
-		do {
-			retValue = UninterruptibleWaitFor(uniqueLock, CPPDEVTK_CHECK_INTERRUPT_REL_TIME);
-			InterruptionPoint();
-			if (retValue == base::cv_status::no_timeout) {
-				break;
-			}
-			waited += CPPDEVTK_CHECK_INTERRUPT_REL_TIME;
-		}
-		while ((waited + CPPDEVTK_CHECK_INTERRUPT_REL_TIME) < relTime);
-	}
+	const cv_status::cv_status_t kRetValue = (relTime > 0) ? DoWaitFor(uniqueLock, CPPDEVTK_CHECK_INTERRUPT_REL_TIME)
+			: DoWaitFor(uniqueLock, relTime);
 	
-	return retValue;
+	InterruptionPoint();
+	
+	return kRetValue;
 	
 #	else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	return UninterruptibleWaitFor(uniqueLock, relTime);
+	return DoWaitFor(uniqueLock, relTime);
 #	endif
 }
 

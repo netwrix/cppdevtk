@@ -42,10 +42,10 @@
 #include "semaphores.hpp"
 #include "waitconditions.hpp"
 
-
 #include <QtCore/QString>
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
+#include <QtCore/QtDebug>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QException>
 #else
@@ -60,6 +60,15 @@
 #endif
 
 
+#if (!CPPDEVTK_PLATFORM_ANDROID)
+#define CPPDEVTK_COUT ::cppdevtk::base::qcout
+#define CPPDEVTK_CERR ::cppdevtk::base::qcerr
+#else
+#define CPPDEVTK_COUT qDebug()
+#define CPPDEVTK_CERR qInfo()
+#endif
+
+
 class TestTmplExplInst: public ::cppdevtk::base::ObjectLevelBasicLockable {};
 class IncompleteType;
 
@@ -70,7 +79,7 @@ class Greetings: public ::cppdevtk::base::MeyersSingleton<Greetings> {
 	friend class ::cppdevtk::base::MeyersSingleton<Greetings>;
 public:
 	void Welcome() {
-		::cppdevtk::base::qcout << "Hello World!" << endl;
+		CPPDEVTK_COUT << "Hello World!" << endl;
 	}
 private:
 	Greetings(): ::cppdevtk::base::MeyersSingleton<Greetings>() {}
@@ -81,15 +90,15 @@ class Logger: public ::cppdevtk::base::ThreadSafePhoenixSingleton<Logger> {
 	friend class ::cppdevtk::base::ThreadSafePhoenixSingleton<Logger>;
 public:
 	void Log(const QString& msg) {
-		::cppdevtk::base::qcout << "log msg: " << msg << endl;
+		CPPDEVTK_COUT << "log msg: " << msg << endl;
 	}
 private:
 	Logger(): ::cppdevtk::base::ThreadSafePhoenixSingleton<Logger>() {
-		::cppdevtk::base::qcout << "logger created" << endl;
+		CPPDEVTK_COUT << "logger created" << endl;
 	}
 	
 	~Logger() {
-		::cppdevtk::base::qcout << "logger destroyed" << endl;
+		CPPDEVTK_COUT << "logger destroyed" << endl;
 	}
 };
 
@@ -101,11 +110,11 @@ public:
 	}
 private:
 	LoggerUser(): ::cppdevtk::base::Singleton<LoggerUser>() {
-		::cppdevtk::base::qcout << "LoggerUser created" << endl;
+		CPPDEVTK_COUT << "LoggerUser created" << endl;
 	}
 	
 	~LoggerUser() {
-		::cppdevtk::base::qcout << "LoggerUser destroyed" << endl;
+		CPPDEVTK_COUT << "LoggerUser destroyed" << endl;
 	}
 };
 
@@ -127,11 +136,13 @@ public:
 };
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 ::cppdevtk::base::DefaultMutex gQCOutMtx;
 
 int ThreadMainFunctionHelloWorld() {
 	::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-	::cppdevtk::base::qcout << "Function Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId() << endl;
+	CPPDEVTK_COUT << "Function Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId().ToString() << endl;
 	return EXIT_SUCCESS;
 }
 
@@ -141,7 +152,7 @@ public:
 protected:
 	virtual int Main() {
 		::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-		::cppdevtk::base::qcout << "Thread Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId() << endl;
+		CPPDEVTK_COUT << "Thread Hello world from thread with id: " << ::cppdevtk::base::this_thread::GetId().ToString() << endl;
 		return EXIT_SUCCESS;
 	}
 };
@@ -155,24 +166,24 @@ protected:
 	virtual int Main() {
 		{
 			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world entering main from thread with id: "
-					<< ::cppdevtk::base::this_thread::GetId() << endl;
+			CPPDEVTK_COUT << "Interruptible Sleep Thread Hello world entering main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId().ToString() << endl;
 		}
 		
 		// parent thread waits 2.5 sec before requesting interrupt; child thread loops max 5 sec
 		for (int cnt = 0; cnt < 50; ++cnt) {
 			{
 				::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-				::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world from thread with id: "
-						<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
+				CPPDEVTK_COUT << "Interruptible Sleep Thread Hello world from thread with id: "
+						<< ::cppdevtk::base::this_thread::GetId().ToString() << "; sleepCnt: " << cnt << endl;
 			}
 			::cppdevtk::base::this_thread::SleepFor(100);
 		}
 		
 		{
 			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-			::cppdevtk::base::qcout << "Interruptible Sleep Thread Hello world leaving main from thread with id: "
-					<< ::cppdevtk::base::this_thread::GetId() << endl;
+			CPPDEVTK_COUT << "Interruptible Sleep Thread Hello world leaving main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId().ToString() << endl;
 		}
 		
 		return EXIT_SUCCESS;
@@ -186,8 +197,8 @@ protected:
 	virtual int Main() {
 		{
 			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-			::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world entering main from thread with id: "
-					<< ::cppdevtk::base::this_thread::GetId() << endl;
+			CPPDEVTK_COUT << "Interruptible Cond Var Thread Hello world entering main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId().ToString() << endl;
 		}
 		
 		// parent thread waits 2.5 sec before requesting interrupt; child thread loops max 5 sec
@@ -195,8 +206,8 @@ protected:
 		for (int cnt = 0; cnt < kMaxCnt; ++cnt) {
 			{
 				::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-				::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world from thread with id: "
-						<< ::cppdevtk::base::this_thread::GetId() << "; sleepCnt: " << cnt << endl;
+				CPPDEVTK_COUT << "Interruptible Cond Var Thread Hello world from thread with id: "
+						<< ::cppdevtk::base::this_thread::GetId().ToString() << "; sleepCnt: " << cnt << endl;
 			}
 			::cppdevtk::base::Mutex mtx;
 			::cppdevtk::base::UniqueLock< ::cppdevtk::base::Mutex> uniqueLock(mtx);
@@ -205,16 +216,17 @@ protected:
 		}
 		
 		{
-		::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
-		::cppdevtk::base::qcout << "Interruptible Cond Var Thread Hello world leaving main from thread with id: "
-				<< ::cppdevtk::base::this_thread::GetId() << endl;
+			::cppdevtk::base::DefaultLockGuard lockGuard(gQCOutMtx);
+			CPPDEVTK_COUT << "Interruptible Cond Var Thread Hello world leaving main from thread with id: "
+					<< ::cppdevtk::base::this_thread::GetId().ToString() << endl;
 		}
 		
 		return EXIT_SUCCESS;
 	}
 };
 
-#endif
+#endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 bool TestSafeDelete();
@@ -225,7 +237,9 @@ bool TestNonStdExceptions();
 bool TestSystemException();
 bool TestExceptionPropagation();
 bool TestMutex();
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 bool TestThread();
+#endif
 
 void TestStackTraceCppHelper1(int dummy);
 void TestStackTraceCppHelper2(int);
@@ -248,7 +262,9 @@ using ::cppdevtk::base::RecursiveTimedMutex;
 using ::cppdevtk::base::ErrorCheckingMutex;
 using ::cppdevtk::base::ErrorCheckingTimedMutex;
 #endif
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 using ::cppdevtk::base::Thread;
+#endif
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
 using ::std::exception;
@@ -269,95 +285,99 @@ int main(int argc, char* argv[]) try {
 	// use kStdStringNPos
 #	endif
 	
-	TestTmplExplInst testTmplExplInst;
+	//TestTmplExplInst testTmplExplInst;
 	
 	try {
-		qcout << "testing SafeDelete..." << endl;
+		CPPDEVTK_COUT << "testing SafeDelete..." << endl;
 		if (!TestSafeDelete()) {
-			qcerr << "SafeDelete test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "SafeDelete test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "SafeDelete test: PASSED" << endl;
+		CPPDEVTK_COUT << "SafeDelete test: PASSED" << endl;
 		
-		qcout << "testing Singleton..." << endl;
+		CPPDEVTK_COUT << "testing Singleton..." << endl;
 		if (!TestSingleton()) {
-			qcerr << "Singleton test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "Singleton test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "Singleton test: PASSED" << endl;
+		CPPDEVTK_COUT << "Singleton test: PASSED" << endl;
 		
-		qcout << "testing StackTrace..." << endl;
+		CPPDEVTK_COUT << "testing StackTrace..." << endl;
 		if (!TestStackTrace()) {
-			qcerr << "StackTrace test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "StackTrace test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "StackTrace test: PASSED" << endl;
+		CPPDEVTK_COUT << "StackTrace test: PASSED" << endl;
 		
-		qcout << "testing StdExceptions..." << endl;
+		CPPDEVTK_COUT << "testing StdExceptions..." << endl;
 		if (!TestStdExceptions()) {
-			qcerr << "StdExceptions test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "StdExceptions test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "StdExceptions test: PASSED" << endl;
+		CPPDEVTK_COUT << "StdExceptions test: PASSED" << endl;
 		
-		qcout << "testing NonStdExceptions..." << endl;
+		CPPDEVTK_COUT << "testing NonStdExceptions..." << endl;
 		if (!TestNonStdExceptions()) {
-			qcerr << "NonStdExceptions test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "NonStdExceptions test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "NonStdExceptions test: PASSED" << endl;
+		CPPDEVTK_COUT << "NonStdExceptions test: PASSED" << endl;
 		
-		qcout << "testing SystemException..." << endl;
+		CPPDEVTK_COUT << "testing SystemException..." << endl;
 		if (!TestSystemException()) {
-			qcerr << "SystemException test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "SystemException test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "SystemException test: PASSED" << endl;
+		CPPDEVTK_COUT << "SystemException test: PASSED" << endl;
 		
-		qcout << "testing ExceptionPropagation..." << endl;
+		CPPDEVTK_COUT << "testing ExceptionPropagation..." << endl;
 		if (!TestExceptionPropagation()) {
-			qcerr << "ExceptionPropagation test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "ExceptionPropagation test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "ExceptionPropagation test: PASSED" << endl;
+		CPPDEVTK_COUT << "ExceptionPropagation test: PASSED" << endl;
 		
-		qcout << "testing Mutex..." << endl;
+		CPPDEVTK_COUT << "testing Mutex..." << endl;
 		if (!TestMutex()) {
-			qcerr << "Mutex test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "Mutex test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "Mutex test: PASSED" << endl;
+		CPPDEVTK_COUT << "Mutex test: PASSED" << endl;
 		
-		qcout << "testing Thread..." << endl;
+#		if (CPPDEVTK_HAVE_THREAD_STORAGE)
+		
+		CPPDEVTK_COUT << "testing Thread..." << endl;
 		if (!TestThread()) {
-			qcerr << "Thread test: FAILED!!!" << endl;
+			CPPDEVTK_CERR << "Thread test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
-		qcout << "Thread test: PASSED" << endl;
+		CPPDEVTK_COUT << "Thread test: PASSED" << endl;
 		
-		qcout << "testing semaphore..." << endl;
+#		endif
+		
+		CPPDEVTK_COUT << "testing semaphore..." << endl;
 		test_sem();
-		qcout << "semaphore test: PASSED" << endl;
+		CPPDEVTK_COUT << "semaphore test: PASSED" << endl;
 		
-		qcout << "testing condition variable..." << endl;
+		CPPDEVTK_COUT << "testing condition variable..." << endl;
 		test_cv();
-		qcout << "condition variable test: PASSED" << endl;
+		CPPDEVTK_COUT << "condition variable test: PASSED" << endl;
 		
-		qcout << "done!" << endl;
+		CPPDEVTK_COUT << "done!" << endl;
 		return EXIT_SUCCESS;
 	}
 	catch (const exception& exc) {
 		const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
 				exc.what(), Exception::GetDetailedInfo(exc));
 		CPPDEVTK_LOG_ERROR(kErrMsg);
-		qcerr << "Error: " << kErrMsg << endl;
+		CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 		
 		return EXIT_FAILURE;
 	}
 	catch (...) {
 		const QString kErrMsg("caught unknown exception!!!");
 		CPPDEVTK_LOG_ERROR(kErrMsg);
-		qcerr << "Error: " << kErrMsg << endl;
+		CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 		
 		return EXIT_FAILURE;
 	}
@@ -366,14 +386,14 @@ catch (const exception& exc) {
 	const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
 			exc.what(), Exception::GetDetailedInfo(exc));
 	CPPDEVTK_LOG_FATAL(kErrMsg);
-	qcerr << "Fatal Error: " << kErrMsg << endl;
+	CPPDEVTK_CERR << "Fatal Error: " << kErrMsg << endl;
 	
 	return EXIT_FAILURE;
 }
 catch (...) {
 	const QString kErrMsg("caught unknown exception!!!");
 	CPPDEVTK_LOG_FATAL(kErrMsg);
-	qcerr << "Fatal Error: " << kErrMsg << endl;
+	CPPDEVTK_CERR << "Fatal Error: " << kErrMsg << endl;
 	
 	return EXIT_FAILURE;
 }
@@ -406,13 +426,13 @@ bool TestStackTrace() {
 	public:
 		void f_ctor() {
 			StackTrace stackTrace;
-			qcout << "StackTrace auto captured:\n" << stackTrace.ToString() << endl;
+			CPPDEVTK_COUT << "StackTrace auto captured:\n" << stackTrace.ToString() << endl;
 		}
 		
 		void f_capture() {
 			StackTrace stackTrace(false);
 			stackTrace.Capture();
-			qcout << "StackTrace captured on demand:\n" << stackTrace.ToString() << endl;
+			CPPDEVTK_COUT << "StackTrace captured on demand:\n" << stackTrace.ToString() << endl;
 		}
 	};
 	
@@ -441,25 +461,25 @@ bool TestStdExceptions() {
 	
 	auto_ptr<Cloneable> pCloneable(exc.Clone());
 	if (pCloneable.get() == NULL) {
-		qcerr << "pCloneable.get() == NULL" << endl;
+		CPPDEVTK_CERR << "pCloneable.get() == NULL" << endl;
 		return false;
 	}
 	
 	auto_ptr<Exception> pException(exc.Clone());
 	if (pException.get() == NULL) {
-		qcerr << "pException.get() == NULL" << endl;
+		CPPDEVTK_CERR << "pException.get() == NULL" << endl;
 		return false;
 	}
 	
 	auto_ptr<LogicException> pLogicException(exc.Clone());
 	if (pLogicException.get() == NULL) {
-		qcerr << "pLogicException.get() == NULL" << endl;
+		CPPDEVTK_CERR << "pLogicException.get() == NULL" << endl;
 		return false;
 	}
 	
 	
-	qcout << "pException->What(): " << pException->What() << endl;
-	qcout << "pException->ToString(): " << pException->ToString() << endl;
+	CPPDEVTK_COUT << "pException->What(): " << pException->What() << endl;
+	CPPDEVTK_COUT << "pException->ToString(): " << pException->ToString() << endl;
 	
 	
 	bool catched = false;
@@ -470,7 +490,7 @@ bool TestStdExceptions() {
 		catched = true;
 	}
 	if (!catched) {
-		qcerr << "failed to catch LogicException" << endl;
+		CPPDEVTK_CERR << "failed to catch LogicException" << endl;
 		return false;
 	}
 	
@@ -509,13 +529,13 @@ bool TestNonStdExceptions() {
 	swap(nullArg1, nullArg2);
 	
 	if (nullArg1.What() != kNullArg2What) {
-		qcerr << "nullArg1.What() != kNullArg2What; nullArg1.What(): " << nullArg1.What()
+		CPPDEVTK_CERR << "nullArg1.What() != kNullArg2What; nullArg1.What(): " << nullArg1.What()
 				<< "; kNullArg2What: " << kNullArg2What << endl;
 		return false;
 	}
 	
 	if (nullArg2.What() != kNullArg1What) {
-		qcerr << "nullArg2.What() != kNullArg1What; nullArg2.What(): " << nullArg2.What()
+		CPPDEVTK_CERR << "nullArg2.What() != kNullArg1What; nullArg2.What(): " << nullArg2.What()
 				<< "; kNullArg1What: " << kNullArg1What << endl;
 		return false;
 	}
@@ -526,42 +546,42 @@ bool TestNonStdExceptions() {
 			throw CPPDEVTK_NULL_ARGUMENT_EXCEPTION("dummy");
 		}
 		catch (NullArgumentException& exc) {
-			qcout << "exc.What(): " << exc.What() << endl;
+			CPPDEVTK_COUT << "exc.What(): " << exc.What() << endl;
 		}
 		
 		try {
 			throw CPPDEVTK_NULL_ARGUMENT_EXCEPTION("dummy");
 		}
 		catch (NullPointerException& exc) {
-			qcout << "exc.What(): " << exc.What() << endl;
+			CPPDEVTK_COUT << "exc.What(): " << exc.What() << endl;
 		}
 		
 		try {
 			throw CPPDEVTK_NULL_ARGUMENT_EXCEPTION("dummy");
 		}
 		catch (InvalidArgumentException& exc) {
-			qcout << "exc.What(): " << exc.What() << endl;
+			CPPDEVTK_COUT << "exc.What(): " << exc.What() << endl;
 		}
 		
 		try {
 			throw CPPDEVTK_NULL_ARGUMENT_EXCEPTION("dummy");
 		}
 		catch (LogicException& exc) {
-			qcout << "exc.What(): " << exc.What() << endl;
+			CPPDEVTK_COUT << "exc.What(): " << exc.What() << endl;
 		}
 		
 		try {
 			throw CPPDEVTK_NULL_ARGUMENT_EXCEPTION("dummy");
 		}
 		catch (Exception& exc) {
-			qcout << "exc.What(): " << exc.What() << endl;
+			CPPDEVTK_COUT << "exc.What(): " << exc.What() << endl;
 		}
 		
 		try {
 			throw CPPDEVTK_NULL_ARGUMENT_EXCEPTION("dummy");
 		}
 		catch (exception& exc) {
-			qcout << "exc.what(): " << exc.what() << endl;
+			CPPDEVTK_COUT << "exc.what(): " << exc.what() << endl;
 		}
 	}
 	catch (...) {
@@ -574,7 +594,7 @@ bool TestNonStdExceptions() {
 bool TestSystemException() {
 	::cppdevtk::base::SetLastSystemErrorCode(::cppdevtk::base::MakeSystemErrorCode(ESUCCESS));
 	
-	qcout << CPPDEVTK_SYSTEM_EXCEPTION_W_EC(::cppdevtk::base::GetLastSystemErrorCode()).What() << endl;
+	CPPDEVTK_COUT << CPPDEVTK_SYSTEM_EXCEPTION_W_EC(::cppdevtk::base::GetLastSystemErrorCode()).What() << endl;
 	
 	return true;
 }
@@ -599,13 +619,13 @@ bool TestExceptionPropagation() {
 				RethrowException(exceptionPtr);
 			}
 			catch (const DerivedFromStdRuntimeError&) {
-				qcout << "exception propagation supports classes derived from std exception classes" << endl;
+				CPPDEVTK_COUT << "exception propagation supports classes derived from std exception classes" << endl;
 			}
 			catch (const runtime_error&) {
-				qcout << "WARN: exception propagation does not support classes derived from std exception classes" << endl;
+				CPPDEVTK_COUT << "WARN: exception propagation does not support classes derived from std exception classes" << endl;
 			}
 			catch (const exception&) {
-				qcerr << "exception propagation does not support std exception classes" << endl;
+				CPPDEVTK_CERR << "exception propagation does not support std exception classes" << endl;
 				return false;
 			}
 		}
@@ -625,10 +645,10 @@ bool TestExceptionPropagation() {
 				RethrowException(exceptionPtr);
 			}
 			catch (const DerivedFromQtException&) {
-				qcout << "exception propagation supports Qt exception classes" << endl;
+				CPPDEVTK_COUT << "exception propagation supports Qt exception classes" << endl;
 			}
 			catch (const exception&) {
-				qcerr << "exception propagation does not support Qt exception classes" << endl;
+				CPPDEVTK_CERR << "exception propagation does not support Qt exception classes" << endl;
 				return false;
 			}
 		}
@@ -648,10 +668,10 @@ bool TestExceptionPropagation() {
 				RethrowException(exceptionPtr);
 			}
 			catch (const ::cppdevtk::base::IosFailureException&) {
-				qcout << "exception propagation supports cppdevtk exception classes" << endl;
+				CPPDEVTK_COUT << "exception propagation supports cppdevtk exception classes" << endl;
 			}
 			catch (const exception&) {
-				qcerr << "exception propagation does not support cppdevtk exception classes" << endl;
+				CPPDEVTK_CERR << "exception propagation does not support cppdevtk exception classes" << endl;
 				return false;
 			}
 		}
@@ -664,7 +684,7 @@ bool TestMutex() {
 	Mutex mutex;
 	mutex.Lock();
 	if (mutex.TryLock()) {
-		qcerr << "mutex.TryLock() succeeded" << endl;
+		CPPDEVTK_CERR << "mutex.TryLock() succeeded" << endl;
 		return false;
 	}
 	mutex.Unlock();
@@ -686,7 +706,7 @@ bool TestMutex() {
 	TimedMutex timedMutex;
 	timedMutex.Lock();
 	if (timedMutex.TryLock()) {
-		qcerr << "timedMutex.TryLock() succeeded" << endl;
+		CPPDEVTK_CERR << "timedMutex.TryLock() succeeded" << endl;
 		return false;
 	}
 	timedMutex.Unlock();
@@ -715,17 +735,17 @@ bool TestMutex() {
 			caught = true;
 		}
 		else {
-			qcout << "errorCheckingMutex.Lock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
+			CPPDEVTK_COUT << "errorCheckingMutex.Lock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
 	}
 	catch (const exception& exc) {
-		qcout << "errorCheckingMutex.Lock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+		CPPDEVTK_COUT << "errorCheckingMutex.Lock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
 	}
 	catch (...) {
-		qcerr << "errorCheckingMutex.Lock(): caught unknown exception" << endl;
+		CPPDEVTK_CERR << "errorCheckingMutex.Lock(): caught unknown exception" << endl;
 	}
 	if (!caught) {
-		qcerr << "errorCheckingMutex.Lock(): !caught" << endl;
+		CPPDEVTK_CERR << "errorCheckingMutex.Lock(): !caught" << endl;
 		return false;
 	}
 	errorCheckingMutex.Unlock();
@@ -734,7 +754,7 @@ bool TestMutex() {
 	caught = false;
 	try {
 		if (errorCheckingMutex.TryLock()) {
-			qcerr << "errorCheckingMutex.TryLock() succeeded" << endl;
+			CPPDEVTK_CERR << "errorCheckingMutex.TryLock() succeeded" << endl;
 			return false;
 		}
 		caught = true;
@@ -744,17 +764,17 @@ bool TestMutex() {
 			caught = true;
 		}
 		else {
-			qcout << "errorCheckingMutex.TryLock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
+			CPPDEVTK_COUT << "errorCheckingMutex.TryLock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
 	}
 	catch (const exception& exc) {
-		qcout << "errorCheckingMutex.TryLock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+		CPPDEVTK_COUT << "errorCheckingMutex.TryLock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
 	}
 	catch (...) {
-		qcerr << "errorCheckingMutex.TryLock(): caught unknown exception" << endl;
+		CPPDEVTK_CERR << "errorCheckingMutex.TryLock(): caught unknown exception" << endl;
 	}
 	if (!caught) {
-		qcerr << "errorCheckingMutex.TryLock(): !caught" << endl;
+		CPPDEVTK_CERR << "errorCheckingMutex.TryLock(): !caught" << endl;
 		return false;
 	}
 	errorCheckingMutex.Unlock();
@@ -771,17 +791,17 @@ bool TestMutex() {
 			caught = true;
 		}
 		else {
-			qcout << "errorCheckingTimedMutex.Lock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
+			CPPDEVTK_COUT << "errorCheckingTimedMutex.Lock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
 	}
 	catch (const exception& exc) {
-		qcout << "errorCheckingTimedMutex.Lock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+		CPPDEVTK_COUT << "errorCheckingTimedMutex.Lock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
 	}
 	catch (...) {
-		qcerr << "errorCheckingTimedMutex.Lock(): caught unknown exception" << endl;
+		CPPDEVTK_CERR << "errorCheckingTimedMutex.Lock(): caught unknown exception" << endl;
 	}
 	if (!caught) {
-		qcerr << "errorCheckingTimedMutex.Lock(): !caught" << endl;
+		CPPDEVTK_CERR << "errorCheckingTimedMutex.Lock(): !caught" << endl;
 		return false;
 	}
 	errorCheckingTimedMutex.Unlock();
@@ -790,7 +810,7 @@ bool TestMutex() {
 	caught = false;
 	try {
 		if (errorCheckingTimedMutex.TryLock()) {
-			qcerr << "errorCheckingTimedMutex.TryLock() succeeded" << endl;
+			CPPDEVTK_CERR << "errorCheckingTimedMutex.TryLock() succeeded" << endl;
 			return false;
 		}
 		caught = true;
@@ -800,17 +820,17 @@ bool TestMutex() {
 			caught = true;
 		}
 		else {
-			qcout << "errorCheckingTimedMutex.TryLock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
+			CPPDEVTK_COUT << "errorCheckingTimedMutex.TryLock(): got wrong error code: " << exc.ErrorCodeRef().ToString() << endl;
 		}
 	}
 	catch (const exception& exc) {
-		qcout << "errorCheckingTimedMutex.TryLock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
+		CPPDEVTK_COUT << "errorCheckingTimedMutex.TryLock(): caught: " << Exception::GetDetailedInfo(exc) << endl;
 	}
 	catch (...) {
-		qcerr << "errorCheckingTimedMutex.TryLock(): caught unknown exception" << endl;
+		CPPDEVTK_CERR << "errorCheckingTimedMutex.TryLock(): caught unknown exception" << endl;
 	}
 	if (!caught) {
-		qcerr << "errorCheckingTimedMutex.TryLock(): !caught" << endl;
+		CPPDEVTK_CERR << "errorCheckingTimedMutex.TryLock(): !caught" << endl;
 		return false;
 	}
 	errorCheckingTimedMutex.Unlock();
@@ -829,11 +849,14 @@ bool TestMutex() {
 	return true;
 }
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 bool TestThread() {
 	using ::cppdevtk::base::DefaultLockGuard;
 	
 	
-	qcout << "hardwareConcurrency: " << Thread::GetHardwareConcurrency() << endl;
+	CPPDEVTK_COUT << "hardwareConcurrency: " << Thread::GetHardwareConcurrency() << endl;
 	
 	int retCode = EXIT_FAILURE;
 	Thread delegationThread(&ThreadMainFunctionHelloWorld);
@@ -854,12 +877,12 @@ bool TestThread() {
 	interruptibleSleepHelloWorldThread.Start();
 	{
 		DefaultLockGuard lockGuard(gQCOutMtx);
-		qcout << "letting child interruptibleSleepHelloWorldThread to work a little..." << endl;
+		CPPDEVTK_COUT << "letting child interruptibleSleepHelloWorldThread to work a little..." << endl;
 	}
 	::cppdevtk::base::this_thread::SleepFor(2500);
 	{
 		DefaultLockGuard lockGuard(gQCOutMtx);
-		qcout << "done waiting for child interruptibleSleepHelloWorldThread" << endl;
+		CPPDEVTK_COUT << "done waiting for child interruptibleSleepHelloWorldThread" << endl;
 	}
 	interruptibleSleepHelloWorldThread.RequestInterruption();
 	bool caught = false;
@@ -868,14 +891,14 @@ bool TestThread() {
 	}
 	catch (const ::cppdevtk::base::ThreadInterruptedException& exc) {
 		caught = true;
-		qcout << "interruptibleSleepHelloWorldThread interrupted: " << exc.What() << endl;
+		CPPDEVTK_COUT << "interruptibleSleepHelloWorldThread interrupted: " << exc.What() << endl;
 	}
 	if (!caught) {
-		qcerr << "failed to catch thread interrupted for interruptibleSleepHelloWorldThread" << endl;
+		CPPDEVTK_CERR << "failed to catch thread interrupted for interruptibleSleepHelloWorldThread" << endl;
 		return false;
 	}
 	
-	qcout << "interruptibleSleepHelloWorldThread took: ";
+	CPPDEVTK_COUT << "interruptibleSleepHelloWorldThread took: ";
 	PrintTime(time.elapsed());
 	
 	
@@ -885,12 +908,12 @@ bool TestThread() {
 	interruptibleCondVarHelloWorldThread.Start();
 	{
 		DefaultLockGuard lockGuard(gQCOutMtx);
-		qcout << "letting child interruptibleCondVarHelloWorldThread to work a little..." << endl;
+		CPPDEVTK_COUT << "letting child interruptibleCondVarHelloWorldThread to work a little..." << endl;
 	}
 	::cppdevtk::base::this_thread::SleepFor(2500);
 	{
 		DefaultLockGuard lockGuard(gQCOutMtx);
-		qcout << "done waiting for child interruptibleCondVarHelloWorldThread" << endl;
+		CPPDEVTK_COUT << "done waiting for child interruptibleCondVarHelloWorldThread" << endl;
 	}
 	interruptibleCondVarHelloWorldThread.RequestInterruption();
 	caught = false;
@@ -899,20 +922,22 @@ bool TestThread() {
 	}
 	catch (const ::cppdevtk::base::ThreadInterruptedException& exc) {
 		caught = true;
-		qcout << "interruptibleCondVarHelloWorldThread interrupted: " << exc.What() << endl;
+		CPPDEVTK_COUT << "interruptibleCondVarHelloWorldThread interrupted: " << exc.What() << endl;
 	}
 	if (!caught) {
-		qcerr << "failed to catch thread interrupted for interruptibleCondVarHelloWorldThread" << endl;
+		CPPDEVTK_CERR << "failed to catch thread interrupted for interruptibleCondVarHelloWorldThread" << endl;
 		return false;
 	}
 	
-	qcout << "interruptibleCondVarHelloWorldThread took: ";
+	CPPDEVTK_COUT << "interruptibleCondVarHelloWorldThread took: ";
 	PrintTime(time.elapsed());
 	
 #	endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 	
 	return true;
 }
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 void TestStackTraceCppHelper1(int dummy) {
@@ -921,7 +946,7 @@ void TestStackTraceCppHelper1(int dummy) {
 
 void TestStackTraceCppHelper2(int) {
 	::cppdevtk::base::StackTrace stackTrace;
-	qcout << "StackTrace from C++ function:\n" << stackTrace.ToString() << endl;
+	CPPDEVTK_COUT << "StackTrace from C++ function:\n" << stackTrace.ToString() << endl;
 }
 
 void TestStackTraceCHelper1(int dummy) {
@@ -930,7 +955,7 @@ void TestStackTraceCHelper1(int dummy) {
 
 void TestStackTraceCHelper2(int) {
 	::cppdevtk::base::StackTrace stackTrace;
-	qcout << "StackTrace from C function:\n" << stackTrace.ToString() << endl;
+	CPPDEVTK_COUT << "StackTrace from C function:\n" << stackTrace.ToString() << endl;
 }
 
 
@@ -941,5 +966,5 @@ void PrintTime(int milliseconds) {
 	seconds %= 60;
 	int hours = minutes / 60;
 	minutes %= 60;
-	qcout << QTime(hours, minutes, seconds, milliseconds).toString("hh:mm:ss.zzz") << endl;
+	CPPDEVTK_COUT << QTime(hours, minutes, seconds, milliseconds).toString("hh:mm:ss.zzz") << endl;
 }

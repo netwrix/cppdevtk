@@ -18,6 +18,11 @@
 
 
 #include <cppdevtk/base/thread.hpp>
+
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 #include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/deadlock_exception.hpp>
@@ -496,19 +501,6 @@ RestoreInterruptionGuard::~RestoreInterruptionGuard() {
 #endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 
 
-namespace detail {
-
-
-/* CPPDEVTK_BASE_API */ void SetInterruptionWaitingConditionVariable(ConditionVariable* value) {
-	if (pThreadLocalData != NULL) {
-		pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(value);
-	}
-}
-
-
-}	// namespace detail
-
-
 }	// namespace this_thread
 
 
@@ -536,3 +528,6 @@ Thread::Id::Id(NativeIdType nativeId) CPPDEVTK_NOEXCEPT: nativeId_(nativeId) {}
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)

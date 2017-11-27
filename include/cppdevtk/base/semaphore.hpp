@@ -30,7 +30,7 @@
 #include "lock_exception.hpp"
 #include "time_utils.hpp"
 
-#if (CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+#if (CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 #include <semaphore.h>
 #elif (CPPDEVTK_PLATFORM_WINDOWS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 #include <windows.h>
@@ -73,7 +73,7 @@ public:
 	bool TryWait();	///< \sa POSIX sem_trywait()
 	
 	// sem_timedwait() not available on Mac OS X & iOS
-#	if (!((CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
+#	if (!((CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
 	/// \arg relTime Relative timeout, in milliseconds. If it is <= 0, calls TryWait()
 	/// \attention Interruption point
 	/// \sa POSIX sem_timedwait()
@@ -85,7 +85,7 @@ public:
 	bool WaitUntil(::std::time_t absTime);
 #	endif
 private:
-#	if (CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
+#	if (CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 	sem_t semaphore_;
 #	elif (CPPDEVTK_PLATFORM_WINDOWS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION)
 	HANDLE semaphore_;
@@ -104,7 +104,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-#if (!((CPPDEVTK_HAVE_PTHREADS && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
+#if (!((CPPDEVTK_HAVE_WORKING_POSIX_SEMAPHORE && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
 
 inline bool Semaphore::WaitUntil(::std::time_t absTime) {
 	using ::std::time_t;

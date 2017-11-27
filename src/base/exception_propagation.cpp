@@ -43,7 +43,7 @@ ExceptionPtr ThrowableCurrentException() {
 		throw;
 	}
 	catch (const Exception& exc) {
-		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.Clone()));
+		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.Clone().release()));
 	}
 	catch (const detail::PolymorphicExceptionBase& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.clone()));

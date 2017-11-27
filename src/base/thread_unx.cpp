@@ -22,6 +22,10 @@
 #	error "This file is Unix specific!!!"
 #endif
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 #include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/cerrno.hpp>
@@ -30,10 +34,10 @@
 #include <cppdevtk/base/dbc.hpp>
 #include "thread_local_data_ptr.hpp"
 
-#if (CPPDEVTK_PLATFORM_LINUX)
+#if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
 #include <sys/sysinfo.h>
-#elif (CPPDEVTK_PLATFORM_MACOSX)
-#if ((MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5) || CPPDEVTK_PLATFORM_IOS)
+#elif (CPPDEVTK_PLATFORM_MACOSX || CPPDEVTK_PLATFORM_ANDROID)
+#if (((MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5) || CPPDEVTK_PLATFORM_IOS) || CPPDEVTK_PLATFORM_ANDROID)
 #include <unistd.h>
 #else
 #include <sys/types.h>
@@ -109,12 +113,12 @@ Thread::Id Thread::GetId() const CPPDEVTK_NOEXCEPT {
 }
 
 unsigned int Thread::GetHardwareConcurrency() CPPDEVTK_NOEXCEPT {
-#	if (CPPDEVTK_PLATFORM_LINUX)
+#	if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
 	return get_nprocs();
-#	elif (CPPDEVTK_PLATFORM_MACOSX)
+#	elif (CPPDEVTK_PLATFORM_MACOSX || CPPDEVTK_PLATFORM_ANDROID)
 	
 	// _SC_NPROCESSORS_ONLN missing on Mac OS X 10.4 although present in sysconf() manpage...
-#	if ((MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5) || CPPDEVTK_PLATFORM_IOS)
+#	if (((MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5) || CPPDEVTK_PLATFORM_IOS) || CPPDEVTK_PLATFORM_ANDROID)
 	
 	long numProcessorsOnline = sysconf(_SC_NPROCESSORS_ONLN);
 	if (numProcessorsOnline == -1) {
@@ -230,3 +234,6 @@ bool Thread::Id::operator==(const Id& other) const CPPDEVTK_NOEXCEPT {
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)

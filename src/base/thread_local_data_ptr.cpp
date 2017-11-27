@@ -28,7 +28,9 @@ namespace this_thread {
 namespace detail {
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 CPPDEVTK_THREAD ::cppdevtk::base::detail::ThreadData* pThreadLocalData = NULL;
+#endif
 
 
 }	// namespace detail

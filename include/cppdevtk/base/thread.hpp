@@ -22,6 +22,13 @@
 
 
 #include "config.hpp"
+
+
+// iOS < 9.0 and official GCC on Mac OS X do not have __thread so Thread class not available on iOS < 9.0
+// and Mac OS X < 10.7 (>= 10.7 use clang, OK); maybe implement pthread based workaround in the future...
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 #if (CPPDEVTK_PLATFORM_WINDOWS)
 #include <windows.h>
 #undef Yield
@@ -359,15 +366,6 @@ public:
 ///@}
 
 
-namespace detail {
-
-
-/* CPPDEVTK_BASE_API */ void SetInterruptionWaitingConditionVariable(ConditionVariable* value);
-
-
-}	// namespace detail
-
-
 #endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 
 
@@ -466,4 +464,5 @@ inline bool Thread::Id::operator>=(const Id& other) const CPPDEVTK_NOEXCEPT {
 #endif
 
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 #endif	// CPPDEVTK_BASE_THREAD_HPP_INCLUDED_

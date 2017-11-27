@@ -18,7 +18,7 @@
 QT -= gui
 QT *= core
 android {
-	QT *= androidextras
+	QT *= network androidextras
 }
 
 
@@ -48,16 +48,27 @@ else {
 }
 TEMPLATE -= cppdevtkphonylib
 
-!android:!ios {
+#!android:!ios {
 	target.path = $${CPPDEVTK_BIN_DIR}
 	INSTALLS += target
-}
+#}
 
 
 # LIBS + PRE_TARGETDEPS
 !debug_and_release|build_pass {
 	LIBS += -l$${CPPDEVTK_UTIL_TARGET} -l$${CPPDEVTK_BASE_TARGET}
 	!static_and_shared|build_pass {
+		android {
+			cppdevtk_enable_android_destdir_workaround {
+				ANDROID_EXTRA_LIBS += $${OUT_PWD}/../../src/base/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				ANDROID_EXTRA_LIBS += $${OUT_PWD}/../../src/util/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+			else {
+				ANDROID_EXTRA_LIBS += $${DESTDIR}/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				ANDROID_EXTRA_LIBS += $${DESTDIR}/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+		}
+		
 		unix {
 			cppdevtk_enable_android_destdir_workaround {
 				PRE_TARGETDEPS += $${OUT_PWD}/../../src/util/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
@@ -119,3 +130,11 @@ HEADERS += info.hpp \
 SOURCES += main.cpp	\
 	semaphores.cpp	\
 	waitconditions.cpp
+
+android {
+	cppdevtk_enable_android_manifest {
+		ANDROID_PACKAGE_SOURCE_DIR = $${_PRO_FILE_PWD_}/android
+	
+		DISTFILES += android/AndroidManifest.xml
+	}
+}

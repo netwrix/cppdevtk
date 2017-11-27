@@ -591,8 +591,21 @@ exit 0
 
 
 %changelog
-* Thu Oct 26 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Mon Nov 27 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.4.1
+- added CPPDEVTK_NOEXCEPT
+- added exception propagation
+- added thread (not available on iOS < 9.0 and Mac OS X < 10.7 because __thread is not supported)
+- added interruption support to condition variable
+- added interruption support to semaphore
+- Kubuntu: updated Qt to 5.9.2
+- moved EnableIf and IfThenElse as Conditional in type_traits.hpp
+- added more std exception classes equivalents
+- treat warning "not all control paths return a value" as error
+- uniform error reporting/handling in synchronization primitives
+- added time utils
+- removed sleep.hpp (replaced by this_thread sleep API)
+- enabled console test apps on Android and iOS
 - fixed internal pthread_mutex_timedlock(): absTime instead of relTime
 * Tue Oct 17 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.3.1
