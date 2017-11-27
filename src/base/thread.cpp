@@ -193,7 +193,7 @@ void Thread::Join(MainFunctionType::result_type& retCode) {
 	pData_.reset();
 	CPPDEVTK_ASSERT(!IsJoinable());
 	
-	if (pTmpData->GetExceptionPtr()) {
+	if (pTmpData->GetExceptionPtr() != NULL) {
 		RethrowException(pTmpData->GetExceptionPtr());
 	}
 #	if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
@@ -225,7 +225,7 @@ bool Thread::TryJoin(ExceptionPtr& exceptionPtr, MainFunctionType::result_type& 
 	
 	exceptionPtr = GetTryJoinExceptionPtr(pTmpData);
 	
-	if (!exceptionPtr) {
+	if (exceptionPtr == NULL) {
 		retCode = pTmpData->GetRetCode();
 	}
 	
@@ -259,7 +259,7 @@ bool Thread::TryJoinFor(int relTime, ExceptionPtr& exceptionPtr, MainFunctionTyp
 	
 	exceptionPtr = GetTryJoinExceptionPtr(pTmpData);
 	
-	if (!exceptionPtr) {
+	if (exceptionPtr == NULL) {
 		retCode = pTmpData->GetRetCode();
 	}
 	
@@ -357,10 +357,17 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	CPPDEVTK_LOG_TRACE("parent thread notified that child thread started");
 	
 	pThreadLocalData = pData.get();
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
+#	if (BOOST_VERSION >= 105000)
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((void)) {
 		pThreadLocalData = NULL;
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
+#	else
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pThreadLocalData)) {
+		pThreadLocalData = NULL;
+	}
+	CPPDEVTK_ON_BLOCK_EXIT_END
+#	endif
 	
 #	if (CPPDEVTK_PLATFORM_UNIX)
 #	if (!CPPDEVTK_PLATFORM_ANDROID)
@@ -386,7 +393,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	if (!pData->GetJoinedOrDetachedInfoRef().IfIsNotJoinedOrDetachedThenSetJoinAndNotifyOne()) {
 		// detached; if exceptionPtr then terminate()
 		const ExceptionPtr kExceptionPtr = pData->GetExceptionPtr();
-		if (kExceptionPtr) {
+		if (kExceptionPtr != NULL) {
 			try {
 				RethrowException(kExceptionPtr);
 			}
