@@ -28,7 +28,6 @@
 #include "thread.hpp"
 #include "time_utils.hpp"
 #include "dbc.hpp"
-#include "on_block_exit.hpp"
 
 #if (CPPDEVTK_HAVE_PTHREADS)
 #include <pthread.h>

@@ -59,19 +59,14 @@ void ConditionVariable::Wait(UniqueLock<Mutex>& uniqueLock) {
 	}
 #	if (BOOST_VERSION >= 105000)
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
-		if (pThreadLocalData != NULL) {
-			pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(NULL);
-		}
-	}
-	CPPDEVTK_ON_BLOCK_EXIT_END
 #	else
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pThreadLocalData)) {
+#	endif
 		if (pThreadLocalData != NULL) {
 			pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(NULL);
 		}
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
-#	endif
 	
 	InterruptionPoint();
 	
@@ -96,19 +91,14 @@ cv_status::cv_status_t ConditionVariable::WaitFor(UniqueLock<Mutex>& uniqueLock,
 	}
 #	if (BOOST_VERSION >= 105000)
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
-		if (pThreadLocalData != NULL) {
-			pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(NULL);
-		}
-	}
-	CPPDEVTK_ON_BLOCK_EXIT_END
 #	else
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pThreadLocalData)) {
+#	endif
 		if (pThreadLocalData != NULL) {
 			pThreadLocalData->GetInterruptionInfoRef().SetWaitingConditionVariable(NULL);
 		}
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
-#	endif
 	
 	InterruptionPoint();
 	

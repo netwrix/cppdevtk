@@ -359,15 +359,12 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	pThreadLocalData = pData.get();
 #	if (BOOST_VERSION >= 105000)
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
-		pThreadLocalData = NULL;
-	}
-	CPPDEVTK_ON_BLOCK_EXIT_END
 #	else
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pThreadLocalData)) {
+#	endif
 		pThreadLocalData = NULL;
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
-#	endif
 	
 #	if (CPPDEVTK_PLATFORM_UNIX)
 #	if (!CPPDEVTK_PLATFORM_ANDROID)
