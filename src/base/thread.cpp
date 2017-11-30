@@ -18,6 +18,8 @@
 
 
 #include <cppdevtk/base/thread.hpp>
+#include <cppdevtk/base/time_utils.hpp>
+#include <cppdevtk/base/dbc.hpp>
 
 
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
@@ -29,10 +31,8 @@
 #include <cppdevtk/base/mutex.hpp>
 #include <cppdevtk/base/condition_variable.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
-#include <cppdevtk/base/time_utils.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
-#include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include "thread_local_data_ptr.hpp"
@@ -49,8 +49,14 @@
 #endif
 
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 namespace cppdevtk {
 namespace base {
+
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 using this_thread::InterruptionPoint;
@@ -440,6 +446,9 @@ CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, Thread::Id threadId) 
 }
 
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 namespace this_thread {
 
 
@@ -454,6 +463,7 @@ CPPDEVTK_BASE_API void SleepUntil(::std::time_t absTime) {
 	SleepFor(kSeconds * 1000);
 }
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 #if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 
 CPPDEVTK_BASE_API bool IsInterruptionEnabled() {
@@ -503,10 +513,13 @@ RestoreInterruptionGuard::~RestoreInterruptionGuard() {
 }
 
 #endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 }	// namespace this_thread
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 // NOTE: do not inline: nativeId_ and are not exported!
 
@@ -529,9 +542,12 @@ bool Thread::Id::operator<(const Id& other) const CPPDEVTK_NOEXCEPT {
 
 Thread::Id::Id(NativeIdType nativeId) CPPDEVTK_NOEXCEPT: nativeId_(nativeId) {}
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 
 }	// namespace base
 }	// namespace cppdevtk
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)

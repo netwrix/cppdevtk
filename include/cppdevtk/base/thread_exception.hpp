@@ -225,10 +225,12 @@ inline ThreadException* ThreadException::DoClone() const {
 }
 
 inline void ThreadException::SwapOwnData(ThreadException& other) CPPDEVTK_NOEXCEPT {
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	using ::std::swap;
 	
-#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
 	swap(threadId_, other.threadId_);
+#	else
+	SuppressUnusedWarning(other);
 #	endif
 }
 

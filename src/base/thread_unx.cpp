@@ -22,16 +22,19 @@
 #	error "This file is Unix specific!!!"
 #endif
 
+#include <cppdevtk/base/thread_exception.hpp>
+#include <cppdevtk/base/dbc.hpp>
+#include <cppdevtk/base/cerrno.hpp>
+
+#include <sched.h>
+
 
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 #include <cppdevtk/base/thread_data.hpp>
-#include <cppdevtk/base/thread_exception.hpp>
-#include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
-#include <cppdevtk/base/dbc.hpp>
 #include "thread_local_data_ptr.hpp"
 
 #if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
@@ -44,11 +47,16 @@
 #include <sys/sysctl.h> 
 #endif
 #endif
-#include <sched.h>
+
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 namespace cppdevtk {
 namespace base {
+
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 using this_thread::detail::pThreadLocalData;
@@ -163,14 +171,19 @@ void Thread::Create() {
 	pData_->SetNativeHandle(nativeHandle);
 }
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 
 namespace this_thread {
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 CPPDEVTK_BASE_API Thread::Id GetId() CPPDEVTK_NOEXCEPT {
 	return pthread_self();
 }
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */ {
 	const int kRetCode = sched_yield();
@@ -227,13 +240,18 @@ CPPDEVTK_BASE_API void SleepFor(int relTime) {
 }	// namespace this_thread
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 bool Thread::Id::operator==(const Id& other) const CPPDEVTK_NOEXCEPT {
 	return pthread_equal(nativeId_, other.nativeId_);
 }
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 }	// namespace base
 }	// namespace cppdevtk
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)

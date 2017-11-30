@@ -22,6 +22,12 @@
 
 
 #include "config.hpp"
+#if (CPPDEVTK_PLATFORM_WINDOWS)
+#include <windows.h>
+#undef Yield
+#endif
+
+#include <ctime>
 
 
 // iOS < 9.0 and official GCC on Mac OS X do not have __thread so Thread class not available on iOS < 9.0
@@ -29,10 +35,6 @@
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
-#if (CPPDEVTK_PLATFORM_WINDOWS)
-#include <windows.h>
-#undef Yield
-#endif
 #include "thread_data_types.hpp"
 #include "non_copyable.hpp"
 #include "stringizable.hpp"
@@ -41,7 +43,6 @@
 
 #include <QtCore/QTextStream>
 
-#include <ctime>
 #include <cstddef>
 #include <ostream>
 #include CPPDEVTK_TR1_HEADER(memory)
@@ -78,8 +79,14 @@ CPPDEVTK_STATIC_ASSERT((1 <= CPPDEVTK_CHECK_INTERRUPT_REL_TIME) && (CPPDEVTK_CHE
 #endif
 
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
 namespace cppdevtk {
 namespace base {
+
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 class ConditionVariable;
@@ -296,18 +303,24 @@ template <typename TChar>
 
 CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, Thread::Id threadId);
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 
 namespace this_thread {
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 /// \returns An object of type \c Thread::Id that uniquely identifies the current thread of execution.
 /// \remark Threads not created by \c Thread (adopted threads) are supported.
 CPPDEVTK_BASE_API Thread::Id GetId() CPPDEVTK_NOEXCEPT;
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 /// \remarks
 /// - Threads not created by \c Thread (adopted threads) are supported.
-/// - noexcept in std but POSIX impl may fail!
+/// - noexcept in std but POSIX impl may fail (sched_yield() may fail
+/// (actually on Linux it always succeeds but Mac OS X man page is missing))!
 CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */;
 
 
@@ -328,6 +341,7 @@ CPPDEVTK_BASE_API void SleepUntil(::std::time_t absTime);
 ///@}
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 #if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 
 /// \name Interruption
@@ -367,9 +381,13 @@ public:
 
 
 #endif	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 }	// namespace this_thread
+
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 // full declaration here to avoid compile errors due to friend declarations
@@ -454,10 +472,14 @@ inline bool Thread::Id::operator>=(const Id& other) const CPPDEVTK_NOEXCEPT {
 	return !(*this < other);
 }
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 
 }	// namespace base
 }	// namespace cppdevtk
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(pop)

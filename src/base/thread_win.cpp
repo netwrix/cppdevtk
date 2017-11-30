@@ -22,6 +22,13 @@
 #	error "This file is Windows specific!!!"
 #endif
 
+#include <cppdevtk/base/dbc.hpp>
+
+#include <windows.h>
+#if (_WIN32_WINNT >= _WIN32_WINNT_WIN8)
+#include <synchapi.h>
+#endif
+
 
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
@@ -30,15 +37,21 @@
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/cassert.hpp>
-#include <cppdevtk/base/dbc.hpp>
 #include "thread_local_data_ptr.hpp"
 
-#include <windows.h>
 #include <process.h>
+#if (_WIN32_WINNT >= _WIN32_WINNT_WIN8)
+#include <processthreadsapi.h>
+#endif
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 namespace cppdevtk {
 namespace base {
+
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 using this_thread::detail::pThreadLocalData;
@@ -93,14 +106,19 @@ void Thread::Create() {
 	pData_->SetNativeId(nativeId);
 }
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 
 namespace this_thread {
 
+
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 CPPDEVTK_BASE_API Thread::Id GetId() CPPDEVTK_NOEXCEPT {
 	return ::GetCurrentThreadId();
 }
 
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */ {
 	::Sleep(0);
@@ -141,13 +159,18 @@ CPPDEVTK_BASE_API void SleepFor(int relTime) {
 }	// namespace this_thread
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
+
 bool Thread::Id::operator==(const Id& other) const CPPDEVTK_NOEXCEPT {
 	return nativeId_ == other.nativeId_;
 }
+
+#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 }	// namespace base
 }	// namespace cppdevtk
 
 
+#if (CPPDEVTK_HAVE_THREAD_STORAGE)
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
