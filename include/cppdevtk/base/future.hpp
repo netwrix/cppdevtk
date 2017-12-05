@@ -37,6 +37,29 @@ namespace cppdevtk {
 namespace base {
 
 
+namespace future_errc {
+
+
+enum future_errc_t {
+	broken_promise,
+	promise_already_satisfied,
+	no_state
+};
+
+
+CPPDEVTK_BASE_API ErrorCode MakeErrorCode(future_errc_t futureErrC) CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(future_errc_t futureErrC) CPPDEVTK_NOEXCEPT;
+
+
+}	// namespace future_errc
+
+
+template <>
+struct IsErrorCodeEnum<future_errc::future_errc_t>: public CPPDEVTK_TR1_NS::true_type {};
+
+CPPDEVTK_BASE_API const ErrorCategory& GetFutureCategory() CPPDEVTK_NOEXCEPT;
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \addtogroup std_exceptions
 /// @{
@@ -100,6 +123,21 @@ CPPDEVTK_BASE_API void swap(FutureException& x, FutureException& y) CPPDEVTK_NOE
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
+
+namespace future_errc {
+
+
+inline CPPDEVTK_BASE_API ErrorCode MakeErrorCode(future_errc_t futureErrC) CPPDEVTK_NOEXCEPT {
+	return ErrorCode(static_cast<int>(futureErrC), GetFutureCategory());
+}
+
+inline CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(future_errc_t futureErrC) CPPDEVTK_NOEXCEPT {
+	return ErrorCondition(static_cast<int>(futureErrC), GetFutureCategory());
+}
+
+
+}	// namespace future_errc
+
 
 inline FutureException::FutureException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode):
 		Exception(throwPoint), LogicException(throwPoint, ""), errorCode_(errorCode) {}

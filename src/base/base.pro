@@ -113,9 +113,6 @@ SOURCES += \
     exception.cpp \
 	exception_propagation.cpp \
 	unknown_exception.cpp	\
-	new.cpp \
-	functional.cpp \
-	memory.cpp \
 	future.cpp \
     ios.cpp \
     lockables.cpp \
@@ -319,9 +316,6 @@ HEADERS += \
     ../../include/cppdevtk/base/exception.hpp \
 	../../include/cppdevtk/base/exception_propagation.hpp \
 	../../include/cppdevtk/base/unknown_exception.hpp \
-	../../include/cppdevtk/base/new.hpp \
-	../../include/cppdevtk/base/functional.hpp \
-	../../include/cppdevtk/base/memory.hpp \
 	../../include/cppdevtk/base/future.hpp \
     ../../include/cppdevtk/base/info.hpp \
     ../../include/cppdevtk/base/info_tr.hpp \

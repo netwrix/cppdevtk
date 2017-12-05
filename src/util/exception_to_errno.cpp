@@ -26,7 +26,6 @@
 #include <cppdevtk/util/no_such_file_or_directory_exception.hpp>
 #include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
-#include <cppdevtk/base/new.hpp>
 #include <cppdevtk/base/exception.hpp>
 
 #include <cppdevtk/base/logger.hpp>
@@ -69,9 +68,6 @@ CPPDEVTK_UTIL_API void ExceptionToErrno() {
 		}
 		catch (const base::LogicException&) {
 			errno = ENODATA;
-		}
-		catch (const base::BadAllocException&) {
-			errno = ENOMEM;
 		}
 		catch (const base::Exception&) {
 			errno = ENODATA;

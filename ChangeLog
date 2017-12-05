@@ -3,6 +3,8 @@ Version 1.0.5.1:
 - New features:
 - Improvements:
 	- this_thread Yield(), SleepFor() and SleepUntil() available even if !CPPDEVTK_HAVE_THREAD_STORAGE
+	- removed unnecessary exceptions
+	- exception propagation: added parameter to terminate or return null on failure
 - Fixed bugs:
 
 

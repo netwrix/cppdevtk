@@ -333,7 +333,7 @@ ExceptionPtr Thread::GetTryJoinExceptionPtr(DataPtr pData) {
 #	if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 	if (!exceptionPtr) {
 		if (pData->GetThrowStdBadException()) {
-			exceptionPtr = MakeExceptionPtr(bad_exception());
+			exceptionPtr = MakeExceptionPtr(bad_exception(), false);
 			if (!exceptionPtr) {
 				CPPDEVTK_LOG_FATAL("failed to propagate exception from child to parent thread");
 				terminate();
@@ -387,7 +387,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	}
 	catch (...) {
 		CPPDEVTK_LOG_DEBUG("thread main function threw");
-		pData->SetExceptionPtr(CurrentException());
+		pData->SetExceptionPtr(CurrentException(false));
 #		if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 		pData->SetThrowStdBadException(true);
 #		endif

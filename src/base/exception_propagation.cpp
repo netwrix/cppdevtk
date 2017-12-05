@@ -18,11 +18,13 @@
 
 
 #include <cppdevtk/base/exception_propagation.hpp>
+#if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 #include <cppdevtk/base/unknown_exception.hpp>
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/logger.hpp>
+#endif
 
 
 namespace cppdevtk {
@@ -30,6 +32,9 @@ namespace base {
 
 
 #if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
+
+
+using ::std::terminate;
 
 
 namespace detail {
@@ -45,7 +50,7 @@ ExceptionPtr ThrowableCurrentException() {
 	catch (const Exception& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.Clone().release()));
 	}
-	catch (const detail::PolymorphicExceptionBase& exc) {
+	catch (const CPPDEVTK_QT_EXCEPTION& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.clone()));
 	}
 	
@@ -116,7 +121,7 @@ ExceptionPtr ThrowableCurrentException() {
 	
 	catch (...) {
 		CPPDEVTK_MAKE_UNKNOWN_EXCEPTION(exc);
-		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.clone()));
+		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.Clone().release()));
 	}
 	
 	CPPDEVTK_ASSERT(exceptionPtr);
@@ -127,13 +132,12 @@ ExceptionPtr ThrowableCurrentException() {
 }	// namespace detail
 
 
-CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT {
+CPPDEVTK_BASE_API ExceptionPtr CurrentException(bool terminateIfFail) CPPDEVTK_NOEXCEPT {
 	// NOTE:
 	// - If needs to allocate memory and the attempt fails, it returns an exception_ptr object that refers to
 	// an instance of bad_alloc.
 	// - If the attempt to copy the current exception object throws an exception, the function returns an exception_ptr
 	// object that refers to the thrown exception or, if this is not possible, to an instance of bad_exception.
-	// - ::std::current_exception() may not fail but our impl may fail and return null exception pointer to indicate failure.
 	
 	try {
 		return detail::ThrowableCurrentException();
@@ -143,7 +147,14 @@ CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT {
 			return ExceptionPtr(ExceptionPtr::ImplPtrType(detail::PolymorphicStdBadAlloc(exc).clone()));
 		}
 		catch (...) {
-			return ExceptionPtr();
+			if (terminateIfFail) {
+				CPPDEVTK_LOG_FATAL("failed to clone PolymorphicStdBadAlloc");
+				terminate();
+			}
+			else {
+				CPPDEVTK_LOG_INFO("failed to clone PolymorphicStdBadAlloc");
+				return ExceptionPtr();
+			}
 		}
 	}
 	catch (...) {
@@ -156,7 +167,14 @@ CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT {
 						::std::bad_exception()).clone()));
 			}
 			catch (...) {
-				return ExceptionPtr();
+				if (terminateIfFail) {
+					CPPDEVTK_LOG_FATAL("failed to clone PolymorphicStdBadException");
+					terminate();
+				}
+				else {
+					CPPDEVTK_LOG_INFO("failed to clone PolymorphicStdBadException");
+					return ExceptionPtr();
+				}
 			}
 		}
 	}
@@ -171,7 +189,7 @@ CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr) {
 	CPPDEVTK_LOG_FATAL("exceptionPtr.pImpl_->raise() did not throw!!!; typeInfoName: "
 			<< typeid(*(exceptionPtr.pImpl_)).name());
 	CPPDEVTK_ASSERT(0 && "exceptionPtr.pImpl_->raise() did not throw!!!");
-	::std::terminate();
+	terminate();
 }
 
 

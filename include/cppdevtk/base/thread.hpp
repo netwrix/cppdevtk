@@ -38,7 +38,7 @@
 #include "thread_data_types.hpp"
 #include "non_copyable.hpp"
 #include "stringizable.hpp"
-#include "exception_propagation.hpp"
+#include "exception.hpp"
 #include "static_assert.hpp"
 
 #include <QtCore/QTextStream>

@@ -27,7 +27,8 @@
 
 
 #include "config.hpp"
-
+#include "unused.hpp"
+#if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QException>
@@ -35,7 +36,6 @@
 #include <QtCore/QtCore>
 #endif
 
-#include <exception>
 #include <stdexcept>
 #include <typeinfo>
 #include <ios>
@@ -52,6 +52,8 @@
 #include <cstddef>
 #include <algorithm>	// swap(), C++98
 #include <utility>	// swap(), C++11
+#endif	// (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
+#include <exception>
 
 
 namespace cppdevtk {
@@ -136,7 +138,7 @@ namespace detail {
 
 class CPPDEVTK_BASE_API ExceptionPtr {
 private:
-	friend CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT;
+	friend CPPDEVTK_BASE_API ExceptionPtr CurrentException(bool) CPPDEVTK_NOEXCEPT;
 	friend ExceptionPtr detail::ThrowableCurrentException();
 	friend CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr);
 	
@@ -172,18 +174,27 @@ CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NOEXCEPT;
 
 #endif	// (CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 
+/// \arg terminateIfFail If fails then if it is \c true then calls \c ::std::terminate() else returns null exception ptr.
+/// \attention If \c ::std::make_exception_ptr() is not available then:
+/// - Qt based (including CppDevTk) exceptions work as expected.
+/// - only exceptions that inherit from \c ::std::exception are supported; other exceptions will be reported as unknown exception.
+/// - user defined exceptions, other than Qt, that inherit from std exceptions will be reported as their std exception base
+/// (ex: if FooError inherits from \c ::std::runtime_error then \c runtime_error will be reported, not FooError, so slicing...).
+/// - it may fail.
 template <typename TException>
-ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT;
+ExceptionPtr MakeExceptionPtr(TException exc, bool terminateIfFail = true) CPPDEVTK_NOEXCEPT;
 
+/// \arg terminateIfFail If fails then if it is \c true then calls \c ::std::terminate() else returns null exception ptr.
 /// \attention If \c ::std::current_exception() is not available then:
 /// - Qt based (including CppDevTk) exceptions work as expected.
 /// - only exceptions that inherit from \c ::std::exception are supported; other exceptions will be reported as unknown exception.
 /// - user defined exceptions, other than Qt, that inherit from std exceptions will be reported as their std exception base
 /// (ex: if FooError inherits from \c ::std::runtime_error then \c runtime_error will be reported, not FooError, so slicing...).
 /// - it will work only if there is a handled exception (called in a catch clause).
-/// - it may fail, in this case it returns a null exception pointer.
-CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT;
+/// - it may fail.
+CPPDEVTK_BASE_API ExceptionPtr CurrentException(bool terminateIfFail = true) CPPDEVTK_NOEXCEPT;
 
+/// \pre \a exceptionPtr is not null.
 CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr);
 
 /// @}
@@ -263,8 +274,9 @@ inline CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NO
 #endif	// (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 
 template <typename TException>
-inline ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT {
+inline ExceptionPtr MakeExceptionPtr(TException exc, bool terminateIfFail) CPPDEVTK_NOEXCEPT {
 #if (CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
+	SuppressUnusedWarning(terminateIfFail);
 #if (!CPPDEVTK_COMPILER_GCC)
 	return ::std::make_exception_ptr(exc);
 #elif (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 6, 0))
@@ -277,14 +289,15 @@ inline ExceptionPtr MakeExceptionPtr(TException exc) CPPDEVTK_NOEXCEPT {
 		throw exc;
 	}
 	catch (...) {
-		return CurrentException();
+		return CurrentException(terminateIfFail);
 	}
 #endif
 }
 
 #if (CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 
-inline CPPDEVTK_BASE_API ExceptionPtr CurrentException() CPPDEVTK_NOEXCEPT {
+inline CPPDEVTK_BASE_API ExceptionPtr CurrentException(bool terminateIfFail) CPPDEVTK_NOEXCEPT {
+	SuppressUnusedWarning(terminateIfFail);
 	return ::std::current_exception();
 }
 

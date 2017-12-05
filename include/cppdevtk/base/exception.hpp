@@ -166,51 +166,6 @@ private:
 CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) CPPDEVTK_NOEXCEPT;
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BadException
-
-#define CPPDEVTK_BAD_EXCEPTION()	\
-	::cppdevtk::base::BadException(CPPDEVTK_SOURCE_CODE_INFO())
-
-#define CPPDEVTK_MAKE_BAD_EXCEPTION(excName)	\
-	::cppdevtk::base::BadException excName(CPPDEVTK_SOURCE_CODE_INFO())
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \sa C++ 03, 18.6.2.1 Class bad_exception
-class CPPDEVTK_BASE_API BadException: public Exception {
-public:
-	explicit BadException(const SourceCodeInfo& throwPoint);
-	
-	virtual ~BadException() CPPDEVTK_NOEXCEPT;
-	
-	::std::auto_ptr<BadException> Clone() const;
-	
-#	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
-#	else
-	virtual BadException* clone() const;
-#	endif
-	
-	void Swap(BadException& other) CPPDEVTK_NOEXCEPT;
-protected:
-	virtual void DoThrow() const;
-	
-#	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual Cloneable* DoClone() const;
-#	else
-	virtual BadException* DoClone() const;
-#	endif
-	
-	void SwapOwnData(BadException& other) CPPDEVTK_NOEXCEPT;
-};
-
-
-CPPDEVTK_BASE_API void swap(BadException& x, BadException& y) CPPDEVTK_NOEXCEPT;
-
-
 /// @}	// std_exceptions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -328,48 +283,6 @@ inline void Exception::SwapOwnData(Exception& other) CPPDEVTK_NOEXCEPT {
 
 inline CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) CPPDEVTK_NOEXCEPT {
 	x.Swap(y);
-}
-
-
-
-
-inline BadException::BadException(const SourceCodeInfo& throwPoint): Exception(throwPoint) {}
-
-inline BadException::~BadException() CPPDEVTK_NOEXCEPT {}
-
-inline ::std::auto_ptr<BadException> BadException::Clone() const {
-	return ::std::auto_ptr<BadException>(dynamic_cast<BadException*>(Cloneable::Clone().release()));
-}
-
-#if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* BadException::clone() const {
-#else
-inline BadException* BadException::clone() const {
-#endif
-	return Clone().release();
-}
-
-inline void BadException::Swap(BadException& other) CPPDEVTK_NOEXCEPT {
-	if (this != &other) {
-		Exception::Swap(other);
-		SwapOwnData(other);
-	}
-}
-
-inline void BadException::DoThrow() const {
-	throw *this;
-}
-
-#if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline Cloneable* BadException::DoClone() const {
-#else
-inline BadException* BadException::DoClone() const {
-#endif
-	return new BadException(*this);
-}
-
-inline void BadException::SwapOwnData(BadException& other) CPPDEVTK_NOEXCEPT {
-	SuppressUnusedWarning(other);
 }
 
 

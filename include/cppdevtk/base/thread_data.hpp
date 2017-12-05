@@ -26,7 +26,7 @@
 #include "non_copyable.hpp"
 #include "mutex.hpp"
 #include "condition_variable.hpp"
-#include "exception_propagation.hpp"
+#include "exception.hpp"
 #include "thread_exception.hpp"
 
 #include <cstddef>

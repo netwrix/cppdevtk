@@ -46,9 +46,6 @@ HEADERS += \
     exception.hpp \
 	exception_propagation.hpp \
 	unknown_exception.hpp	\
-	new.hpp \
-	functional.hpp \
-	memory.hpp \
 	future.hpp \
     info.hpp \
     info_tr.hpp \

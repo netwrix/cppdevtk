@@ -35,7 +35,6 @@
 #include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/dbc_exceptions.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
-#include <cppdevtk/base/new.hpp>
 #include <cppdevtk/base/exception.hpp>
 
 #include <cppdevtk/base/cassert.hpp>
@@ -108,9 +107,6 @@ CPPDEVTK_JNI_API void ThrowJavaExceptionFromCatchedCppException(JNIEnv* pJniEnv)
 	}
 	catch (const ::cppdevtk::base::LogicException& exc) {
 		detail::ThrowJavaException(pJniEnv, "java/lang/RuntimeException", exc.what());
-	}
-	catch (const ::cppdevtk::base::BadAllocException& exc) {
-		detail::ThrowJavaException(pJniEnv, "java/lang/OutOfMemoryError", exc.what());
 	}
 	catch (const ::cppdevtk::base::Exception& exc) {
 		detail::ThrowJavaException(pJniEnv, "java/lang/Exception", exc.what());
