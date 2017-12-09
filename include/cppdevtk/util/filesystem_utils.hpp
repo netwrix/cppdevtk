@@ -34,6 +34,7 @@
 
 #include "config.hpp"
 #include "filesystem_exception.hpp"
+#include "no_such_file_or_directory_exception.hpp"
 #if (CPPDEVTK_PLATFORM_WINDOWS)
 #include <windows.h>
 #undef DeleteFile

@@ -41,6 +41,7 @@
 
 #include "semaphores.hpp"
 #include "waitconditions.hpp"
+#include "boost_any_test.hpp"
 
 #include <QtCore/QString>
 #include <QtCore/QtGlobal>
@@ -236,10 +237,12 @@ bool TestStdExceptions();
 bool TestNonStdExceptions();
 bool TestSystemException();
 bool TestExceptionPropagation();
+bool TestAny();
 bool TestMutex();
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 bool TestThread();
 #endif
+
 
 void TestStackTraceCppHelper1(int dummy);
 void TestStackTraceCppHelper2(int);
@@ -336,6 +339,13 @@ int main(int argc, char* argv[]) try {
 			return EXIT_FAILURE;
 		}
 		CPPDEVTK_COUT << "ExceptionPropagation test: PASSED" << endl;
+		
+		CPPDEVTK_COUT << "testing Any..." << endl;
+		if (!TestAny()) {
+			CPPDEVTK_CERR << "Any test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		CPPDEVTK_COUT << "Any test: PASSED" << endl;
 		
 		CPPDEVTK_COUT << "testing Mutex..." << endl;
 		if (!TestMutex()) {
@@ -680,6 +690,12 @@ bool TestExceptionPropagation() {
 	return true;
 }
 
+bool TestAny() {
+    using namespace any_tests;
+    tester<test_case_iterator> test_suite(begin, end);
+    return test_suite() ? true : false;
+}
+
 bool TestMutex() {
 	Mutex mutex;
 	mutex.Lock();
@@ -848,7 +864,6 @@ bool TestMutex() {
 	
 	return true;
 }
-
 
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 

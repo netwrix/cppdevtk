@@ -28,6 +28,8 @@
 #include "config.hpp"
 #include "non_copyable.hpp"
 #include "locks.hpp"
+#include "lock_exception.hpp"
+#include "deadlock_exception.hpp"
 #include "generic_locking_algorithms.hpp"
 #include "unused.hpp"
 

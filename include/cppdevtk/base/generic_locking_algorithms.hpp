@@ -28,6 +28,8 @@
 
 #include "config.hpp"
 #include "locks.hpp"
+#include "lock_exception.hpp"
+#include "deadlock_exception.hpp"
 #include "cassert.hpp"
 
 

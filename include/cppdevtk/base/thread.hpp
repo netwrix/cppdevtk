@@ -315,13 +315,14 @@ namespace this_thread {
 /// \remark Threads not created by \c Thread (adopted threads) are supported.
 CPPDEVTK_BASE_API Thread::Id GetId() CPPDEVTK_NOEXCEPT;
 
+// TODO
+//template<typename Func>
+//void AtThreadExit(Func func);
+
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
-/// \remarks
-/// - Threads not created by \c Thread (adopted threads) are supported.
-/// - noexcept in std but POSIX impl may fail (sched_yield() may fail
-/// (actually on Linux it always succeeds but Mac OS X man page is missing))!
-CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */;
+/// \remark Threads not created by \c Thread (adopted threads) are supported.
+CPPDEVTK_BASE_API void Yield() CPPDEVTK_NOEXCEPT;
 
 
 /// \name Sleep
@@ -487,4 +488,9 @@ inline bool Thread::Id::operator>=(const Id& other) const CPPDEVTK_NOEXCEPT {
 
 
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
+
+
+#include "thread_exception.hpp"
+
+
 #endif	// CPPDEVTK_BASE_THREAD_HPP_INCLUDED_

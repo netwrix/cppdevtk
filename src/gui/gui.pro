@@ -170,40 +170,40 @@ win32 {
 
 
 FORMS += \
-    qt_overwrite_dialog.ui \
-    qt_other_dialog.ui \
-    qt_copy_dialog.ui \
-    caps_lock_widget.ui \
-    timed_computer_management_widget.ui \
-    language_widget.ui \
-    eula_widget.ui \
-    disk_space_widget.ui \
-    custom_wizard.ui	\
+	caps_lock_widget.ui \
+	custom_wizard.ui	\
+	disk_space_widget.ui \
+	eula_widget.ui \
+	language_widget.ui \
 	login_widget.ui	\
-	password_widget.ui
+	password_widget.ui	\
+	qt_copy_dialog.ui \
+	qt_other_dialog.ui \
+	qt_overwrite_dialog.ui \
+	timed_computer_management_widget.ui
 
 
 SOURCES += \
-    application.cpp \
-    application_base.cpp \
-    caps_lock_widget.cpp \
-    custom_wizard.cpp \
-    disk_space_widget.cpp \
-    eula_widget.cpp \
-    invisible_widget.cpp \
-    k_squeezed_text_label.cpp \
-    language_widget.cpp \
-    login_widget.cpp \
-    message_box.cpp \
-    password_widget.cpp \
-    progress_dialog.cpp \
-    qt_copy_dialog.cpp \
-    qt_file_copier.cpp \
-    qt_single_application.cpp \
-    single_application.cpp \
-    timed_computer_management_widget.cpp \
-    widget_base.cpp \
-    init_resources.cpp
+	application.cpp \
+	application_base.cpp \
+	caps_lock_widget.cpp \
+	custom_wizard.cpp \
+	disk_space_widget.cpp \
+	eula_widget.cpp \
+	init_resources.cpp	\
+	invisible_widget.cpp \
+	k_squeezed_text_label.cpp \
+	language_widget.cpp \
+	login_widget.cpp \
+	message_box.cpp \
+	password_widget.cpp \
+	progress_dialog.cpp \
+	qt_copy_dialog.cpp \
+	qt_file_copier.cpp \
+	qt_single_application.cpp \
+	single_application.cpp \
+	timed_computer_management_widget.cpp \
+	widget_base.cpp
 
 unix {
 	linux* {
@@ -234,29 +234,29 @@ else {
 }
 
 HEADERS += \
-    ../../include/cppdevtk/gui/application.hpp \
-    ../../include/cppdevtk/gui/application_base.hpp \
-    ../../include/cppdevtk/gui/caps_lock_widget.hpp \
-    ../../include/cppdevtk/gui/computer_manager.hpp \
-    ../../include/cppdevtk/gui/config.hpp \
-    ../../include/cppdevtk/gui/custom_wizard.hpp \
-    ../../include/cppdevtk/gui/disk_space_widget.hpp \
-    ../../include/cppdevtk/gui/eula_widget.hpp \
-    ../../include/cppdevtk/gui/info.hpp \
-    ../../include/cppdevtk/gui/init_resources.hpp \
-    ../../include/cppdevtk/gui/invisible_widget.hpp \
-    ../../include/cppdevtk/gui/is_caps_lock_on.hpp \
-    ../../include/cppdevtk/gui/k_squeezed_text_label.hpp \
-    ../../include/cppdevtk/gui/language_widget.hpp \
-    ../../include/cppdevtk/gui/login_widget.hpp \
-    ../../include/cppdevtk/gui/message_box.hpp \
-    ../../include/cppdevtk/gui/password_widget.hpp \
-    ../../include/cppdevtk/gui/progress_dialog.hpp \
-    ../../include/cppdevtk/gui/qt_copy_dialog.hpp \
-    ../../include/cppdevtk/gui/qt_file_copier.hpp \
-    ../../include/cppdevtk/gui/qt_single_application.hpp \
-    ../../include/cppdevtk/gui/set_stylesheet_from_file.hpp \
-    ../../include/cppdevtk/gui/single_application.hpp \
-    ../../include/cppdevtk/gui/timed_computer_management_widget.hpp \
-    ../../include/cppdevtk/gui/user_idle_time.hpp \
-    ../../include/cppdevtk/gui/widget_base.hpp
+	../../include/cppdevtk/gui/application.hpp \
+	../../include/cppdevtk/gui/application_base.hpp \
+	../../include/cppdevtk/gui/caps_lock_widget.hpp \
+	../../include/cppdevtk/gui/computer_manager.hpp \
+	../../include/cppdevtk/gui/config.hpp \
+	../../include/cppdevtk/gui/custom_wizard.hpp \
+	../../include/cppdevtk/gui/disk_space_widget.hpp \
+	../../include/cppdevtk/gui/eula_widget.hpp \
+	../../include/cppdevtk/gui/info.hpp \
+	../../include/cppdevtk/gui/init_resources.hpp \
+	../../include/cppdevtk/gui/invisible_widget.hpp \
+	../../include/cppdevtk/gui/is_caps_lock_on.hpp \
+	../../include/cppdevtk/gui/k_squeezed_text_label.hpp \
+	../../include/cppdevtk/gui/language_widget.hpp \
+	../../include/cppdevtk/gui/login_widget.hpp \
+	../../include/cppdevtk/gui/message_box.hpp \
+	../../include/cppdevtk/gui/password_widget.hpp \
+	../../include/cppdevtk/gui/progress_dialog.hpp \
+	../../include/cppdevtk/gui/qt_copy_dialog.hpp \
+	../../include/cppdevtk/gui/qt_file_copier.hpp \
+	../../include/cppdevtk/gui/qt_single_application.hpp \
+	../../include/cppdevtk/gui/set_stylesheet_from_file.hpp \
+	../../include/cppdevtk/gui/single_application.hpp \
+	../../include/cppdevtk/gui/timed_computer_management_widget.hpp \
+	../../include/cppdevtk/gui/user_idle_time.hpp \
+	../../include/cppdevtk/gui/widget_base.hpp

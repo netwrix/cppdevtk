@@ -25,32 +25,32 @@ SUBDIRS +=
 
 
 HEADERS += \
-    application.hpp \
-    application_base.hpp \
-    caps_lock_widget.hpp \
-    computer_manager.hpp \
-    config.hpp \
-    custom_wizard.hpp \
-    disk_space_widget.hpp \
-    eula_widget.hpp \
-    info.hpp \
-    init_resources.hpp \
-    invisible_widget.hpp \
-    is_caps_lock_on.hpp \
-    k_squeezed_text_label.hpp \
-    language_widget.hpp \
-    login_widget.hpp \
-    message_box.hpp \
-    password_widget.hpp \
-    progress_dialog.hpp \
-    qt_copy_dialog.hpp \
-    qt_file_copier.hpp \
-    qt_single_application.hpp \
-    set_stylesheet_from_file.hpp \
-    single_application.hpp \
-    timed_computer_management_widget.hpp \
-    user_idle_time.hpp \
-    widget_base.hpp
+	application.hpp \
+	application_base.hpp \
+	caps_lock_widget.hpp \
+	computer_manager.hpp \
+	config.hpp \
+	custom_wizard.hpp \
+	disk_space_widget.hpp \
+	eula_widget.hpp \
+	info.hpp \
+	init_resources.hpp \
+	invisible_widget.hpp \
+	is_caps_lock_on.hpp \
+	k_squeezed_text_label.hpp \
+	language_widget.hpp \
+	login_widget.hpp \
+	message_box.hpp \
+	password_widget.hpp \
+	progress_dialog.hpp \
+	qt_copy_dialog.hpp \
+	qt_file_copier.hpp \
+	qt_single_application.hpp \
+	set_stylesheet_from_file.hpp \
+	single_application.hpp \
+	timed_computer_management_widget.hpp \
+	user_idle_time.hpp \
+	widget_base.hpp
 
 
 headers.files = $${HEADERS}

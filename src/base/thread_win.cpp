@@ -120,8 +120,8 @@ CPPDEVTK_BASE_API Thread::Id GetId() CPPDEVTK_NOEXCEPT {
 
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
-CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */ {
-	::Sleep(0);
+CPPDEVTK_BASE_API void Yield() CPPDEVTK_NOEXCEPT {
+	::Sleep(0);	// do not use SwitchToThread()! (does not switch execution to another processor etc)
 }
 
 CPPDEVTK_BASE_API void SleepFor(int relTime) {

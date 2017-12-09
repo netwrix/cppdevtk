@@ -22,6 +22,7 @@
 
 
 #include "config.hpp"
+#include "dynamic_loader_exception.hpp"
 #include <cppdevtk/base/non_copyable.hpp>
 #if (CPPDEVTK_PLATFORM_UNIX)
 #	include <dlfcn.h>

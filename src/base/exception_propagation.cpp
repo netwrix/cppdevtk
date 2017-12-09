@@ -149,6 +149,7 @@ CPPDEVTK_BASE_API ExceptionPtr CurrentException(bool terminateIfFail) CPPDEVTK_N
 		catch (...) {
 			if (terminateIfFail) {
 				CPPDEVTK_LOG_FATAL("failed to clone PolymorphicStdBadAlloc");
+				CPPDEVTK_ASSERT(0 && "failed to clone PolymorphicStdBadAlloc");
 				terminate();
 			}
 			else {
@@ -169,6 +170,7 @@ CPPDEVTK_BASE_API ExceptionPtr CurrentException(bool terminateIfFail) CPPDEVTK_N
 			catch (...) {
 				if (terminateIfFail) {
 					CPPDEVTK_LOG_FATAL("failed to clone PolymorphicStdBadException");
+					CPPDEVTK_ASSERT(0 && "failed to clone PolymorphicStdBadException");
 					terminate();
 				}
 				else {

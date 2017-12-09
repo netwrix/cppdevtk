@@ -152,11 +152,11 @@ win32 {
 
 
 SOURCES += \
-    string_conv.cpp \
-    cpp_this_field.cpp	\
-    exceptions.cpp	\
+	cpp_this_field.cpp	\
+	exceptions.cpp	\
 	exceptions_support.cpp	\
-	jni_loader.cpp
+	jni_loader.cpp	\
+	string_conv.cpp
 
 android {
 	SOURCES += get_package_name.cpp	\
@@ -165,14 +165,14 @@ android {
 
 
 HEADERS += \
-    ../../include/cppdevtk/jni/config.hpp \
-    ../../include/cppdevtk/jni/info.hpp \
-    ../../include/cppdevtk/jni/string_conv.hpp \
-    ../../include/cppdevtk/jni/tstring_conv.hpp	\
+	../../include/cppdevtk/jni/config.hpp \
 	../../include/cppdevtk/jni/cpp_this_field.hpp	\
 	../../include/cppdevtk/jni/exceptions.hpp	\
 	../../include/cppdevtk/jni/exceptions_support.hpp	\
-	../../include/cppdevtk/jni/jni_loader.hpp
+	../../include/cppdevtk/jni/info.hpp \
+	../../include/cppdevtk/jni/jni_loader.hpp	\
+	../../include/cppdevtk/jni/string_conv.hpp \
+	../../include/cppdevtk/jni/tstring_conv.hpp
 
 android {
 	HEADERS += ../../include/cppdevtk/jni/get_package_name.hpp	\

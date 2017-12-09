@@ -18,3 +18,11 @@
 
 
 #include <cppdevtk/base/typeinfo.hpp>
+
+
+namespace cppdevtk {
+namespace base {
+
+
+}	// namespace base
+}	// namespace cppdevtk

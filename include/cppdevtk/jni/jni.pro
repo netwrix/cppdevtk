@@ -24,14 +24,15 @@ include(./../../../common.pri)
 SUBDIRS +=
 
 
-HEADERS += config.hpp	\
-	info.hpp	\
-	string_conv.hpp	\
-	tstring_conv.hpp \
-    cpp_this_field.hpp	\
-    exceptions.hpp	\
+HEADERS +=	\
+	config.hpp	\
+	cpp_this_field.hpp	\
+	exceptions.hpp	\
 	exceptions_support.hpp	\
-	jni_loader.hpp
+	info.hpp	\
+	jni_loader.hpp	\
+	string_conv.hpp	\
+	tstring_conv.hpp
 
 android {
 	HEADERS += get_package_name.hpp	\

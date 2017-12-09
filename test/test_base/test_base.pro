@@ -124,12 +124,14 @@ HEADERS += info.hpp \
     init_resources.hpp \
     config.hpp	\
 	semaphores.hpp	\
-	waitconditions.hpp
+	waitconditions.hpp	\
+	boost_any_test.hpp
 
 
 SOURCES += main.cpp	\
 	semaphores.cpp	\
-	waitconditions.cpp
+	waitconditions.cpp	\
+	boost_any_test.cpp
 
 android {
 	cppdevtk_enable_android_manifest {

@@ -18,75 +18,12 @@
 
 
 #include <cppdevtk/base/future.hpp>
-#include <cppdevtk/base/unused.hpp>
-#include <cppdevtk/base/cassert.hpp>
 
 
 namespace cppdevtk {
 namespace base {
 
 
-namespace detail {
 
-
-class /* CPPDEVTK_BASE_API */ FutureErrorCategory: public ErrorCategory {
-public:
-	FutureErrorCategory() CPPDEVTK_NOEXCEPT;	// needed for default initialization of an object of const type
-	virtual QString GetName() const;
-	virtual QString GetMessage(int errVal, const QLocale& locale = QLocale::c()) const;
-};
-
-
-}	// namespace detail
-
-
-QString FutureException::DoOwnWhat() const {
-	QString ownWhat = LogicException::DoOwnWhat();
-	if (ownWhat.isEmpty()) {
-		ownWhat = Exception::DoOwnWhat();
-	}
-	ownWhat += QString("; error code: %1").arg(errorCode_.ToString());
-	return ownWhat;
-}
-
-
-CPPDEVTK_BASE_API const ErrorCategory& GetFutureCategory() CPPDEVTK_NOEXCEPT {
-#	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
-	CPPDEVTK_COMPILER_WARNING("local static variable initialization is not thread safe!");
-#	endif
-	
-	static const detail::FutureErrorCategory kFutureErrorCategory;
-	
-	return kFutureErrorCategory;
-}
-
-
-namespace detail {
-
-
-FutureErrorCategory::FutureErrorCategory() CPPDEVTK_NOEXCEPT: ErrorCategory() {}
-
-QString FutureErrorCategory::GetName() const {
-	return "future";
-}
-
-QString FutureErrorCategory::GetMessage(int errVal, const QLocale& locale) const {
-	SuppressUnusedWarning(locale);
-	
-	switch (static_cast<future_errc::future_errc_t>(errVal)) {
-		case future_errc::broken_promise:
-			return "the promise object with which the future shares its shared state was destroyed before being set a value or an exception";
-		case future_errc::promise_already_satisfied:
-			return "the promise object was already set a value or exception";
-		case future_errc::no_state:
-			return "an operation attempted to access the shared state of an object with no shared state";
-		default:
-			CPPDEVTK_ASSERT(0 && "unknown future_errc_t value");
-			return "unknown future_errc_t value";
-	}
-}
-
-
-}	// namespace detail
 }	// namespace base
 }	// namespace cppdevtk

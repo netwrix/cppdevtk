@@ -22,8 +22,13 @@
 
 
 #include "config.hpp"
+#include "bad_cast_exception.hpp"
+#include "stringizable.hpp"
 
 #include <typeinfo>
+#include <cstddef>
+#include <algorithm>	// swap(), C++98
+#include <utility>	// swap(), C++11
 
 
 namespace cppdevtk {
@@ -33,16 +38,20 @@ namespace base {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Wrapper class around std::type_info with value semantics (public copy constructor and assignment operator)
 /// and seamless comparisons.
-/// \sa <a href="http://loki-lib.sourceforge.net/index.php?n=Main.HomePage">Loki, TypeInfo</a>
-class CPPDEVTK_BASE_API TypeInfo {
+/// \sa <a href="http://loki-lib.sourceforge.net/html/a00553.html">Loki::TypeInfo</a>
+class CPPDEVTK_BASE_API TypeInfo: public QStringizable {
 public:
 	TypeInfo() CPPDEVTK_NOEXCEPT;	///< \note Needed for containers.
-	TypeInfo(const ::std::type_info& stdTypeInfo) CPPDEVTK_NOEXCEPT;	///< \remark Non-explicit (conversion ctor).
+	TypeInfo(const ::std::type_info& stdTypeInfo) CPPDEVTK_NOEXCEPT;	///< \note Non-explicit (conversion ctor).
 	
 	bool Before(const TypeInfo& other) const CPPDEVTK_NOEXCEPT;
+	
 	const char* Name() const CPPDEVTK_NOEXCEPT;
+	virtual QString ToString() const;	///< Same as \c Name()
 	
 	const ::std::type_info& Peek() const CPPDEVTK_NOEXCEPT;
+	
+	void Swap(TypeInfo& other) CPPDEVTK_NOEXCEPT;
 private:
 	const ::std::type_info* pStdTypeInfo_;
 };
@@ -55,15 +64,21 @@ CPPDEVTK_BASE_API bool operator>(const TypeInfo& lhs, const TypeInfo& rhs) CPPDE
 CPPDEVTK_BASE_API bool operator<=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
 CPPDEVTK_BASE_API bool operator>=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT;
 
+CPPDEVTK_BASE_API void swap(TypeInfo& x, TypeInfo& y) CPPDEVTK_NOEXCEPT;
+
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-inline TypeInfo::TypeInfo() CPPDEVTK_NOEXCEPT: pStdTypeInfo_(&typeid(*this)) {}
+inline TypeInfo::TypeInfo() CPPDEVTK_NOEXCEPT: QStringizable(), pStdTypeInfo_(NULL) {
+	class NullTypeInfo {};
+	pStdTypeInfo_ = &typeid(NullTypeInfo);
+}
 
-inline TypeInfo::TypeInfo(const ::std::type_info& stdTypeInfo) CPPDEVTK_NOEXCEPT: pStdTypeInfo_(&stdTypeInfo) {}
+inline TypeInfo::TypeInfo(const ::std::type_info& stdTypeInfo) CPPDEVTK_NOEXCEPT: QStringizable(),
+		pStdTypeInfo_(&stdTypeInfo) {}
 
 inline bool TypeInfo::Before(const TypeInfo& other) const CPPDEVTK_NOEXCEPT {
 #if (CPPDEVTK_COMPILER_MSVC)
@@ -79,8 +94,17 @@ inline const char* TypeInfo::Name() const CPPDEVTK_NOEXCEPT {
 	return pStdTypeInfo_->name();
 }
 
+inline QString TypeInfo::ToString() const {
+	return Name();
+}
+
 inline const ::std::type_info& TypeInfo::Peek() const CPPDEVTK_NOEXCEPT {
 	return *pStdTypeInfo_;
+}
+
+inline void TypeInfo::Swap(TypeInfo& other) CPPDEVTK_NOEXCEPT {
+	using ::std::swap;
+	swap(pStdTypeInfo_, other.pStdTypeInfo_);
 }
 
 
@@ -106,6 +130,11 @@ inline CPPDEVTK_BASE_API bool operator<=(const TypeInfo& lhs, const TypeInfo& rh
 
 inline CPPDEVTK_BASE_API bool operator>=(const TypeInfo& lhs, const TypeInfo& rhs) CPPDEVTK_NOEXCEPT {
 	return !(lhs < rhs);
+}
+
+
+inline CPPDEVTK_BASE_API void swap(TypeInfo& x, TypeInfo& y) CPPDEVTK_NOEXCEPT {
+	x.Swap(y);
 }
 
 

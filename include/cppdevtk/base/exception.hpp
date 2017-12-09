@@ -22,7 +22,6 @@
 
 
 #include "config.hpp"
-#include "exception_propagation.hpp"
 #include "throwable.hpp"
 #include "cloneable.hpp"
 #include "stringizable.hpp"
@@ -288,6 +287,9 @@ inline CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) CPPDEVTK_NOEXCEPT
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+#include "exception_propagation.hpp"
 
 
 #endif	// CPPDEVTK_BASE_EXCEPTION_HPP_INCLUDED_

@@ -17,34 +17,45 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_DYNAMIC_LOADER_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_DYNAMIC_LOADER_HPP_INCLUDED_
+#include <cppdevtk/base/any.hpp>
+#include <cppdevtk/base/exception.hpp>
+#include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/cassert.hpp>
 
-
-#include "config.hpp"
-#include "dynamic_library.hpp"
-#include "dynamic_loader_exception.hpp"
-#include <cppdevtk/base/non_copyable.hpp>
-
-#include <QtCore/QString>
+#include <typeinfo>
 
 
 namespace cppdevtk {
-namespace util {
+namespace base {
 
 
-class CPPDEVTK_UTIL_API DynamicLoader: private ::cppdevtk::base::NonCopyable {
-public:
-	static DynamicLibrary::Handle Load(const QString& dynLibName);
-	static void Unload(DynamicLibrary::Handle dynLibHandle);
-private:
-	DynamicLoader();
-	~DynamicLoader();
-};
+void Any::Reset() CPPDEVTK_NOEXCEPT {
+	using ::std::terminate;
+	
+	
+	if (pTypeErasedValue_ == NULL) {
+		return;
+	}
+	
+	try {
+		delete pTypeErasedValue_;
+	}
+	catch (const ::std::exception& exc) {
+		CPPDEVTK_LOG_FATAL("Any::Reset(): destructor of TypeErasedValue (" << typeid(*pTypeErasedValue_).name()
+			<< ") threw exception: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_ASSERT(0 && "Any::Reset(): destructor of TypeErasedValue threw exception");
+		terminate();
+	}
+	catch (...) {
+		CPPDEVTK_LOG_FATAL("Any::Reset(): destructor of TypeErasedValue (" << typeid(*pTypeErasedValue_).name()
+			<< ") threw unknown exception");
+		CPPDEVTK_ASSERT(0 && "Any::Reset(): destructor of TypeErasedValue threw unknown exception");
+		terminate();
+	}
+	
+	pTypeErasedValue_ = NULL;
+}
 
 
-}	// namespace util
+}	// namespace base
 }	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_UTIL_DYNAMIC_LOADER_HPP_INCLUDED_

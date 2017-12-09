@@ -96,6 +96,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 			catch (const exception& exc) {
 				if (IsJoinable()) {
 					CPPDEVTK_LOG_FATAL("thread destructor: join threw exception: " << Exception::GetDetailedInfo(exc));
+					CPPDEVTK_ASSERT(0 && "thread destructor: join threw exception");
 					terminate();
 				}
 				else {
@@ -106,6 +107,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 			catch (...) {
 				if (IsJoinable()) {
 					CPPDEVTK_LOG_FATAL("thread destructor: join threw unknown exception");
+					CPPDEVTK_ASSERT(0 && "thread destructor: join threw unknown exception");
 					terminate();
 				}
 				else {
@@ -115,17 +117,20 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 			
 #			else	// (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 			CPPDEVTK_LOG_FATAL("thread destructor: interruption disabled and thread is joinable");
+			CPPDEVTK_ASSERT(0 && "thread destructor: interruption disabled and thread is joinable");
 			terminate();
 #			endif
 		}
 	}
 	catch (const exception& exc) {
 		CPPDEVTK_LOG_FATAL("thread destructor: caught exception: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_ASSERT(0 && "thread destructor: caught exception");
 		SuppressUnusedWarning(exc);
 		terminate();
 	}
 	catch (...) {
 		CPPDEVTK_LOG_FATAL("thread destructor: caught unknown exception");
+		CPPDEVTK_ASSERT(0 && "thread destructor: caught unknown exception");
 		terminate();
 	}
 }
@@ -164,6 +169,7 @@ void Thread::Start() {
 		}
 		catch (const exception& exc1) {
 			CPPDEVTK_LOG_FATAL("failed to wait for child thread to start; exc1: " << Exception::GetDetailedInfo(exc));
+			CPPDEVTK_ASSERT(0 && "failed to wait for child thread to start");
 			SuppressUnusedWarning(exc1);
 			terminate();
 		}
@@ -336,6 +342,7 @@ ExceptionPtr Thread::GetTryJoinExceptionPtr(DataPtr pData) {
 			exceptionPtr = MakeExceptionPtr(bad_exception(), false);
 			if (!exceptionPtr) {
 				CPPDEVTK_LOG_FATAL("failed to propagate exception from child to parent thread");
+				CPPDEVTK_ASSERT(0 && "failed to propagate exception from child to parent thread");
 				terminate();
 			}
 		}
@@ -408,11 +415,13 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 #			endif
 			catch (const exception& exc) {
 				CPPDEVTK_LOG_FATAL("detached thread threw exception: " << Exception::GetDetailedInfo(exc));
+				CPPDEVTK_ASSERT(0 && "detached thread threw exception");
 				SuppressUnusedWarning(exc);
 				terminate();
 			}
 			catch (...) {
 				CPPDEVTK_LOG_FATAL("detached thread threw unknown exception");
+				CPPDEVTK_ASSERT(0 && "detached thread threw unknown exception");
 				terminate();
 			}
 		}
@@ -420,6 +429,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 		else {
 			if (pData->GetThrowStdBadException()) {
 				CPPDEVTK_LOG_FATAL("detached thread threw bad_exception");
+				CPPDEVTK_ASSERT(0 && "detached thread threw bad_exception");
 				terminate();
 			}
 		}
@@ -429,13 +439,15 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 	return 0;
 }
 catch (const exception& exc) {
-	CPPDEVTK_LOG_FATAL("thread Run() C routine threw: " << Exception::GetDetailedInfo(exc));
+	CPPDEVTK_LOG_FATAL("thread Run() C routine threw exception: " << Exception::GetDetailedInfo(exc));
+	CPPDEVTK_ASSERT(0 && "thread Run() C routine threw exception");
 	SuppressUnusedWarning(exc);
 	terminate();
 	return 0;
 }
 catch (...) {
 	CPPDEVTK_LOG_FATAL("thread Run() C routine threw unknown exception");
+	CPPDEVTK_ASSERT(0 && "thread Run() C routine threw  unknown exception");
 	terminate();
 	return 0;
 }

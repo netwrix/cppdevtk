@@ -25,6 +25,8 @@
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/cerrno.hpp>
+#include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/logger.hpp>
 
 #include <sched.h>
 
@@ -33,7 +35,6 @@
 
 
 #include <cppdevtk/base/thread_data.hpp>
-#include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include "thread_local_data_ptr.hpp"
 
@@ -185,11 +186,19 @@ CPPDEVTK_BASE_API Thread::Id GetId() CPPDEVTK_NOEXCEPT {
 
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
-CPPDEVTK_BASE_API void Yield() /* CPPDEVTK_NOEXCEPT */ {
-	const int kRetCode = sched_yield();
+CPPDEVTK_BASE_API void Yield() CPPDEVTK_NOEXCEPT {
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	CPPDEVTK_VERIFY(sched_yield() == ESUCCESS);	// Linux implementation always succeeds, but just in case...
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
+	const int kRetCode = sched_yield();	// POSIX impl may fail and Mac OS X man page is missing
 	if (kRetCode != ESUCCESS) {
-		throw CPPDEVTK_THREAD_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "sched_yield() failed");
+		CPPDEVTK_LOG_FATAL("sched_yield() failed; errorCode: " << GetLastSystemErrorCode().ToString());
+		CPPDEVTK_ASSERT(0 && "sched_yield() failed");
+		::std::terminate();
 	}
+#	else
+#	error "Unsupported Unix platform!!!"
+#	endif
 }
 
 CPPDEVTK_BASE_API void SleepFor(int relTime) {

@@ -1097,10 +1097,19 @@ DEPENDPATH *= $${PWD}/include/cppdevtk/base
 DEPENDPATH *= $${PWD}/include/cppdevtk/util
 DEPENDPATH *= $${PWD}/include/cppdevtk/jni
 DEPENDPATH *= $${PWD}/include/cppdevtk/gui
+
 DEPENDPATH *= $${PWD}/src/cppdevtk/base
 DEPENDPATH *= $${PWD}/src/cppdevtk/util
 DEPENDPATH *= $${PWD}/src/cppdevtk/jni
 DEPENDPATH *= $${PWD}/src/cppdevtk/gui
+
+DEPENDPATH *= $${PWD}/test/test_base
+DEPENDPATH *= $${PWD}/test/test_caps_lock_widget
+DEPENDPATH *= $${PWD}/test/test_config
+DEPENDPATH *= $${PWD}/test/test_disk_space_widget
+DEPENDPATH *= $${PWD}/test/test_invisible_widget
+DEPENDPATH *= $${PWD}/test/test_slot_throw
+DEPENDPATH *= $${PWD}/test/test_util
 
 
 #****************************************************************************************************************************

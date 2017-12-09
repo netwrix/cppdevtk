@@ -23,6 +23,7 @@
 
 #include "config.hpp"
 #include "tstring.hpp"
+#include "invalid_string_conversion_exception.hpp"
 
 #include <QtCore/QString>
 

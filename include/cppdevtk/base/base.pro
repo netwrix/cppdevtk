@@ -25,100 +25,113 @@ SUBDIRS +=
 
 
 HEADERS += \
-    architecture_types.h \
-    architecture_types.hpp \
-    assert.h \
-    cassert.hpp \
-    cerrno.hpp \
-    cinttypes.hpp \
-    cloneable.hpp \
-    config.hpp \
-    cstdint.hpp \
-    dbc.hpp \
-    dbc_exceptions.hpp \
-    deadlock_exception.hpp \
-    dynamic_byte_array.hpp \
-    type_traits.hpp \
-    errno.h \
-    error_category.hpp \
-    error_code.hpp \
-    error_condition.hpp \
-    exception.hpp \
-	exception_propagation.hpp \
-	unknown_exception.hpp	\
-	future.hpp \
-    info.hpp \
-    info_tr.hpp \
-    init_resources.hpp \
-    inttypes.h \
-    inttypes_detail.h \
-    ios.hpp \
-    join.h \
-    lock_exception.hpp \
-    lockables.hpp \
-    locking_levels.hpp \
-    locks.hpp \
-    logger.hpp \
-    mutex.hpp \
-    name_mangling.hpp \
-    non_copyable.hpp \
-    on_block_exit.hpp \
-    qiostream.hpp \
-    safe_delete.hpp \
-    safe_free.hpp \
-    singletons.hpp \
-    source_code_info.hpp \
-    stack_frame.hpp \
-    stack_trace.hpp \
-    static_assert.hpp \
-    stdexcept.hpp \
-    stdint.h \
-    stdint_detail.h \
-	stl_explicit_instantiation.hpp	\
-    string_conv.hpp \
-    string_utils.hpp \
-    stringizable.hpp \
-    stringize.h \
-    system_exception.hpp \
-    tchar.h \
-    tchar.hpp \
-    tfstream.hpp \
-    thread_shared_obj_locking_ptr.hpp \
-    throwable.hpp \
-    time_utils.hpp	\
-    tios.hpp \
-    tiostream.hpp \
-    tistream.hpp \
-    tostream.hpp \
-    tsstream.hpp \
-    tstreambuf.hpp \
-    tstring.hpp \
-    tstring_conv.hpp \
-    tstringizable.hpp \
-    tstringize.h \
-    typeinfo.hpp \
-    unused.h \
-    unused.hpp \
-    verify.h \
-	version.h	\
-    wstringize.h \
-    zeroize.h \
-    zeroize.hpp	\
-    concurrent_run.hpp	\
+	any.hpp	\
+	architecture_types.h	\
+	architecture_types.hpp	\
+	assert.h	\
+	bad_any_cast_exception.hpp	\
+	bad_cast_exception.hpp	\
 	cancelable.hpp	\
-	task_canceled_exception.hpp	\
-	invalid_string_conversion_exception.hpp	\
+	cassert.hpp	\
+	cerrno.hpp	\
+	cinttypes.hpp	\
+	cloneable.hpp	\
+	concurrent_run.hpp	\
 	condition_variable.hpp	\
-	semaphore.hpp	\
+	config.hpp	\
+	cstdint.hpp	\
+	dbc_exceptions.hpp	\
+	dbc.hpp	\
+	deadlock_exception.hpp	\
+	dynamic_byte_array.hpp	\
+	errno.h	\
+	error_category.hpp	\
+	error_code.hpp	\
+	error_condition.hpp	\
+	exception_propagation.hpp	\
+	exception.hpp	\
+	future_errc.hpp	\
+	future_exception.hpp	\
+	future.hpp	\
 	generic_locking_algorithms.hpp	\
-	thread_exception.hpp	\
-	thread.hpp	\
+	info_tr.hpp	\
+	info.hpp	\
+	init_resources.hpp	\
+	inttypes_detail.h	\
+	inttypes.h	\
+	invalid_string_conversion_exception.hpp	\
+	ios_failure_exception.hpp	\
+	ios.hpp	\
+	join.h	\
+	locale_to_lang_id_win.hpp	\
+	lock_exception.hpp	\
+	lockables.hpp	\
+	locking_levels.hpp	\
+	locks.hpp	\
+	logger.hpp	\
+	mutex.hpp	\
+	name_mangling.hpp	\
+	non_copyable.hpp	\
+	on_block_exit.hpp	\
+	qiostream.hpp	\
+	safe_delete.hpp	\
+	safe_free.hpp	\
+	semaphore.hpp	\
+	singletons.hpp	\
+	source_code_info.hpp	\
+	stack_frame.hpp	\
+	stack_trace.hpp	\
+	static_assert.hpp	\
+	stdexcept.hpp	\
+	stdint_detail.h	\
+	stdint.h	\
+	stl_explicit_instantiation.hpp	\
+	string_conv.hpp	\
+	string_utils.hpp	\
+	stringizable.hpp	\
+	stringize.h	\
+	system_exception.hpp	\
+	task_canceled_exception.hpp	\
+	tchar.h	\
+	tchar.hpp	\
+	tfstream.hpp	\
+	thread_data_types.hpp	\
 	thread_data.hpp	\
-	thread_data_types.hpp
+	thread_exception.hpp	\
+	thread_shared_obj_locking_ptr.hpp	\
+	thread.hpp	\
+	throwable.hpp	\
+	time_utils.hpp	\
+	tios.hpp	\
+	tiostream.hpp	\
+	tistream.hpp	\
+	tostream.hpp	\
+	tsstream.hpp	\
+	tstreambuf.hpp	\
+	tstring_conv.hpp	\
+	tstring.hpp	\
+	tstringizable.hpp	\
+	tstringize.h	\
+	type_traits.hpp	\
+	typeinfo.hpp	\
+	unknown_exception.hpp	\
+	unused.h	\
+	unused.hpp	\
+	verify.h	\
+	version.h	\
+	wstringize.h	\
+	zeroize.h	\
+	zeroize.hpp
 
 unix {
 	HEADERS += execinfo_unx.h
-	
+}
+
+win32 {
+	HEADERS += locale_to_lang_id_win.hpp
+}
+
+unix {
 	linux* {
 	   HEADERS += error_code_lnx.hpp
 	}
@@ -133,7 +146,6 @@ unix {
 }
 else {
 	win32 {
-		HEADERS += locale_to_lang_id_win.hpp
 		HEADERS += error_code_win.hpp
 	}
 	else {

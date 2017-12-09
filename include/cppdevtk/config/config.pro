@@ -21,12 +21,14 @@ TEMPLATE = subdirs
 include(./../../../common.pri)
 
 
-SUBDIRS += compiler	\
+SUBDIRS +=	\
+	compiler	\
 	platform	\
 	platform_compiler
 
 
-HEADERS += architecture.hpp	\
+HEADERS +=	\
+	architecture.hpp	\
 	company_info.hpp	\
 	compiler.hpp	\
 	config.hpp	\

@@ -25,6 +25,7 @@
 #include "non_copyable.hpp"
 #include "mutex.hpp"
 #include "lock_exception.hpp"
+#include "deadlock_exception.hpp"
 #include "thread.hpp"
 #include "time_utils.hpp"
 #include "dbc.hpp"
@@ -119,6 +120,10 @@ private:
 	QWaitCondition conditionVariable_;
 #	endif
 };
+
+
+// TODO
+//CPPDEVTK_BASE_API void NotifyAllAtThreadExit(ConditionVariable& condVar, UniqueLock<Mutex> uniqueLock);
 
 
 

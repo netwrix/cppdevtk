@@ -17,34 +17,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_DYNAMIC_LOADER_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_DYNAMIC_LOADER_HPP_INCLUDED_
-
-
-#include "config.hpp"
-#include "dynamic_library.hpp"
-#include "dynamic_loader_exception.hpp"
-#include <cppdevtk/base/non_copyable.hpp>
-
-#include <QtCore/QString>
+#include <cppdevtk/base/future_exception.hpp>
 
 
 namespace cppdevtk {
-namespace util {
+namespace base {
 
 
-class CPPDEVTK_UTIL_API DynamicLoader: private ::cppdevtk::base::NonCopyable {
-public:
-	static DynamicLibrary::Handle Load(const QString& dynLibName);
-	static void Unload(DynamicLibrary::Handle dynLibHandle);
-private:
-	DynamicLoader();
-	~DynamicLoader();
-};
+QString FutureException::DoOwnWhat() const {
+	QString ownWhat = LogicException::DoOwnWhat();
+	if (ownWhat.isEmpty()) {
+		ownWhat = Exception::DoOwnWhat();
+	}
+	ownWhat += QString("; error code: %1").arg(errorCode_.ToString());
+	return ownWhat;
+}
 
 
-}	// namespace util
+}	// namespace base
 }	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_UTIL_DYNAMIC_LOADER_HPP_INCLUDED_

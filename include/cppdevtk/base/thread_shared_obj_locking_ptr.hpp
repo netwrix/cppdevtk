@@ -39,7 +39,7 @@ namespace base {
 /// \brief Thread shared object locking pointer.
 /// \details Provides pointer like thread-safe access to an object shared between threads.
 /// \attention Objects that are shared between threads must be volatile qualified and must have a mutex associated.
-/// \sa <a href="http://loki-lib.sourceforge.net/index.php?n=Main.HomePage">Loki, LockingPtr</a>
+/// \sa <a href="http://loki-lib.sourceforge.net/html/a00441.html">Loki::LockingPtr</a>
 template <typename TThreadSharedObj, class TMutex>
 class ThreadSharedObjLockingPtr: private NonCopyable {
 public:

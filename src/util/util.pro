@@ -169,37 +169,38 @@ win32 {
 
 
 SOURCES += \
-    core_application.cpp \
-    core_application_base.cpp \
-    damerau_levenshtein_distance.cpp \
-    dynamic_library.cpp \
-    filesystem_exception.cpp \
-    filesystem_utils.cpp \
-    language_info.cpp \
-	no_such_file_or_directory_exception.cpp	\
-    password_requirements.cpp \
-    q_zip.cpp \
-    qt_local_peer.cpp \
-    qt_locked_file.cpp \
-    qt_service.cpp \
-    qt_single_core_application.cpp \
-    single_core_application.cpp \
-    init_resources.cpp	\
-	tinyxml2.cpp	\
+	core_application.cpp \
+	core_application_base.cpp \
+	damerau_levenshtein_distance.cpp \
+	dynamic_library.cpp \
+	exception_to_errno.cpp	\
+	filesystem_exception.cpp \
+	filesystem_utils.cpp \
+	init_resources.cpp	\
 	jsoncpp.cpp	\
-	exception_to_errno.cpp
+	language_info.cpp \
+	no_such_file_or_directory_exception.cpp	\
+	password_requirements.cpp \
+	q_zip.cpp \
+	qt_local_peer.cpp \
+	qt_locked_file.cpp \
+	qt_service.cpp \
+	qt_single_core_application.cpp \
+	single_core_application.cpp \
+	tinyxml2.cpp
 
 unix {
-	SOURCES += qt_locked_file_unx.cpp \
+	SOURCES +=	\
+		dynamic_library_unx.cpp \
+		dynamic_loader_exception_unx.cpp \
+		dynamic_loader_unx.cpp	\
+		filesystem_utils_unx.cpp	\
+		get_user_name_unx.cpp	\
+		qt_locked_file_unx.cpp \
 		qt_service_unx.cpp \
 		qt_unix_server_socket_unx.cpp \
 		qt_unix_socket_unx.cpp	\
-		socket_pair_unx.cpp	\
-		filesystem_utils_unx.cpp	\
-		get_user_name_unx.cpp	\
-		dynamic_library_unx.cpp \
-		dynamic_loader_exception_unx.cpp \
-		dynamic_loader_unx.cpp
+		socket_pair_unx.cpp
 	
 	linux* {
 		SOURCES += filesystem_utils_lnx.cpp
@@ -218,14 +219,15 @@ unix {
 }
 else {
 	win32 {
-		SOURCES += qt_locked_file_win.cpp \
-			qt_service_win.cpp	\
-			socket_pair_win.cpp	\
-			filesystem_utils_win.cpp	\
-			get_user_name_win.cpp	\
+		SOURCES +=	\
 			dynamic_library_win.cpp \
 			dynamic_loader_exception_win.cpp \
-			dynamic_loader_win.cpp
+			dynamic_loader_win.cpp	\
+			filesystem_utils_win.cpp	\
+			get_user_name_win.cpp	\
+			qt_locked_file_win.cpp \
+			qt_service_win.cpp	\
+			socket_pair_win.cpp
 	}
 	else {
 		error("Unsupported platform!!!")
@@ -234,33 +236,33 @@ else {
 
 
 HEADERS += \
-    ../../include/cppdevtk/util/config.hpp \
-    ../../include/cppdevtk/util/core_application.hpp \
-    ../../include/cppdevtk/util/core_application_base.hpp \
-    ../../include/cppdevtk/util/damerau_levenshtein_distance.hpp \
-    ../../include/cppdevtk/util/dynamic_library.hpp \
-    ../../include/cppdevtk/util/dynamic_loader.hpp \
-    ../../include/cppdevtk/util/dynamic_loader_exception.hpp \
-    ../../include/cppdevtk/util/filesystem_exception.hpp \
-    ../../include/cppdevtk/util/filesystem_utils.hpp \
-    ../../include/cppdevtk/util/get_user_name.hpp \
-    ../../include/cppdevtk/util/info.hpp \
-    ../../include/cppdevtk/util/init_resources.hpp \
-    ../../include/cppdevtk/util/language_info.hpp \
-	../../include/cppdevtk/util/no_such_file_or_directory_exception.hpp	\
-    ../../include/cppdevtk/util/password_requirements.hpp \
-    ../../include/cppdevtk/util/q_zip_reader.hpp \
-    ../../include/cppdevtk/util/q_zip_writer.hpp \
-    ../../include/cppdevtk/util/qt_local_peer.hpp \
-    ../../include/cppdevtk/util/qt_locked_file.hpp \
-    ../../include/cppdevtk/util/qt_service.hpp \
-    ../../include/cppdevtk/util/qt_single_core_application.hpp \
-    ../../include/cppdevtk/util/single_core_application.hpp \
-    ../../include/cppdevtk/util/socket_pair.hpp \
-	../../include/cppdevtk/util/tinyxml2.h	\
-	../../include/cppdevtk/util/json/json.h	\
+	../../include/cppdevtk/util/config.hpp \
+	../../include/cppdevtk/util/core_application.hpp \
+	../../include/cppdevtk/util/core_application_base.hpp \
+	../../include/cppdevtk/util/damerau_levenshtein_distance.hpp \
+	../../include/cppdevtk/util/dynamic_library.hpp \
+	../../include/cppdevtk/util/dynamic_loader.hpp \
+	../../include/cppdevtk/util/dynamic_loader_exception.hpp \
+	../../include/cppdevtk/util/exception_to_errno.hpp	\
+	../../include/cppdevtk/util/filesystem_exception.hpp \
+	../../include/cppdevtk/util/filesystem_utils.hpp \
+	../../include/cppdevtk/util/get_user_name.hpp \
+	../../include/cppdevtk/util/info.hpp \
+	../../include/cppdevtk/util/init_resources.hpp \
 	../../include/cppdevtk/util/json/json-forwards.h	\
-	../../include/cppdevtk/util/exception_to_errno.hpp
+	../../include/cppdevtk/util/json/json.h	\
+	../../include/cppdevtk/util/language_info.hpp \
+	../../include/cppdevtk/util/no_such_file_or_directory_exception.hpp	\
+	../../include/cppdevtk/util/password_requirements.hpp \
+	../../include/cppdevtk/util/q_zip_reader.hpp \
+	../../include/cppdevtk/util/q_zip_writer.hpp \
+	../../include/cppdevtk/util/qt_local_peer.hpp \
+	../../include/cppdevtk/util/qt_locked_file.hpp \
+	../../include/cppdevtk/util/qt_service.hpp \
+	../../include/cppdevtk/util/qt_single_core_application.hpp \
+	../../include/cppdevtk/util/single_core_application.hpp \
+	../../include/cppdevtk/util/socket_pair.hpp \
+	../../include/cppdevtk/util/tinyxml2.h
 
 unix {
 	HEADERS += ../../include/cppdevtk/util/filesystem_utils_unx.hpp
