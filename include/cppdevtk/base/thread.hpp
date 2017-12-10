@@ -36,9 +36,12 @@
 
 
 #include "thread_data_types.hpp"
+//#include "thread_data.hpp"
 #include "non_copyable.hpp"
 #include "stringizable.hpp"
 #include "exception.hpp"
+#include "lock_exception.hpp"
+#include "deadlock_exception.hpp"
 #include "static_assert.hpp"
 
 #include <QtCore/QTextStream>

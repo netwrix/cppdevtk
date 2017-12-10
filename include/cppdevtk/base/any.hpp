@@ -25,7 +25,6 @@
 #include "typeinfo.hpp"
 #include "bad_any_cast_exception.hpp"
 #include "cloneable.hpp"
-#include "non_copyable.hpp"
 
 #include <cstddef>
 #include <new>
@@ -42,6 +41,7 @@ namespace base {
 /// A type-safe container for single values of any \c CopyConstructible type with no-throw destructor.
 /// \sa
 /// - <a href="http://en.cppreference.com/w/cpp/utility/any">C++17 any</a>
+/// - <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4562.html#any">C++ Extensions for Library Fundamentals, Version 2, 6 Class any</a>
 /// - <a href="http://www.boost.org/doc/libs/1_65_1/doc/html/any.html">Boost.Any</a>
 class CPPDEVTK_BASE_API Any {
 	template <typename TValue>
@@ -73,7 +73,7 @@ public:
 	
 	void Swap(Any& other) CPPDEVTK_NOEXCEPT;
 private:
-	class TypeErasedValue: public Cloneable {
+	class CPPDEVTK_BASE_API TypeErasedValue: public Cloneable {
 	public:
 		virtual TypeInfo GetTypeInfo() const = 0;
 	private:

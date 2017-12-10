@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#if (!(defined(CPPDEVTK_DETAIL_BUILD) || defined(CPPDEVTK_BASE_THREAD_HPP_INCLUDED_)))
+#	error "Do not include directly (non-std file); please include <cppdevtk/base/thread.hpp> instead!!!"
+#endif
+
+
 #ifndef CPPDEVTK_BASE_THREAD_EXCEPTION_HPP_INCLUDED_
 #define CPPDEVTK_BASE_THREAD_EXCEPTION_HPP_INCLUDED_
 

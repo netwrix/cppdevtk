@@ -26,7 +26,6 @@
 #include "mutex.hpp"
 #include "lock_exception.hpp"
 #include "deadlock_exception.hpp"
-#include "thread.hpp"
 #include "time_utils.hpp"
 #include "dbc.hpp"
 
@@ -159,6 +158,19 @@ private:
 	CPPDEVTK_TR1_NS::shared_ptr<Mutex> pMtx_;
 	ConditionVariable conditionVariable_;
 };
+
+
+
+
+}	// namespace base
+}	// namespace cppdevtk
+
+
+#include "thread.hpp"
+
+
+namespace cppdevtk {
+namespace base {
 
 
 

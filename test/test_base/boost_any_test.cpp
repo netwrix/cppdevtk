@@ -4,6 +4,9 @@
 // where: tested with BCC 5.5, MSVC 6.0, and g++ 2.95
 
 
+// NOTE: taken from boost 1.65.1 and adapted for cppdevtk
+
+
 #include <cppdevtk/base/any.hpp>
 #include <cppdevtk/base/typeinfo.hpp>
 

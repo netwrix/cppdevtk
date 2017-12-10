@@ -51,7 +51,7 @@ namespace base {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa C++ 11, 30.6.3 Class future_error
-class CPPDEVTK_BASE_API FutureException: public virtual LogicException {
+class CPPDEVTK_BASE_API FutureException: public LogicException {
 public:
 	FutureException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode);	
 	FutureException(const FutureException& other) CPPDEVTK_NOEXCEPT;

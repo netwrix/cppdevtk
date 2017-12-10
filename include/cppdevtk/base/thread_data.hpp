@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#if (!(defined(CPPDEVTK_DETAIL_BUILD) || defined(CPPDEVTK_BASE_THREAD_HPP_INCLUDED_)))
+#	error "Do not include directly (non-std file); please include <cppdevtk/base/thread.hpp> instead!!!"
+#endif
+
+
 #ifndef CPPDEVTK_BASE_THREAD_DATA_HPP_INCLUDED_
 #define CPPDEVTK_BASE_THREAD_DATA_HPP_INCLUDED_
 
@@ -28,6 +33,8 @@
 #include "condition_variable.hpp"
 #include "exception.hpp"
 #include "thread_exception.hpp"
+#include "lock_exception.hpp"
+#include "deadlock_exception.hpp"
 
 #include <cstddef>
 #include CPPDEVTK_TR1_HEADER(memory)
@@ -40,7 +47,7 @@ namespace detail {
 
 class /* CPPDEVTK_BASE_API */ ThreadData: public CPPDEVTK_TR1_NS::enable_shared_from_this<ThreadData>, private NonCopyable {
 public:
-	class StartInfo: private NonCopyable {
+	class /* CPPDEVTK_BASE_API */ StartInfo: private NonCopyable {
 	public:
 		StartInfo();
 		
@@ -54,7 +61,7 @@ public:
 	};
 	
 	
-	class JoinedOrDetachedInfo: private NonCopyable {
+	class /* CPPDEVTK_BASE_API */ JoinedOrDetachedInfo: private NonCopyable {
 	public:
 		explicit JoinedOrDetachedInfo(bool detached);
 		
@@ -73,7 +80,7 @@ public:
 	
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	class InterruptionInfo: private NonCopyable {
+	class /* CPPDEVTK_BASE_API */ InterruptionInfo: private NonCopyable {
 	public:
 		InterruptionInfo();
 		

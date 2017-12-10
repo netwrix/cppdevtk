@@ -3,6 +3,10 @@
 // when:  November 2000
 // where: tested with BCC 5.5, MSVC 6.0, and g++ 2.91
 
+
+// NOTE: taken from boost 1.65.1 and adapted for cppdevtk
+
+
 #ifndef ANY_TEST_INCLUDED
 #define ANY_TEST_INCLUDED
 
