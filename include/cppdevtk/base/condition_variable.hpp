@@ -21,8 +21,12 @@
 #define CPPDEVTK_BASE_CONDITION_VARIABLE_HPP_INCLUDED_
 
 
+#define CPPDEVTK_BASE_CONDITION_VARIABLE_ENABLE_LUPDATE_WORKAROUND 1
+
+
 #include "config.hpp"
 #include "non_copyable.hpp"
+#include "thread.hpp"
 #include "mutex.hpp"
 #include "lock_exception.hpp"
 #include "deadlock_exception.hpp"
@@ -158,19 +162,6 @@ private:
 	CPPDEVTK_TR1_NS::shared_ptr<Mutex> pMtx_;
 	ConditionVariable conditionVariable_;
 };
-
-
-
-
-}	// namespace base
-}	// namespace cppdevtk
-
-
-#include "thread.hpp"
-
-
-namespace cppdevtk {
-namespace base {
 
 
 
