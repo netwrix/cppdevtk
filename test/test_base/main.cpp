@@ -42,6 +42,10 @@
 #include "semaphores.hpp"
 #include "waitconditions.hpp"
 #include "boost_any_test.hpp"
+#include "boost_test_optional/optional_test.hpp"
+#if (CPPDEVTK_OPTIONAL_SUPPORTS_REF)
+#include "boost_test_optional/optional_test_ref.hpp"
+#endif
 
 #include <QtCore/QString>
 #include <QtCore/QtGlobal>
@@ -346,6 +350,22 @@ int main(int argc, char* argv[]) try {
 			return EXIT_FAILURE;
 		}
 		CPPDEVTK_COUT << "Any test: PASSED" << endl;
+		
+		CPPDEVTK_COUT << "testing Optional..." << endl;
+		if (!TestOptional()) {
+			CPPDEVTK_CERR << "Optional test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		CPPDEVTK_COUT << "Optional test: PASSED" << endl;
+		
+#		if (CPPDEVTK_OPTIONAL_SUPPORTS_REF)
+		CPPDEVTK_COUT << "testing Optional Ref..." << endl;
+		if (!TestOptionalRef()) {
+			CPPDEVTK_CERR << "Optional Ref test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		CPPDEVTK_COUT << "Optional Ref test: PASSED" << endl;
+#		endif
 		
 		CPPDEVTK_COUT << "testing Mutex..." << endl;
 		if (!TestMutex()) {

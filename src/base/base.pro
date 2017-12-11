@@ -107,6 +107,7 @@ SOURCES += \
 	assert.cpp \
 	bad_any_cast_exception.cpp	\
 	bad_cast_exception.cpp	\
+	bad_optional_access_exception.cpp	\
 	cancelable.cpp	\
 	cloneable.cpp \
 	concurrent_run.cpp	\
@@ -307,6 +308,7 @@ HEADERS += \
 	./../include/cppdevtk/base/assert.h	\
 	./../include/cppdevtk/base/bad_any_cast_exception.hpp	\
 	./../include/cppdevtk/base/bad_cast_exception.hpp	\
+	./../include/cppdevtk/base/bad_optional_access_exception.hpp	\
 	./../include/cppdevtk/base/cancelable.hpp	\
 	./../include/cppdevtk/base/cassert.hpp	\
 	./../include/cppdevtk/base/cerrno.hpp	\
@@ -349,6 +351,7 @@ HEADERS += \
 	./../include/cppdevtk/base/name_mangling.hpp	\
 	./../include/cppdevtk/base/non_copyable.hpp	\
 	./../include/cppdevtk/base/on_block_exit.hpp	\
+	./../include/cppdevtk/base/optional.hpp	\
 	./../include/cppdevtk/base/qiostream.hpp	\
 	./../include/cppdevtk/base/safe_delete.hpp	\
 	./../include/cppdevtk/base/safe_free.hpp	\

@@ -18,8 +18,23 @@
 #include <utility>
 
 
+#define CPPDEVTK_ANY_SUPPORTS_ARRAY 0
+#define CPPDEVTK_ANY_SUPPORTS_ADDRESS_OF 0
+
+
 using ::cppdevtk::base::Any;
 using ::cppdevtk::base::BadAnyCastException;
+
+
+//
+// THIS TEST SHOULD FAIL TO COMPILE
+//
+#if 0	// cppdevtk test passed
+void test_any_cast_cv() {
+    Any const a;
+    ::cppdevtk::base::AnyCast<int&>(a);
+}
+#endif
 
 
 namespace any_tests // test suite
@@ -33,11 +48,15 @@ namespace any_tests // test suite
     void test_swap();
     void test_null_copying();
     void test_cast_to_reference();
+#	if (CPPDEVTK_ANY_SUPPORTS_ARRAY)
     void test_with_array();
+#	endif
     void test_with_func();
     void test_clear();
     void test_vectors();
+#	if (CPPDEVTK_ANY_SUPPORTS_ADDRESS_OF)
     void test_addressof();
+#	endif
 
     const test_case test_cases[] =
     {
@@ -50,11 +69,15 @@ namespace any_tests // test suite
         { "swap member function",           test_swap              },
         { "copying operations on a null",   test_null_copying      },
         { "cast to reference types",        test_cast_to_reference },
+#		if (CPPDEVTK_ANY_SUPPORTS_ARRAY)
         { "storing an array inside",        test_with_array        },
+#		endif
         { "implicit cast of returned value",test_with_func         },
         { "clear() methods",                test_clear             },
-        { "testing with vectors",           test_vectors           },
-        { "class with operator&()",         test_addressof         }
+        { "testing with vectors",           test_vectors           }
+#		if (CPPDEVTK_ANY_SUPPORTS_ADDRESS_OF)
+        , { "class with operator&()",         test_addressof         }
+#		endif
     };
 
     const test_case_iterator begin = test_cases;
@@ -255,10 +278,9 @@ namespace any_tests // test definitions
             "AnyCast to incorrect const reference type");
     }
 
+#	if (CPPDEVTK_ANY_SUPPORTS_ARRAY)
     void test_with_array()
     {
-		// FIXME
-		/*
         Any value1("Char array");
         Any value2;
         value2 = "Char array";
@@ -271,9 +293,9 @@ namespace any_tests // test definitions
         
         check_non_null(::cppdevtk::base::AnyCast<const char*>(&value1), "AnyCast<const char*>");
         check_non_null(::cppdevtk::base::AnyCast<const char*>(&value2), "AnyCast<const char*>");
-        */
     }
-
+#	endif
+	
     const std::string& returning_string1() 
     {
         static const std::string ret("foo"); 
@@ -357,6 +379,7 @@ namespace any_tests // test definitions
         const T* ptr;
     };
 
+#	if (CPPDEVTK_ANY_SUPPORTS_ADDRESS_OF)
     void test_addressof()
     {
         int val = 10;
@@ -364,13 +387,12 @@ namespace any_tests // test definitions
         class_with_address_op<int> obj(ptr);
         Any test_val(obj);
         
-        // FIXME
-        //class_with_address_op<int> returned_obj = ::cppdevtk::base::AnyCast<class_with_address_op<int> >(test_val);
-        //check_equal(&val, returned_obj.get(), "AnyCast incorrectly works with type that has operator&(): addresses differ");
+        class_with_address_op<int> returned_obj = ::cppdevtk::base::AnyCast<class_with_address_op<int> >(test_val);
+        check_equal(&val, returned_obj.get(), "AnyCast incorrectly works with type that has operator&(): addresses differ");
         
-        // FIXME
-        //check_true(!!::cppdevtk::base::AnyCast<class_with_address_op<int> >(&test_val), "AnyCast incorrectly works with type that has operator&()");
+        check_true(!!::cppdevtk::base::AnyCast<class_with_address_op<int> >(&test_val), "AnyCast incorrectly works with type that has operator&()");
     }
+#	endif
 
 }
 

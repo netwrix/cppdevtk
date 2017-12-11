@@ -39,6 +39,8 @@ namespace base {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// A type-safe container for single values of any \c CopyConstructible type with no-throw destructor.
+/// \note C++ 17 std says that implementations are encouraged to avoid dynamic allocations for small objects.
+/// Currently our implementation always uses dynamic allocations.
 /// \sa
 /// - <a href="http://en.cppreference.com/w/cpp/utility/any">C++17 any</a>
 /// - <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4562.html#any">C++ Extensions for Library Fundamentals, Version 2, 6 Class any</a>
@@ -141,7 +143,7 @@ inline Any::Any(const TValue& value): pTypeErasedValue_(new Value<TValue>(value)
 inline Any::Any(const Any& other): pTypeErasedValue_(
 		(other.pTypeErasedValue_ == NULL) ? NULL : static_cast<TypeErasedValue*>(other.pTypeErasedValue_->Clone().release())) {}
 
-Any::~Any() CPPDEVTK_NOEXCEPT {
+inline Any::~Any() CPPDEVTK_NOEXCEPT {
 	Reset();
 }
 

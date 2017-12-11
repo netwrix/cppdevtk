@@ -29,6 +29,11 @@
 #include <cstddef>
 
 
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4702)	// C4702: unreachable code
+#endif
+
+
 using ::cppdevtk::base::detail::ThrowLockException;
 using ::std::system_error;
 

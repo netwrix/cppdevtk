@@ -31,6 +31,7 @@ HEADERS += \
 	assert.h	\
 	bad_any_cast_exception.hpp	\
 	bad_cast_exception.hpp	\
+	bad_optional_access_exception.hpp	\
 	cancelable.hpp	\
 	cassert.hpp	\
 	cerrno.hpp	\
@@ -73,6 +74,7 @@ HEADERS += \
 	name_mangling.hpp	\
 	non_copyable.hpp	\
 	on_block_exit.hpp	\
+	optional.hpp	\
 	qiostream.hpp	\
 	safe_delete.hpp	\
 	safe_free.hpp	\

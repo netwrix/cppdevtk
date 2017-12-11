@@ -25,6 +25,11 @@
 #include <typeinfo>
 
 
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4702)	// C4702: unreachable code
+#endif
+
+
 namespace cppdevtk {
 namespace base {
 

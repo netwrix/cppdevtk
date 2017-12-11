@@ -127,11 +127,30 @@ HEADERS += info.hpp \
 	waitconditions.hpp	\
 	boost_any_test.hpp
 
+HEADERS += \
+	./boost_test_optional/optional_test.hpp	\
+	./boost_test_optional/optional_test_common.hpp	\
+	./boost_test_optional/optional_test_ref.hpp
+
 
 SOURCES += main.cpp	\
 	semaphores.cpp	\
 	waitconditions.cpp	\
 	boost_any_test.cpp
+
+SOURCES +=	\
+	./boost_test_optional/optional_test.cpp	\
+	./boost_test_optional/optional_test_common.cpp	\
+	./boost_test_optional/optional_test_fail1.cpp	\
+	./boost_test_optional/optional_test_fail2.cpp	\
+	./boost_test_optional/optional_test_fail3.cpp	\
+	./boost_test_optional/optional_test_fail3a.cpp	\
+	./boost_test_optional/optional_test_fail3b.cpp	\
+	./boost_test_optional/optional_test_ref.cpp	\
+	./boost_test_optional/optional_test_ref_fail1.cpp	\
+	./boost_test_optional/optional_test_ref_fail3.cpp	\
+	./boost_test_optional/optional_test_ref_fail4.cpp
+
 
 android {
 	cppdevtk_enable_android_manifest {
