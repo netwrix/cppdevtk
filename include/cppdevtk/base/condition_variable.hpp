@@ -21,9 +21,6 @@
 #define CPPDEVTK_BASE_CONDITION_VARIABLE_HPP_INCLUDED_
 
 
-#define CPPDEVTK_BASE_CONDITION_VARIABLE_ENABLE_LUPDATE_WORKAROUND 1
-
-
 #include "config.hpp"
 #include "non_copyable.hpp"
 #include "thread.hpp"
