@@ -39,6 +39,7 @@ namespace base {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// A type-safe container for single values of any \c CopyConstructible type with no-throw destructor.
+/// \attention Arrays are not supported!
 /// \note C++ 17 std says that implementations are encouraged to avoid dynamic allocations for small objects.
 /// Currently our implementation always uses dynamic allocations.
 /// \sa

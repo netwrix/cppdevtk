@@ -27,6 +27,6 @@ void test_no_implicit_conversion()
 
   // You can compare against 0 or against another optional<>,
   // but not against another value
-  if ( opt == 1 ) {};
+  if ( opt == 1 ) { ; }
 }
 #endif

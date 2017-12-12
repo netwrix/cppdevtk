@@ -23,11 +23,16 @@
 
 #include "config.hpp"
 #include "bad_optional_access_exception.hpp"
-#include "any.hpp"
 #include "dbc.hpp"
 #include "unused.hpp"
+#include "logger.hpp"
+#include "exception.hpp"
+#include "cassert.hpp"
 
 #include <cstddef>
+#include <new>
+#include <algorithm>	// swap(), C++98
+#include <utility>	// swap(), C++11
 
 
 namespace cppdevtk {
@@ -127,7 +132,7 @@ private:
 	static void UnspecifiedBoolTrue() CPPDEVTK_NOEXCEPT;
 	
 	
-	Any any_;
+	TValue* pValue_;
 };
 
 
@@ -259,35 +264,40 @@ bool operator>=(const TValue& lhs, const Optional<TValue>& rhs);
 // Inline functions, template definitions
 
 template <typename TValue>
-inline Optional<TValue>::Optional() CPPDEVTK_NOEXCEPT: any_() {}
+inline Optional<TValue>::Optional() CPPDEVTK_NOEXCEPT: pValue_(NULL) {}
 
 template <typename TValue>
-inline Optional<TValue>::Optional(NullOptT) CPPDEVTK_NOEXCEPT: any_() {}
+inline Optional<TValue>::Optional(NullOptT) CPPDEVTK_NOEXCEPT: pValue_(NULL) {}
 
 template <typename TValue>
-inline Optional<TValue>::Optional(const TValue& value): any_(value) {}
+inline Optional<TValue>::Optional(const TValue& value): pValue_(new TValue(value)) {}
 
 template <typename TValue>
-inline Optional<TValue>::Optional(bool cond, const TValue& value): any_() {
+inline Optional<TValue>::Optional(bool cond, const TValue& value): pValue_(NULL) {
 	if (cond) {
-		any_ = value;
+		pValue_ = new TValue(value);
 	}
 }
 
 template <typename TValue>
 template <typename TConvertibleValue>
-inline Optional<TValue>::Optional(const Optional<TConvertibleValue>& other): any_() {
+inline Optional<TValue>::Optional(const Optional<TConvertibleValue>& other): pValue_(NULL) {
 	if (other.HasValue()) {
-		const TValue kTmp = *other;
-		any_ = kTmp;
+		pValue_ = new TValue(*other);
 	}
 }
 
 template <typename TValue>
-inline Optional<TValue>::Optional(const Optional& other): any_(other.any_) {}
+inline Optional<TValue>::Optional(const Optional& other): pValue_(NULL) {
+	if (other.HasValue()) {
+		pValue_ = new TValue(*other);
+	}
+}
 
 template <typename TValue>
-inline Optional<TValue>::~Optional() CPPDEVTK_NOEXCEPT {}
+inline Optional<TValue>::~Optional() CPPDEVTK_NOEXCEPT {
+	Reset();
+}
 
 template <typename TValue>
 inline Optional<TValue>& Optional<TValue>::operator=(NullOptT) CPPDEVTK_NOEXCEPT {
@@ -305,36 +315,74 @@ inline Optional<TValue>& Optional<TValue>::operator=(const TValue& value) {
 template <typename TValue>
 template <typename TConvertibleValue>
 inline Optional<TValue>& Optional<TValue>::operator=(const Optional<TConvertibleValue>& other) {
-	Optional tmp(other);
-	Swap(tmp);
+	if (other.HasValue()) {
+		Optional tmp(other);
+		Swap(tmp);
+	}
+	else {
+		Reset();
+	}
 	return *this;
 }
 
 template <typename TValue>
 inline Optional<TValue>& Optional<TValue>::operator=(const Optional& other) {
-	Optional tmp(other);
-	Swap(tmp);
+	if (this != &other) {
+		if (other.HasValue()) {
+			Optional tmp(other);
+			Swap(tmp);
+		}
+		else {
+			Reset();
+		}
+	}
 	return *this;
 }
 
 template <typename TValue>
 inline void Optional<TValue>::Swap(Optional& other) CPPDEVTK_NOEXCEPT {
-	any_.Swap(other.any_);
+	using ::std::swap;
+	swap(pValue_, other.pValue_);
 }
 
 template <typename TValue>
-inline void Optional<TValue>::Reset() CPPDEVTK_NOEXCEPT {
-	any_.Reset();
+void Optional<TValue>::Reset() CPPDEVTK_NOEXCEPT {
+	using ::std::terminate;
+	
+	
+	if (pValue_ == NULL) {
+		return;
+	}
+	
+	try {
+		delete pValue_;
+	}
+	catch (const ::std::exception& exc) {
+		CPPDEVTK_LOG_FATAL("Optional::Reset(): destructor of TValue (" << typeid(TValue).name()
+			<< ") threw exception: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_ASSERT(0 && "Optional::Reset(): destructor of TValue threw exception");
+		terminate();
+	}
+	catch (...) {
+		CPPDEVTK_LOG_FATAL("Optional::Reset(): destructor of TValue (" << typeid(TValue).name()
+			<< ") threw unknown exception");
+		CPPDEVTK_ASSERT(0 && "Optional::Reset(): destructor of TValue threw unknown exception");
+		terminate();
+	}
+	
+	pValue_ = NULL;
 }
 
 template <typename TValue>
 inline void Optional<TValue>::Reset(const TValue& value) {
-	any_ = value;
+	TValue* pTmpValue = new TValue(value);
+	Reset();
+	pValue_ = pTmpValue;
 }
 
 template <typename TValue>
 inline bool Optional<TValue>::HasValue() const CPPDEVTK_NOEXCEPT {
-	return any_.HasValue();
+	return pValue_ != NULL;
 }
 
 template <typename TValue>
@@ -387,14 +435,14 @@ inline const TValue& Optional<TValue>::GetValueOr(const TValue& defaultValue) co
 template <typename TValue>
 TValue* Optional<TValue>::operator->() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(HasValue());
-	return AnyCast<TValue>(&any_);
+	return pValue_;
 }
 
 // NOTE: do not inline (uses dbc macro)
 template <typename TValue>
 const TValue* Optional<TValue>::operator->() const {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(HasValue());
-	return AnyCast<TValue>(&any_);
+	return pValue_;
 }
 
 // NOTE: do not inline (uses dbc macro)
