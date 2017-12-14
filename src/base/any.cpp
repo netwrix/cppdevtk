@@ -21,6 +21,7 @@
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 #include <typeinfo>
 
@@ -49,6 +50,7 @@ void Any::Reset() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_LOG_FATAL("Any::Reset(): destructor of TypeErasedValue (" << typeid(*pTypeErasedValue_).name()
 			<< ") threw exception: " << Exception::GetDetailedInfo(exc));
 		CPPDEVTK_ASSERT(0 && "Any::Reset(): destructor of TypeErasedValue threw exception");
+		SuppressUnusedWarning(exc);
 		terminate();
 	}
 	catch (...) {

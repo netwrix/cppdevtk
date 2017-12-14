@@ -129,8 +129,7 @@ HEADERS += info.hpp \
 
 HEADERS += \
 	./boost_test_optional/optional_test.hpp	\
-	./boost_test_optional/optional_test_common.hpp	\
-	./boost_test_optional/optional_test_ref.hpp
+	./boost_test_optional/optional_test_common.hpp
 
 
 SOURCES += main.cpp	\
@@ -145,11 +144,7 @@ SOURCES +=	\
 	./boost_test_optional/optional_test_fail2.cpp	\
 	./boost_test_optional/optional_test_fail3.cpp	\
 	./boost_test_optional/optional_test_fail3a.cpp	\
-	./boost_test_optional/optional_test_fail3b.cpp	\
-	./boost_test_optional/optional_test_ref.cpp	\
-	./boost_test_optional/optional_test_ref_fail1.cpp	\
-	./boost_test_optional/optional_test_ref_fail3.cpp	\
-	./boost_test_optional/optional_test_ref_fail4.cpp
+	./boost_test_optional/optional_test_fail3b.cpp
 
 
 android {

@@ -204,7 +204,8 @@ void test_conditional_ctor_and_get_valur_or ( T const* )
   T& rb = o0.GetValueOr(rz);
   BOOST_TEST_OPTIONAL_CHECK( rb == b ) ;
   
-#if (CPPDEVTK_OPTIONAL_SUPPORTS_REF)
+  // our Optional does not support references
+  /*
   T& ra = a ;
   
   Optional<T&> defref(false,ra);
@@ -212,11 +213,9 @@ void test_conditional_ctor_and_get_valur_or ( T const* )
 
   Optional<T&> ref(true,ra);
   BOOST_TEST_OPTIONAL_CHECK(!!ref);
-#endif
 
   a = T(432);
 
-#if (CPPDEVTK_OPTIONAL_SUPPORTS_REF)
   BOOST_TEST_OPTIONAL_CHECK( *ref == a ) ;
   
   T& r1 = defref.GetValueOr(z);
@@ -224,7 +223,7 @@ void test_conditional_ctor_and_get_valur_or ( T const* )
 
   T& r2 = ref.GetValueOr(z);
   BOOST_TEST_OPTIONAL_CHECK( r2 == a ) ;
-#endif
+  */
 }
 
 //
@@ -1019,8 +1018,6 @@ public:
     bool operator== (CustomAddressOfClass const& that) const { return n == that.n; }
 };
 
-#if (CPPDEVTK_OPTIONAL_SUPPORTS_ADDRESS_OF)
-
 void test_custom_addressof_operator()
 {
     cppdevtk::base::Optional< CustomAddressOfClass > o1(CustomAddressOfClass(10));
@@ -1035,8 +1032,6 @@ void test_custom_addressof_operator()
     BOOST_TEST_OPTIONAL_CHECK(!o1);
 }
 
-#endif
-
 bool TestOptional() {
 	try {
 		test_with_class_type();
@@ -1045,9 +1040,7 @@ bool TestOptional() {
 		test_conversions1();
 		test_conversions2();
 		//test_swap_tweaking();
-#if (CPPDEVTK_OPTIONAL_SUPPORTS_ADDRESS_OF)
 		test_custom_addressof_operator();
-#endif
 	}
 	catch (const ::std::exception& exc) {
 		::std::cerr << "OptionalTest(): caught exception: " << exc.what() << ::std::endl;

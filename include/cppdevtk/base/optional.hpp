@@ -28,11 +28,13 @@
 #include "logger.hpp"
 #include "exception.hpp"
 #include "cassert.hpp"
+#include "static_assert.hpp"
 
 #include <cstddef>
 #include <new>
 #include <algorithm>	// swap(), C++98
 #include <utility>	// swap(), C++11
+#include CPPDEVTK_TR1_HEADER(type_traits)
 
 
 namespace cppdevtk {
@@ -69,7 +71,7 @@ static const NullOptT kNullOpt = (static_cast<NullOptT>(NULL)) ;
 /// - C++ 17 std says that if an ::std::optional<T> contains a value, the value is guaranteed to be allocated
 /// as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place.
 /// Our implementation currently use dynamic memory allocation (need for public API and no time for proper implementation...)!
-/// - Reference types are not supported!
+/// - Reference types are not supported (C++ 17 ::std::optional does not support references, ::boost::optional does)!
 /// \sa
 /// - <a href="http://en.cppreference.com/w/cpp/utility/optional">C++17 optional</a>
 /// - <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4562.html#optional.object">C++ Extensions for Library Fundamentals, Version 2, 5.3 optional for object types</a>
@@ -78,6 +80,10 @@ static const NullOptT kNullOpt = (static_cast<NullOptT>(NULL)) ;
 template <typename TValue>
 class Optional {
 public:
+	CPPDEVTK_STATIC_ASSERT(!CPPDEVTK_TR1_NS::is_reference<TValue>::value);
+	CPPDEVTK_STATIC_ASSERT((!CPPDEVTK_TR1_NS::is_same<TValue, NullOptT>::value));
+	
+	
 	typedef TValue ValueType;
 	typedef void (*UnspecifiedBoolType)();
 	
@@ -361,6 +367,7 @@ void Optional<TValue>::Reset() CPPDEVTK_NOEXCEPT {
 		CPPDEVTK_LOG_FATAL("Optional::Reset(): destructor of TValue (" << typeid(TValue).name()
 			<< ") threw exception: " << Exception::GetDetailedInfo(exc));
 		CPPDEVTK_ASSERT(0 && "Optional::Reset(): destructor of TValue threw exception");
+		SuppressUnusedWarning(exc);
 		terminate();
 	}
 	catch (...) {

@@ -39,10 +39,10 @@
 
 #if (CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
 #	define CPPDEVTK_STATIC_ASSERT_W_MSG(expr, msg)	\
-		static_assert(expr, msg)
+		static_assert((expr), msg)
 	
 #	define CPPDEVTK_STATIC_ASSERT(expr)	\
-		static_assert(expr, #expr)
+		static_assert((expr), "static assert failed: " #expr)
 #else	// (CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
 #	define CPPDEVTK_STATIC_ASSERT_W_MSG(expr, msg)	\
 		CPPDEVTK_STATIC_ASSERT(expr)
