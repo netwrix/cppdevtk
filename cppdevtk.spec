@@ -12,7 +12,7 @@
 
 # suse_version, sle_version, is_opensuse, leap_version (deprecated):
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto#Detect_a_distribution_flavor_for_special_code
-# - Tumbleweed: suse_version 1330
+# - Tumbleweed: suse_version 1550
 # - Leap 42.3: suse_version 1315, sle_version 120300, leap_version 420300
 # - Leap 42.2: suse_version 1315, sle_version 120200
 # - SLE12 SP3: sle_version 120300
@@ -591,8 +591,16 @@ exit 0
 
 
 %changelog
-* Tue Nov 28 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Fri Dec 15 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.5.1
+- added Any
+- added future errc
+- added Optional
+- this_thread Yield(), SleepFor() and SleepUntil() available even if !CPPDEVTK_HAVE_THREAD_STORAGE
+- removed unnecessary exceptions
+- exception classes in separate files
+- exception propagation: added parameter to terminate or return null on failure
+- improved TypeInfo
 * Mon Nov 27 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.4.1
 - added CPPDEVTK_NOEXCEPT
