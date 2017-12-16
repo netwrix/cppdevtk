@@ -77,7 +77,7 @@
 
 
 Name: cppdevtk
-Version: 1.0.5
+Version: 1.0.6
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -591,6 +591,8 @@ exit 0
 
 
 %changelog
+* Sat Dec 16 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.0.6.1 to fill
 * Fri Dec 15 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.5.1
 - added Any
