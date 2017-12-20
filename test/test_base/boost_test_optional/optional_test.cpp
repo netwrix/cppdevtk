@@ -275,6 +275,9 @@ void test_uninitialized_access( T const* )
   catch (...) {}
   BOOST_TEST_OPTIONAL_CHECK(!passed);
 
+  // cppdevtk: actually deref does not throw, it is UB
+  /*
+  
   passed = false ;
   try
   {
@@ -308,6 +311,8 @@ void test_uninitialized_access( T const* )
   }
   catch (...) {}
   BOOST_TEST_OPTIONAL_CHECK(!passed);
+  
+  */
 }
 
 #if (CPPDEVTK_TEST_OPTIONAL_VERIFY_LIFETIME)

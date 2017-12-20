@@ -78,7 +78,7 @@ public:
 private:
 	class CPPDEVTK_BASE_API TypeErasedValue: public Cloneable {
 	public:
-		virtual TypeInfo GetTypeInfo() const = 0;
+		virtual TypeInfo GetTypeInfo() const CPPDEVTK_NOEXCEPT = 0;
 	private:
 		TypeErasedValue& operator=(const TypeErasedValue&);
 	};
