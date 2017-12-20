@@ -1,18 +1,41 @@
-1. Update version:
-1.1 Search in files cppdevtk/common.pri and cppdevtk/include/cppdevtk/config/product_info.hpp
+1. Prerequisites:
+- Qt 5.6.3 msvc2015 and Qt 5.6.1-1 android needed on Windows
+- Qt 5.6.3 macosx and Qt 5.9.2 ios needed on Mac OS X
+- JDK 8u144 needed on Windows and Mac OS X
+- Android SDK r25.2.3 needed on Windows (maybe it works with r24.x >= r24.4, r25.x, r26.x): SDK Build-tools must be 25.x and Android 4.2.2 (API level 17)
+- Android NDK r10e needed on Windows
+
+- Ubuntu Qt 5:
+Use ppa:beineri (https://launchpad.net/~beineri)
+16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt592-xenial
+14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt592-trusty
+12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt563
+> sudo apt-get update
+> sudo apt-get install qt-latest qtcreator-latest
+or
+> sudo apt-get install qt59-meta-full qt59creator
+
+- CentOS Qt 5:
+Use EPEL repo
+> yum install epel-release
+
+
+
+
+2. Update version:
+2.1 Search in files cppdevtk/common.pri and cppdevtk/include/cppdevtk/config/product_info.hpp
 for CPPDEVTK_VERSION_MAJOR, CPPDEVTK_VERSION_MINOR and CPPDEVTK_VERSION_PATCH
-1.2 Search in *.plist for CFBundleShortVersionString and CFBundleVersion
-1.3 Modify in AndroidManifest.xml files versionName and versionCode
-1.4 Update in Doxyfile PROJECT_NUMBER
-1.5 Update Version in cppdevtk.spec and debian changelog
+2.2 Search in *.plist for CFBundleShortVersionString and CFBundleVersion
+2.3 Modify in AndroidManifest.xml files versionName and versionCode
+2.4 Update in Doxyfile PROJECT_NUMBER
+2.5 Update Version in cppdevtk.spec and debian changelog
 
-2. (optional) Copy customization files (if needed)
+3. (optional) Copy customization files (if needed)
 
-3. Update translations (run cppdevtk/scripts/translate.* (bat/sh))
+4. Update translations (run cppdevtk/scripts/translate.* (bat/sh))
 
-4. Update documentation (run doxygen ./Doxyfile)
+5. Update documentation (run doxygen ./Doxyfile)
 
-5. Create archive cppdevtk.zip and copy to Linux/Mac
 
 6. Build
 6.1 On Windows/Linux build from Qt Creator
@@ -49,21 +72,6 @@ static:
 CONFIG+=release CONFIG+=static
 
 
-Qt 5 >= 5.6.1:
-
-- Ubuntu:
-Use ppa:beineri (https://launchpad.net/~beineri)
-16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt592-xenial
-14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt592-trusty
-12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt563
-> sudo apt-get update
-> sudo apt-get install qt-latest qtcreator-latest
-or
-> sudo apt-get install qt59-meta-full qt59creator
-
-- CentOS
-Use EPEL repo
-> yum install epel-release
 
 
 RPM: rpmbuild -ta cppdevtk-1.0.0.tar.bz2
