@@ -20,6 +20,23 @@ Use EPEL repo
 > yum install epel-release
 
 
+- Windows environment variables for Java and Android:
+JAVA_HOME C:\Program Files\Java\jdk1.8.0_144
+ANDROID_NDK_ROOT C:\android\ndk-r10e
+NDK_ROOT %ANDROID_NDK_ROOT%
+ANDROID_HOME C:\android\sdk_r25.2.3
+ANDROID_SDK_ROOT %ANDROID_HOME%
+ANDROID_NDK_PLATFORM android-17
+
+Add to PATH:
+%JAVA_HOME%\bin
+%JAVA_HOME%\jre\bin\server
+%ANDROID_NDK_ROOT%
+%ANDROID_HOME%\tools
+%ANDROID_HOME%\platform-tools
+
+- On Mac OS X create symlink /Library/Java/Home
+
 
 
 2. Update version:
