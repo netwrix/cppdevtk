@@ -2,7 +2,7 @@
 - Qt 5.6.3 msvc2015 and Qt 5.6.1-1 android needed on Windows
 - Qt 5.6.3 macosx and Qt 5.9.2 ios needed on Mac OS X
 - JDK 8u144 needed on Windows and Mac OS X
-- Android SDK r25.2.3 needed on Windows (maybe it works with r24.x >= r24.4, r25.x, r26.x): SDK Build-tools must be 25.x and Android 4.2.2 (API level 17)
+- Android SDK r25.2.3 needed on Windows (maybe it works with r24.x >= r24.4, r25.x): SDK Build-tools must be 25.x and Android 4.2.2 (API level 17)
 - Android NDK r10e needed on Windows
 
 - Ubuntu Qt 5:
@@ -55,15 +55,23 @@ for CPPDEVTK_VERSION_MAJOR, CPPDEVTK_VERSION_MINOR and CPPDEVTK_VERSION_PATCH
 
 
 6. Build
-6.1 On Windows/Linux build from Qt Creator
+6.1 On Windows/Linux/Mac >= 10.7 build from Qt Creator
+In Qt Creator:
 - make sure to select Release configuration
-On Linux add in Qt Creator, Build Steps:
-static:
-CONFIG+=release CONFIG+=static
-shared:
+- add in Build Steps, qmake:
+shared (Lnx/Win/Mac/Android):
 CONFIG+=release CONFIG+=shared
+static (ios):
+CONFIG+=release CONFIG+=static
+Build then in bld dir:
+Linux:
+> make install
+Windows msvc 2015 cmd prompt:
+> nmake install
+Mac OS X:
+> make -j1 install
 
-6.2 Mac
+6.2 Mac OS X 10.4
 Qt Creator does not work on Mac OS X 10.4 so use CLI...
 Open terminal in cppdevtk
 
@@ -78,18 +86,6 @@ shared:
 make
 make -j1 install
 
-
-Android:
-shared:
-CONFIG+=release CONFIG+=shared
-
-
-iOS:
-static:
-CONFIG+=release CONFIG+=static
-
-
-
-
+6.3 On Linux if packaging:
 RPM: rpmbuild -ta cppdevtk-1.0.0.tar.bz2
 Deb: debuild --no-tgz-check -D -us -uc -B
