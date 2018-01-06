@@ -52,6 +52,7 @@ HEADERS += \
 	error_condition.hpp	\
 	exception_propagation.hpp	\
 	exception.hpp	\
+	factory.hpp	\
 	future_errc.hpp	\
 	future_exception.hpp	\
 	future.hpp	\

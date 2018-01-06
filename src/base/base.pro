@@ -329,6 +329,7 @@ HEADERS += \
 	./../include/cppdevtk/base/error_condition.hpp	\
 	./../include/cppdevtk/base/exception_propagation.hpp	\
 	./../include/cppdevtk/base/exception.hpp	\
+	./../include/cppdevtk/base/factory.hpp	\
 	./../include/cppdevtk/base/future_errc.hpp	\
 	./../include/cppdevtk/base/future_exception.hpp	\
 	./../include/cppdevtk/base/future.hpp	\

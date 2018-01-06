@@ -25,6 +25,8 @@
 #include "join.h"
 #include <cppdevtk/config/compiler.hpp>
 
+#include <cstddef>
+
 
 /// C++11 static_assert(bool_constexpr, message)
 #define CPPDEVTK_STATIC_ASSERT_W_MSG(expr, msg) ((void)0)
@@ -71,7 +73,7 @@ namespace base {
 namespace detail {
 
 
-template <int>
+template < ::std::size_t>
 struct StaticAssert {};
 
 

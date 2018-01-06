@@ -272,7 +272,7 @@ bool TestCallTraits()
    #if 0	// cppdevtk not as boost
    CPPDEVTK_BOOST_CHECK_TYPE(const int, ::cppdevtk::base::CallTraits<int>::ParameterType);
    #else
-   CPPDEVTK_BOOST_CHECK_TYPE(const int, ::cppdevtk::base::CallTraits<const int>::ParameterType);
+   CPPDEVTK_BOOST_CHECK_TYPE(int, ::cppdevtk::base::CallTraits<int>::ParameterType);
    #endif
    CPPDEVTK_BOOST_CHECK_TYPE(int*, ::cppdevtk::base::CallTraits<int*>::ValueType);
    CPPDEVTK_BOOST_CHECK_TYPE(int*&, ::cppdevtk::base::CallTraits<int*>::Reference);
@@ -280,7 +280,7 @@ bool TestCallTraits()
    #if 0	// cppdevtk not as boost
    CPPDEVTK_BOOST_CHECK_TYPE(int*const, ::cppdevtk::base::CallTraits<int*>::ParameterType);
    #else
-   CPPDEVTK_BOOST_CHECK_TYPE(int*const, ::cppdevtk::base::CallTraits<int*const>::ParameterType);
+   CPPDEVTK_BOOST_CHECK_TYPE(int*, ::cppdevtk::base::CallTraits<int*>::ParameterType);
    #endif
 //#if defined(BOOST_MSVC6_MEMBER_TEMPLATES)
    CPPDEVTK_BOOST_CHECK_TYPE(int&, ::cppdevtk::base::CallTraits<int&>::ValueType);
@@ -303,11 +303,19 @@ bool TestCallTraits()
    CPPDEVTK_BOOST_CHECK_TYPE(const int*, ::cppdevtk::base::CallTraits<int[3]>::ValueType);
    CPPDEVTK_BOOST_CHECK_TYPE(int(&)[3], ::cppdevtk::base::CallTraits<int[3]>::Reference);
    CPPDEVTK_BOOST_CHECK_TYPE(const int(&)[3], ::cppdevtk::base::CallTraits<int[3]>::ConstReference);
+   #if 0	// cppdevtk not as boost
    CPPDEVTK_BOOST_CHECK_TYPE(const int*const, ::cppdevtk::base::CallTraits<int[3]>::ParameterType);
+   #else
+   CPPDEVTK_BOOST_CHECK_TYPE(const int*, ::cppdevtk::base::CallTraits<int[3]>::ParameterType);
+   #endif
    CPPDEVTK_BOOST_CHECK_TYPE(const int*, ::cppdevtk::base::CallTraits<const int[3]>::ValueType);
    CPPDEVTK_BOOST_CHECK_TYPE(const int(&)[3], ::cppdevtk::base::CallTraits<const int[3]>::Reference);
    CPPDEVTK_BOOST_CHECK_TYPE(const int(&)[3], ::cppdevtk::base::CallTraits<const int[3]>::ConstReference);
+   #if 0	// cppdevtk not as boost
    CPPDEVTK_BOOST_CHECK_TYPE(const int*const, ::cppdevtk::base::CallTraits<const int[3]>::ParameterType);
+   #else
+   CPPDEVTK_BOOST_CHECK_TYPE(const int*, ::cppdevtk::base::CallTraits<const int[3]>::ParameterType);
+   #endif
    // test with abstract base class:
    CPPDEVTK_BOOST_CHECK_TYPE(test_abc1, ::cppdevtk::base::CallTraits<test_abc1>::ValueType);
    CPPDEVTK_BOOST_CHECK_TYPE(test_abc1&, ::cppdevtk::base::CallTraits<test_abc1>::Reference);
@@ -331,7 +339,7 @@ bool TestCallTraits()
    #if 0	// cppdevtk not as boost
    CPPDEVTK_BOOST_CHECK_TYPE(const enum_UDT, ::cppdevtk::base::CallTraits<enum_UDT>::ParameterType);
    #else
-   CPPDEVTK_BOOST_CHECK_TYPE(const enum_UDT, ::cppdevtk::base::CallTraits<const enum_UDT>::ParameterType);
+   CPPDEVTK_BOOST_CHECK_TYPE(enum_UDT, ::cppdevtk::base::CallTraits<enum_UDT>::ParameterType);
    #endif
    
    return true;
@@ -349,11 +357,11 @@ struct CallTraits_test
    typedef typename ct::Reference reference;
    typedef typename ct::ConstReference const_reference;
    typedef typename ct::ValueType value_type;
-   static void assert_construct(typename ::cppdevtk::base::CallTraits<T>::ParameterType val);
+   static void assert_construct(param_type val);
 };
 
 template <typename T, bool isarray>
-void CallTraits_test<T, isarray>::assert_construct(typename ::cppdevtk::base::CallTraits<T>::ParameterType val)
+void CallTraits_test<T, isarray>::assert_construct(param_type val)
 {
    //
    // this is to check that the CallTraits assertions are valid:
@@ -401,7 +409,7 @@ struct CallTraits_test<T, true>
 };
 
 template <typename T>
-void CallTraits_test<T, true>::assert_construct(typename ::cppdevtk::base::CallTraits<T>::ParameterType val)
+void CallTraits_test<T, true>::assert_construct(param_type val)
 {
    //
    // this is to check that the CallTraits assertions are valid:
@@ -450,3 +458,12 @@ template struct CallTraits_test<const int&>;
 template struct CallTraits_test<int[2], true>;
 //#endif
 //#endif
+
+#if 0
+CallTraits_test<int> cti;
+CallTraits_test<const int> ctci;
+CallTraits_test<int*> ctip;
+CallTraits_test<int&> ctir;
+CallTraits_test<const int&> ctcir;
+CallTraits_test<int[2], true> ctai;
+#endif

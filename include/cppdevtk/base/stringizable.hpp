@@ -104,7 +104,7 @@ CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, const QStringizable& 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <typename TChar>
 inline BasicStringizable<TChar>::BasicStringizable() {}

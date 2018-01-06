@@ -67,7 +67,7 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <typename TThreadSharedObj, class TMutex>
 inline ThreadSharedObjLockingPtr<TThreadSharedObj, TMutex>::ThreadSharedObjLockingPtr(

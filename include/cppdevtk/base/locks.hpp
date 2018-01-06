@@ -149,7 +149,7 @@ void swap(UniqueLock<TMutex>& x, UniqueLock<TMutex>& y) CPPDEVTK_NOEXCEPT;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <class TMutex>
 inline LockGuard<TMutex>::LockGuard(MutexType& mutex): NonCopyable(), mutex_(mutex) {

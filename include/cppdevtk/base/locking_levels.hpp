@@ -22,6 +22,7 @@
 
 
 #include "config.hpp"
+#include "mutex.hpp"
 #include "non_copyable.hpp"
 #include "lock_exception.hpp"
 #include "deadlock_exception.hpp"
@@ -82,7 +83,7 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <class TMutex>
 inline ObjectLevelLocking<TMutex>::ObjectLevelLocking(): NonCopyable(), mutex_() {}

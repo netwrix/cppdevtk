@@ -308,7 +308,7 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullCla
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <class TMutex, template <class> class TLockingLevel>
 inline void BasicLockable<TMutex, TLockingLevel>::Lock() const {

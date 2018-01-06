@@ -37,6 +37,8 @@
 #include <cppdevtk/base/singletons.hpp>
 #include <cppdevtk/base/thread.hpp>
 #include <cppdevtk/base/thread_exception.hpp>
+#include <cppdevtk/base/factory.hpp>
+#include <cppdevtk/base/verify.h>
 #include <cppdevtk/util/core_application.hpp>
 
 #include "semaphores.hpp"
@@ -232,6 +234,67 @@ protected:
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
+class Pet {
+public:
+	virtual ~Pet() {}
+	virtual void Speak() const = 0;
+};
+
+class Dog: public Pet {
+public:
+	virtual void Speak() const {
+		CPPDEVTK_COUT << "Woof, I'm hungry" << endl;
+	}
+};
+
+class Cat: public Pet {
+public:
+	virtual void Speak() const {
+		CPPDEVTK_COUT << "Meow, I'm hungry" << endl;
+	}
+};
+
+enum PetId {
+	pidDog,
+	pidCat
+};
+
+
+void PetDeleter(Pet* pPet) {
+	delete pPet;
+}
+
+Pet* CreateDogFunction() {
+	return new Dog();
+}
+
+Pet* CreateCatFunction() {
+	return new Cat();
+}
+
+class CreatePetFunctionObject {
+public:
+	virtual ~CreatePetFunctionObject() {}
+	virtual Pet* operator()() = 0;
+};
+
+class CreateDogFunctionObject: public CreatePetFunctionObject {
+public:
+	Pet* operator()() {
+		return new Dog();
+	}
+};
+
+class CreateCatFunctionObject: public CreatePetFunctionObject {
+public:
+	Pet* operator()() {
+		return new Cat();
+	}
+};
+
+
+
+
 bool TestSafeDelete();
 bool TestSingleton();
 bool TestStackTrace();
@@ -239,6 +302,7 @@ bool TestStdExceptions();
 bool TestNonStdExceptions();
 bool TestSystemException();
 bool TestExceptionPropagation();
+bool TestFactory();
 bool TestAny();
 bool TestMutex();
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
@@ -341,6 +405,13 @@ int main(int argc, char* argv[]) try {
 			return EXIT_FAILURE;
 		}
 		CPPDEVTK_COUT << "ExceptionPropagation test: PASSED" << endl;
+		
+		CPPDEVTK_COUT << "testing Factory..." << endl;
+		if (!TestFactory()) {
+			CPPDEVTK_CERR << "Factory test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		CPPDEVTK_COUT << "Factory test: PASSED" << endl;
 		
 		CPPDEVTK_COUT << "testing Any..." << endl;
 		if (!TestAny()) {
@@ -710,6 +781,49 @@ bool TestExceptionPropagation() {
 			}
 		}
 	}
+	
+	return true;
+}
+
+bool TestFactory() {
+	typedef ::cppdevtk::base::Factory<Pet, PetId, false> PetFactory;
+	PetFactory& thePetFactory = PetFactory::GetInstance();
+	
+	CPPDEVTK_VERIFY(thePetFactory.IsEmpty());
+	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 0);
+	
+	CPPDEVTK_VERIFY(thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunction));
+	CPPDEVTK_VERIFY(!thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunction));
+	CPPDEVTK_VERIFY(thePetFactory.IsConcreteProductRegistered(pidDog));
+	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 1);
+	CPPDEVTK_TR1_NS::shared_ptr<Pet> pDog = thePetFactory.CreateConcreteProduct(pidDog);
+	CPPDEVTK_VERIFY(dynamic_cast<Dog*>(pDog.get()) != NULL);
+	pDog->Speak();
+	CPPDEVTK_VERIFY(thePetFactory.UnregisterConcreteProduct(pidDog));
+	CPPDEVTK_VERIFY(!thePetFactory.UnregisterConcreteProduct(pidDog));
+	CPPDEVTK_VERIFY(!thePetFactory.IsConcreteProductRegistered(pidDog));
+	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 0);
+	
+	CPPDEVTK_VERIFY(thePetFactory.RegisterConcreteProduct(pidCat, CreateCatFunction));
+	CPPDEVTK_VERIFY(!thePetFactory.RegisterConcreteProduct(pidCat, CreateCatFunction));
+	CPPDEVTK_VERIFY(thePetFactory.IsConcreteProductRegistered(pidCat));
+	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 1);
+	CPPDEVTK_TR1_NS::shared_ptr<Pet> pCat = thePetFactory.CreateConcreteProduct(pidCat, PetDeleter);
+	CPPDEVTK_VERIFY(dynamic_cast<Cat*>(pCat.get()) != NULL);
+	pCat->Speak();
+	thePetFactory.Clear();
+	CPPDEVTK_VERIFY(!thePetFactory.UnregisterConcreteProduct(pidCat));
+	CPPDEVTK_VERIFY(!thePetFactory.IsConcreteProductRegistered(pidCat));
+	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 0);
+	CPPDEVTK_VERIFY(thePetFactory.IsEmpty());
+	
+	
+	CPPDEVTK_VERIFY(thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunctionObject()));
+	CPPDEVTK_VERIFY(!thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunctionObject()));
+	CPPDEVTK_VERIFY(thePetFactory.IsConcreteProductRegistered(pidDog));
+	pDog = thePetFactory.CreateConcreteProduct(pidDog);
+	CPPDEVTK_VERIFY(dynamic_cast<Dog*>(pDog.get()) != NULL);
+	pDog->Speak();
 	
 	return true;
 }

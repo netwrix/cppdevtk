@@ -61,7 +61,7 @@ public:
 	typedef const T* ValueType;
 	typedef ArrayType& Reference;
 	typedef const ArrayType& ConstReference;
-	typedef const T* const ParameterType;
+	typedef const T* ParameterType;
 };
 
 
@@ -73,7 +73,7 @@ public:
 	typedef const T* ValueType;
 	typedef ArrayType& Reference;
 	typedef const ArrayType& ConstReference;
-	typedef const T* const ParameterType;
+	typedef const T* ParameterType;
 };
 
 

@@ -144,7 +144,7 @@ int LockHelper(TL1& l1, TL2& l2, TL3& l3, TL4& l4, TL5& l5, TL6& l6, TL7& l7, TL
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <class TL1, class TL2>
 inline int TryLock(TL1& l1, TL2& l2) {

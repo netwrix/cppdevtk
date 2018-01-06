@@ -204,7 +204,7 @@ CPPDEVTK_BASE_API void RethrowException(const ExceptionPtr& exceptionPtr);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Inline functions
+// Inline functions / template definitions.
 
 #if (!CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 

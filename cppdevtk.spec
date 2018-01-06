@@ -594,6 +594,7 @@ exit 0
 * Sat Jan 6 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.6.1
 - added CallTraits
+- added Factory
 - fixed Optional test
 * Fri Dec 15 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.5.1

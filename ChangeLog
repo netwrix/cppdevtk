@@ -2,6 +2,7 @@ Version 1.0.6.1:
 - Release date: 6 Jan 2018
 - New features:
 	- added CallTraits
+	- added Factory
 - Improvements:
 - Fixed bugs:
 	- fixed Optional test

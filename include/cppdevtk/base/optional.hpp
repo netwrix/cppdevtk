@@ -267,7 +267,7 @@ bool operator>=(const TValue& lhs, const Optional<TValue>& rhs);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Inline functions, template definitions
+// Inline functions / template definitions.
 
 template <typename TValue>
 inline Optional<TValue>::Optional() CPPDEVTK_NOEXCEPT: pValue_(NULL) {}

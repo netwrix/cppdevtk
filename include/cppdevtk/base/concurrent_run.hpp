@@ -162,7 +162,7 @@ public:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Inline functions.
+// Inline functions / template definitions.
 
 inline FutureInterfaceCancelable::FutureInterfaceCancelable(QFutureInterfaceBase& futureInterfaceBase): Cancelable(),
 		futureInterfaceBase_(futureInterfaceBase) {}

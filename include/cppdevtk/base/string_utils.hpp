@@ -59,7 +59,7 @@ QString NumToHexStr(TNum num);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 inline CPPDEVTK_BASE_API bool IsLatin1(const QChar& chr) {
 	return chr.toLatin1() != 0;

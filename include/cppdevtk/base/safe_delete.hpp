@@ -54,7 +54,7 @@ void DeleteCompleteTypeArrayAndSetToNull(T*& ptr);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Template definitions / Inline functions
+// Inline functions / template definitions.
 
 template <typename T>
 inline void DeleteAndSetToNull(T*& ptr) {
