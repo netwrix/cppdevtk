@@ -25,11 +25,11 @@
 namespace boost {
 
 
-int optional_test_errors_counter = 0;
+int test_errors_counter = 0;
 
 
 void ReportError(const char* msg, const char* file, int line, const char* func_name, bool is_msg) {
-    ++optional_test_errors_counter;
+    ++test_errors_counter;
     std::cerr << file << "(" << line << "): ";
 
     if( is_msg )

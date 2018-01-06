@@ -25,6 +25,7 @@
 #include "typeinfo.hpp"
 #include "bad_any_cast_exception.hpp"
 #include "cloneable.hpp"
+#include "static_assert.hpp"
 
 #include <cstddef>
 #include <new>
@@ -86,6 +87,8 @@ private:
 	
 	template <typename TValue>
 	class Value: public TypeErasedValue {
+		CPPDEVTK_STATIC_ASSERT(!CPPDEVTK_TR1_NS::is_array<TValue>::value);
+		
 		template <typename TValue1>
 		friend TValue1* AnyCast(Any*);
 	public:

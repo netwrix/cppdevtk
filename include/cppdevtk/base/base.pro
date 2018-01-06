@@ -32,6 +32,7 @@ HEADERS += \
 	bad_any_cast_exception.hpp	\
 	bad_cast_exception.hpp	\
 	bad_optional_access_exception.hpp	\
+	call_traits.hpp	\
 	cancelable.hpp	\
 	cassert.hpp	\
 	cerrno.hpp	\

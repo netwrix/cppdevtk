@@ -43,6 +43,7 @@
 #include "waitconditions.hpp"
 #include "boost_any_test.hpp"
 #include "boost_test_optional/optional_test.hpp"
+#include "boost_call_traits_test.hpp"
 
 #include <QtCore/QString>
 #include <QtCore/QtGlobal>
@@ -353,7 +354,22 @@ int main(int argc, char* argv[]) try {
 			CPPDEVTK_CERR << "Optional test: FAILED!!!" << endl;
 			return EXIT_FAILURE;
 		}
+		if (boost::test_errors_counter != 0) {
+			CPPDEVTK_COUT << "Optional test_errors_counter: " << boost::test_errors_counter << endl;
+			return EXIT_FAILURE;
+		}
 		CPPDEVTK_COUT << "Optional test: PASSED" << endl;
+		
+		CPPDEVTK_COUT << "testing CallTraits..." << endl;
+		if (!TestCallTraits()) {
+			CPPDEVTK_CERR << "CallTraits test: FAILED!!!" << endl;
+			return EXIT_FAILURE;
+		}
+		if (boost::test_errors_counter != 0) {
+			CPPDEVTK_COUT << "CallTraits test_errors_counter: " << boost::test_errors_counter << endl;
+			return EXIT_FAILURE;
+		}
+		CPPDEVTK_COUT << "CallTraits test: PASSED" << endl;
 		
 		CPPDEVTK_COUT << "testing Mutex..." << endl;
 		if (!TestMutex()) {

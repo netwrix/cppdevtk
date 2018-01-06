@@ -23,6 +23,8 @@
 
 #include <cppdevtk/config/config.hpp>
 #include <cppdevtk/base/optional.hpp>
+#include <cppdevtk/base/stringize.h>
+#include <cppdevtk/base/qiostream.hpp>
 
 #include <iostream>
 
@@ -38,16 +40,39 @@
 #endif
 
 
-#define BOOST_TEST_OPTIONAL_CHECK(exp)       \
+#define CPPDEVTK_BOOST_CHECK(exp)       \
   ( (exp)                      \
       ? static_cast<void>(0)   \
       : boost::ReportError(#exp,__FILE__,__LINE__, CPPDEVTK_FUNCTION_LONG_NAME) )
 
 
+#define CPPDEVTK_BOOST_CHECK_MESSAGE(pred, message)\
+   do{\
+   if(!(pred))\
+   {\
+      ::cppdevtk::base::qcout << __FILE__ << ":" << __LINE__ << ": " << message << endl;\
+      ++boost::test_errors_counter;\
+   }\
+   }while(0)
+
+#define CPPDEVTK_BOOST_CHECK_TYPE(type_expression, expected_type)\
+do{\
+   if(!CPPDEVTK_TR1_NS::is_same< type_expression, expected_type >::value){\
+   CPPDEVTK_BOOST_CHECK_MESSAGE(false, "The expression: \"" << CPPDEVTK_STRINGIZE_A(expression)\
+      << "\" did not have the expected type:\n\tevaluating:   boost::is_same<"\
+      << CPPDEVTK_STRINGIZE_A(type_expression) << ", " << CPPDEVTK_STRINGIZE_A(expected_type)\
+      << ">" << "\n\tfound:        "\
+      << typeid(CPPDEVTK_TR1_NS::is_same< type_expression, expected_type >).name());\
+   }else\
+      CPPDEVTK_BOOST_CHECK_MESSAGE(true, "Validating Type Expression: \""\
+         << CPPDEVTK_STRINGIZE_A(expression) << "\"");\
+} while(0)
+
+
 namespace boost {
 
 
-extern int optional_test_errors_counter;
+extern int test_errors_counter;
 
 
 void ReportError(const char* msg, const char* file, int line, const char* func_name, bool is_msg = false);
@@ -161,13 +186,13 @@ inline void set_throw_on_copy          ( X const* x ) { unused_variable(x); X::t
 inline void set_throw_on_assign        ( X const* x ) { unused_variable(x); X::throw_on_assign = true  ; }
 inline void reset_throw_on_copy        ( X const* x ) { unused_variable(x); X::throw_on_copy = false ; }
 inline void reset_throw_on_assign      ( X const* x ) { unused_variable(x); X::throw_on_assign = false ; }
-inline void check_is_pending_copy      ( X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( X::pending_copy ) ; }
-inline void check_is_pending_dtor      ( X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( X::pending_dtor ) ; }
-inline void check_is_pending_assign    ( X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( X::pending_assign ) ; }
-inline void check_is_not_pending_copy  ( X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( !X::pending_copy ) ; }
-inline void check_is_not_pending_dtor  ( X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( !X::pending_dtor ) ; }
-inline void check_is_not_pending_assign( X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( !X::pending_assign ) ; }
-inline void check_instance_count       ( int c, X const* x ) { unused_variable(x); BOOST_TEST_OPTIONAL_CHECK( X::count == c ) ; }
+inline void check_is_pending_copy      ( X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( X::pending_copy ) ; }
+inline void check_is_pending_dtor      ( X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( X::pending_dtor ) ; }
+inline void check_is_pending_assign    ( X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( X::pending_assign ) ; }
+inline void check_is_not_pending_copy  ( X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( !X::pending_copy ) ; }
+inline void check_is_not_pending_dtor  ( X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( !X::pending_dtor ) ; }
+inline void check_is_not_pending_assign( X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( !X::pending_assign ) ; }
+inline void check_instance_count       ( int c, X const* x ) { unused_variable(x); CPPDEVTK_BOOST_CHECK( X::count == c ) ; }
 inline int  get_instance_count         ( X const* x ) { unused_variable(x); return X::count ; }
 
 #else
@@ -210,18 +235,18 @@ inline int  get_instance_count         (...) { return 0 ; }
 template<class T>
 inline void check_uninitialized_const ( Optional<T> const& opt )
 {
-  BOOST_TEST_OPTIONAL_CHECK( opt == 0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK( !opt ) ;
-  //BOOST_TEST_OPTIONAL_CHECK( !get_pointer(opt) ) ;
-  BOOST_TEST_OPTIONAL_CHECK( !opt.GetValuePtr() ) ;
+  CPPDEVTK_BOOST_CHECK( opt == 0 ) ;
+  CPPDEVTK_BOOST_CHECK( !opt ) ;
+  //CPPDEVTK_BOOST_CHECK( !get_pointer(opt) ) ;
+  CPPDEVTK_BOOST_CHECK( !opt.GetValuePtr() ) ;
 }
 template<class T>
 inline void check_uninitialized ( Optional<T>& opt )
 {
-  BOOST_TEST_OPTIONAL_CHECK( opt == 0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK( !opt ) ;
-  //BOOST_TEST_OPTIONAL_CHECK( !get_pointer(opt) ) ;
-  BOOST_TEST_OPTIONAL_CHECK( !opt.GetValuePtr() ) ;
+  CPPDEVTK_BOOST_CHECK( opt == 0 ) ;
+  CPPDEVTK_BOOST_CHECK( !opt ) ;
+  //CPPDEVTK_BOOST_CHECK( !get_pointer(opt) ) ;
+  CPPDEVTK_BOOST_CHECK( !opt.GetValuePtr() ) ;
 
   check_uninitialized_const(opt);
 }
@@ -229,21 +254,21 @@ inline void check_uninitialized ( Optional<T>& opt )
 template<class T>
 inline void check_initialized_const ( Optional<T> const& opt )
 {
-  BOOST_TEST_OPTIONAL_CHECK( opt ) ;
-  BOOST_TEST_OPTIONAL_CHECK( opt != 0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !!opt ) ;
-  //BOOST_TEST_OPTIONAL_CHECK ( get_pointer(opt) ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt.GetValuePtr() ) ;
+  CPPDEVTK_BOOST_CHECK( opt ) ;
+  CPPDEVTK_BOOST_CHECK( opt != 0 ) ;
+  CPPDEVTK_BOOST_CHECK ( !!opt ) ;
+  //CPPDEVTK_BOOST_CHECK ( get_pointer(opt) ) ;
+  CPPDEVTK_BOOST_CHECK ( opt.GetValuePtr() ) ;
 }
 
 template<class T>
 inline void check_initialized ( Optional<T>& opt )
 {
-  BOOST_TEST_OPTIONAL_CHECK( opt ) ;
-  BOOST_TEST_OPTIONAL_CHECK( opt != 0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !!opt ) ;
-  //BOOST_TEST_OPTIONAL_CHECK ( get_pointer(opt) ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt.GetValuePtr() ) ;
+  CPPDEVTK_BOOST_CHECK( opt ) ;
+  CPPDEVTK_BOOST_CHECK( opt != 0 ) ;
+  CPPDEVTK_BOOST_CHECK ( !!opt ) ;
+  //CPPDEVTK_BOOST_CHECK ( get_pointer(opt) ) ;
+  CPPDEVTK_BOOST_CHECK ( opt.GetValuePtr() ) ;
 
   check_initialized_const(opt);
 }
@@ -251,23 +276,23 @@ inline void check_initialized ( Optional<T>& opt )
 template<class T>
 inline void check_value_const ( Optional<T> const& opt, T const& v, T const& z )
 {
-  BOOST_TEST_OPTIONAL_CHECK( *opt == v ) ;
-  BOOST_TEST_OPTIONAL_CHECK( *opt != z ) ;
-  BOOST_TEST_OPTIONAL_CHECK( opt.GetValue() == v ) ;
-  BOOST_TEST_OPTIONAL_CHECK( opt.GetValue() != z ) ;
-  BOOST_TEST_OPTIONAL_CHECK( (*(opt.operator->()) == v) ) ;
-  //BOOST_TEST_OPTIONAL_CHECK( *get_pointer(opt) == v ) ;
+  CPPDEVTK_BOOST_CHECK( *opt == v ) ;
+  CPPDEVTK_BOOST_CHECK( *opt != z ) ;
+  CPPDEVTK_BOOST_CHECK( opt.GetValue() == v ) ;
+  CPPDEVTK_BOOST_CHECK( opt.GetValue() != z ) ;
+  CPPDEVTK_BOOST_CHECK( (*(opt.operator->()) == v) ) ;
+  //CPPDEVTK_BOOST_CHECK( *get_pointer(opt) == v ) ;
 }
 
 template<class T>
 inline void check_value ( Optional<T>& opt, T const& v, T const& z )
 {
-  BOOST_TEST_OPTIONAL_CHECK( *opt == v ) ;
-  BOOST_TEST_OPTIONAL_CHECK( *opt != z ) ;
-  BOOST_TEST_OPTIONAL_CHECK( opt.GetValue() == v ) ;
-  BOOST_TEST_OPTIONAL_CHECK( opt.GetValue() != z ) ;
-  BOOST_TEST_OPTIONAL_CHECK( (*(opt.operator->()) == v) ) ;
-  //BOOST_TEST_OPTIONAL_CHECK( *get_pointer(opt) == v ) ;
+  CPPDEVTK_BOOST_CHECK( *opt == v ) ;
+  CPPDEVTK_BOOST_CHECK( *opt != z ) ;
+  CPPDEVTK_BOOST_CHECK( opt.GetValue() == v ) ;
+  CPPDEVTK_BOOST_CHECK( opt.GetValue() != z ) ;
+  CPPDEVTK_BOOST_CHECK( (*(opt.operator->()) == v) ) ;
+  //CPPDEVTK_BOOST_CHECK( *get_pointer(opt) == v ) ;
 
   check_value_const(opt,v,z);
 }

@@ -1,8 +1,10 @@
 Version 1.0.6.1:
-- Release date:
+- Release date: 6 Jan 2018
 - New features:
+	- added CallTraits
 - Improvements:
 - Fixed bugs:
+	- fixed Optional test
 
 
 Version 1.0.5.1:

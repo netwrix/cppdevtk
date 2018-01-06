@@ -309,6 +309,7 @@ HEADERS += \
 	./../include/cppdevtk/base/bad_any_cast_exception.hpp	\
 	./../include/cppdevtk/base/bad_cast_exception.hpp	\
 	./../include/cppdevtk/base/bad_optional_access_exception.hpp	\
+	./../include/cppdevtk/base/call_traits.hpp	\
 	./../include/cppdevtk/base/cancelable.hpp	\
 	./../include/cppdevtk/base/cassert.hpp	\
 	./../include/cppdevtk/base/cerrno.hpp	\

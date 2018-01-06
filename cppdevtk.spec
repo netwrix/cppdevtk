@@ -591,8 +591,10 @@ exit 0
 
 
 %changelog
-* Sat Dec 16 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
-- v1.0.6.1 to fill
+* Sat Jan 6 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.0.6.1
+- added CallTraits
+- fixed Optional test
 * Fri Dec 15 2017 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.5.1
 - added Any

@@ -125,7 +125,8 @@ HEADERS += info.hpp \
     config.hpp	\
 	semaphores.hpp	\
 	waitconditions.hpp	\
-	boost_any_test.hpp
+	boost_any_test.hpp	\
+	boost_call_traits_test.hpp
 
 HEADERS += \
 	./boost_test_optional/optional_test.hpp	\
@@ -135,7 +136,8 @@ HEADERS += \
 SOURCES += main.cpp	\
 	semaphores.cpp	\
 	waitconditions.cpp	\
-	boost_any_test.cpp
+	boost_any_test.cpp	\
+	boost_call_traits_test.cpp
 
 SOURCES +=	\
 	./boost_test_optional/optional_test.cpp	\

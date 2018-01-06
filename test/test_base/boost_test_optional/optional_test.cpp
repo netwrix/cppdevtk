@@ -41,12 +41,12 @@ void test_implicit_construction ( Optional<X> opt, X const& v, X const& z )
 
 void test_default_implicit_construction ( double, Optional<double> opt )
 {
-  BOOST_TEST_OPTIONAL_CHECK(!opt);
+  CPPDEVTK_BOOST_CHECK(!opt);
 }
 
 void test_default_implicit_construction ( X const&, Optional<X> opt )
 {
-  BOOST_TEST_OPTIONAL_CHECK(!opt);
+  CPPDEVTK_BOOST_CHECK(!opt);
 }
 
 //
@@ -183,46 +183,46 @@ void test_conditional_ctor_and_get_valur_or ( T const* )
   check_value(o1,a,z);
 
   T b = def0.GetValueOr(z);
-  BOOST_TEST_OPTIONAL_CHECK( b == z ) ;
+  CPPDEVTK_BOOST_CHECK( b == z ) ;
 
   b = o0.GetValueOr(z);
-  BOOST_TEST_OPTIONAL_CHECK( b == a ) ;
+  CPPDEVTK_BOOST_CHECK( b == a ) ;
 
 
   T const& crz = z ;
   T&        rz = z ;
 
   T const& crzz = def0.GetValueOr(crz);
-  BOOST_TEST_OPTIONAL_CHECK( crzz == crz ) ;
+  CPPDEVTK_BOOST_CHECK( crzz == crz ) ;
 
   T& rzz = def0.GetValueOr(rz);
-  BOOST_TEST_OPTIONAL_CHECK( rzz == rz ) ;
+  CPPDEVTK_BOOST_CHECK( rzz == rz ) ;
 
   T const& crb = o0.GetValueOr(crz);
-  BOOST_TEST_OPTIONAL_CHECK( crb == a ) ;
+  CPPDEVTK_BOOST_CHECK( crb == a ) ;
 
   T& rb = o0.GetValueOr(rz);
-  BOOST_TEST_OPTIONAL_CHECK( rb == b ) ;
+  CPPDEVTK_BOOST_CHECK( rb == b ) ;
   
   // our Optional does not support references
   /*
   T& ra = a ;
   
   Optional<T&> defref(false,ra);
-  BOOST_TEST_OPTIONAL_CHECK(!defref);
+  CPPDEVTK_BOOST_CHECK(!defref);
 
   Optional<T&> ref(true,ra);
-  BOOST_TEST_OPTIONAL_CHECK(!!ref);
+  CPPDEVTK_BOOST_CHECK(!!ref);
 
   a = T(432);
 
-  BOOST_TEST_OPTIONAL_CHECK( *ref == a ) ;
+  CPPDEVTK_BOOST_CHECK( *ref == a ) ;
   
   T& r1 = defref.GetValueOr(z);
-  BOOST_TEST_OPTIONAL_CHECK( r1 == z ) ;
+  CPPDEVTK_BOOST_CHECK( r1 == z ) ;
 
   T& r2 = ref.GetValueOr(z);
-  BOOST_TEST_OPTIONAL_CHECK( r2 == a ) ;
+  CPPDEVTK_BOOST_CHECK( r2 == a ) ;
   */
 }
 
@@ -239,19 +239,19 @@ void test_direct_value_manip( T const* )
   Optional<T> const c_opt0(x) ;
   Optional<T>         opt0(x);
 
-  BOOST_TEST_OPTIONAL_CHECK( c_opt0.GetValue().V() == x.V() ) ;
-  BOOST_TEST_OPTIONAL_CHECK(   opt0.GetValue().V() == x.V() ) ;
+  CPPDEVTK_BOOST_CHECK( c_opt0.GetValue().V() == x.V() ) ;
+  CPPDEVTK_BOOST_CHECK(   opt0.GetValue().V() == x.V() ) ;
 
-  BOOST_TEST_OPTIONAL_CHECK( c_opt0->V() == x.V() ) ;
-  BOOST_TEST_OPTIONAL_CHECK(   opt0->V() == x.V() ) ;
+  CPPDEVTK_BOOST_CHECK( c_opt0->V() == x.V() ) ;
+  CPPDEVTK_BOOST_CHECK(   opt0->V() == x.V() ) ;
 
-  BOOST_TEST_OPTIONAL_CHECK( (*c_opt0).V() == x.V() ) ;
-  BOOST_TEST_OPTIONAL_CHECK( (*  opt0).V() == x.V() ) ;
+  CPPDEVTK_BOOST_CHECK( (*c_opt0).V() == x.V() ) ;
+  CPPDEVTK_BOOST_CHECK( (*  opt0).V() == x.V() ) ;
 
   T y(4);
   opt0 = y ;
-  //BOOST_TEST_OPTIONAL_CHECK( get(opt0).V() == y.V() ) ;
-  BOOST_TEST_OPTIONAL_CHECK(opt0.GetValue().V() == y.V() ) ;
+  //CPPDEVTK_BOOST_CHECK( get(opt0).V() == y.V() ) ;
+  CPPDEVTK_BOOST_CHECK(opt0.GetValue().V() == y.V() ) ;
 }
 
 //
@@ -273,7 +273,7 @@ void test_uninitialized_access( T const* )
     passed = true ;
   }
   catch (...) {}
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   // cppdevtk: actually deref does not throw, it is UB
   /*
@@ -287,7 +287,7 @@ void test_uninitialized_access( T const* )
     passed = true ;
   }
   catch (...) {}
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   passed = false ;
   try
@@ -299,7 +299,7 @@ void test_uninitialized_access( T const* )
     passed = true ;
   }
   catch (...) {}
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   passed = false ;
   try
@@ -310,7 +310,7 @@ void test_uninitialized_access( T const* )
     passed = true ;
   }
   catch (...) {}
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
   
   */
 }
@@ -344,7 +344,7 @@ void test_throwing_direct_init( T const* )
   }
   catch ( ... ){}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
 
@@ -380,7 +380,7 @@ void test_throwing_val_assign_on_uninitialized( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
@@ -426,7 +426,7 @@ void test_throwing_val_assign_on_initialized( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   check_is_not_pending_assign( ARG(T) );
   check_instance_count(count, ARG(T) );
@@ -465,7 +465,7 @@ void test_throwing_copy_initialization( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
@@ -508,7 +508,7 @@ void test_throwing_assign_to_uninitialized( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
@@ -551,7 +551,7 @@ void test_throwing_assign_to_initialized( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   // opt0 was left uninitialized
   check_is_not_pending_assign( ARG(T) );
@@ -631,7 +631,7 @@ void test_throwing_swap( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   // optional's swap doesn't affect the initialized states of the arguments. Therefore,
   // the following must hold:
@@ -662,7 +662,7 @@ void test_throwing_swap( T const* )
   }
   catch ( ... ) {}
 
-  BOOST_TEST_OPTIONAL_CHECK(!passed);
+  CPPDEVTK_BOOST_CHECK(!passed);
 
   check_uninitialized(opt0);
   check_initialized(opt1);
@@ -692,69 +692,69 @@ void test_relops( T const* )
   Optional<T> opt2(v2);
 
   // Check identity
-  BOOST_TEST_OPTIONAL_CHECK ( def0 == def0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt0 == opt0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 != def0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(opt0 != opt0) ) ;
+  CPPDEVTK_BOOST_CHECK ( def0 == def0 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt0 == opt0 ) ;
+  CPPDEVTK_BOOST_CHECK ( !(def0 != def0) ) ;
+  CPPDEVTK_BOOST_CHECK ( !(opt0 != opt0) ) ;
 
   // Check when both are uininitalized.
-  BOOST_TEST_OPTIONAL_CHECK (   def0 == def1  ) ; // both uninitialized compare equal
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 != def1) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 <= def1  ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 >= def1  ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 == def1  ) ; // both uninitialized compare equal
+  CPPDEVTK_BOOST_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized
+  CPPDEVTK_BOOST_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized
+  CPPDEVTK_BOOST_CHECK ( !(def0 != def1) ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 <= def1  ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 >= def1  ) ;
 
   // Check when only lhs is uninitialized.
-  BOOST_TEST_OPTIONAL_CHECK (   def0 != opt0  ) ; // uninitialized is never equal to initialized
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 == opt0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 <  opt0  ) ; // uninitialized is always less than initialized
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 >  opt0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 <= opt0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 >= opt0) ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 != opt0  ) ; // uninitialized is never equal to initialized
+  CPPDEVTK_BOOST_CHECK ( !(def0 == opt0) ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 <  opt0  ) ; // uninitialized is always less than initialized
+  CPPDEVTK_BOOST_CHECK ( !(def0 >  opt0) ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 <= opt0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(def0 >= opt0) ) ;
 
   // Check when only rhs is uninitialized.
-  BOOST_TEST_OPTIONAL_CHECK (   opt0 != def0  ) ; // initialized is never equal to uninitialized
-  BOOST_TEST_OPTIONAL_CHECK ( !(opt0 == def0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(opt0 <  def0) ) ; // initialized is never less than uninitialized
-  BOOST_TEST_OPTIONAL_CHECK (   opt0 >  def0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(opt0 <= def0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   opt0 >= opt0  ) ;
+  CPPDEVTK_BOOST_CHECK (   opt0 != def0  ) ; // initialized is never equal to uninitialized
+  CPPDEVTK_BOOST_CHECK ( !(opt0 == def0) ) ;
+  CPPDEVTK_BOOST_CHECK ( !(opt0 <  def0) ) ; // initialized is never less than uninitialized
+  CPPDEVTK_BOOST_CHECK (   opt0 >  def0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(opt0 <= def0) ) ;
+  CPPDEVTK_BOOST_CHECK (   opt0 >= opt0  ) ;
 
   // If both are initialized, values are compared
-  BOOST_TEST_OPTIONAL_CHECK ( opt0 != opt1 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 == opt2 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt0 <  opt1 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 >  opt0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 <= opt2 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 >= opt0 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt0 != opt1 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 == opt2 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt0 <  opt1 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 >  opt0 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 <= opt2 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 >= opt0 ) ;
 
   // Compare against a value directly
-  BOOST_TEST_OPTIONAL_CHECK ( opt0 == v0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt0 != v1 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 == v2 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt0 <  v1 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 >  v0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 <= v2 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( opt1 >= v0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( v0 != opt1 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( v1 == opt2 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( v0 <  opt1 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( v1 >  opt0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( v1 <= opt2 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( v1 >= opt0 ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 != v0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 == v0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 <  v0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 >  v0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   def0 <= v0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(def0 >= v0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   v0 != def0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(v0 == def0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(v0 <  def0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   v0 >  def0  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(v0 <= def0) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   v0 >= opt0  ) ;
+  CPPDEVTK_BOOST_CHECK ( opt0 == v0 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt0 != v1 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 == v2 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt0 <  v1 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 >  v0 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 <= v2 ) ;
+  CPPDEVTK_BOOST_CHECK ( opt1 >= v0 ) ;
+  CPPDEVTK_BOOST_CHECK ( v0 != opt1 ) ;
+  CPPDEVTK_BOOST_CHECK ( v1 == opt2 ) ;
+  CPPDEVTK_BOOST_CHECK ( v0 <  opt1 ) ;
+  CPPDEVTK_BOOST_CHECK ( v1 >  opt0 ) ;
+  CPPDEVTK_BOOST_CHECK ( v1 <= opt2 ) ;
+  CPPDEVTK_BOOST_CHECK ( v1 >= opt0 ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 != v0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(def0 == v0) ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 <  v0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(def0 >  v0) ) ;
+  CPPDEVTK_BOOST_CHECK (   def0 <= v0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(def0 >= v0) ) ;
+  CPPDEVTK_BOOST_CHECK (   v0 != def0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(v0 == def0) ) ;
+  CPPDEVTK_BOOST_CHECK ( !(v0 <  def0) ) ;
+  CPPDEVTK_BOOST_CHECK (   v0 >  def0  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(v0 <= def0) ) ;
+  CPPDEVTK_BOOST_CHECK (   v0 >= opt0  ) ;
 }
 
 template<class T>
@@ -768,16 +768,16 @@ void test_none( T const* )
   Optional<T> def1(kNullOpt) ;
   Optional<T> non_def( T(1234) ) ;
 
-  BOOST_TEST_OPTIONAL_CHECK ( def0    == kNullOpt ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( non_def != kNullOpt ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !def1           ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(non_def <  kNullOpt) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   non_def >  kNullOpt  ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( !(non_def <= kNullOpt) ) ;
-  BOOST_TEST_OPTIONAL_CHECK (   non_def >= kNullOpt  ) ;
+  CPPDEVTK_BOOST_CHECK ( def0    == kNullOpt ) ;
+  CPPDEVTK_BOOST_CHECK ( non_def != kNullOpt ) ;
+  CPPDEVTK_BOOST_CHECK ( !def1           ) ;
+  CPPDEVTK_BOOST_CHECK ( !(non_def <  kNullOpt) ) ;
+  CPPDEVTK_BOOST_CHECK (   non_def >  kNullOpt  ) ;
+  CPPDEVTK_BOOST_CHECK ( !(non_def <= kNullOpt) ) ;
+  CPPDEVTK_BOOST_CHECK (   non_def >= kNullOpt  ) ;
 
   non_def = kNullOpt ;
-  BOOST_TEST_OPTIONAL_CHECK ( !non_def ) ;
+  CPPDEVTK_BOOST_CHECK ( !non_def ) ;
 
   test_default_implicit_construction(T(1),kNullOpt);
 }
@@ -792,12 +792,12 @@ void test_arrow( T const* )
   Optional<T>        oa(a) ;
   Optional<T> const coa(a) ;
 
-  BOOST_TEST_OPTIONAL_CHECK ( coa->V() == 1234 ) ;
+  CPPDEVTK_BOOST_CHECK ( coa->V() == 1234 ) ;
 
   oa->V() = 4321 ;
 
-  BOOST_TEST_OPTIONAL_CHECK (     a.V() = 1234 ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( (*oa).V() = 4321 ) ;
+  CPPDEVTK_BOOST_CHECK (     a.V() = 1234 ) ;
+  CPPDEVTK_BOOST_CHECK ( (*oa).V() = 4321 ) ;
 }
 
 void test_with_builtin_types()
@@ -835,7 +835,7 @@ void test_with_class_type()
   test_relops( ARG(X) ) ;
   test_none( ARG(X) ) ;
   test_arrow( ARG(X) ) ;
-  BOOST_TEST_OPTIONAL_CHECK ( X::count == 0 ) ;
+  CPPDEVTK_BOOST_CHECK ( X::count == 0 ) ;
 }
 
 int eat ( bool ) { return 1 ; }
@@ -854,7 +854,7 @@ void test_no_implicit_conversions_impl( T const& )
   CPPDEVTK_TEST_OPTIONAL_TRACE( std::endl << CPPDEVTK_FUNCTION_LONG_NAME   );
 
   Optional<T> def ;
-  BOOST_TEST_OPTIONAL_CHECK ( eat(def) == 0 ) ;
+  CPPDEVTK_BOOST_CHECK ( eat(def) == 0 ) ;
 }
 
 void test_no_implicit_conversions()
@@ -880,14 +880,14 @@ void test_conversions1()
   char c = 20 ;
   Optional<char> opt0(c);
   Optional<int> opt1(opt0);
-  BOOST_TEST_OPTIONAL_CHECK(*opt1 == static_cast<int>(c));
+  CPPDEVTK_BOOST_CHECK(*opt1 == static_cast<int>(c));
 
   float f = 21.22f ;
   double d = f ;
   Optional<float> opt2(f) ;
   Optional<double> opt3 ;
   opt3 = opt2 ;
-  BOOST_TEST_OPTIONAL_CHECK(*opt3 == d);
+  CPPDEVTK_BOOST_CHECK(*opt3 == d);
 }
 
 void test_conversions2()
@@ -896,12 +896,12 @@ void test_conversions2()
 
   char c = 20 ;
   Optional<int> opt(c);
-  BOOST_TEST_OPTIONAL_CHECK( opt.GetValue() == static_cast<int>(c));
+  CPPDEVTK_BOOST_CHECK( opt.GetValue() == static_cast<int>(c));
 
   float f = 21.22f ;
   Optional<double> opt1;
   opt1 = f ;
-  BOOST_TEST_OPTIONAL_CHECK(*opt1 == static_cast<double>(f));
+  CPPDEVTK_BOOST_CHECK(*opt1 == static_cast<double>(f));
 }
 
 
@@ -913,7 +913,7 @@ void test_conversions2()
 template <class T>
 bool test_swap_function( T const* )
 {
-  const int counter_before_test = boost::optional_test_errors_counter;
+  const int counter_before_test = boost::test_errors_counter;
   try
   {
     Optional<T> obj1;
@@ -922,29 +922,29 @@ bool test_swap_function( T const* )
     // Self-swap should not have any effect.
     swap(obj1, obj1);
     swap(obj2, obj2);
-    BOOST_TEST_OPTIONAL_CHECK(!obj1);
-    BOOST_TEST_OPTIONAL_CHECK(!!obj2 && obj2->data == 'a');
+    CPPDEVTK_BOOST_CHECK(!obj1);
+    CPPDEVTK_BOOST_CHECK(!!obj2 && obj2->data == 'a');
 
     // Call non-member swap.
     swap(obj1, obj2);
 
     // Test if obj1 and obj2 are really swapped.
-    BOOST_TEST_OPTIONAL_CHECK(!!obj1 && obj1->data == 'a');
-    BOOST_TEST_OPTIONAL_CHECK(!obj2);
+    CPPDEVTK_BOOST_CHECK(!!obj1 && obj1->data == 'a');
+    CPPDEVTK_BOOST_CHECK(!obj2);
 
     // Call non-member swap one more time.
     swap(obj1, obj2);
 
     // Test if obj1 and obj2 are swapped back.
-    BOOST_TEST_OPTIONAL_CHECK(!obj1);
-    BOOST_TEST_OPTIONAL_CHECK(!!obj2 && obj2->data == 'a');
+    CPPDEVTK_BOOST_CHECK(!obj1);
+    CPPDEVTK_BOOST_CHECK(!!obj2 && obj2->data == 'a');
   }
   catch(const std::exception &)
   {
     // The swap function should not throw, for our test cases.
     return false ;
   }
-  return boost::optional_test_errors_counter == counter_before_test ;
+  return boost::test_errors_counter == counter_before_test ;
 }
 
 //
@@ -955,7 +955,7 @@ bool test_swap_function( T const* )
 template <class T>
 bool test_swap_member_function( T const* )
 {
-  const int counter_before_test = boost::optional_test_errors_counter;
+  const int counter_before_test = boost::test_errors_counter;
   try
   {
     Optional<T> obj1;
@@ -964,29 +964,29 @@ bool test_swap_member_function( T const* )
     // Self-swap should not have any effect.
     obj1.swap(obj1);
     obj2.swap(obj2);
-    BOOST_TEST_OPTIONAL_CHECK(!obj1);
-    BOOST_TEST_OPTIONAL_CHECK(!!obj2 && obj2->data == 'a');
+    CPPDEVTK_BOOST_CHECK(!obj1);
+    CPPDEVTK_BOOST_CHECK(!!obj2 && obj2->data == 'a');
 
     // Call member swap.
     obj1.swap(obj2);
 
     // Test if obj1 and obj2 are really swapped.
-    BOOST_TEST_OPTIONAL_CHECK(!!obj1 && obj1->data == 'a');
-    BOOST_TEST_OPTIONAL_CHECK(!obj2);
+    CPPDEVTK_BOOST_CHECK(!!obj1 && obj1->data == 'a');
+    CPPDEVTK_BOOST_CHECK(!obj2);
 
     // Call member swap one more time.
     obj1.swap(obj2);
 
     // Test if obj1 and obj2 are swapped back.
-    BOOST_TEST_OPTIONAL_CHECK(!obj1);
-    BOOST_TEST_OPTIONAL_CHECK(!!obj2 && obj2->data == 'a');
+    CPPDEVTK_BOOST_CHECK(!obj1);
+    CPPDEVTK_BOOST_CHECK(!!obj2 && obj2->data == 'a');
   }
   catch(const std::exception &)
   {
     // The Optional<T>::swap member function should not throw, for our test cases.
     return false ;
   }
- return boost::optional_test_errors_counter == counter_before_test ;
+ return boost::test_errors_counter == counter_before_test ;
 }
 
 
@@ -997,16 +997,16 @@ bool test_swap_member_function( T const* )
 /*
 void test_swap_tweaking()
 {
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_function( ARG(optional_swap_test::class_without_default_ctor) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_function( ARG(optional_swap_test::class_whose_default_ctor_should_be_used) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_function( ARG(optional_swap_test::class_whose_default_ctor_should_not_be_used) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_function( ARG(optional_swap_test::class_whose_explicit_ctor_should_be_used) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_function( ARG(optional_swap_test::template_whose_default_ctor_should_be_used<char>) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_member_function( ARG(optional_swap_test::class_without_default_ctor) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_member_function( ARG(optional_swap_test::class_whose_default_ctor_should_be_used) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_member_function( ARG(optional_swap_test::class_whose_default_ctor_should_not_be_used) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_member_function( ARG(optional_swap_test::class_whose_explicit_ctor_should_be_used) ) );
-  BOOST_TEST_OPTIONAL_CHECK( test_swap_member_function( ARG(optional_swap_test::template_whose_default_ctor_should_be_used<char>) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_function( ARG(optional_swap_test::class_without_default_ctor) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_function( ARG(optional_swap_test::class_whose_default_ctor_should_be_used) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_function( ARG(optional_swap_test::class_whose_default_ctor_should_not_be_used) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_function( ARG(optional_swap_test::class_whose_explicit_ctor_should_be_used) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_function( ARG(optional_swap_test::template_whose_default_ctor_should_be_used<char>) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_member_function( ARG(optional_swap_test::class_without_default_ctor) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_member_function( ARG(optional_swap_test::class_whose_default_ctor_should_be_used) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_member_function( ARG(optional_swap_test::class_whose_default_ctor_should_not_be_used) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_member_function( ARG(optional_swap_test::class_whose_explicit_ctor_should_be_used) ) );
+  CPPDEVTK_BOOST_CHECK( test_swap_member_function( ARG(optional_swap_test::template_whose_default_ctor_should_be_used<char>) ) );
 }
 */
 
@@ -1026,15 +1026,15 @@ public:
 void test_custom_addressof_operator()
 {
     cppdevtk::base::Optional< CustomAddressOfClass > o1(CustomAddressOfClass(10));
-    BOOST_TEST_OPTIONAL_CHECK(!!o1);
-    BOOST_TEST_OPTIONAL_CHECK(o1.GetValue() == CustomAddressOfClass(10));
+    CPPDEVTK_BOOST_CHECK(!!o1);
+    CPPDEVTK_BOOST_CHECK(o1.GetValue() == CustomAddressOfClass(10));
 
     o1 = CustomAddressOfClass(20);
-    BOOST_TEST_OPTIONAL_CHECK(!!o1);
-    BOOST_TEST_OPTIONAL_CHECK(o1.GetValue() == CustomAddressOfClass(20));
+    CPPDEVTK_BOOST_CHECK(!!o1);
+    CPPDEVTK_BOOST_CHECK(o1.GetValue() == CustomAddressOfClass(20));
 
     o1 = ::cppdevtk::base::kNullOpt;
-    BOOST_TEST_OPTIONAL_CHECK(!o1);
+    CPPDEVTK_BOOST_CHECK(!o1);
 }
 
 bool TestOptional() {
@@ -1056,5 +1056,5 @@ bool TestOptional() {
 		return false;
 	}
 	
-	return boost::optional_test_errors_counter == 0;
+	return boost::test_errors_counter == 0;
 }
