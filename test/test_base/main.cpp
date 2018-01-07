@@ -789,20 +789,53 @@ bool TestFactory() {
 	typedef ::cppdevtk::base::Factory<Pet, PetId, false> PetFactory;
 	PetFactory& thePetFactory = PetFactory::GetInstance();
 	
-	CPPDEVTK_VERIFY(thePetFactory.IsEmpty());
-	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 0);
+	if (!thePetFactory.IsEmpty()) {
+		CPPDEVTK_CERR << "factory is not empty" << endl;
+		return false;
+	}
+	if (thePetFactory.GetSize() != 0) {
+		CPPDEVTK_CERR << "factory size is not 0" << endl;
+		return false;
+	}
 	
-	CPPDEVTK_VERIFY(thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunction));
-	CPPDEVTK_VERIFY(!thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunction));
-	CPPDEVTK_VERIFY(thePetFactory.IsConcreteProductRegistered(pidDog));
-	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 1);
+	if (!thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunction)) {
+		CPPDEVTK_CERR << "failed to RegisterConcreteProduct()" << endl;
+		return false;
+	}
+	if (thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunction)) {
+		CPPDEVTK_CERR << "double registration succeeded" << endl;
+		return false;
+	}
+	if (!thePetFactory.IsConcreteProductRegistered(pidDog)) {
+		CPPDEVTK_CERR << "IsConcreteProductRegistered() failed" << endl;
+		return false;
+	}
+	if (thePetFactory.GetSize() != 1) {
+		CPPDEVTK_CERR << "factory size is not 1" << endl;
+		return false;
+	}
 	CPPDEVTK_TR1_NS::shared_ptr<Pet> pDog = thePetFactory.CreateConcreteProduct(pidDog);
-	CPPDEVTK_VERIFY(dynamic_cast<Dog*>(pDog.get()) != NULL);
+	if (dynamic_cast<Dog*>(pDog.get()) == NULL) {
+		CPPDEVTK_CERR << "ptr type is not Dog" << endl;
+		return false;
+	}
 	pDog->Speak();
-	CPPDEVTK_VERIFY(thePetFactory.UnregisterConcreteProduct(pidDog));
-	CPPDEVTK_VERIFY(!thePetFactory.UnregisterConcreteProduct(pidDog));
-	CPPDEVTK_VERIFY(!thePetFactory.IsConcreteProductRegistered(pidDog));
-	CPPDEVTK_VERIFY(thePetFactory.GetSize() == 0);
+	if (!thePetFactory.UnregisterConcreteProduct(pidDog)) {
+		CPPDEVTK_CERR << "UnregisterConcreteProduct() failed" << endl;
+		return false;
+	}
+	if (thePetFactory.UnregisterConcreteProduct(pidDog)) {
+		CPPDEVTK_CERR << "double unregistration succeeded" << endl;
+		return false;
+	}
+	if (thePetFactory.IsConcreteProductRegistered(pidDog)) {
+		CPPDEVTK_CERR << "IsConcreteProductRegistered() failed" << endl;
+		return false;
+	}
+	if (thePetFactory.GetSize() != 0) {
+		CPPDEVTK_CERR << "factory size is not 0" << endl;
+		return false;
+	}
 	
 	CPPDEVTK_VERIFY(thePetFactory.RegisterConcreteProduct(pidCat, CreateCatFunction));
 	CPPDEVTK_VERIFY(!thePetFactory.RegisterConcreteProduct(pidCat, CreateCatFunction));
@@ -822,7 +855,10 @@ bool TestFactory() {
 	CPPDEVTK_VERIFY(!thePetFactory.RegisterConcreteProduct(pidDog, CreateDogFunctionObject()));
 	CPPDEVTK_VERIFY(thePetFactory.IsConcreteProductRegistered(pidDog));
 	pDog = thePetFactory.CreateConcreteProduct(pidDog);
-	CPPDEVTK_VERIFY(dynamic_cast<Dog*>(pDog.get()) != NULL);
+	if (dynamic_cast<Dog*>(pDog.get()) == NULL) {
+		CPPDEVTK_CERR << "ptr type is not Dog" << endl;
+		return false;
+	}
 	pDog->Speak();
 	
 	return true;

@@ -4,7 +4,7 @@ cppdevtk (1.0.6-0ubuntu1) trusty; urgency=medium
   * added Factory
   * fixed Optional test
 
- -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Sat, 6 Jan 2018 14:19:46 +0300
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Sun, 7 Jan 2018 14:19:46 +0300
 
 
 cppdevtk (1.0.5-0ubuntu1) trusty; urgency=medium

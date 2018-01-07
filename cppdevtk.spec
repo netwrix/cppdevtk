@@ -591,7 +591,7 @@ exit 0
 
 
 %changelog
-* Sat Jan 6 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Sun Jan 7 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.6.1
 - added CallTraits
 - added Factory

@@ -302,123 +302,123 @@ unix {
 
 
 HEADERS += \
-	./../include/cppdevtk/base/any.hpp	\
-	./../include/cppdevtk/base/architecture_types.h	\
-	./../include/cppdevtk/base/architecture_types.hpp	\
-	./../include/cppdevtk/base/assert.h	\
-	./../include/cppdevtk/base/bad_any_cast_exception.hpp	\
-	./../include/cppdevtk/base/bad_cast_exception.hpp	\
-	./../include/cppdevtk/base/bad_optional_access_exception.hpp	\
-	./../include/cppdevtk/base/call_traits.hpp	\
-	./../include/cppdevtk/base/cancelable.hpp	\
-	./../include/cppdevtk/base/cassert.hpp	\
-	./../include/cppdevtk/base/cerrno.hpp	\
-	./../include/cppdevtk/base/cinttypes.hpp	\
-	./../include/cppdevtk/base/cloneable.hpp	\
-	./../include/cppdevtk/base/concurrent_run.hpp	\
-	./../include/cppdevtk/base/condition_variable.hpp	\
-	./../include/cppdevtk/base/config.hpp	\
-	./../include/cppdevtk/base/cstdint.hpp	\
-	./../include/cppdevtk/base/dbc_exceptions.hpp	\
-	./../include/cppdevtk/base/dbc.hpp	\
-	./../include/cppdevtk/base/deadlock_exception.hpp	\
-	./../include/cppdevtk/base/dynamic_byte_array.hpp	\
-	./../include/cppdevtk/base/errno.h	\
-	./../include/cppdevtk/base/error_category.hpp	\
-	./../include/cppdevtk/base/error_code.hpp	\
-	./../include/cppdevtk/base/error_condition.hpp	\
-	./../include/cppdevtk/base/exception_propagation.hpp	\
-	./../include/cppdevtk/base/exception.hpp	\
-	./../include/cppdevtk/base/factory.hpp	\
-	./../include/cppdevtk/base/future_errc.hpp	\
-	./../include/cppdevtk/base/future_exception.hpp	\
-	./../include/cppdevtk/base/future.hpp	\
-	./../include/cppdevtk/base/generic_locking_algorithms.hpp	\
-	./../include/cppdevtk/base/info_tr.hpp	\
-	./../include/cppdevtk/base/info.hpp	\
-	./../include/cppdevtk/base/init_resources.hpp	\
-	./../include/cppdevtk/base/inttypes_detail.h	\
-	./../include/cppdevtk/base/inttypes.h	\
-	./../include/cppdevtk/base/invalid_string_conversion_exception.hpp	\
-	./../include/cppdevtk/base/ios_failure_exception.hpp	\
-	./../include/cppdevtk/base/ios.hpp	\
-	./../include/cppdevtk/base/join.h	\
-	./../include/cppdevtk/base/locale_to_lang_id_win.hpp	\
-	./../include/cppdevtk/base/lock_exception.hpp	\
-	./../include/cppdevtk/base/lockables.hpp	\
-	./../include/cppdevtk/base/locking_levels.hpp	\
-	./../include/cppdevtk/base/locks.hpp	\
-	./../include/cppdevtk/base/logger.hpp	\
-	./../include/cppdevtk/base/mutex.hpp	\
-	./../include/cppdevtk/base/name_mangling.hpp	\
-	./../include/cppdevtk/base/non_copyable.hpp	\
-	./../include/cppdevtk/base/on_block_exit.hpp	\
-	./../include/cppdevtk/base/optional.hpp	\
-	./../include/cppdevtk/base/qiostream.hpp	\
-	./../include/cppdevtk/base/safe_delete.hpp	\
-	./../include/cppdevtk/base/safe_free.hpp	\
-	./../include/cppdevtk/base/semaphore.hpp	\
-	./../include/cppdevtk/base/singletons.hpp	\
-	./../include/cppdevtk/base/source_code_info.hpp	\
-	./../include/cppdevtk/base/stack_frame.hpp	\
-	./../include/cppdevtk/base/stack_trace.hpp	\
-	./../include/cppdevtk/base/static_assert.hpp	\
-	./../include/cppdevtk/base/stdexcept.hpp	\
-	./../include/cppdevtk/base/stdint_detail.h	\
-	./../include/cppdevtk/base/stdint.h	\
-	./../include/cppdevtk/base/stl_explicit_instantiation.hpp	\
-	./../include/cppdevtk/base/string_conv.hpp	\
-	./../include/cppdevtk/base/string_utils.hpp	\
-	./../include/cppdevtk/base/stringizable.hpp	\
-	./../include/cppdevtk/base/stringize.h	\
-	./../include/cppdevtk/base/system_exception.hpp	\
-	./../include/cppdevtk/base/task_canceled_exception.hpp	\
-	./../include/cppdevtk/base/tchar.h	\
-	./../include/cppdevtk/base/tchar.hpp	\
-	./../include/cppdevtk/base/tfstream.hpp	\
-	./../include/cppdevtk/base/thread_data_types.hpp	\
-	./../include/cppdevtk/base/thread_data.hpp	\
-	./../include/cppdevtk/base/thread_exception.hpp	\
-	./../include/cppdevtk/base/thread_shared_obj_locking_ptr.hpp	\
-	./../include/cppdevtk/base/thread.hpp	\
-	./../include/cppdevtk/base/throwable.hpp	\
-	./../include/cppdevtk/base/time_utils.hpp	\
-	./../include/cppdevtk/base/tios.hpp	\
-	./../include/cppdevtk/base/tiostream.hpp	\
-	./../include/cppdevtk/base/tistream.hpp	\
-	./../include/cppdevtk/base/tostream.hpp	\
-	./../include/cppdevtk/base/tsstream.hpp	\
-	./../include/cppdevtk/base/tstreambuf.hpp	\
-	./../include/cppdevtk/base/tstring_conv.hpp	\
-	./../include/cppdevtk/base/tstring.hpp	\
-	./../include/cppdevtk/base/tstringizable.hpp	\
-	./../include/cppdevtk/base/tstringize.h	\
-	./../include/cppdevtk/base/type_traits.hpp	\
-	./../include/cppdevtk/base/typeinfo.hpp	\
-	./../include/cppdevtk/base/unknown_exception.hpp	\
-	./../include/cppdevtk/base/unused.h	\
-	./../include/cppdevtk/base/unused.hpp	\
-	./../include/cppdevtk/base/verify.h	\
-	./../include/cppdevtk/base/version.h	\
-	./../include/cppdevtk/base/wstringize.h	\
-	./../include/cppdevtk/base/zeroize.h	\
-	./../include/cppdevtk/base/zeroize.hpp
+	../../include/cppdevtk/base/any.hpp	\
+	../../include/cppdevtk/base/architecture_types.h	\
+	../../include/cppdevtk/base/architecture_types.hpp	\
+	../../include/cppdevtk/base/assert.h	\
+	../../include/cppdevtk/base/bad_any_cast_exception.hpp	\
+	../../include/cppdevtk/base/bad_cast_exception.hpp	\
+	../../include/cppdevtk/base/bad_optional_access_exception.hpp	\
+	../../include/cppdevtk/base/call_traits.hpp	\
+	../../include/cppdevtk/base/cancelable.hpp	\
+	../../include/cppdevtk/base/cassert.hpp	\
+	../../include/cppdevtk/base/cerrno.hpp	\
+	../../include/cppdevtk/base/cinttypes.hpp	\
+	../../include/cppdevtk/base/cloneable.hpp	\
+	../../include/cppdevtk/base/concurrent_run.hpp	\
+	../../include/cppdevtk/base/condition_variable.hpp	\
+	../../include/cppdevtk/base/config.hpp	\
+	../../include/cppdevtk/base/cstdint.hpp	\
+	../../include/cppdevtk/base/dbc_exceptions.hpp	\
+	../../include/cppdevtk/base/dbc.hpp	\
+	../../include/cppdevtk/base/deadlock_exception.hpp	\
+	../../include/cppdevtk/base/dynamic_byte_array.hpp	\
+	../../include/cppdevtk/base/errno.h	\
+	../../include/cppdevtk/base/error_category.hpp	\
+	../../include/cppdevtk/base/error_code.hpp	\
+	../../include/cppdevtk/base/error_condition.hpp	\
+	../../include/cppdevtk/base/exception_propagation.hpp	\
+	../../include/cppdevtk/base/exception.hpp	\
+	../../include/cppdevtk/base/factory.hpp	\
+	../../include/cppdevtk/base/future_errc.hpp	\
+	../../include/cppdevtk/base/future_exception.hpp	\
+	../../include/cppdevtk/base/future.hpp	\
+	../../include/cppdevtk/base/generic_locking_algorithms.hpp	\
+	../../include/cppdevtk/base/info_tr.hpp	\
+	../../include/cppdevtk/base/info.hpp	\
+	../../include/cppdevtk/base/init_resources.hpp	\
+	../../include/cppdevtk/base/inttypes_detail.h	\
+	../../include/cppdevtk/base/inttypes.h	\
+	../../include/cppdevtk/base/invalid_string_conversion_exception.hpp	\
+	../../include/cppdevtk/base/ios_failure_exception.hpp	\
+	../../include/cppdevtk/base/ios.hpp	\
+	../../include/cppdevtk/base/join.h	\
+	../../include/cppdevtk/base/locale_to_lang_id_win.hpp	\
+	../../include/cppdevtk/base/lock_exception.hpp	\
+	../../include/cppdevtk/base/lockables.hpp	\
+	../../include/cppdevtk/base/locking_levels.hpp	\
+	../../include/cppdevtk/base/locks.hpp	\
+	../../include/cppdevtk/base/logger.hpp	\
+	../../include/cppdevtk/base/mutex.hpp	\
+	../../include/cppdevtk/base/name_mangling.hpp	\
+	../../include/cppdevtk/base/non_copyable.hpp	\
+	../../include/cppdevtk/base/on_block_exit.hpp	\
+	../../include/cppdevtk/base/optional.hpp	\
+	../../include/cppdevtk/base/qiostream.hpp	\
+	../../include/cppdevtk/base/safe_delete.hpp	\
+	../../include/cppdevtk/base/safe_free.hpp	\
+	../../include/cppdevtk/base/semaphore.hpp	\
+	../../include/cppdevtk/base/singletons.hpp	\
+	../../include/cppdevtk/base/source_code_info.hpp	\
+	../../include/cppdevtk/base/stack_frame.hpp	\
+	../../include/cppdevtk/base/stack_trace.hpp	\
+	../../include/cppdevtk/base/static_assert.hpp	\
+	../../include/cppdevtk/base/stdexcept.hpp	\
+	../../include/cppdevtk/base/stdint_detail.h	\
+	../../include/cppdevtk/base/stdint.h	\
+	../../include/cppdevtk/base/stl_explicit_instantiation.hpp	\
+	../../include/cppdevtk/base/string_conv.hpp	\
+	../../include/cppdevtk/base/string_utils.hpp	\
+	../../include/cppdevtk/base/stringizable.hpp	\
+	../../include/cppdevtk/base/stringize.h	\
+	../../include/cppdevtk/base/system_exception.hpp	\
+	../../include/cppdevtk/base/task_canceled_exception.hpp	\
+	../../include/cppdevtk/base/tchar.h	\
+	../../include/cppdevtk/base/tchar.hpp	\
+	../../include/cppdevtk/base/tfstream.hpp	\
+	../../include/cppdevtk/base/thread_data_types.hpp	\
+	../../include/cppdevtk/base/thread_data.hpp	\
+	../../include/cppdevtk/base/thread_exception.hpp	\
+	../../include/cppdevtk/base/thread_shared_obj_locking_ptr.hpp	\
+	../../include/cppdevtk/base/thread.hpp	\
+	../../include/cppdevtk/base/throwable.hpp	\
+	../../include/cppdevtk/base/time_utils.hpp	\
+	../../include/cppdevtk/base/tios.hpp	\
+	../../include/cppdevtk/base/tiostream.hpp	\
+	../../include/cppdevtk/base/tistream.hpp	\
+	../../include/cppdevtk/base/tostream.hpp	\
+	../../include/cppdevtk/base/tsstream.hpp	\
+	../../include/cppdevtk/base/tstreambuf.hpp	\
+	../../include/cppdevtk/base/tstring_conv.hpp	\
+	../../include/cppdevtk/base/tstring.hpp	\
+	../../include/cppdevtk/base/tstringizable.hpp	\
+	../../include/cppdevtk/base/tstringize.h	\
+	../../include/cppdevtk/base/type_traits.hpp	\
+	../../include/cppdevtk/base/typeinfo.hpp	\
+	../../include/cppdevtk/base/unknown_exception.hpp	\
+	../../include/cppdevtk/base/unused.h	\
+	../../include/cppdevtk/base/unused.hpp	\
+	../../include/cppdevtk/base/verify.h	\
+	../../include/cppdevtk/base/version.h	\
+	../../include/cppdevtk/base/wstringize.h	\
+	../../include/cppdevtk/base/zeroize.h	\
+	../../include/cppdevtk/base/zeroize.hpp
 
 unix {
-	HEADERS += ./../include/cppdevtk/base/execinfo_unx.h
+	HEADERS += ../../include/cppdevtk/base/execinfo_unx.h
 }
 
 win32 {
-	HEADERS += ./../include/cppdevtk/base/locale_to_lang_id_win.hpp
+	HEADERS += ../../include/cppdevtk/base/locale_to_lang_id_win.hpp
 }
 
 unix {
 	linux* {
-	   HEADERS += ./../include/cppdevtk/base/error_code_lnx.hpp
+	   HEADERS += ../../include/cppdevtk/base/error_code_lnx.hpp
 	}
 	else {
 		macx|ios {
-			HEADERS += ./../include/cppdevtk/base/error_code_mac.hpp
+			HEADERS += ../../include/cppdevtk/base/error_code_mac.hpp
 		}
 		else {
 			error("Unsupported Unix platform for gcc compiler!!!")
@@ -427,7 +427,7 @@ unix {
 }
 else {
 	win32 {
-		HEADERS += ./../include/cppdevtk/base/error_code_win.hpp
+		HEADERS += ../../include/cppdevtk/base/error_code_win.hpp
 	}
 	else {
 		error("Unsupported platform!!!")
