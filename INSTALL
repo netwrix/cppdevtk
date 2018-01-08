@@ -37,6 +37,16 @@ Add to PATH:
 
 - On Mac OS X create symlink /Library/Java/Home
 
+- Windows cross-compile (build on 64 for 32) JDK convenience workaround:
+Add in common.pri, win32 replace isEmpty(CPPDEVTK_JAVA_HOME) test with:
+isEqual(QMAKE_TARGET.arch, "x86_64") {
+	CPPDEVTK_JAVA_HOME = "C:/Program Files/Java/jdk1.8.0_144"
+}
+else {
+	CPPDEVTK_JAVA_HOME = "C:/Program Files (x86)/Java/jdk1.8.0_144"
+}
+
+
 
 
 2. Update version:
