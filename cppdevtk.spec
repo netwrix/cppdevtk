@@ -77,7 +77,7 @@
 
 
 Name: cppdevtk
-Version: 1.0.7
+Version: 1.0.6
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -591,9 +591,6 @@ exit 0
 
 
 %changelog
-* Mon Jan 8 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
-- v1.0.7.1
-- to fill
 * Sun Jan 7 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.6.1
 - added CallTraits

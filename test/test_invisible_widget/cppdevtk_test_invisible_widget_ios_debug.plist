@@ -11,9 +11,9 @@
 	<key>CFBundleDisplayName</key>
 	<string>CppDevTk Test Invisible Widget Debug</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.7</string>
+	<string>1.0.6</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.7</string>
+	<string>1.0.6</string>
 	<key>CFBundleGetInfoString</key>
 	<string>CppDevTk test application.</string>
 	<key>CFBundleIdentifier</key>
