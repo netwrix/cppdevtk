@@ -1,3 +1,10 @@
+cppdevtk (1.0.8-0ubuntu1) trusty; urgency=medium
+
+  * to fill
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Fri, 19 Jan 2018 14:19:46 +0300
+
+
 cppdevtk (1.0.7-0ubuntu1) trusty; urgency=medium
 
   * qt 4 and qt 5: fixed support for qt static builds, static qico plugin, translations
