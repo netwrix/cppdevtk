@@ -374,6 +374,15 @@ else {
 				# C4464: relative include path contains '..'
 				QMAKE_CFLAGS_WARN_ON *= -wd4820 -wd4548 -wd4619 -wd4711 -wd4464
 				QMAKE_CXXFLAGS_WARN_ON *= -wd4820 -wd4548 -wd4619 -wd4711 -wd4464
+				
+				!static_and_shared|build_pass {
+					CONFIG(static, static|shared) {
+						# C4365: action' : conversion from 'type_1' to 'type_2', signed/unsigned mismatch
+						# C4571: Informational: catch(...) semantics changed since Visual C++ 7.1; structured exceptions (SEH) are no longer caught
+						QMAKE_CFLAGS_WARN_ON *= -wd4365 -wd4571
+						QMAKE_CXXFLAGS_WARN_ON *= -wd4365 -wd4571
+					}
+				}
 			}
 			
 			# treat as error
