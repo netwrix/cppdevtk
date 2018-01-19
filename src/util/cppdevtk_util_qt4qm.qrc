@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/cppdevtk/util">
+        <file>res/tr/qt_ar.qm</file>
+        <file>res/tr/qt_cs.qm</file>
+        <file>res/tr/qt_da.qm</file>
+        <file>res/tr/qt_de.qm</file>
+        <file>res/tr/qt_es.qm</file>
+        <file>res/tr/qt_fa.qm</file>
+        <file>res/tr/qt_fr.qm</file>
+        <file>res/tr/qt_gl.qm</file>
+        <file>res/tr/qt_he.qm</file>
+        <file>res/tr/qt_hu.qm</file>
+        <file>res/tr/qt_ja.qm</file>
+        <file>res/tr/qt_ko.qm</file>
+        <file>res/tr/qt_lt.qm</file>
+        <file>res/tr/qt_pl.qm</file>
+        <file>res/tr/qt_pt.qm</file>
+        <file>res/tr/qt_ru.qm</file>
+        <file>res/tr/qt_sk.qm</file>
+        <file>res/tr/qt_sl.qm</file>
+        <file>res/tr/qt_sv.qm</file>
+        <file>res/tr/qt_uk.qm</file>
+        <file>res/tr/qt_zh_CN.qm</file>
+        <file>res/tr/qt_zh_TW.qm</file>
+    </qresource>
+</RCC>

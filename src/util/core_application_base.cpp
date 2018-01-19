@@ -247,7 +247,11 @@ bool CoreApplicationBase::SetupTranslators() {
 		return retCode;
 	}
 	
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	if (qtTranslator_.load((QString("qtbase_") + currentLanguageInfo_.GetLocale().name()), ":/cppdevtk/util/res/tr")) {
+#	else
 	if (qtTranslator_.load((QString("qt_") + currentLanguageInfo_.GetLocale().name()), ":/cppdevtk/util/res/tr")) {
+#	endif
 		QCoreApplication::installTranslator(&qtTranslator_);
 	}
 	else {

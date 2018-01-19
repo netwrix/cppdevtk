@@ -1,7 +1,8 @@
-Version 1.0.7.1:
+Version 1.0.7.1: 18 Jan 2018
 - Release date:
 - New features:
 - Improvements:
+	- qt 4 and qt 5: fixed support for qt static builds, static qico plugin, translations
 - Fixed bugs:
 
 

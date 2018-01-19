@@ -247,8 +247,6 @@
 #endif
 
 
-#define CPPDEVTK_ENABLE_STATIC_PLUGIN_WORKAROUND (CPPDEVTK_PLATFORM_IOS && 1)
-
 #if (defined(__unix__) || defined(__unix))
 #	define CPPDEVTK_DISABLE_UNICODE 0
 #	define CPPDEVTK_DISABLE_WIDE 1

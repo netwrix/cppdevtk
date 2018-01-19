@@ -97,5 +97,13 @@ make
 make -j1 install
 
 6.3 On Linux if packaging:
-RPM: rpmbuild -ta cppdevtk-1.0.0.tar.bz2
+RPM: rpmbuild -ta --sign cppdevtk-1.0.0.tar.bz2
 Deb: debuild --no-tgz-check -D -us -uc -B
+
+Verify signature:
+- rpm based
+> rpm --checksig ./*.rpm
+
+- deb based
+Ubuntu 16.04: dpkg-sig --verify ./*.deb
+Ubuntu 14.04: dpkg-sig-fixed --verify ./*.deb

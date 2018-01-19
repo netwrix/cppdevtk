@@ -265,7 +265,7 @@ isEmpty(CPPDEVTK_PREFIX) {
 	!android:!ios {
 		!static_and_shared|build_pass {
 			CONFIG(static, static|shared) {
-				DESTDIR = $${DESTDIR}/static
+				CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/static
 			}
 		}
 	}

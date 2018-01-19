@@ -162,6 +162,18 @@ INSTALLS += target
 RESOURCES += cppdevtk_util.qrc	\
     cppdevtk_util_customization.qrc
 
+isEqual(QT_MAJOR_VERSION, "4") {
+	RESOURCES += cppdevtk_util_qt4qm.qrc
+}
+else {
+	isEqual(QT_MAJOR_VERSION, "5") {
+		RESOURCES += cppdevtk_util_qt5qm.qrc
+	}
+	else {
+		error("Qt 4 and Qt 5 are supported!!!")
+	}
+}
+
 win32 {
 	RC_FILE = cppdevtk_util.rc
 	HEADERS += cppdevtk_util_res_win.hpp

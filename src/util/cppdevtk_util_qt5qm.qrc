@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/cppdevtk/util">
+        <file>res/tr/qtbase_ca.qm</file>
+        <file>res/tr/qtbase_cs.qm</file>
+        <file>res/tr/qtbase_de.qm</file>
+        <file>res/tr/qtbase_es.qm</file>
+        <file>res/tr/qtbase_fi.qm</file>
+        <file>res/tr/qtbase_fr.qm</file>
+        <file>res/tr/qtbase_gd.qm</file>
+        <file>res/tr/qtbase_he.qm</file>
+        <file>res/tr/qtbase_hu.qm</file>
+        <file>res/tr/qtbase_it.qm</file>
+        <file>res/tr/qtbase_ja.qm</file>
+        <file>res/tr/qtbase_ko.qm</file>
+        <file>res/tr/qtbase_lv.qm</file>
+        <file>res/tr/qtbase_pl.qm</file>
+        <file>res/tr/qtbase_ru.qm</file>
+        <file>res/tr/qtbase_sk.qm</file>
+        <file>res/tr/qtbase_uk.qm</file>
+    </qresource>
+</RCC>

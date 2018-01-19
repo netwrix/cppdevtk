@@ -591,9 +591,9 @@ exit 0
 
 
 %changelog
-* Mon Jan 8 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Thu Jan 18 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.7.1
-- to fill
+- qt 4 and qt 5: fixed support for qt static builds, static qico plugin, translations
 * Sun Jan 7 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.6.1
 - added CallTraits
