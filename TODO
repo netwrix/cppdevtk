@@ -18,7 +18,7 @@ Replace third party StackWalker; maybe our implementation will use CaptureStackB
 Android not ported (search for "TODO: Android port"):
 - GetFileSystemSpaceInfo(): uses statvfs() that is available in Android 4.4W2 (API level 20)
 - GetUserName(): uses getpwuid_r() that is available in Android 5.0.1 (API level 21)
-- GetDeviceNameFromMountPoint(), GetMountPointsFromDeviceName(), GetMountPointsFromPath(): uses setmntent() that is available in Android 5.0.1 (API level 21)
+- GetDeviceNameFromMountPoint(), GetMountPointsFromDeviceName(), GetMountPointsFromPath(), GetMountPoints(): uses setmntent() that is available in Android 5.0.1 (API level 21)
 - GetDeviceName(): uses udev that is Linux specific
 - IsCapsLockOn(), GetUserIdleTime(): uses X11 that is Linux specific. Checked and AFAIK there is no way to implement on Android
 (it has no idle concept (only ACTION_SCREEN_OFF) and no way to detect caps lock)

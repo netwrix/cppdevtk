@@ -87,6 +87,7 @@
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
 using ::cppdevtk::base::GetSystemCategory;
+using ::cppdevtk::base::SuppressUnusedWarning;
 
 
 namespace cppdevtk {
@@ -158,6 +159,10 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& device
 	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(deviceName), "deviceName must be valid");
 	CPPDEVTK_DBC_CHECK_ARGUMENT(!deviceName.startsWith(_PATH_DEV),
 			"deviceName must not start with _PATH_DEV (it must be BSD name)");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(!deviceName.startsWith('/'),
+			"deviceName must not start with '/' (it must be BSD name)");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(!deviceName.endsWith('/'),
+			"deviceName must not end with '/' (it must be BSD name)");
 	
 #	if (!CPPDEVTK_PLATFORM_IOS)
 	
@@ -241,7 +246,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& device
 	
 #	else
 	// TODO: iOS port
-	::cppdevtk::base::SuppressUnusedWarning(deviceName);
+	SuppressUnusedWarning(deviceName);
 	CPPDEVTK_COMPILER_WARNING("GetMountPointsFromDeviceName() not ported on iOS");
 	return QStringList();
 #	endif
@@ -261,10 +266,10 @@ CPPDEVTK_UTIL_API QString GetDeviceName(DeviceType deviceType, const QString& se
 	
 #	else
 	// TODO: iOS port
-	::cppdevtk::base::SuppressUnusedWarning(deviceType);
-	::cppdevtk::base::SuppressUnusedWarning(serialNumber);
-	::cppdevtk::base::SuppressUnusedWarning(vendorId);
-	::cppdevtk::base::SuppressUnusedWarning(productId);
+	SuppressUnusedWarning(deviceType);
+	SuppressUnusedWarning(serialNumber);
+	SuppressUnusedWarning(vendorId);
+	SuppressUnusedWarning(productId);
 	CPPDEVTK_COMPILER_WARNING("GetDeviceName() not ported on iOS");
 	return QString("");
 #	endif
@@ -283,8 +288,7 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
 	}
 	if (retCode == 0) {
-		CPPDEVTK_LOG_WARN("no mounted file system found");
-		return QString();
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(MakeErrorCode(base::errc::io_error), "no mounted file system found");
 	}
 	
 	CPPDEVTK_LOG_DEBUG("number of mounted file systems: " << retCode);
@@ -299,8 +303,7 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
 	}
 	if (retCode == 0) {
-		CPPDEVTK_LOG_WARN("no mounted file system found");
-		return QString();
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(MakeErrorCode(base::errc::io_error), "no mounted file system found");
 	}
 	
 	for (int idx = 0; idx < retCode; ++idx) {
@@ -315,8 +318,16 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 		
 		if (mountPoint == currentMountPoint) {
 			deviceName = QDir::fromNativeSeparators(CPPDEVTK_U2Q(buf[idx].f_mntfromname));
+			if (deviceName.startsWith(_PATH_DEV)) {
+				deviceName.remove(0, qstrlen(_PATH_DEV));
+			}
+			if (deviceName.startsWith('/')) {
+				deviceName.remove(0, 1);
+			}
+			if (deviceName.endsWith('/')) {
+				deviceName.chop(1);
+			}
 			CPPDEVTK_ASSERT(!deviceName.isEmpty());
-			CPPDEVTK_ASSERT(!deviceName.startsWith(_PATH_DEV));
 			
 			break;
 		}
@@ -531,6 +542,8 @@ QString GetDeviceName(DeviceType deviceType, const QString& serialNumber,
 			deviceName = CPPDEVTK_U2Q(buf);
 			CPPDEVTK_ASSERT(!deviceName.isEmpty());
 			CPPDEVTK_ASSERT(!deviceName.startsWith(_PATH_DEV));
+			CPPDEVTK_ASSERT(!deviceName.startsWith('/'));
+			CPPDEVTK_ASSERT(!deviceName.endsWith('/'));
 			
 			break;
 		}
@@ -544,14 +557,78 @@ QString GetDeviceName(DeviceType deviceType, const QString& serialNumber,
 	
 #	else
 	// TODO: iOS port
-	::cppdevtk::base::SuppressUnusedWarning(deviceType);
-	::cppdevtk::base::SuppressUnusedWarning(serialNumber);
-	::cppdevtk::base::SuppressUnusedWarning(vendorId);
-	::cppdevtk::base::SuppressUnusedWarning(productId);
-	::cppdevtk::base::SuppressUnusedWarning(iousbDeviceClassName);
+	SuppressUnusedWarning(deviceType);
+	SuppressUnusedWarning(serialNumber);
+	SuppressUnusedWarning(vendorId);
+	SuppressUnusedWarning(productId);
+	SuppressUnusedWarning(iousbDeviceClassName);
 	CPPDEVTK_COMPILER_WARNING("GetDeviceName() not ported on iOS");
 	return QString("");
 #	endif
+}
+
+
+
+
+CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems) {
+	// NOTE: getmntinfo() is not usable because it is not thread-safe... so we use getfsstat()
+	
+	int retCode = getfsstat(NULL, 0, MNT_WAIT);
+	if (retCode == -1) {
+		CPPDEVTK_ASSERT(errno != EINTR);
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
+	}
+	if (retCode == 0) {
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(MakeErrorCode(base::errc::io_error), "no mounted file system found");
+	}
+	CPPDEVTK_LOG_DEBUG("number of mounted file systems: " << retCode);
+	
+	::std::vector<struct statfs> buf(retCode);
+	memset(&buf[0], 0, (buf.size() * sizeof(struct statfs)));
+	retCode = getfsstat(&buf[0], (buf.size() * sizeof(struct statfs)), MNT_WAIT);
+	if (retCode == -1) {
+		CPPDEVTK_ASSERT(errno != EINTR);
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "getfsstat() failed");
+	}
+	if (retCode == 0) {
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(MakeErrorCode(base::errc::io_error), "no mounted file system found");
+	}
+	
+	QStringList mountPoints;
+	
+	for (int idx = 0; idx < retCode; ++idx) {
+		CPPDEVTK_ASSERT(buf[idx].f_mntfromname != NULL);
+		CPPDEVTK_ASSERT(buf[idx].f_mntonname != NULL);
+		
+		if (ignoreSpecialFileSystems) {
+			struct statfs buf1;
+			memset(&buf1, 0, sizeof(buf1));
+			if (statfs(buf[idx].f_mntfromname, &buf1) != 0) {
+				CPPDEVTK_LOG_WARN("failed to stat " << buf[idx].f_mntfromname);
+				continue;
+			}
+			
+			memset(&buf1, 0, sizeof(buf1));
+			if (statfs(buf[idx].f_mntonname, &buf1) != 0) {
+				CPPDEVTK_LOG_WARN("failed to stat " << buf[idx].f_mntonname);
+				continue;
+			}
+			if (buf1.f_blocks == 0) {
+				CPPDEVTK_LOG_TRACE("skipping special filesystem " << buf[idx].f_mntonname);
+				continue;
+			}
+		}
+		
+		QString mountPoint = QDir::fromNativeSeparators(CPPDEVTK_U2Q(buf[idx].f_mntonname));
+		CPPDEVTK_ASSERT(!mountPoint.isEmpty());
+		if (!mountPoint.endsWith('/')) {
+			mountPoint += '/';
+		}
+		CPPDEVTK_LOG_DEBUG("found mount point: " << mountPoint);
+		mountPoints.append(mountPoint);
+	}
+	
+	return mountPoints;	
 }
 
 

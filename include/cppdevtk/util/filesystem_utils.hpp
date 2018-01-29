@@ -148,6 +148,20 @@ CPPDEVTK_UTIL_API bool RemoveDirectoryRecursively(const QString& path, bool fail
 CPPDEVTK_UTIL_API bool CopyDirectoryRecursively(const QString& srcPath, const QString& dstPath, bool failIfDstPathExists,
 		bool failIfFileExists, ::cppdevtk::base::ErrorCode& errorCode);
 
+
+
+
+/// \return
+/// - Drives on Windows (ex: C:/, D:/)
+/// - mount point on Unix (ex: /, /home/)
+/// - empty list if no error and no mount point found
+/// \throw ::cppdevtk::util::FilesystemException
+/// \note
+/// - Mount points ends with '/'
+/// - On Windows drive letters are uppercase
+CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems = true);
+CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems, ::cppdevtk::base::ErrorCode& errorCode);
+
 /// \pre IsValidPath()
 /// \return
 /// - Drive on Windows (ex: C:/)
@@ -159,6 +173,9 @@ CPPDEVTK_UTIL_API bool CopyDirectoryRecursively(const QString& srcPath, const QS
 /// - On Windows drive letter is uppercase
 CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path);
 CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path, ::cppdevtk::base::ErrorCode& errorCode);
+
+
+
 
 /// \pre IsValidPath()
 /// \throw ::cppdevtk::util::FilesystemException
@@ -179,84 +196,6 @@ CPPDEVTK_UTIL_API QString GetLocalizedFileName(const QString& fileNamePrefix, co
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
-
-inline CPPDEVTK_UTIL_API bool DeleteFile(const QString& fileName, bool failIfNotExists,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	try {
-		DeleteFile(fileName, failIfNotExists);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return false;
-	}
-	
-	return true;
-}
-
-inline CPPDEVTK_UTIL_API bool CopyFile(const QString& srcFileName, const QString& dstFileName, bool failIfExists,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	try {
-		CopyFile(srcFileName, dstFileName, failIfExists);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return false;
-	}
-	
-	return true;
-}
-
-inline CPPDEVTK_UTIL_API bool MakeDirectory(const QString& dirName, bool failIfExists,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	try {
-		MakeDirectory(dirName, failIfExists);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return false;
-	}
-	
-	return true;
-}
-
-inline CPPDEVTK_UTIL_API bool MakePath(const QString& dirPath, bool failIfExists,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	try {
-		MakePath(dirPath, failIfExists);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return false;
-	}
-	
-	return true;
-}
-
-inline CPPDEVTK_UTIL_API bool RemoveDirectory(const QString& path, bool failIfNotExists,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	try {
-		RemoveDirectory(path, failIfNotExists);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return false;
-	}
-	
-	return true;
-}
-
-inline CPPDEVTK_UTIL_API bool GetFileSystemSpaceInfo(const QString& path, FileSystemSpaceInfo& fileSystemSpaceInfo,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	try {
-		GetFileSystemSpaceInfo(path, fileSystemSpaceInfo);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return false;
-	}
-	
-	return true;
-}
 
 
 }	// namespace util

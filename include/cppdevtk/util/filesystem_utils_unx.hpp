@@ -62,28 +62,30 @@ CPPDEVTK_UTIL_API QStringList GetMountPoints(DeviceType deviceType, const QStrin
 /// \throw ::cppdevtk::base::RuntimeException
 /// \throw ::cppdevtk::util::FilesystemException
 /// \arg deviceName
-/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev))
+/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev/))
 /// - On Mac OS X has the form disk2 (BSD name)
 /// \return mount points that end with '/' (empty list if no error and no mount point found)
 CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& deviceName);
 
 /// \throw ::cppdevtk::base::RuntimeException
 /// \return
-/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev))
+/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev/))
 /// - On Mac OS X has the form disk2 (BSD name)
 /// - empty string if no error and no device name found
 CPPDEVTK_UTIL_API QString GetDeviceName(DeviceType deviceType, const QString& serialNumber,
 		unsigned long vendorId, unsigned long productId);
 
 /// \throw ::cppdevtk::util::FilesystemException
+/// \pre \a mountPoint must end with '/'
 /// \return
-/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev))
+/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev/))
 /// - On Mac OS X has the form disk2 (BSD name)
 /// - empty string if no error and no device name found
 CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint);
 
+/// \pre \a mountPoint must end with '/'
 /// \return
-/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev))
+/// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev/))
 /// - On Mac OS X has the form disk2 (BSD name)
 /// - empty string: check \a errorCode to see if no error or no device name found
 CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint, ::cppdevtk::base::ErrorCode& errorCode);
@@ -93,18 +95,6 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint,
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
-
-inline CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint,
-		::cppdevtk::base::ErrorCode& errorCode) {
-	errorCode = ::cppdevtk::base::ErrorCode();
-	try {
-		return GetDeviceNameFromMountPoint(mountPoint);
-	}
-	catch (const FilesystemException& exc) {
-		errorCode = exc.ErrorCodeRef();
-		return QString();
-	}
-}
 
 
 }	// namespace util

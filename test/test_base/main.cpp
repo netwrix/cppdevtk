@@ -336,6 +336,7 @@ using ::cppdevtk::base::Thread;
 #endif
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
+using ::cppdevtk::base::SuppressUnusedWarning;
 using ::std::exception;
 
 
@@ -348,8 +349,8 @@ int main(int argc, char* argv[]) try {
 	// make sure npos works (issue with msvc >= 2010 when exporting string from dll)
 	const ::std::string::size_type npos = ::std::string::npos;
 	const ::std::wstring::size_type wnpos = ::std::wstring::npos;
-	::cppdevtk::base::SuppressUnusedWarning(npos);
-	::cppdevtk::base::SuppressUnusedWarning(wnpos);
+	SuppressUnusedWarning(npos);
+	SuppressUnusedWarning(wnpos);
 #	else
 	// use kStdStringNPos
 #	endif
@@ -697,7 +698,7 @@ bool TestNonStdExceptions() {
 }
 
 bool TestSystemException() {
-	::cppdevtk::base::SetLastSystemErrorCode(::cppdevtk::base::MakeSystemErrorCode(ESUCCESS));
+	::cppdevtk::base::SetLastSystemErrorCode(ErrorCode());
 	
 	CPPDEVTK_COUT << CPPDEVTK_SYSTEM_EXCEPTION_W_EC(::cppdevtk::base::GetLastSystemErrorCode()).What() << endl;
 	
@@ -1034,7 +1035,7 @@ bool TestMutex() {
 	DummyClassLevelBasicLockable dummylassLevelBasicLockable;
 	::cppdevtk::base::ClassLevelBasicLockableLockGuard classLevelBasicLockableLockGuard(dummylassLevelBasicLockable);
 	
-	::cppdevtk::base::SuppressUnusedWarning(caught);
+	SuppressUnusedWarning(caught);
 	
 	return true;
 }

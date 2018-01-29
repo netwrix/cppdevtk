@@ -348,5 +348,29 @@ CPPDEVTK_UTIL_API QStringList GetMountPoints(DeviceType deviceType, const QStrin
 }
 
 
+
+
+CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	QString deviceName;
+	try {
+		deviceName = GetDeviceNameFromMountPoint(mountPoint);
+	}
+	catch (const ::cppdevtk::base::SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+	}
+	catch (const ::std::bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+	}
+	
+	return deviceName;
+}
+
+
 }	// namespace util
 }	// namespace cppdevtk

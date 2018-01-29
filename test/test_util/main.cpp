@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) try {
 	::cppdevtk::util::CoreApplication coreApplication(argc, argv);
 	
 	
-	CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(fsExc, ::cppdevtk::base::MakeSystemErrorCode(0),
+	CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(fsExc, ::cppdevtk::base::ErrorCode(),
 			"testing fs exc", "aSrcPath", "aDstPath");
 	CPPDEVTK_COUT << "fsExc.What(): " << fsExc.What() << endl;
 	CPPDEVTK_COUT << "fsExc.ToString(): " << fsExc.ToString() << endl;
@@ -93,6 +93,32 @@ int main(int argc, char* argv[]) try {
 	
 	*/
 	
+	/*
+	::cppdevtk::base::ErrorCode errorCode;
+	QStringList mountPoints = GetMountPoints(true, errorCode);
+	if (errorCode) {
+		CPPDEVTK_CERR << "GetMountPoints() failed; errorCode: " << errorCode << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "mountPoints: " << mountPoints.join(' ') << endl;
+	
+	mountPoints = GetMountPointsFromPath("/media/canita/43CB-0B4D", errorCode);
+	if (errorCode) {
+		CPPDEVTK_CERR << "GetMountPointsFromPath() failed; errorCode: " << errorCode << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "mountPointsFromPath: " << mountPoints.join(' ') << endl;
+	
+	mountPoints = GetMountPointsFromDeviceName("/dev/sdb1");
+	CPPDEVTK_COUT << "mountPointsFromDeviceName: " << mountPoints.join(' ') << endl;
+	
+	QString deviceName = GetDeviceNameFromMountPoint("/media/canita/43CB-0B4D/", errorCode);
+	if (errorCode) {
+		CPPDEVTK_CERR << "GetDeviceNameFromMountPoint() failed; errorCode: " << errorCode << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "deviceName: " << deviceName << endl;
+	*/
 	
 #	if 1
 	CPPDEVTK_COUT << "done!" << endl;

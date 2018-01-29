@@ -176,6 +176,11 @@ win32 {
 macx|ios {
 	ICON = ./res/ico/application.icns
 	
+	ios {
+		ios_icon.files = $$files($$PWD/ios/ico/app_icon_*.png)
+		QMAKE_BUNDLE_DATA += ios_icon
+	}
+	
 	!debug_and_release|build_pass {
 		CONFIG(debug, debug|release) {
 			macx {
@@ -213,10 +218,12 @@ macx|ios {
 	#QMAKE_POST_LINK += rm -Rf $${DESTDIR}/$${TARGET}.app/Contents/Resources/qt_menu.nib
 	#QMAKE_POST_LINK += && cp -R $$[QT_INSTALL_PREFIX]/src/gui/mac/qt_menu.nib $${DESTDIR}/$${TARGET}.app/Contents/Resources
 	macx {
-		!isEmpty(QMAKE_POST_LINK) {
-			QMAKE_POST_LINK += &&
+		CONFIG(shared, static|shared) {
+			!isEmpty(QMAKE_POST_LINK) {
+				QMAKE_POST_LINK += &&
+			}
+			QMAKE_POST_LINK += cp -f $${_PRO_FILE_PWD_}/res/qt.conf $${DESTDIR}/$${TARGET}.app/Contents/Resources
 		}
-		QMAKE_POST_LINK += cp -f $${_PRO_FILE_PWD_}/res/qt.conf $${DESTDIR}/$${TARGET}.app/Contents/Resources
 	}
 }
 

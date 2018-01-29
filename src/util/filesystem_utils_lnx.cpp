@@ -65,7 +65,7 @@ using ::cppdevtk::base::Exception;
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
 using ::cppdevtk::base::GetSystemCategory;
-
+using ::cppdevtk::base::SuppressUnusedWarning;
 using ::std::auto_ptr;
 using ::std::exception;
 
@@ -173,7 +173,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path) {
 	
 #	else
 	// TODO: Android port for API level < 21
-	::cppdevtk::base::SuppressUnusedWarning(path);
+	SuppressUnusedWarning(path);
 	CPPDEVTK_COMPILER_WARNING("GetMountPointsFromPath(): Not working on Android < 5.0.1 (API level < 21)!");
 	return QStringList();
 #	endif
@@ -182,7 +182,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path) {
 CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& deviceName) {
 	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(deviceName), "deviceName must be valid");
 	CPPDEVTK_DBC_CHECK_ARGUMENT(deviceName.startsWith(QDir::fromNativeSeparators(CPPDEVTK_U2Q(_PATH_DEV))),
-			"deviceName must start with _PATH_DEV (/dev)");
+			"deviceName must start with _PATH_DEV (/dev/)");
 	
 #	if (!CPPDEVTK_PLATFORM_ANDROID || (__ANDROID_API__ >= 21))
 	
@@ -238,7 +238,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& device
 	
 #	else
 	// TODO: Android port for API level < 21
-	::cppdevtk::base::SuppressUnusedWarning(deviceName);
+	SuppressUnusedWarning(deviceName);
 	CPPDEVTK_COMPILER_WARNING("GetMountPointsFromDeviceName(): Not working on Android < 5.0.1 (API level < 21)!");
 	return QStringList();
 #	endif
@@ -246,9 +246,9 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromDeviceName(const QString& device
 
 CPPDEVTK_UTIL_API QString GetDeviceName(DeviceType deviceType, const QString& serialNumber,
 		unsigned long vendorId, unsigned long productId) {
-#	if (!CPPDEVTK_PLATFORM_ANDROID)
-	
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(serialNumber.isEmpty(), "serialNumber");
+	
+#	if (!CPPDEVTK_PLATFORM_ANDROID)
 	
 	CPPDEVTK_LOG_DEBUG("deviceType: " << deviceType << "; serialNumber: " << serialNumber
 			<< "; vendorId: " << base::NumToHexStr(vendorId) << "; productId: " << base::NumToHexStr(productId));
@@ -413,10 +413,10 @@ CPPDEVTK_UTIL_API QString GetDeviceName(DeviceType deviceType, const QString& se
 	
 #	else
 	// TODO: Android port
-	::cppdevtk::base::SuppressUnusedWarning(deviceType);
-	::cppdevtk::base::SuppressUnusedWarning(serialNumber);
-	::cppdevtk::base::SuppressUnusedWarning(vendorId);
-	::cppdevtk::base::SuppressUnusedWarning(productId);
+	SuppressUnusedWarning(deviceType);
+	SuppressUnusedWarning(serialNumber);
+	SuppressUnusedWarning(vendorId);
+	SuppressUnusedWarning(productId);
 	CPPDEVTK_COMPILER_WARNING("GetDeviceName(): Not ported on Android!");
 	return QString("");
 #	endif
@@ -481,11 +481,101 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 	
 #	else
 	// TODO: Android port for API level < 21
-	::cppdevtk::base::SuppressUnusedWarning(mountPoint);
+	SuppressUnusedWarning(mountPoint);
 	CPPDEVTK_COMPILER_WARNING("GetDeviceNameFromMountPoint(): Not working on Android < 5.0.1 (API level < 21)!");
-	return QString("");
+	return QString();
 #	endif
 }
+
+
+
+
+CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems) {
+#	if (!CPPDEVTK_PLATFORM_ANDROID || (__ANDROID_API__ >= 21))
+	
+	FILE* pMTabFile = setmntent(_PATH_MOUNTED, "r");
+	if (pMTabFile == NULL) {
+		throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "setmntent() failed; (errno not documented to be set)");
+	}
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pMTabFile)) {
+		CPPDEVTK_ASSERT(pMTabFile != NULL);
+		endmntent(pMTabFile);
+	}
+	CPPDEVTK_ON_BLOCK_EXIT_END
+	
+	QStringList mountPoints;
+	
+	for (;;) {
+		struct mntent mntEntry;
+		// mntEntry.mnt_fsname: name of mounted file system; ex: rootfs
+		// mntEntry.mnt_dir: file system path prefix; ex: /
+		//Zeroize(&mntEntry, sizeof(mntEntry));
+		
+		// buf size assumptions:
+		// mnt_fsname: CPPDEVTK_NAME_MAX
+		// mnt_dir: CPPDEVTK_PATH_MAX
+		// mnt_type: 32
+		// mnt_opts: 64
+		char buf[(CPPDEVTK_NAME_MAX + 1) + CPPDEVTK_PATH_MAX + 32 + 64] = {0};
+		
+		if (getmntent_r(pMTabFile, &mntEntry, buf, sizeof(buf)) == NULL) {
+			CPPDEVTK_LOG_DEBUG("getmntent_r() returned NULL; assuming end of mntent");
+			break;
+		}
+		CPPDEVTK_ASSERT(mntEntry.mnt_dir != NULL);
+		
+		if (ignoreSpecialFileSystems) {
+			if (mntEntry.mnt_type != NULL) {
+				if ((strcmp(mntEntry.mnt_type, MNTTYPE_IGNORE) == 0) || (strcmp(mntEntry.mnt_type, MNTTYPE_SWAP) == 0)) {
+					CPPDEVTK_LOG_TRACE("skipping filesystem type: " << mntEntry.mnt_type);
+					continue;
+				}
+			}
+			
+			if (mntEntry.mnt_fsname != NULL) {
+				struct stat buf1;
+				memset(&buf1, 0, sizeof(buf1));
+				if (stat(mntEntry.mnt_fsname, &buf1) != 0) {
+					CPPDEVTK_LOG_WARN("failed to stat " << mntEntry.mnt_fsname);
+					continue;
+				}
+				if (!S_ISBLK(buf1.st_mode)) {
+					CPPDEVTK_LOG_TRACE("skipping non-block device " << mntEntry.mnt_fsname);
+					continue;
+				}
+			}
+			
+			struct stat buf2;
+			memset(&buf2, 0, sizeof(buf2));
+			if (stat(mntEntry.mnt_dir, &buf2) != 0) {
+				CPPDEVTK_LOG_WARN("failed to stat " << mntEntry.mnt_dir);
+				continue;
+			}
+			if (buf2.st_size == 0) {
+				CPPDEVTK_LOG_TRACE("skipping special filesystem " << mntEntry.mnt_dir);
+				continue;
+			}
+		}
+		
+		QString mountPoint = QDir::fromNativeSeparators(mntEntry.mnt_dir);
+		CPPDEVTK_ASSERT(!mountPoint.isEmpty());
+		if (!mountPoint.endsWith('/')) {
+			mountPoint.append('/');
+		}
+		CPPDEVTK_LOG_DEBUG("found mount point: " << mountPoint);
+		mountPoints.append(mountPoint);
+	}
+	
+	return mountPoints;
+	
+#	else
+	// TODO: Android port for API level < 21
+	CPPDEVTK_COMPILER_WARNING("GetMountPoints(): Not working on Android < 5.0.1 (API level < 21)!");
+	return QStringList();
+#	endif
+}
+
+
 
 
 namespace detail {
@@ -494,9 +584,6 @@ namespace detail {
 #if (!CPPDEVTK_PLATFORM_ANDROID)
 
 void PrintUDevDevice(const udev_device& udevDevice) {
-	using ::cppdevtk::base::SuppressUnusedWarning;
-	
-	
 	auto_ptr<LibUDev> pLibUDev(NULL);
 	try {
 		pLibUDev.reset(new LibUDev1());
@@ -574,8 +661,6 @@ void PrintUDevDevice(const udev_device& udevDevice) {
 }
 
 void PrintUDevListEntry(const udev_list_entry& udevListEntry) {
-	using ::cppdevtk::base::SuppressUnusedWarning;
-	
 	auto_ptr<LibUDev> pLibUDev(NULL);
 	try {
 		pLibUDev.reset(new LibUDev1());

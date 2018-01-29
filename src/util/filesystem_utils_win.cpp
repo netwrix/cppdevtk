@@ -27,6 +27,7 @@
 #include <cppdevtk/base/tstring.hpp>
 #include <cppdevtk/base/tstring_conv.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -376,6 +377,24 @@ CPPDEVTK_UTIL_API void GetFileSystemSpaceInfo(const QString& path, FileSystemSpa
 #	endif
 	CPPDEVTK_ASSERT(fileSystemSpaceInfo.size_ >= fileSystemSpaceInfo.totalFree_);
 	CPPDEVTK_ASSERT(fileSystemSpaceInfo.totalFree_ >= fileSystemSpaceInfo.userFree_);
+}
+
+
+
+
+CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems) {
+	base::SuppressUnusedWarning(ignoreSpecialFileSystems);
+	
+	QStringList mountPoints;
+
+	const QFileInfoList kFileInfoList = QDir::drives();
+	for (QFileInfoList::ConstIterator kIter = kFileInfoList.constBegin(); kIter != kFileInfoList.constEnd(); ++kIter) {
+		const QString kDrive = kIter->path().toUpper();
+		CPPDEVTK_ASSERT((kDrive.length() == 3) && kDrive[0].isLetter() && (kDrive[1] == ':') && (kDrive[2] == '/'));
+		mountPoints.append(kDrive);
+	}
+	
+	return mountPoints;
 }
 
 

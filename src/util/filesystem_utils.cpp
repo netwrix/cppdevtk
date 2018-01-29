@@ -24,6 +24,8 @@
 #include <cppdevtk/base/tstring_conv.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/system_exception.hpp>
+#include <cppdevtk/base/cerrno.hpp>
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QString>
@@ -36,10 +38,16 @@
 #include <utility>
 #include <queue>
 #include <list>
+#include <new>
 
 
 namespace cppdevtk {
 namespace util {
+
+
+using ::cppdevtk::base::SystemException;
+using ::cppdevtk::base::ErrorCode;
+using ::std::bad_alloc;
 
 
 CPPDEVTK_UTIL_API bool RemoveDirectoryRecursively(const QString& path, bool failIfNotExists,
@@ -48,6 +56,8 @@ CPPDEVTK_UTIL_API bool RemoveDirectoryRecursively(const QString& path, bool fail
 	
 	
 	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(path), "path must be valid");
+	
+	errorCode.Clear();
 	
 	Paths paths;
 	paths.push_back(path);
@@ -70,13 +80,17 @@ CPPDEVTK_UTIL_API bool RemoveDirectoryRecursively(const QString& path, bool fail
 		CPPDEVTK_LOG_TRACE("there are " << kFiles.size() << " files to delete in directory " << kPath);
 		for (QStringList::ConstIterator kIter = kFiles.constBegin(); kIter != kFiles.constEnd(); ++kIter) {
 			const QString kFileName = kPath + '/' + *kIter;
-			if (!DeleteFile(kFileName, false, errorCode)) {
+			ErrorCode tmpErrorCode;
+			if (!DeleteFile(kFileName, false, tmpErrorCode)) {
+				errorCode = tmpErrorCode;
 				CPPDEVTK_LOG_ERROR("failed to delete file '" << kFileName << "'\nerror code: " << errorCode.ToString());
 				retCode = false;
 			}
 		}
 		
-		if (!RemoveDirectory(kPath, (paths.empty() ? failIfNotExists : false), errorCode)) {
+		ErrorCode tmpErrorCode;
+		if (!RemoveDirectory(kPath, (paths.empty() ? failIfNotExists : false), tmpErrorCode)) {
+			errorCode = tmpErrorCode;
 			CPPDEVTK_LOG_ERROR("failed to remove directory '" << kPath << "'\nerror code: " << errorCode.ToString());
 			retCode = false;
 		}
@@ -94,7 +108,11 @@ CPPDEVTK_UTIL_API bool CopyDirectoryRecursively(const QString& srcPath, const QS
 	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(srcPath), "srcPath must be valid");
 	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(dstPath), "dstPath must be valid");
 	
-	if (!MakePath(dstPath, failIfDstPathExists, errorCode)) {
+	errorCode.Clear();
+	
+	ErrorCode tmpErrorCode;
+	if (!MakePath(dstPath, failIfDstPathExists, tmpErrorCode)) {
+		errorCode = tmpErrorCode;
 		CPPDEVTK_LOG_ERROR("failed to make dstPath: '" << dstPath << "'\nerror code: " << errorCode.ToString());
 		return false;
 	}
@@ -117,7 +135,8 @@ CPPDEVTK_UTIL_API bool CopyDirectoryRecursively(const QString& srcPath, const QS
 		}
 		
 		const QString kDstPath = kSrcDstPathPair.second;
-		if (!MakeDirectory(kDstPath, false, errorCode)) {
+		if (!MakeDirectory(kDstPath, false, tmpErrorCode)) {
+			errorCode = tmpErrorCode;
 			CPPDEVTK_LOG_ERROR("failed to make destination directory: '" << kDstPath
 					<< "'\nerror code: " << errorCode.ToString());
 			retValue = false;
@@ -129,7 +148,8 @@ CPPDEVTK_UTIL_API bool CopyDirectoryRecursively(const QString& srcPath, const QS
 		for (QStringList::ConstIterator kIter = kSrcFiles.constBegin(); kIter != kSrcFiles.constEnd(); ++kIter) {
 			const QString kSrcFileName = kSrcPath + '/' + *kIter;
 			const QString kDstFileName = kDstPath + '/' + *kIter;
-			if (!CopyFile(kSrcFileName, kDstFileName, failIfFileExists, errorCode)) {
+			if (!CopyFile(kSrcFileName, kDstFileName, failIfFileExists, tmpErrorCode)) {
+				errorCode = tmpErrorCode;
 				CPPDEVTK_LOG_ERROR("failed to copy file: '" << kSrcFileName <<  "' to '" << kDstFileName
 						<< "'\nerror code: " << errorCode.ToString());
 				retValue = false;
@@ -203,6 +223,187 @@ CPPDEVTK_UTIL_API QString GetLocalizedFileName(const QString& fileNamePrefix, co
 	
 	localizedFileName.clear();
 	return localizedFileName;
+}
+
+
+
+
+CPPDEVTK_UTIL_API bool DeleteFile(const QString& fileName, bool failIfNotExists,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	try {
+		DeleteFile(fileName, failIfNotExists);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+		return false;
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+		return false;
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+		return false;
+	}
+	
+	return true;
+}
+
+CPPDEVTK_UTIL_API bool CopyFile(const QString& srcFileName, const QString& dstFileName, bool failIfExists,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	try {
+		CopyFile(srcFileName, dstFileName, failIfExists);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+		return false;
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+		return false;
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+		return false;
+	}
+	
+	return true;
+}
+
+CPPDEVTK_UTIL_API bool MakeDirectory(const QString& dirName, bool failIfExists,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	try {
+		MakeDirectory(dirName, failIfExists);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+		return false;
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+		return false;
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+		return false;
+	}
+	
+	return true;
+}
+
+CPPDEVTK_UTIL_API bool MakePath(const QString& dirPath, bool failIfExists,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	try {
+		MakePath(dirPath, failIfExists);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+		return false;
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+		return false;
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+		return false;
+	}
+	
+	return true;
+}
+
+CPPDEVTK_UTIL_API bool RemoveDirectory(const QString& path, bool failIfNotExists,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	try {
+		RemoveDirectory(path, failIfNotExists);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+		return false;
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+		return false;
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+		return false;
+	}
+	
+	return true;
+}
+
+CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems, ::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	QStringList mountPoints;
+	try {
+		mountPoints = GetMountPoints(ignoreSpecialFileSystems);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+	}
+	
+	return mountPoints;
+}
+
+CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path, ::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	QStringList mountPoints;
+	try {
+		mountPoints = GetMountPointsFromPath(path);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+	}
+	
+	return mountPoints;
+}
+
+CPPDEVTK_UTIL_API bool GetFileSystemSpaceInfo(const QString& path, FileSystemSpaceInfo& fileSystemSpaceInfo,
+		::cppdevtk::base::ErrorCode& errorCode) {
+	errorCode.Clear();
+	
+	try {
+		GetFileSystemSpaceInfo(path, fileSystemSpaceInfo);
+	}
+	catch (const SystemException& exc) {
+		errorCode = exc.ErrorCodeRef();
+		return false;
+	}
+	catch (const bad_alloc&) {
+		errorCode = MakeErrorCode(base::errc::not_enough_memory);
+		return false;
+	}
+	catch (...) {
+		errorCode = MakeErrorCode(base::errc::no_message_available);
+		return false;
+	}
+	
+	return true;
 }
 
 

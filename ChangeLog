@@ -1,8 +1,12 @@
 Version 1.0.8.1:
 - Release date:
 - New features:
+	- added GetMountPoints()
 - Improvements:
+	- filesystem functions quick review
+	- android and ios icons
 - Fixed bugs:
+	- added GetMountPointsFromPath() missing implementation
 
 
 Version 1.0.7.1: 18 Jan 2018

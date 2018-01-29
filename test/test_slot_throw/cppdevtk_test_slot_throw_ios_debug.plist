@@ -6,6 +6,46 @@
 	<string>cppdevtk_test_slot_throw_debug</string>
 	<key>CFBundleIconFile</key>
 	<string>application.icns</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>app_icon_29x29.png</string>
+				<string>app_icon_29x29@2x.png</string>
+				<string>app_icon_40x40@2x.png</string>
+				<string>app_icon_57x57.png</string>
+				<string>app_icon_57x57@2x.png</string>
+				<string>app_icon_60x60@2x.png</string>
+			</array>
+		</dict>
+	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>app_icon_29x29.png</string>
+				<string>app_icon_29x29@2x.png</string>
+				<string>app_icon_40x40@2x.png</string>
+				<string>app_icon_57x57.png</string>
+				<string>app_icon_57x57@2x.png</string>
+				<string>app_icon_60x60@2x.png</string>
+				<string>app_icon_29x29~ipad.png</string>
+				<string>app_icon_29x29@2x~ipad.png</string>
+				<string>app_icon_40x40~ipad.png</string>
+				<string>app_icon_40x40@2x~ipad.png</string>
+				<string>app_icon_50x50~ipad.png</string>
+				<string>app_icon_50x50@2x~ipad.png</string>
+				<string>app_icon_72x72~ipad.png</string>
+				<string>app_icon_72x72@2x~ipad.png</string>
+				<string>app_icon_76x76~ipad.png</string>
+				<string>app_icon_76x76@2x~ipad.png</string>
+			</array>
+		</dict>
+	</dict>
 	<key>CFBundleName</key>
 	<string>cppdevtk_test_slot_throw_debug</string>
 	<key>CFBundleDisplayName</key>
