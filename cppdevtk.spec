@@ -77,7 +77,7 @@
 
 
 Name: cppdevtk
-Version: 1.0.8
+Version: 1.0.9
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -591,6 +591,9 @@ exit 0
 
 
 %changelog
+* Wed Jan 31 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.0.9.1
+- to fill
 * Tue Jan 30 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.8.1
 - added GetMountPoints()
