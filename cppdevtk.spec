@@ -591,9 +591,12 @@ exit 0
 
 
 %changelog
-* Fri Jan 19 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Tue Jan 30 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.8.1
-- to fill
+- added GetMountPoints()
+- filesystem functions quick review
+- android and ios icons
+- added GetMountPointsFromPath() missing implementation
 * Thu Jan 18 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.7.1
 - qt 4 and qt 5: fixed support for qt static builds, static qico plugin, translations
