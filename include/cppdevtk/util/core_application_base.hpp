@@ -86,7 +86,7 @@ public:
 	void SetCurrentLanguageInfo(const LanguageInfo& languageInfo);
 	static void SetQmInfo(const QString& qmPath, const QString& qmNamePrefix);
 	static void GetQmInfo(QString& qmPath, QString& qmNamePrefix);
-	static QList<LanguageInfo> GetSupportedLanguageInfos();
+	static QList<LanguageInfo> GetSupportedLanguageInfos();	///< \pre QTranslator.translate("language_native_name", "English")
 	
 	/// Same as QCoreApplication::applicationDirPath() but on Unix dereference symlinks
 	/// and on Mac OS X does not include bundle

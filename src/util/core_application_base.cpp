@@ -112,10 +112,9 @@ QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
 			continue;
 		}
 		
-		const QString kQmPath(":/cppdevtk/util/res/tr");
-		const QString kQmFileName = QString("tr_") + kIter->name();
-		if (!helperTranslator_.load(kQmFileName, kQmPath)) {
-			CPPDEVTK_LOG_ERROR("failed to load translator for: kQmFileName: " << kQmFileName << "; kQmPath: " << kQmPath);
+		const QString kQmFileName = qmNamePrefix_ + kIter->name();
+		if (!helperTranslator_.load(kQmFileName, qmPath_)) {
+			CPPDEVTK_LOG_ERROR("failed to load translator for: kQmFileName: " << kQmFileName << "; qmPath_: " << qmPath_);
 			//CPPDEVTK_ASSERT(0 && "failed to load translator");
 			
 			//CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, "English")));
@@ -126,7 +125,7 @@ QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
 		const QString kNativeName = helperTranslator_.translate("language_native_name", "English");
 		if (kNativeName.isEmpty()) {
 			CPPDEVTK_LOG_ERROR("failed to translate kNativeName for: kQmFileName: " << kQmFileName
-					<< "; kQmPath: " << kQmPath);
+					<< "; qmPath_: " << qmPath_);
 			//CPPDEVTK_ASSERT(0 && "failed to translate kNativeName");
 			
 			//CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, "English")));
@@ -136,7 +135,7 @@ QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
 		}
 		if (kNativeName == "English") {
 			CPPDEVTK_LOG_ERROR("kNativeName is not properly translated for: kQmFileName: " << kQmFileName
-					<< "; kQmPath: " << kQmPath);
+					<< "; qmPath_: " << qmPath_);
 			CPPDEVTK_ASSERT(0 && "kNativeName is not properly translated");
 			
 			//CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, "English")));
