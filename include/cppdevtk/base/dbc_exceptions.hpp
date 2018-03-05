@@ -25,8 +25,6 @@
 #include "stdexcept.hpp"
 #include "cerrno.hpp"
 
-#include <QtCore/QLocale>
-
 
 namespace cppdevtk {
 namespace base {

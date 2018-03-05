@@ -26,26 +26,13 @@
 #define CPPDEVTK_BASE_INFO_TR_HPP_INCLUDED_
 
 
+#include "info_tr_customization.hpp"
 #include "info.hpp"
-
-#include <QtCore/QtGlobal>
-
-
-#define CPPDEVTK_BASE_DESCRIPTION CPPDEVTK_LONG_NAME " base library."
 
 
 // config subproject is headers only and it does not support translations; this is why we put these here.
 
-#define CPPDEVTK_INFO_TR_CTX "cppdevtk_info"
 
-#define CPPDEVTK_COMPANY_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CoSoSys")
-#define CPPDEVTK_COMPANY_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CoSoSys Ltd.")
-#define CPPDEVTK_COMPANY_COPYRIGHT_TR QT_TRANSLATE_NOOP("cppdevtk_info", "Copyright (C) 2015 - 2018 CoSoSys Ltd. All rights reserved. info@cososys.com.")
-#define CPPDEVTK_COMPANY_TRADEMARKS_TR QT_TRANSLATE_NOOP("cppdevtk_info", "TM CoSoSys Ltd.")
-
-#define CPPDEVTK_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CppDevTk")
-#define CPPDEVTK_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "C++ Development Toolkit")
-#define CPPDEVTK_DESCRIPTION_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CppDevTk is a collection of libraries for C++ development.")
 #define CPPDEVTK_COPYRIGHT_TR CPPDEVTK_COMPANY_COPYRIGHT_TR
 #define CPPDEVTK_TRADEMARKS_TR CPPDEVTK_COMPANY_TRADEMARKS_TR
 

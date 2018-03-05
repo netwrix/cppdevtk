@@ -303,6 +303,13 @@ Musisz zaakceptować warunki tej umowy przed rozpoczęciem.</translation>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Język</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
@@ -575,6 +582,13 @@ Musisz zaakceptować warunki tej umowy przed rozpoczęciem.</translation>
     <message>
         <source>Error code: %1</source>
         <translation>Błędny kod: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Polszczyzna</translation>
     </message>
 </context>
 </TS>

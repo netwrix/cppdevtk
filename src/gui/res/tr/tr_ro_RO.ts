@@ -54,7 +54,7 @@ Trebuie să acceptați termenii acestui acord înainte de a continua.</translati
     <name>LanguageWidget</name>
     <message>
         <source>Select &amp;Language:</source>
-        <translation>Selectare &amp;Limba:</translation>
+        <translation>Selectare &amp;Limbă:</translation>
     </message>
 </context>
 <context>
@@ -304,6 +304,13 @@ Trebuie să acceptați termenii acestui acord înainte de a continua.</translati
     <message>
         <source>&amp;Copy Full Text</source>
         <translation>&amp;Copiere text complet</translation>
+    </message>
+</context>
+<context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Limba</translation>
     </message>
 </context>
 <context>
@@ -615,6 +622,13 @@ Trebuie să acceptați termenii acestui acord înainte de a continua.</translati
     <message>
         <source>Error code: %1</source>
         <translation>Error code: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Română</translation>
     </message>
 </context>
 </TS>

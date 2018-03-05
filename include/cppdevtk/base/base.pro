@@ -57,8 +57,10 @@ HEADERS += \
 	future_exception.hpp	\
 	future.hpp	\
 	generic_locking_algorithms.hpp	\
-	info_tr.hpp	\
 	info.hpp	\
+	info_customization.hpp	\
+	info_tr.hpp	\
+	info_tr_customization.hpp	\
 	init_resources.hpp	\
 	inttypes_detail.h	\
 	inttypes.h	\

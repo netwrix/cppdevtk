@@ -58,7 +58,7 @@ protected:
 	
 	virtual bool SetupTranslators();
 private:
-	QTranslator translator_;
+	QTranslator guiTranslator_;
 };
 
 
@@ -68,7 +68,7 @@ private:
 // Inline functions
 
 inline bool ApplicationBase::OpenLocalizedFileInDefaultApp(const QString& fileNamePrefix, const QString& fileExt) const {
-	return OpenLocalizedFileInDefaultApp(fileNamePrefix, fileExt, GetCurrentLanguageInfo().GetLocale());
+	return OpenLocalizedFileInDefaultApp(fileNamePrefix, fileExt, GetCurrentLanguageInfo().GetName());
 }
 
 

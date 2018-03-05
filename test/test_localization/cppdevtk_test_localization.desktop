@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test Localization
+GenericName=CppDevTk test application
+Comment=CppDevTk Test Localization
+Exec=/opt/cososys/bin/cppdevtk_test_localization
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

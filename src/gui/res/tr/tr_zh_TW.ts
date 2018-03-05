@@ -21,11 +21,11 @@ Message: %2</source>
     <name>CustomWizard</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;取消</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;說明</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -33,7 +33,7 @@ Message: %2</source>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;下一步</translation>
     </message>
 </context>
 <context>
@@ -86,128 +86,155 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>設定密碼</translation>
     </message>
 </context>
 <context>
     <name>QtCopyDialog</name>
     <message>
         <source>24% of 100MB (Copying...)</source>
-        <translation type="unfinished"></translation>
+        <translation>24%，共 100MB（複製中...）
+</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>目的地
+</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>來源
+</translation>
     </message>
     <message>
         <source>10 MB of 100 MB completed</source>
-        <translation type="unfinished"></translation>
+        <translation>共 100 MB，已完成 10 MB
+</translation>
     </message>
     <message>
         <source>2 / 5 files</source>
-        <translation type="unfinished"></translation>
+        <translation>第 2 個檔案，共 5 個檔案
+</translation>
     </message>
     <message>
         <source>5 MB/s (00:00:15 remaining)</source>
-        <translation type="unfinished"></translation>
+        <translation>5 MB/秒（剩餘時間 00:00:15）
+</translation>
     </message>
     <message>
         <source>0 / 1 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>第 0 個目錄，共 1 個目錄
+</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消
+</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>關閉
+</translation>
     </message>
 </context>
 <context>
     <name>QtOtherDialog</name>
     <message>
         <source>File Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>檔案已經存在
+</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>來源
+</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>目的地
+</translation>
     </message>
     <message>
         <source>Destination file already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>跳過.</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>重試
+</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>跳過
+</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部跳過
+</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消
+</translation>
     </message>
 </context>
 <context>
     <name>QtOverwriteDialog</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>複製警告
+</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>目的地
+</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>來源
+</translation>
     </message>
     <message>
         <source>[sourceFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[來源檔案]
+</translation>
     </message>
     <message>
         <source>[destinationFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[目的地檔案]
+</translation>
     </message>
     <message>
         <source>Destination already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>目的地已經存在。
+</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>跳過
+</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部跳過
+</translation>
     </message>
     <message>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>覆寫
+</translation>
     </message>
     <message>
         <source>Overwrite All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部覆寫
+</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消
+</translation>
     </message>
 </context>
 <context>
@@ -245,22 +272,24 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::CapsLockWidget</name>
     <message>
         <source>Caps Lock:</source>
-        <translation type="unfinished"></translation>
+        <translation>大寫鎖定 Caps Lock:</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>開啟
+</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>關閉
+</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::CustomWizard</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>錯誤</translation>
     </message>
     <message>
         <source>Failed to open URL in default web browser</source>
@@ -286,7 +315,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::EulaWidget</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>錯誤</translation>
     </message>
     <message>
         <source>Failed to open EULA in default viewer!</source>
@@ -298,6 +327,13 @@ You must accept the terms of this agreement before continuing.</source>
     <message>
         <source>&amp;Copy Full Text</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;語言</translation>
     </message>
 </context>
 <context>
@@ -454,7 +490,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::ProgressDialog</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;取消</translation>
     </message>
     <message>
         <source>%1 of %2: %3</source>
@@ -465,114 +501,147 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::QtCopyDialog</name>
     <message>
         <source>%1 B</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 B
+</translation>
     </message>
     <message>
         <source>%1 kB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kB
+</translation>
     </message>
     <message>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB
+</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 GB
+</translation>
     </message>
     <message>
         <source>100% of %1 (Done)</source>
-        <translation type="unfinished"></translation>
+        <translation>共 100%，%1（完成）
+</translation>
     </message>
     <message>
         <source>%1 / %2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>第 %1 個檔案，共 %2 個檔案
+</translation>
     </message>
     <message>
         <source>%1 / %2 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>第 %1 個檔案，共 %2 個目錄
+</translation>
     </message>
     <message>
         <source>%1 of %2 completed</source>
-        <translation type="unfinished"></translation>
+        <translation>共 %2，完成 %1
+</translation>
     </message>
     <message>
         <source>Copying...</source>
-        <translation type="unfinished"></translation>
+        <translation>複製中...
+</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>完成
+</translation>
     </message>
     <message>
         <source>%1% of %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1% 的 %2 (%3)
+</translation>
     </message>
     <message>
         <source>0 B</source>
-        <translation type="unfinished"></translation>
+        <translation>0 B
+</translation>
     </message>
     <message>
         <source>%1/s ( %2 remaining )</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/秒（剩餘 %2）
+</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::QtCopyDialogPrivate</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>複製警告
+</translation>
     </message>
     <message>
         <source>Source doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>來源不存在。</translation>
     </message>
     <message>
         <source>Source file is a directory. Omitting source directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>來源檔案為目錄。忽略來源目錄。
+</translation>
     </message>
     <message>
         <source>Source directory is a file. Omitting source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>來源目錄為檔案。忽略來源檔案。
+</translation>
     </message>
     <message>
         <source>Path to destination does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>目的地路徑不存在。
+</translation>
     </message>
     <message>
         <source>Cannot create destination directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法建立目的地目錄。
+</translation>
     </message>
     <message>
         <source>Cannot open source file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法開啟來源檔案。請檢查許可權。
+</translation>
     </message>
     <message>
         <source>Cannot open destination file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法開啟目的地檔案。請檢查許可權。
+</translation>
     </message>
     <message>
         <source>Force: Cannot remove destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>強制：無法移除目的地檔案。
+</translation>
     </message>
     <message>
         <source>Cannot create symbolic link targeting to source.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法建立指向來源的符號連結。
+</translation>
     </message>
     <message>
         <source>Cannot read source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法讀取來源檔案。
+</translation>
     </message>
     <message>
         <source>Cannot write destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法寫入目的地檔案。
+</translation>
     </message>
     <message>
         <source>Cannot remove source.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法移除來源。
+</translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>錯誤碼： %1
+</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>正體中文</translation>
     </message>
 </context>
 </TS>

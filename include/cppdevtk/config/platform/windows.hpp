@@ -36,16 +36,24 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Minimum requirement.
 
+#ifndef RC_INVOKED	// for RC4011: identifier truncated to 'identifier'...
+
 #define CPPDEVTK_DETAIL_WIN32_WINNT_WINXP 0x0501
 #define CPPDEVTK_DETAIL_WIN32_WINNT_VISTA 0x0600
 #define CPPDEVTK_DETAIL_WIN32_WINNT_WIN7 0x0601
 
 #define CPPDEVTK_DETAIL_WIN32_WINNT CPPDEVTK_DETAIL_WIN32_WINNT_WINXP
-#if (CPPDEVTK_WIN32_WINNT < CPPDEVTK_DETAIL_WIN32_WINNT_WINXP)
-#	error "CPPDEVTK_WIN32_WINNT < CPPDEVTK_DETAIL_WIN32_WINNT_WINXP!!!"
+#if (CPPDEVTK_WIN32_WINNT < CPPDEVTK_DETAIL_WIN32_WINNT)
+#	error "CPPDEVTK_WIN32_WINNT < CPPDEVTK_DETAIL_WIN32_WINNT!!!"
 #endif
 
+#endif	// RC_INVOKED
+
+
 #include <winsdkver.h>
+
+
+#ifndef RC_INVOKED	// for RC4011: identifier truncated to 'identifier'...
 
 // Safety checks.
 #if (_WIN32_WINNT_MAXVER < CPPDEVTK_DETAIL_WIN32_WINNT_WINXP)
@@ -58,6 +66,8 @@
 #		endif
 #	endif
 #endif
+
+#endif	// RC_INVOKED
 
 
 #ifdef _WIN32_WINNT

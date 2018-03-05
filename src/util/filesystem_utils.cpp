@@ -19,6 +19,7 @@
 
 #include <cppdevtk/util/filesystem_utils.hpp>
 #include <cppdevtk/util/get_user_name.hpp>
+#include <cppdevtk/util/language_info.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/tstring_conv.hpp>
@@ -199,18 +200,18 @@ CPPDEVTK_UTIL_API QString GetLocalizedFileName(const QString& fileNamePrefix, co
 		return localizedFileName;
 	}
 	
-	localizedFileName = fileNamePrefix + (locale.name().split("_", QString::SkipEmptyParts))[0] + '.' + fileExt;
+	localizedFileName = fileNamePrefix + locale.name().split("_", QString::SkipEmptyParts)[0] + '.' + fileExt;
 	if (QFile::exists(localizedFileName)) {
 		return localizedFileName;
 	}
 	
-	if (locale != QLocale(QLocale::English, QLocale::UnitedStates)) {
-		localizedFileName = fileNamePrefix + "en_US" + '.' + fileExt;
+	if (locale.name() != LanguageInfo::GetCodeName()) {
+		localizedFileName = fileNamePrefix + LanguageInfo::GetCodeName() + '.' + fileExt;
 		if (QFile::exists(localizedFileName)) {
 			return localizedFileName;
 		}
 		
-		localizedFileName = fileNamePrefix + "en" + '.' + fileExt;
+		localizedFileName = fileNamePrefix + LanguageInfo::GetCodeName().split("_", QString::SkipEmptyParts)[0] + '.' + fileExt;
 		if (QFile::exists(localizedFileName)) {
 			return localizedFileName;
 		}

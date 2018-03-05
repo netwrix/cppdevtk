@@ -71,7 +71,7 @@ QString GenericErrorCategory::GetMessage(int errVal, const QLocale& locale) cons
 	//message = QString("Failed to get message for generic error: %1").arg(errVal);
 	
 	if (!detail::DoGetMessage(errVal, locale, message)) {
-		if (locale != QLocale::c()) {
+		if (locale.name() != QLocale::c().name()) {
 			CPPDEVTK_LOG_INFO("DoGetMessage() failed; retrying with QLocale::c()"
 				<< "; errVal: " << errVal << "; locale.name(): " << locale.name());
 			if (!detail::DoGetMessage(errVal, QLocale::c(), message)) {

@@ -17,19 +17,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_TEST_UTIL_INFO_HPP_INCLUDED_
 #define CPPDEVTK_TEST_UTIL_INFO_HPP_INCLUDED_
 
 
 #include <cppdevtk/config/info.hpp>
+#include "info_customization.hpp"
 
 
-#define CPPDEVTK_TEST_UTIL_DESCRIPTION CPPDEVTK_LONG_NAME " test application."
+#define CPPDEVTK_TEST_UTIL_NAME_SANITIZED QString(CPPDEVTK_TEST_UTIL_NAME).toLower().replace(' ', '_')
 
 
 #endif	// CPPDEVTK_TEST_UTIL_INFO_HPP_INCLUDED_

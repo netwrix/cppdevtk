@@ -17,19 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_JNI_INFO_HPP_INCLUDED_
 #define CPPDEVTK_JNI_INFO_HPP_INCLUDED_
 
 
 #include <cppdevtk/config/info.hpp>
-
-
-#define CPPDEVTK_JNI_DESCRIPTION CPPDEVTK_LONG_NAME " jni library."
+#include "info_customization.hpp"
 
 
 #endif	// CPPDEVTK_JNI_INFO_HPP_INCLUDED_

@@ -193,6 +193,7 @@ SOURCES += \
 	init_resources.cpp	\
 	invisible_widget.cpp \
 	k_squeezed_text_label.cpp \
+	language_menu.cpp	\
 	language_widget.cpp \
 	login_widget.cpp \
 	message_box.cpp \
@@ -243,10 +244,12 @@ HEADERS += \
 	../../include/cppdevtk/gui/disk_space_widget.hpp \
 	../../include/cppdevtk/gui/eula_widget.hpp \
 	../../include/cppdevtk/gui/info.hpp \
+	../../include/cppdevtk/gui/info_customization.hpp	\
 	../../include/cppdevtk/gui/init_resources.hpp \
 	../../include/cppdevtk/gui/invisible_widget.hpp \
 	../../include/cppdevtk/gui/is_caps_lock_on.hpp \
 	../../include/cppdevtk/gui/k_squeezed_text_label.hpp \
+	../../include/cppdevtk/gui/language_menu.hpp	\
 	../../include/cppdevtk/gui/language_widget.hpp \
 	../../include/cppdevtk/gui/login_widget.hpp \
 	../../include/cppdevtk/gui/message_box.hpp \

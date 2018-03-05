@@ -31,8 +31,6 @@
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/system_exception.hpp>
 
-#include <QtCore/QLocale>
-
 #include <windows.h>
 
 #include <cstring>

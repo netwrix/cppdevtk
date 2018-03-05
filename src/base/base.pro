@@ -334,8 +334,10 @@ HEADERS += \
 	../../include/cppdevtk/base/future_exception.hpp	\
 	../../include/cppdevtk/base/future.hpp	\
 	../../include/cppdevtk/base/generic_locking_algorithms.hpp	\
-	../../include/cppdevtk/base/info_tr.hpp	\
 	../../include/cppdevtk/base/info.hpp	\
+	../../include/cppdevtk/base/info_customization.hpp	\
+	../../include/cppdevtk/base/info_tr.hpp	\
+	../../include/cppdevtk/base/info_tr_customization.hpp	\
 	../../include/cppdevtk/base/init_resources.hpp	\
 	../../include/cppdevtk/base/inttypes_detail.h	\
 	../../include/cppdevtk/base/inttypes.h	\

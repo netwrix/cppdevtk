@@ -1,37 +1,4 @@
 <RCC>
     <qresource prefix="/cppdevtk/test_disk_space_widget">
-        <file>res/tr/tr_ar.qm</file>
-        <file>res/tr/tr_bg.qm</file>
-        <file>res/tr/tr_cs.qm</file>
-        <file>res/tr/tr_da.qm</file>
-        <file>res/tr/tr_de.qm</file>
-        <file>res/tr/tr_el.qm</file>
-        <file>res/tr/tr_en_GB.qm</file>
-        <file>res/tr/tr_es.qm</file>
-        <file>res/tr/tr_et.qm</file>
-        <file>res/tr/tr_fi.qm</file>
-        <file>res/tr/tr_fr.qm</file>
-        <file>res/tr/tr_he.qm</file>
-        <file>res/tr/tr_hi.qm</file>
-        <file>res/tr/tr_hr.qm</file>
-        <file>res/tr/tr_hu.qm</file>
-        <file>res/tr/tr_it.qm</file>
-        <file>res/tr/tr_ja.qm</file>
-        <file>res/tr/tr_ko.qm</file>
-        <file>res/tr/tr_lt.qm</file>
-        <file>res/tr/tr_lv.qm</file>
-        <file>res/tr/tr_nb.qm</file>
-        <file>res/tr/tr_nl.qm</file>
-        <file>res/tr/tr_nn_NO.qm</file>
-        <file>res/tr/tr_pl.qm</file>
-        <file>res/tr/tr_pt_PT.qm</file>
-        <file>res/tr/tr_pt_BR.qm</file>
-        <file>res/tr/tr_ro_RO.qm</file>
-        <file>res/tr/tr_ru.qm</file>
-        <file>res/tr/tr_sr.qm</file>
-        <file>res/tr/tr_sv.qm</file>
-        <file>res/tr/tr_tr.qm</file>
-        <file>res/tr/tr_zh_CN.qm</file>
-        <file>res/tr/tr_zh_TW.qm</file>
     </qresource>
 </RCC>

@@ -22,55 +22,152 @@
 
 
 #include "config.hpp"
+#include <cppdevtk/base/stringizable.hpp>
 
 #include <QtCore/QLocale>
 #include <QtCore/QString>
+#include <QtCore/QMetaType>
+
+
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(push)
+#	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
+#endif
 
 
 namespace cppdevtk {
 namespace util {
 
 
-class CPPDEVTK_UTIL_API LanguageInfo {
+class CPPDEVTK_UTIL_API LanguageInfo: public ::cppdevtk::base::QStringizable {
 public:
-	LanguageInfo();	// C language info
-	LanguageInfo(const QLocale& locale, const QString& nativeName);	///< \pre !nativeName.isEmpty()
+	LanguageInfo();	///< Code language info
+	LanguageInfo(const QString& name, const QString& nativeName);
+	LanguageInfo(QLocale::Language language, QLocale::Country country, const QString& nativeName);
+	LanguageInfo(const QLocale& locale, const QString& nativeName);
 	
-	QLocale GetLocale() const;
+	QString GetName() const;	///< QLocale::name()
 	QString GetNativeName() const;
 	
-	void Set(const QLocale& locale, const QString& nativeName);	///< \pre !nativeName.isEmpty()
+	void Set();
+	void Set(const QString& name, const QString& nativeName);
+	void Set(QLocale::Language language, QLocale::Country country, const QString& nativeName);
+	void Set(const QLocale& locale, const QString& nativeName);
+	
+	bool operator==(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT;
+	bool operator!=(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT;
+	bool operator<(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT;
+	bool operator<=(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT;
+	bool operator>(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT;
+	bool operator>=(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT;
+	
+	virtual QString ToString() const;
+	
+	
+	static QString GetCodeName();
+	static QString GetCodeNativeName();
+	static LanguageInfo GetCodeLanguageInfo();
+	static LanguageInfo GetCLanguageInfo();
 private:
-	QLocale locale_;
+	static QLocale GetCodeLocale();
+	
+	
+	QString name_;
 	QString nativeName_;
 };
 
 
-CPPDEVTK_UTIL_API bool operator==(const LanguageInfo& lhs, const LanguageInfo& rhs);
+}	// namespace util
+}	// namespace cppdevtk
 
 
+// NOTE: do not global qualify because moc will generate bad code
+Q_DECLARE_METATYPE(cppdevtk::util::LanguageInfo)
+
+
+namespace cppdevtk {
+namespace util {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline LanguageInfo::LanguageInfo(): locale_(QLocale::c()), nativeName_(locale_.name()) {}
+inline LanguageInfo::LanguageInfo() {
+	Set(GetCodeLocale(), GetCodeNativeName());
+}
 
-inline QLocale LanguageInfo::GetLocale() const {
-	return locale_;
+inline LanguageInfo::LanguageInfo(QLocale::Language language, QLocale::Country country, const QString& nativeName) {
+	Set(QLocale(language, country), nativeName);
+}
+
+inline LanguageInfo::LanguageInfo(const QLocale& locale, const QString& nativeName) {
+	Set(locale, nativeName);
+}
+
+inline void LanguageInfo::Set() {
+	Set(GetCodeLocale(), GetCodeNativeName());
+}
+
+inline void LanguageInfo::Set(QLocale::Language language, QLocale::Country country, const QString& nativeName) {
+	Set(QLocale(language, country), nativeName);
+}
+
+inline QString LanguageInfo::GetName() const {
+	return name_;
 }
 
 inline QString LanguageInfo::GetNativeName() const {
 	return nativeName_;
 }
 
-inline CPPDEVTK_UTIL_API bool operator==(const LanguageInfo& lhs, const LanguageInfo& rhs) {
-	return lhs.GetLocale() == rhs.GetLocale();
+inline bool LanguageInfo::operator<(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT {
+	return nativeName_ < other.nativeName_;
+}
+
+inline bool LanguageInfo::operator!=(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT {
+	return !(*this == other);
+}
+
+inline bool LanguageInfo::operator<=(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT {
+	return !(other < *this);
+}
+
+inline bool LanguageInfo::operator>(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT {
+	return other < *this;
+}
+
+inline bool LanguageInfo::operator>=(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT {
+	return !(*this < other);
+}
+
+inline QString LanguageInfo::GetCodeName() {
+	return GetCodeLocale().name();
+}
+
+inline QString LanguageInfo::GetCodeNativeName() {
+	return "English";
+}
+
+inline LanguageInfo LanguageInfo::GetCodeLanguageInfo() {
+	return LanguageInfo(GetCodeLocale(), GetCodeNativeName());
+}
+
+inline LanguageInfo LanguageInfo::GetCLanguageInfo() {
+	return LanguageInfo(QLocale::c(), QLocale::c().name());
+}
+
+inline QLocale LanguageInfo::GetCodeLocale() {
+	return QLocale(QLocale::English, QLocale::UnitedStates);
 }
 
 
 }	// namespace util
 }	// namespace cppdevtk
+
+
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(pop)
+#endif
 
 
 #endif	// CPPDEVTK_UTIL_LANGUAGE_INFO_HPP_INCLUDED_

@@ -30,6 +30,8 @@ Application::Application(int& argc, char** argv): QApplication(argc, argv), Appl
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "application");
+	
+	SetCurrentLanguageInfo(GetDefaultLanguageInfo());
 }
 
 Application::~Application() {

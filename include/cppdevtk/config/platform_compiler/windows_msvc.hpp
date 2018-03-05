@@ -21,14 +21,16 @@
 #	error "Do not include directly; please include <cppdevtk/config/platform_compiler.hpp> instead!!!"
 #endif
 
+#ifdef RC_INVOKED
+#	error "Internal error: This file should not be included when RC_INVOKED!!!"
+#endif
+
 #if (!CPPDEVTK_PLATFORM_WINDOWS)
 #	error "This file is Windows specific!!!"
 #endif
 
-#ifndef RC_INVOKED
 #if (!CPPDEVTK_COMPILER_MSVC)
 #	error "This file is MSVC specific!!!"
-#endif
 #endif
 
 
@@ -104,15 +106,6 @@
 #			define CPPDEVTK_ENABLE_TOSTREAM_EXPL_INST 0
 #			define CPPDEVTK_ENABLE_TSSTREAM_EXPL_INST 0	// 1
 #			define CPPDEVTK_ENABLE_TFSTREAM_EXPL_INST 0	// 1
-#		elif (defined(RC_INVOKED))
-#			define CPPDEVTK_ENABLE_TMPL_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TSTRING_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TSTREAMBUF_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TIOS_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TISTREAM_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TOSTREAM_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TSSTREAM_EXPL_INST 0
-#			define CPPDEVTK_ENABLE_TFSTREAM_EXPL_INST 0
 #		endif
 #	else	// CPPDEVTK_SHARED
 #		define CPPDEVTK_ENABLE_TMPL_EXPL_INST 1
@@ -136,14 +129,10 @@
 #endif
 
 #ifdef __cplusplus
-#	ifndef RC_INVOKED
-#		ifdef _CPPUNWIND
-#			define CPPDEVTK_DETAIL_COMPILER_ENABLE_EXCEPTIONS 1
-#		else
-#			define CPPDEVTK_DETAIL_COMPILER_ENABLE_EXCEPTIONS 0
-#		endif
-#	else
+#	ifdef _CPPUNWIND
 #		define CPPDEVTK_DETAIL_COMPILER_ENABLE_EXCEPTIONS 1
+#	else
+#		define CPPDEVTK_DETAIL_COMPILER_ENABLE_EXCEPTIONS 0
 #	endif
 #else
 #	define CPPDEVTK_DETAIL_COMPILER_ENABLE_EXCEPTIONS 0

@@ -23,6 +23,7 @@
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/unused.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 
 #include <new>
 
@@ -34,8 +35,12 @@ namespace gui {
 TimedComputerManagementWidget::TimedComputerManagementWidget(QWidget* pParent): QWidget(pParent), WidgetBase(),
 		pUiTimedComputerManagementWidget_(new Ui::TimedComputerManagementWidget()) {
 	// NOTE: do not global qualify because moc will generate bad code
-	qRegisterMetaType<cppdevtk::gui::TimedComputerManagementWidget::Method>(
-				"cppdevtk::gui::TimedComputerManagementWidget::Method");
+	if (QMetaType::type("cppdevtk::gui::TimedComputerManagementWidget::Method") == QMetaType::UnknownType) {
+		if (qRegisterMetaType< ::cppdevtk::gui::TimedComputerManagementWidget::Method>(
+				"cppdevtk::gui::TimedComputerManagementWidget::Method") == QMetaType::UnknownType) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::gui::TimedComputerManagementWidget::Method");
+		}
+	}
 	
 	pUiTimedComputerManagementWidget_->setupUi(this);
 	ValidateUi();

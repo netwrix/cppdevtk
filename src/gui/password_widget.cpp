@@ -31,6 +31,7 @@
 #include <cppdevtk/base/string_utils.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/zeroize.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/util/damerau_levenshtein_distance.hpp>
 
 #include <QtCore/QtGlobal>
@@ -50,7 +51,13 @@ PasswordWidget::PasswordWidget(QWidget* pParent): QWidget(pParent), WidgetBase()
 	CPPDEVTK_ASSERT(passwordRequirements_.GetPwdMaxLen() <= 0);
 	CPPDEVTK_ASSERT(passwordRequirements_.GetHintMaxLen() <= 0);
 	
-	//qRegisterMetaType<cppdevtk::gui::PasswordWidget::Mode>("cppdevtk::gui::PasswordWidget::Mode");
+	// NOTE: do not global qualify because moc will generate bad code
+	if (QMetaType::type("cppdevtk::gui::PasswordWidget::Mode") == QMetaType::UnknownType) {
+		if (qRegisterMetaType< ::cppdevtk::gui::PasswordWidget::Mode>("cppdevtk::gui::PasswordWidget::Mode")
+				== QMetaType::UnknownType) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::gui::PasswordWidget::Mode");
+		}
+	}
 	
 	pUiPasswordWidget_->setupUi(this);
 	SetupStrings();

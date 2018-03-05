@@ -26,13 +26,13 @@
 #define CPPDEVTK_CONFIG_INFO_HPP_INCLUDED_
 
 
+/// \defgroup config_info Info
+/// \ingroup config
+
+
 #include "features.hpp"
 #include "company_info.hpp"
 #include "product_info.hpp"
-
-
-/// \defgroup config_info Info
-/// \ingroup config
 
 
 #endif	// CPPDEVTK_CONFIG_INFO_HPP_INCLUDED_

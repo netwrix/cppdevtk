@@ -25,8 +25,6 @@
 #include "widget_base.hpp"
 #include <cppdevtk/util/language_info.hpp>
 
-#include <QtCore/QLocale>
-#include <QtCore/QList>
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets/QWidget>
@@ -49,34 +47,34 @@ namespace gui {
 class CPPDEVTK_GUI_API LanguageWidget: public QWidget, public WidgetBase {
 	Q_OBJECT
 signals:
-	void CurrentIndexChanged(int index);
+	void CurrentLanguageInfoChanged(const ::cppdevtk::util::LanguageInfo& languageInfo);
 public:
 	explicit LanguageWidget(QWidget* pParent = NULL);
 	virtual ~LanguageWidget();
 	
-	void AddItem(const ::cppdevtk::util::LanguageInfo& languageInfo);
-	void AddItems(const QList< ::cppdevtk::util::LanguageInfo>& languageInfos);
-	
 	int GetCount() const;
 	
-	int GetCurrentIndex() const;
+	/// \remark For convenience returned list is sorted by native name.
+	QList< ::cppdevtk::util::LanguageInfo> GetLanguageInfos() const;
 	
-	::cppdevtk::util::LanguageInfo GetLanguageInfo(int index) const;
+	::cppdevtk::util::LanguageInfo GetCurrentLanguageInfo() const;	///< \return LanguageInfo() if no (current) item
 	
-	::cppdevtk::util::LanguageInfo GetCurrentLanguageInfo() const;
-	void SetCurrentLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
+	void AddLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
+	void AddLanguageInfos(const QList< ::cppdevtk::util::LanguageInfo>& languageInfos);
+	
+	/// \attention May not emit CurrentLanguageInfoChanged()
+	void RemoveLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
 public slots:
 	void Clear();
-	void SetCurrentIndex(int index);
-	void RemoveItem(int index);
-	void RemoveCurrentItem();
+	void SetCurrentLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
 protected:
 	virtual void changeEvent(QEvent* pEvent);
+private slots:
+	void ConvertCurrentChanged(int index);
 private:
 	Q_DISABLE_COPY(LanguageWidget)
 	
 	void ValidateUi() const;
-	void MakeConnections();
 	
 	
 	Ui::LanguageWidget* pUiLanguageWidget_;
@@ -88,19 +86,11 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline void LanguageWidget::AddItems(const QList< ::cppdevtk::util::LanguageInfo>& languageInfos) {
+inline void LanguageWidget::AddLanguageInfos(const QList< ::cppdevtk::util::LanguageInfo>& languageInfos) {
 	for (QList< ::cppdevtk::util::LanguageInfo>::ConstIterator kIter = languageInfos.constBegin();
 			kIter != languageInfos.constEnd(); ++kIter) {
-		AddItem(*kIter);
+		AddLanguageInfo(*kIter);
 	}
-}
-
-inline ::cppdevtk::util::LanguageInfo LanguageWidget::GetCurrentLanguageInfo() const {
-	return GetLanguageInfo(GetCurrentIndex());
-}
-
-inline void LanguageWidget::RemoveCurrentItem() {
-	RemoveItem(GetCurrentIndex());
 }
 
 

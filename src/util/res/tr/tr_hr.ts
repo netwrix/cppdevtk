@@ -95,7 +95,7 @@ Details: %3</source>
     <name>language_native_name</name>
     <message>
         <source>English</source>
-        <translation>Croatian</translation>
+        <translation>hrvatski jezik</translation>
     </message>
 </context>
 </TS>

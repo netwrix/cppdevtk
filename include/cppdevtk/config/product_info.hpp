@@ -27,12 +27,17 @@
 
 
 #include "features.hpp"
+#include "product_info_customization.hpp"
 #include "company_info.hpp"
 #include "compiler.hpp"
+#include "platform.hpp"
+
+#if (defined(__cplusplus) && !defined(RC_INVOKED))
+#	include <QtCore/QString>
+#endif
 
 
-/// \defgroup config_info_product_info Product Info
-/// \ingroup config_info
+/// \ingroup config_info_product_info
 /// @{
 
 /// \defgroup config_info_product_info_version Version
@@ -79,18 +84,10 @@
 /// @}	// config_info_product_info_version
 
 
-#define CPPDEVTK_SHORT_NAME "CppDevTk"
 #define CPPDEVTK_SHORT_NAME_SANITIZED QString(CPPDEVTK_SHORT_NAME).toLower().replace(' ', '_')
-#define CPPDEVTK_LONG_NAME "C++ Development Toolkit"
 #define CPPDEVTK_LONG_NAME_SANITIZED QString(CPPDEVTK_LONG_NAME).toLower().replace(' ', '_')
-#define CPPDEVTK_DESCRIPTION "CppDevTk is a collection of libraries for C++ development."
 #define CPPDEVTK_COPYRIGHT CPPDEVTK_COMPANY_COPYRIGHT
 #define CPPDEVTK_TRADEMARKS CPPDEVTK_COMPANY_TRADEMARKS
-#define CPPDEVTK_HOMEPAGE "https://github.com/cososys/cppdevtk"
-#define CPPDEVTK_ONLINE_SUPPORT ""
-#define CPPDEVTK_ONLINE_REGISTRATION ""
-#define CPPDEVTK_ESTORE ""
-
 
 /// @}	// config_info_product_info
 

@@ -21,11 +21,11 @@ Message: %2</source>
     <name>CustomWizard</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Avbryt</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hjälp</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -33,7 +33,7 @@ Message: %2</source>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nästa</translation>
     </message>
 </context>
 <context>
@@ -86,128 +86,128 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ditt lösenord</translation>
     </message>
 </context>
 <context>
     <name>QtCopyDialog</name>
     <message>
         <source>24% of 100MB (Copying...)</source>
-        <translation type="unfinished"></translation>
+        <translation>24% av 100MB (Kopierar...)</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Målmapp</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Källa</translation>
     </message>
     <message>
         <source>10 MB of 100 MB completed</source>
-        <translation type="unfinished"></translation>
+        <translation>10 MB av 100 MB har slutförts</translation>
     </message>
     <message>
         <source>2 / 5 files</source>
-        <translation type="unfinished"></translation>
+        <translation>2 / 5 filer</translation>
     </message>
     <message>
         <source>5 MB/s (00:00:15 remaining)</source>
-        <translation type="unfinished"></translation>
+        <translation>5 MB/s (00:00:15 återstår)</translation>
     </message>
     <message>
         <source>0 / 1 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>0 / 1 mappar</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
     <name>QtOtherDialog</name>
     <message>
         <source>File Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen finns redan</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Källa</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Målmapp</translation>
     </message>
     <message>
         <source>Destination file already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Målfilen finns redan.</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök igen</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över alla</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
     <name>QtOverwriteDialog</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieringsvarning</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Målmapp</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Källa</translation>
     </message>
     <message>
         <source>[sourceFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[källFil]</translation>
     </message>
     <message>
         <source>[destinationFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[målFil]</translation>
     </message>
     <message>
         <source>Destination already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mål finns redan.</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över alla</translation>
     </message>
     <message>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersätt</translation>
     </message>
     <message>
         <source>Overwrite All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersätt alla</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -222,19 +222,19 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Computer Protection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Datorskydd:</translation>
     </message>
     <message>
         <source>&amp;None</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Inget</translation>
     </message>
     <message>
         <source>&amp;Lock Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lås dator</translation>
     </message>
     <message>
         <source>Logout &amp;User</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Logga ut användare</translation>
     </message>
     <message>
         <source>Shutdown &amp;Computer</source>
@@ -245,22 +245,22 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::CapsLockWidget</name>
     <message>
         <source>Caps Lock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skiftlås:</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>AV</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>AV</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::CustomWizard</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <source>Failed to open URL in default web browser</source>
@@ -286,7 +286,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::EulaWidget</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <source>Failed to open EULA in default viewer!</source>
@@ -301,10 +301,17 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Språk</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordsledtråd:</translation>
     </message>
 </context>
 <context>
@@ -454,7 +461,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::ProgressDialog</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Avbryt</translation>
     </message>
     <message>
         <source>%1 of %2: %3</source>
@@ -465,114 +472,121 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::QtCopyDialog</name>
     <message>
         <source>%1 B</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 B</translation>
     </message>
     <message>
         <source>%1 kB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kB</translation>
     </message>
     <message>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 GB</translation>
     </message>
     <message>
         <source>100% of %1 (Done)</source>
-        <translation type="unfinished"></translation>
+        <translation>100% av %1 (Klar)</translation>
     </message>
     <message>
         <source>%1 / %2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 filer</translation>
     </message>
     <message>
         <source>%1 / %2 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 mappar</translation>
     </message>
     <message>
         <source>%1 of %2 completed</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 of %2 har slutförts</translation>
     </message>
     <message>
         <source>Copying...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopierar...</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Klar</translation>
     </message>
     <message>
         <source>%1% of %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1% av %2 (%3)</translation>
     </message>
     <message>
         <source>0 B</source>
-        <translation type="unfinished"></translation>
+        <translation>0 B</translation>
     </message>
     <message>
         <source>%1/s ( %2 remaining )</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/s ( %2 återstår)</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::QtCopyDialogPrivate</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieringsvarning</translation>
     </message>
     <message>
         <source>Source doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Källa finns inte.</translation>
     </message>
     <message>
         <source>Source file is a directory. Omitting source directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Källfilen är en mapp. Hoppar över källmapp.</translation>
     </message>
     <message>
         <source>Source directory is a file. Omitting source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Källmappen är en fil. Hoppar över källfil.</translation>
     </message>
     <message>
         <source>Path to destination does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökväg till platsen finns inte.</translation>
     </message>
     <message>
         <source>Cannot create destination directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte skapa målmapp.</translation>
     </message>
     <message>
         <source>Cannot open source file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte öppna källfil. Kontrollera rättigheter.</translation>
     </message>
     <message>
         <source>Cannot open destination file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte skapa målfil. Kontrollera rättigheter.</translation>
     </message>
     <message>
         <source>Force: Cannot remove destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Forcera: Kan inte radera målfil.</translation>
     </message>
     <message>
         <source>Cannot create symbolic link targeting to source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte skapa symbolisk länk mål till källa.</translation>
     </message>
     <message>
         <source>Cannot read source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte läsa källfilen.</translation>
     </message>
     <message>
         <source>Cannot write destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte skapa målfil.</translation>
     </message>
     <message>
         <source>Cannot remove source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte ta bort källa.</translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Felkod: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Svenska</translation>
     </message>
 </context>
 </TS>

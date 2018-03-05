@@ -30,6 +30,7 @@ SUBDIRS +=	\
 HEADERS +=	\
 	architecture.hpp	\
 	company_info.hpp	\
+	company_info_customization.hpp	\
 	compiler.hpp	\
 	config.hpp	\
 	features.hpp	\
@@ -37,6 +38,7 @@ HEADERS +=	\
 	platform.hpp	\
 	platform_compiler.hpp	\
 	product_info.hpp	\
+	product_info_customization.hpp	\
 	third_party.hpp
 
 

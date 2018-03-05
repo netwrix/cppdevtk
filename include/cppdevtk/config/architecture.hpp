@@ -17,11 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_CONFIG_ARCHITECTURE_HPP_INCLUDED_
 #define CPPDEVTK_CONFIG_ARCHITECTURE_HPP_INCLUDED_
 

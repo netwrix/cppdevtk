@@ -253,7 +253,7 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>KAPALI</translation>
     </message>
 </context>
 <context>
@@ -301,10 +301,17 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Þifre Ýpucu:</translation>
     </message>
 </context>
 <context>
@@ -573,6 +580,13 @@ You must accept the terms of this agreement before continuing.</source>
     <message>
         <source>Error code: %1</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Türkçe</translation>
     </message>
 </context>
 </TS>

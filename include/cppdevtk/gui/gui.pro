@@ -34,10 +34,12 @@ HEADERS += \
 	disk_space_widget.hpp \
 	eula_widget.hpp \
 	info.hpp \
+	info_customization.hpp	\
 	init_resources.hpp \
 	invisible_widget.hpp \
 	is_caps_lock_on.hpp \
 	k_squeezed_text_label.hpp \
+	language_menu.hpp	\
 	language_widget.hpp \
 	login_widget.hpp \
 	message_box.hpp \

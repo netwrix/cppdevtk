@@ -95,7 +95,7 @@ Details: %3</source>
     <name>language_native_name</name>
     <message>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>한국어</translation>
     </message>
 </context>
 </TS>

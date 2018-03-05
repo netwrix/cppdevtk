@@ -15,5 +15,6 @@ lrelease-qt5 ./../test/test_caps_lock_widget/test_caps_lock_widget.pro
 lrelease-qt5 ./../test/test_config/test_config.pro
 lrelease-qt5 ./../test/test_disk_space_widget/test_disk_space_widget.pro
 lrelease-qt5 ./../test/test_invisible_widget/test_invisible_widget.pro
+lrelease-qt5 ./../test/test_localization/test_localization.pro
 lrelease-qt5 ./../test/test_slot_throw/test_slot_throw.pro
 lrelease-qt5 ./../test/test_util/test_util.pro

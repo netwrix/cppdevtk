@@ -95,7 +95,7 @@ Details: %3</source>
     <name>language_native_name</name>
     <message>
         <source>English</source>
-        <translation>Czech</translation>
+        <translation>čeština</translation>
     </message>
 </context>
 </TS>

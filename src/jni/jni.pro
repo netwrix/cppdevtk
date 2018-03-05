@@ -170,6 +170,7 @@ HEADERS += \
 	../../include/cppdevtk/jni/exceptions.hpp	\
 	../../include/cppdevtk/jni/exceptions_support.hpp	\
 	../../include/cppdevtk/jni/info.hpp \
+	../../include/cppdevtk/jni/info_customization.hpp	\
 	../../include/cppdevtk/jni/jni_loader.hpp	\
 	../../include/cppdevtk/jni/string_conv.hpp \
 	../../include/cppdevtk/jni/tstring_conv.hpp

@@ -121,6 +121,7 @@ win32 {
 
 
 HEADERS += info.hpp \
+	info_customization.hpp	\
     init_resources.hpp \
     config.hpp	\
 	semaphores.hpp	\

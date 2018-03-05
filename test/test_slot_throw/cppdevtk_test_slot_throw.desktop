@@ -2,7 +2,7 @@
 Type=Application
 Name=Test Slot Throw
 GenericName=CppDevTk test application
-Comment=Test CppDevTk Slot Throw
+Comment=CppDevTk Test Slot Throw
 Exec=/opt/cososys/bin/cppdevtk_test_slot_throw
 Icon=cppdevtk
 Categories=Utility;

@@ -95,7 +95,7 @@ Details: %3</source>
     <name>language_native_name</name>
     <message>
         <source>English</source>
-        <translation>Lithuanian</translation>
+        <translation>lietuvių kalba</translation>
     </message>
 </context>
 </TS>

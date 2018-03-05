@@ -19,22 +19,67 @@
 
 #include <cppdevtk/util/language_info.hpp>
 #include <cppdevtk/base/dbc.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 
 
 namespace cppdevtk {
 namespace util {
 
 
-LanguageInfo::LanguageInfo(const QLocale& locale, const QString& nativeName):
-		locale_(locale), nativeName_(nativeName) {
-	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(nativeName.isEmpty(), nativeName);
+LanguageInfo::LanguageInfo(const QString& name, const QString& nativeName) {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(name.isEmpty(), "name");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(((name.length() == 2) || ((name.length() == 5) && (name[2] == '_'))), "name: invalid format");
+	
+	Set(QLocale(name), nativeName);
+}
+
+void LanguageInfo::Set(const QString& name, const QString& nativeName) {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(name.isEmpty(), "name");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(((name.length() == 2) || ((name.length() == 5) && (name[2] == '_'))), "name: invalid format");
+	
+	Set(QLocale(name), nativeName);
 }
 
 void LanguageInfo::Set(const QLocale& locale, const QString& nativeName) {
-	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(nativeName.isEmpty(), nativeName);
+	CPPDEVTK_DBC_CHECK_ARGUMENT(((locale.name() != QLocale::c().name()) || (nativeName == QLocale::c().name())),
+			"nativeName: incorrect for C locale");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(((locale.name() != GetCodeName())
+			|| (nativeName == GetCodeNativeName())), "nativeName: incorrect for en_US locale");
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(nativeName.isEmpty(), "nativeName");
 	
-	locale_ = locale;
+	// make sure that Qt not changed
+	CPPDEVTK_ASSERT(QLocale("").name() == QLocale::c().name());
+	CPPDEVTK_ASSERT(QLocale("en").name() == GetCodeName());
+	CPPDEVTK_ASSERT(QLocale("en_US").name() == GetCodeName());
+	
+	// NOTE: do not global qualify because moc will generate bad code
+	if (QMetaType::type("cppdevtk::util::LanguageInfo") == QMetaType::UnknownType) {
+		if (qRegisterMetaType< ::cppdevtk::util::LanguageInfo>("cppdevtk::util::LanguageInfo")
+				== QMetaType::UnknownType) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::util::LanguageInfo");
+		}
+	}
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
+	if (!QMetaType::hasRegisteredComparators< ::cppdevtk::util::LanguageInfo>()) {
+		if (!QMetaType::registerComparators< ::cppdevtk::util::LanguageInfo>()) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register comparators for metatype cppdevtk::util::LanguageInfo");
+		}
+	}
+#	endif
+	
+	name_ = locale.name();
 	nativeName_ = nativeName;
+}
+
+bool LanguageInfo::operator==(const LanguageInfo& other) const CPPDEVTK_NOEXCEPT {
+	CPPDEVTK_ASSERT(((name_ == other.name_) && (nativeName_ == other.nativeName_))
+			|| ((name_ != other.name_) && (nativeName_ != other.nativeName_)));
+	
+	return name_ == other.name_;
+}
+
+QString LanguageInfo::ToString() const {
+	return QString("name: %1; nativeName: %2").arg(name_, nativeName_);
 }
 
 

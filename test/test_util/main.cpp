@@ -50,10 +50,15 @@ using namespace ::cppdevtk::util;
 
 
 int main(int argc, char* argv[]) try {
+	using ::cppdevtk::util::CoreApplication;
+	
+	
 	::cppdevtk::test_util::InitResources();
 	
-	::cppdevtk::util::CoreApplication coreApplication(argc, argv);
+	CoreApplication::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
+			(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_UTIL_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
 	
+	CoreApplication coreApplication(argc, argv);
 	
 	CPPDEVTK_MAKE_FILESYSTEM_EXCEPTION_W_EC_WA_SRC_DST(fsExc, ::cppdevtk::base::ErrorCode(),
 			"testing fs exc", "aSrcPath", "aDstPath");

@@ -21,11 +21,11 @@ Message: %2</source>
     <name>CustomWizard</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Отмена</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Справка</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -33,7 +33,7 @@ Message: %2</source>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Далее</translation>
     </message>
 </context>
 <context>
@@ -86,128 +86,128 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить пароль</translation>
     </message>
 </context>
 <context>
     <name>QtCopyDialog</name>
     <message>
         <source>24% of 100MB (Copying...)</source>
-        <translation type="unfinished"></translation>
+        <translation>24% из 100 Мб (копирование...)</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Цель</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник</translation>
     </message>
     <message>
         <source>10 MB of 100 MB completed</source>
-        <translation type="unfinished"></translation>
+        <translation>10 Мб из 100 Мб выполнено</translation>
     </message>
     <message>
         <source>2 / 5 files</source>
-        <translation type="unfinished"></translation>
+        <translation>2 / 5 файлов</translation>
     </message>
     <message>
         <source>5 MB/s (00:00:15 remaining)</source>
-        <translation type="unfinished"></translation>
+        <translation>5 Мб/с (осталось 00:00:15)</translation>
     </message>
     <message>
         <source>0 / 1 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>0 / 1 папок</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
     <name>QtOtherDialog</name>
     <message>
         <source>File Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл уже существует</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Цель</translation>
     </message>
     <message>
         <source>Destination file already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Целевой файл уже существует.</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Повтор</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропуск</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропустить все</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
     <name>QtOverwriteDialog</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Предупреждение о копировании</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Цель</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник</translation>
     </message>
     <message>
         <source>[sourceFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[исходныйФайл]</translation>
     </message>
     <message>
         <source>[destinationFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[целевойФайл]</translation>
     </message>
     <message>
         <source>Destination already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Цель уже существует.</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропуск</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропустить все</translation>
     </message>
     <message>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезаписать</translation>
     </message>
     <message>
         <source>Overwrite All</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезаписать все</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
@@ -245,22 +245,22 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::CapsLockWidget</name>
     <message>
         <source>Caps Lock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввод заглавных букв:</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>ВКЛ</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>ВЫКЛ</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::CustomWizard</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <source>Failed to open URL in default web browser</source>
@@ -286,7 +286,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::EulaWidget</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <source>Failed to open EULA in default viewer!</source>
@@ -301,10 +301,17 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Язык</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Подсказка пароля:</translation>
     </message>
 </context>
 <context>
@@ -454,7 +461,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::ProgressDialog</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Отмена</translation>
     </message>
     <message>
         <source>%1 of %2: %3</source>
@@ -465,114 +472,121 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::QtCopyDialog</name>
     <message>
         <source>%1 B</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 байт</translation>
     </message>
     <message>
         <source>%1 kB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 кб</translation>
     </message>
     <message>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Мб</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Гб</translation>
     </message>
     <message>
         <source>100% of %1 (Done)</source>
-        <translation type="unfinished"></translation>
+        <translation>100% из %1 (готово)</translation>
     </message>
     <message>
         <source>%1 / %2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 файлов</translation>
     </message>
     <message>
         <source>%1 / %2 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 папок</translation>
     </message>
     <message>
         <source>%1 of %2 completed</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 из %2 выполнено</translation>
     </message>
     <message>
         <source>Copying...</source>
-        <translation type="unfinished"></translation>
+        <translation>Копирование...</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Готово</translation>
     </message>
     <message>
         <source>%1% of %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1% из %2 (%3)</translation>
     </message>
     <message>
         <source>0 B</source>
-        <translation type="unfinished"></translation>
+        <translation>0 байт</translation>
     </message>
     <message>
         <source>%1/s ( %2 remaining )</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/с (осталось %2)</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::QtCopyDialogPrivate</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Предупреждение о копировании</translation>
     </message>
     <message>
         <source>Source doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Источник не существует.</translation>
     </message>
     <message>
         <source>Source file is a directory. Omitting source directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Исходный файл является папкой. Пропуск исходной папки.</translation>
     </message>
     <message>
         <source>Source directory is a file. Omitting source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Исходная папка является файлом. Пропуск исходного файла.</translation>
     </message>
     <message>
         <source>Path to destination does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Целевой путь не существует.</translation>
     </message>
     <message>
         <source>Cannot create destination directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно создать целевую папку.</translation>
     </message>
     <message>
         <source>Cannot open source file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть исходный файл. Проверьте разрешения.</translation>
     </message>
     <message>
         <source>Cannot open destination file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть целевой файл. Проверьте разрешения.</translation>
     </message>
     <message>
         <source>Force: Cannot remove destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Принудительно: Невозможно открыть целевой файл.</translation>
     </message>
     <message>
         <source>Cannot create symbolic link targeting to source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно создать целевую символьную ссылку на источник.</translation>
     </message>
     <message>
         <source>Cannot read source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно считать исходный файл.</translation>
     </message>
     <message>
         <source>Cannot write destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно записать целевой файл.</translation>
     </message>
     <message>
         <source>Cannot remove source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно удалить источник.</translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Код ошибки: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Русский</translation>
     </message>
 </context>
 </TS>

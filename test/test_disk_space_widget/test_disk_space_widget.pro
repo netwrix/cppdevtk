@@ -234,6 +234,7 @@ SOURCES += main.cpp	\
 
 HEADERS += \
 	info.hpp \
+	info_customization.hpp	\
     config.hpp \
     init_resources.hpp \
     widget.hpp

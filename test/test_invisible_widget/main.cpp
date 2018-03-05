@@ -58,14 +58,10 @@ int main(int argc, char* argv[]) try {
 	::cppdevtk::test_invisible_widget::InitResources();
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
-	
 	Application::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
-			CPPDEVTK_SHORT_NAME_SANITIZED, CPPDEVTK_VERSION_STRING);
-	Application::SetQmInfo(":/cppdevtk/test_invisible_widget/res/tr", "tr_");
+			(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_INVISIBLE_WIDGET_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
 	
 	Application application(argc, argv);
-	application.SetPreferSystemLocale(true);
-	application.SetCurrentLanguageInfo(application.GetCurrentLanguageInfo());
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_invisible_widget/res/ico/application.ico"));
 	
@@ -81,16 +77,16 @@ int main(int argc, char* argv[]) try {
 	catch (const exception& exc) {
 		CPPDEVTK_LOG_ERROR("caught ::std::exception: " << Exception::GetDetailedInfo(exc));
 		MessageBox::Critical(application.GetDefaultWindow(),
-				Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_LONG_NAME_TR),
-				Application::translate("main", "Caught exception: %1").arg(exc.what()), exc);
+				CPPDEVTK_TEST_INVISIBLE_WIDGET_NAME,
+				QString("Caught exception: %1").arg(exc.what()), exc);
 		
 		return EXIT_FAILURE;
 	}
 	catch (...) {
 		CPPDEVTK_LOG_ERROR("caught unknown exception!");
 		MessageBox::Critical(application.GetDefaultWindow(),
-				Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_LONG_NAME_TR),
-				Application::translate("main", "Caught unknown exception!"));
+				CPPDEVTK_TEST_INVISIBLE_WIDGET_NAME,
+				QString("Caught unknown exception!"));
 		
 		return EXIT_FAILURE;
 	}

@@ -37,6 +37,7 @@ HEADERS += \
 	filesystem_utils.hpp \
 	get_user_name.hpp \
 	info.hpp \
+	info_customization.hpp	\
 	init_resources.hpp \
 	language_info.hpp \
 	no_such_file_or_directory_exception.hpp	\

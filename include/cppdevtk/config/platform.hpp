@@ -17,11 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_CONFIG_PLATFORM_HPP_INCLUDED_
 #define CPPDEVTK_CONFIG_PLATFORM_HPP_INCLUDED_
 
@@ -232,8 +227,6 @@
 #undef CPPDEVTK_CHECK_INTERRUPT_REL_TIME
 
 
-#ifndef RC_INVOKED	// for RC4011: identifier truncated to 'identifier'...
-
 #if (CPPDEVTK_PLATFORM_UNIX)
 #	include "platform/unix.hpp"
 #	if (CPPDEVTK_PLATFORM_LINUX)
@@ -305,9 +298,6 @@
 #ifndef CPPDEVTK_CHECK_INTERRUPT_REL_TIME
 #	error "Please define CPPDEVTK_CHECK_INTERRUPT_REL_TIME properly for current platform!!!"
 #endif
-
-
-#endif	// RC_INVOKED
 
 
 /// \endcond

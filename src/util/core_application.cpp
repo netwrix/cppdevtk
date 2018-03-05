@@ -28,6 +28,8 @@ namespace util {
 
 CoreApplication::CoreApplication(int& argc, char** argv): QCoreApplication(argc, argv), CoreApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
+	
+	SetCurrentLanguageInfo(GetDefaultLanguageInfo());
 }
 
 CoreApplication::~CoreApplication() {

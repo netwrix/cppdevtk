@@ -102,7 +102,7 @@ Szczegóły: %3</translation>
     <name>language_native_name</name>
     <message>
         <source>English</source>
-        <translation>Polski</translation>
+        <translation>Polszczyzna</translation>
     </message>
 </context>
 </TS>

@@ -27,6 +27,7 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QList>
+#include <QtCore/QStringList>
 #include <QtCore/QLocale>
 #include <QtCore/QTranslator>
 
@@ -69,28 +70,45 @@ public:
 	CoreApplicationBase();
 	virtual ~CoreApplicationBase() = 0;
 	
+	void SetNotifyThrowAction(NotifyThrowAction notifyThrowAction);		///< Default is \c ntaRethrow
 	NotifyThrowAction GetNotifyThrowAction() const;
 	
-	void SetNotifyThrowAction(NotifyThrowAction notifyThrowAction);
+	/// \name Localization support
+	///@{
 	
+	/// Default is \c false (code locale) so that an app that does not need localization has nothing to do
+	void SetPreferSystemLocale(bool preferSystemLocale);
+	bool IsSystemLocalePreferred() const;
+	
+	/// If IsSystemLocalePreferred() then system, English (United States) otherwise
+	/// \pre !IsSystemLocalePreferred() or SetQmInfo()
+	LanguageInfo GetDefaultLanguageInfo() const;
+	
+	void SetCurrentLanguageInfo(const LanguageInfo& languageInfo);
+	LanguageInfo GetCurrentLanguageInfo() const;
+	
+	static void SetQmInfo(const QString& qmPath, const QString& qmNamePrefix);
+	static void GetQmInfo(QString& qmPath, QString& qmNamePrefix);
+	
+	/// \pre SetQmInfo()
+	/// \remark For convenience returned list is sorted by native name.
+	static QList<LanguageInfo> GetSupportedLanguageInfos();
+	
+	///@}
 	
 	static void SetCompanyInfo(const QString& companyName, const QString& companyHomepage);
 	static void SetProductInfo(const QString& productName, const QString& productVersion);
 	static void SetInfo(const QString& companyName, const QString& companyHomepage,
 			const QString& productName, const QString& productVersion);
 	
-	void SetPreferSystemLocale(bool preferSystemLocale);
-	bool IsSystemLocalePreferred() const;
-	LanguageInfo GetDefaultLanguageInfo() const;
-	LanguageInfo GetCurrentLanguageInfo() const;
-	void SetCurrentLanguageInfo(const LanguageInfo& languageInfo);
-	static void SetQmInfo(const QString& qmPath, const QString& qmNamePrefix);
-	static void GetQmInfo(QString& qmPath, QString& qmNamePrefix);
-	static QList<LanguageInfo> GetSupportedLanguageInfos();	///< \pre QTranslator.translate("language_native_name", "English")
-	
 	/// Same as QCoreApplication::applicationDirPath() but on Unix dereference symlinks
 	/// and on Mac OS X does not include bundle
 	static QString GetAppDirPath();
+	
+	/// For single instance apps
+	/// \pre !organizationName().isEmpty()
+	/// \pre !applicationName().isEmpty()
+	static QString GetId();
 protected:
 	virtual bool notify(QObject* pReceiver, QEvent* pEvent);
 	virtual bool NotifyThrowHandler(const ::std::exception* pExc = NULL);
@@ -109,35 +127,18 @@ private:
 	
 	static QString qmPath_;
 	static QString qmNamePrefix_;
-	static QTranslator helperTranslator_;
 };
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline CoreApplicationBase::NotifyThrowAction CoreApplicationBase::GetNotifyThrowAction() const {
-	return notifyThrowAction_;
-}
-
 inline void CoreApplicationBase::SetNotifyThrowAction(NotifyThrowAction notifyThrowAction) {
 	notifyThrowAction_ = notifyThrowAction;
 }
 
-inline void CoreApplicationBase::SetCompanyInfo(const QString& companyName, const QString& companyHomepage) {
-	QCoreApplication::setOrganizationName(companyName);
-	QCoreApplication::setOrganizationDomain(companyHomepage);
-}
-
-inline void CoreApplicationBase::SetProductInfo(const QString& productName, const QString& productVersion) {
-	QCoreApplication::setApplicationName(productName);
-	QCoreApplication::setApplicationVersion(productVersion);
-}
-
-inline void CoreApplicationBase::SetInfo(const QString& companyName, const QString& companyHomepage,
-		const QString& productName, const QString& productVersion) {
-	SetCompanyInfo(companyName, companyHomepage);
-	SetProductInfo(productName, productVersion);
+inline CoreApplicationBase::NotifyThrowAction CoreApplicationBase::GetNotifyThrowAction() const {
+	return notifyThrowAction_;
 }
 
 inline void CoreApplicationBase::SetPreferSystemLocale(bool preferSystemLocale) {
@@ -155,6 +156,12 @@ inline LanguageInfo CoreApplicationBase::GetCurrentLanguageInfo() const {
 inline void CoreApplicationBase::GetQmInfo(QString& qmPath, QString& qmNamePrefix) {
 	qmPath = qmPath_;
 	qmNamePrefix = qmNamePrefix_;
+}
+
+inline void CoreApplicationBase::SetInfo(const QString& companyName, const QString& companyHomepage,
+		const QString& productName, const QString& productVersion) {
+	SetCompanyInfo(companyName, companyHomepage);
+	SetProductInfo(productName, productVersion);
 }
 
 

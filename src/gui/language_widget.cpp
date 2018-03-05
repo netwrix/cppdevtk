@@ -25,6 +25,7 @@
 #include <cppdevtk/base/logger.hpp>
 
 #include <QtCore/QVariant>
+#include <QtCore/QtAlgorithms>
 
 #include <new>
 
@@ -33,56 +34,93 @@ namespace cppdevtk {
 namespace gui {
 
 
+using ::cppdevtk::util::LanguageInfo;
+
+
 LanguageWidget::LanguageWidget(QWidget* pParent): QWidget(pParent), WidgetBase(),
 		pUiLanguageWidget_(new Ui::LanguageWidget()) {
+#	ifndef NDEBUG
+	LanguageInfo languageInfo;
+	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != QMetaType::UnknownType);
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
+	CPPDEVTK_ASSERT(QMetaType::hasRegisteredComparators< ::cppdevtk::util::LanguageInfo>());
+#	endif
+#	endif
+	
 	pUiLanguageWidget_->setupUi(this);
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "language_widget");
 	ValidateUi();
 	
-	MakeConnections();
+	CPPDEVTK_VERIFY(connect(pUiLanguageWidget_->pComboBoxLanguage_, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(ConvertCurrentChanged(int))));
 }
 
 LanguageWidget::~LanguageWidget() {
 	delete pUiLanguageWidget_;
 }
 
-void LanguageWidget::AddItem(const ::cppdevtk::util::LanguageInfo& languageInfo) {
-	pUiLanguageWidget_->pComboBoxLanguage_->addItem(languageInfo.GetNativeName(), languageInfo.GetLocale());
-}
-
 int LanguageWidget::GetCount() const {
 	return pUiLanguageWidget_->pComboBoxLanguage_->count();
 }
 
-int LanguageWidget::GetCurrentIndex() const {
-	return pUiLanguageWidget_->pComboBoxLanguage_->currentIndex();
+QList< ::cppdevtk::util::LanguageInfo> LanguageWidget::GetLanguageInfos() const {
+	QList<LanguageInfo> languageInfos;
+	
+	const int kCount = GetCount();
+	for (int idx = 0; idx < kCount; ++idx) {
+		languageInfos.append(pUiLanguageWidget_->pComboBoxLanguage_->itemData(idx).value<LanguageInfo>());
+	}
+	
+	qSort(languageInfos.begin(), languageInfos.end());
+	
+	return languageInfos;
 }
 
-::cppdevtk::util::LanguageInfo LanguageWidget::GetLanguageInfo(int index) const {
-	CPPDEVTK_DBC_CHECK_IN_RANGE(((0 <= index) && (index < GetCount())), "index");
-	
-	const QString kNativeName = pUiLanguageWidget_->pComboBoxLanguage_->itemText(index);
-	CPPDEVTK_ASSERT(!kNativeName.isEmpty());
-	QVariant kLocaleVariant = pUiLanguageWidget_->pComboBoxLanguage_->itemData(index);
-	CPPDEVTK_ASSERT(kLocaleVariant.type() == QVariant::Locale);
-	
-	return ::cppdevtk::util::LanguageInfo(kLocaleVariant.toLocale(), kNativeName);
+::cppdevtk::util::LanguageInfo LanguageWidget::GetCurrentLanguageInfo() const {
+	const int kCurrentIndex = pUiLanguageWidget_->pComboBoxLanguage_->currentIndex();
+	return (kCurrentIndex != -1) ? pUiLanguageWidget_->pComboBoxLanguage_->itemData(kCurrentIndex).value<LanguageInfo>()
+			: LanguageInfo::GetCLanguageInfo();
 }
 
-void LanguageWidget::SetCurrentLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo) {
-	SetCurrentIndex(pUiLanguageWidget_->pComboBoxLanguage_->findText(languageInfo.GetNativeName()));
+void LanguageWidget::AddLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT((languageInfo != LanguageInfo::GetCLanguageInfo()), "languageInfo: C");
+	
+	pUiLanguageWidget_->pComboBoxLanguage_->addItem(languageInfo.GetNativeName(), QVariant::fromValue(languageInfo));
+}
+
+void LanguageWidget::RemoveLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT((languageInfo != LanguageInfo::GetCLanguageInfo()), "languageInfo: C");
+	
+	// findData() use QVariant::operator==() that for custom types registered with qRegisterMetaType() require QMetaType::registerComparators()
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
+	const int kIdx = pUiLanguageWidget_->pComboBoxLanguage_->findData(QVariant::fromValue(languageInfo));
+#	else
+	const int kIdx = pUiLanguageWidget_->pComboBoxLanguage_->findText(languageInfo.GetNativeName());
+#	endif
+	if (kIdx != -1) {
+		pUiLanguageWidget_->pComboBoxLanguage_->removeItem(kIdx);
+	}
 }
 
 void LanguageWidget::Clear() {
 	pUiLanguageWidget_->pComboBoxLanguage_->clear();
 }
 
-void LanguageWidget::SetCurrentIndex(int index) {
-	pUiLanguageWidget_->pComboBoxLanguage_->setCurrentIndex(index);
-}
-
-void LanguageWidget::RemoveItem(int index) {
-	pUiLanguageWidget_->pComboBoxLanguage_->removeItem(index);
+void LanguageWidget::SetCurrentLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo) {
+	if (languageInfo == LanguageInfo::GetCLanguageInfo()) {
+		pUiLanguageWidget_->pComboBoxLanguage_->setCurrentIndex(-1);
+		return;
+	}
+	
+	// findData() use QVariant::operator==() that for custom types registered with qRegisterMetaType() require QMetaType::registerComparators()
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
+	const int kIdx = pUiLanguageWidget_->pComboBoxLanguage_->findData(QVariant::fromValue(languageInfo));
+#	else
+	const int kIdx = pUiLanguageWidget_->pComboBoxLanguage_->findText(languageInfo.GetNativeName());
+#	endif
+	if (kIdx != -1) {
+		pUiLanguageWidget_->pComboBoxLanguage_->setCurrentIndex(kIdx);
+	}
 }
 
 void LanguageWidget::changeEvent(QEvent* pEvent) {
@@ -99,15 +137,21 @@ void LanguageWidget::changeEvent(QEvent* pEvent) {
 	}
 }
 
+void LanguageWidget::ConvertCurrentChanged(int index) {
+	if (index != -1) {
+		emit CurrentLanguageInfoChanged(pUiLanguageWidget_->pComboBoxLanguage_->itemData(index).value<LanguageInfo>());
+	}
+	else {
+		emit CurrentLanguageInfoChanged(LanguageInfo::GetCLanguageInfo());
+	}
+}
+
 void LanguageWidget::ValidateUi() const {
+	CPPDEVTK_ASSERT(!pUiLanguageWidget_->pComboBoxLanguage_->isEditable());
+	CPPDEVTK_ASSERT(!pUiLanguageWidget_->pComboBoxLanguage_->duplicatesEnabled());
 	CPPDEVTK_ASSERT(pUiLanguageWidget_->pComboBoxLanguage_->insertPolicy() == QComboBox::InsertAlphabetically);
 	
 	CPPDEVTK_ASSERT(pUiLanguageWidget_->pGridLayout_->contentsMargins() == QMargins(0, 0, 0, 0));	
-}
-
-void LanguageWidget::MakeConnections() {
-	CPPDEVTK_VERIFY(connect(pUiLanguageWidget_->pComboBoxLanguage_, SIGNAL(currentIndexChanged(int)),
-			this, SIGNAL(CurrentIndexChanged(int))));
 }
 
 

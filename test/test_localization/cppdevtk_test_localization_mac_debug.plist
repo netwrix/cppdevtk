@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>cppdevtk_test_localization_debug</string>
+	<key>CFBundleIconFile</key>
+	<string>application.icns</string>
+	<key>CFBundleName</key>
+	<string>cppdevtk_test_localization_debug</string>
+	<key>CFBundleDisplayName</key>
+	<string>CppDevTk Test Localization Debug</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.9</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.9</string>
+	<key>CFBundleGetInfoString</key>
+	<string>CppDevTk test application.</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.cososys.cppdevtk.cppdevtk_test_localization_debug</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>	
+	<key>CFBundleSignature</key>
+	<string>????</string>
+</dict>
+</plist>

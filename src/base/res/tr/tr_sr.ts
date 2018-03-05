@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="sr_CS" sourcelanguage="en_US">
 <context>
+    <name>cppdevtk_helper</name>
+    <message>
+        <source>no_need_to_translate</source>
+        <translation>no_need_to_translate</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk_info</name>
     <message>
         <source>CoSoSys</source>

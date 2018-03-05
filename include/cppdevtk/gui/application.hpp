@@ -41,7 +41,7 @@ class CPPDEVTK_GUI_API Application: public QApplication, public ApplicationBase 
 	
 	Q_OBJECT
 public:
-	Application(int& argc, char** argv);
+	Application(int& argc, char** argv);	///< \pre !IsSystemLocalePreferred() or SetQmInfo()
 	virtual ~Application();
 public slots:
 	/// \note We can not use ::cppdevtk::util::CoreApplicationBase::NotifyThrowAction here because enum must

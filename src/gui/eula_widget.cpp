@@ -113,7 +113,7 @@ void EulaWidget::Refresh() {
 	CPPDEVTK_ASSERT(dynamic_cast<ApplicationBase*>(qApp) != NULL);
 	CPPDEVTK_ASSERT(util::IsValidPath(fileNamePrefix_));
 	
-	const QLocale kLocale = dynamic_cast<ApplicationBase*>(qApp)->GetCurrentLanguageInfo().GetLocale();
+	const QLocale kLocale(dynamic_cast<ApplicationBase*>(qApp)->GetCurrentLanguageInfo().GetName());
 	const QString kLocalizedFileName = util::GetLocalizedFileName(fileNamePrefix_, fileExt_, kLocale);
 	if (kLocalizedFileName.isEmpty()) {
 		CPPDEVTK_LOG_ERROR("failed to get localizedFileName for fileNamePrefix: " << fileNamePrefix_

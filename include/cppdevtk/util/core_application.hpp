@@ -36,7 +36,7 @@ class CPPDEVTK_UTIL_API CoreApplication: public QCoreApplication, public CoreApp
 	
 	Q_OBJECT
 public:	
-	CoreApplication(int& argc, char** argv);
+	CoreApplication(int& argc, char** argv);	///< \pre !IsSystemLocalePreferred() or SetQmInfo()
 	virtual ~CoreApplication();
 public slots:
 	/// \note We can not use ::cppdevtk::util::CoreApplicationBase::NotifyThrowAction here because enum must

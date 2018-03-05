@@ -21,11 +21,13 @@ Message: %2</source>
     <name>CustomWizard</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Annulla
+</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aiuto
+</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -33,7 +35,8 @@ Message: %2</source>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Avanti
+</translation>
     </message>
 </context>
 <context>
@@ -86,128 +89,128 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta password</translation>
     </message>
 </context>
 <context>
     <name>QtCopyDialog</name>
     <message>
         <source>24% of 100MB (Copying...)</source>
-        <translation type="unfinished"></translation>
+        <translation>24% di 100 MB (copia…)</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinazione</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorgente</translation>
     </message>
     <message>
         <source>10 MB of 100 MB completed</source>
-        <translation type="unfinished"></translation>
+        <translation>10 MB di 100 MB completati</translation>
     </message>
     <message>
         <source>2 / 5 files</source>
-        <translation type="unfinished"></translation>
+        <translation>2 / 5 file</translation>
     </message>
     <message>
         <source>5 MB/s (00:00:15 remaining)</source>
-        <translation type="unfinished"></translation>
+        <translation>5 MB/s (tempo residuo: 00:00:15)</translation>
     </message>
     <message>
         <source>0 / 1 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>0 / 1 dir</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiudi</translation>
     </message>
 </context>
 <context>
     <name>QtOtherDialog</name>
     <message>
         <source>File Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Il File è già Esistente</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorgente</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinazione</translation>
     </message>
     <message>
         <source>Destination file already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file di destinazione è già esistente.</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Riprova</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta Tutto</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella</translation>
     </message>
 </context>
 <context>
     <name>QtOverwriteDialog</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvertenza Copia</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinazione</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorgente</translation>
     </message>
     <message>
         <source>[sourceFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[File sorgente]</translation>
     </message>
     <message>
         <source>[destinationFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[File di destinazione]</translation>
     </message>
     <message>
         <source>Destination already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinazione già esistente.</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta Tutto</translation>
     </message>
     <message>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Sovrascrivi</translation>
     </message>
     <message>
         <source>Overwrite All</source>
-        <translation type="unfinished"></translation>
+        <translation>Sovrascrivi Tutto</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella</translation>
     </message>
 </context>
 <context>
@@ -222,19 +225,19 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Computer Protection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Protezione del computer:</translation>
     </message>
     <message>
         <source>&amp;None</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nessuna</translation>
     </message>
     <message>
         <source>&amp;Lock Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Blocca computer</translation>
     </message>
     <message>
         <source>Logout &amp;User</source>
-        <translation type="unfinished"></translation>
+        <translation>Disconnessione &amp;utente</translation>
     </message>
     <message>
         <source>Shutdown &amp;Computer</source>
@@ -245,22 +248,22 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::CapsLockWidget</name>
     <message>
         <source>Caps Lock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocco maiuscole:</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>INSERITO</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>DISINSERITO</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::CustomWizard</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <source>Failed to open URL in default web browser</source>
@@ -286,7 +289,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::EulaWidget</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <source>Failed to open EULA in default viewer!</source>
@@ -301,10 +304,17 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Lingua</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Password suggerita: </translation>
     </message>
 </context>
 <context>
@@ -454,7 +464,8 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::ProgressDialog</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Annulla
+</translation>
     </message>
     <message>
         <source>%1 of %2: %3</source>
@@ -465,114 +476,121 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::QtCopyDialog</name>
     <message>
         <source>%1 B</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 B</translation>
     </message>
     <message>
         <source>%1 kB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kB</translation>
     </message>
     <message>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 GB</translation>
     </message>
     <message>
         <source>100% of %1 (Done)</source>
-        <translation type="unfinished"></translation>
+        <translation>100% di %1 (eseguito)</translation>
     </message>
     <message>
         <source>%1 / %2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 file</translation>
     </message>
     <message>
         <source>%1 / %2 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 dir</translation>
     </message>
     <message>
         <source>%1 of %2 completed</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 di %2 completato</translation>
     </message>
     <message>
         <source>Copying...</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia…</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Completato</translation>
     </message>
     <message>
         <source>%1% of %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 di %2 (%3)</translation>
     </message>
     <message>
         <source>0 B</source>
-        <translation type="unfinished"></translation>
+        <translation>0 B</translation>
     </message>
     <message>
         <source>%1/s ( %2 remaining )</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/s (residuo %2)</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::QtCopyDialogPrivate</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvertenza Copia</translation>
     </message>
     <message>
         <source>Source doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorgente inesistente.</translation>
     </message>
     <message>
         <source>Source file is a directory. Omitting source directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file sorgente è una directory. Tralascio directory sorgente.</translation>
     </message>
     <message>
         <source>Source directory is a file. Omitting source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>La directory sorgente è un file. Tralascio file sorgente.</translation>
     </message>
     <message>
         <source>Path to destination does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il percorso verso la destinazione è inesistente.</translation>
     </message>
     <message>
         <source>Cannot create destination directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile creare la directory di destinazione.</translation>
     </message>
     <message>
         <source>Cannot open source file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile aprire il file sorgente. Verificare le autorizzazioni.</translation>
     </message>
     <message>
         <source>Cannot open destination file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile aprire il file di destinazione. Verificare le autorizzazioni.</translation>
     </message>
     <message>
         <source>Force: Cannot remove destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Forzatura: Impossibile rimuovere il file di destinazione.</translation>
     </message>
     <message>
         <source>Cannot create symbolic link targeting to source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile creare un link simbolico verso la sorgente.</translation>
     </message>
     <message>
         <source>Cannot read source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile leggere il file sorgente.</translation>
     </message>
     <message>
         <source>Cannot write destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scrivere sul file di destinazione.</translation>
     </message>
     <message>
         <source>Cannot remove source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile rimuovere la sorgente.</translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Codice d’errore: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Italiano</translation>
     </message>
 </context>
 </TS>

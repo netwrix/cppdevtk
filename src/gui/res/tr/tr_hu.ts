@@ -21,11 +21,11 @@ Message: %2</source>
     <name>CustomWizard</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mégse</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Súgó</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -33,7 +33,7 @@ Message: %2</source>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Következő</translation>
     </message>
 </context>
 <context>
@@ -86,128 +86,128 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelszó Meghatározás</translation>
     </message>
 </context>
 <context>
     <name>QtCopyDialog</name>
     <message>
         <source>24% of 100MB (Copying...)</source>
-        <translation type="unfinished"></translation>
+        <translation>24% a 100 MB-ból (Másolás...)</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Cél</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrás</translation>
     </message>
     <message>
         <source>10 MB of 100 MB completed</source>
-        <translation type="unfinished"></translation>
+        <translation>10 MB a 100 MB-ból teljesítve</translation>
     </message>
     <message>
         <source>2 / 5 files</source>
-        <translation type="unfinished"></translation>
+        <translation>2 / 5 fájl</translation>
     </message>
     <message>
         <source>5 MB/s (00:00:15 remaining)</source>
-        <translation type="unfinished"></translation>
+        <translation>5 MB/s (00:00:15 maradt)</translation>
     </message>
     <message>
         <source>0 / 1 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>0 / 1 mappa</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégse</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezár</translation>
     </message>
 </context>
 <context>
     <name>QtOtherDialog</name>
     <message>
         <source>File Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>A Fájl Már Létezik</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrás</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Cél</translation>
     </message>
     <message>
         <source>Destination file already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>A célfájl már létezik.</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Ismétel</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Kihagy</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Kihagy Mind</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégse</translation>
     </message>
 </context>
 <context>
     <name>QtOverwriteDialog</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolási Figyelmeztető</translation>
     </message>
     <message>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Cél</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrás</translation>
     </message>
     <message>
         <source>[sourceFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[forrásFájl]</translation>
     </message>
     <message>
         <source>[destinationFile]</source>
-        <translation type="unfinished"></translation>
+        <translation>[célFájl]</translation>
     </message>
     <message>
         <source>Destination already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>A cél már létezik.</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Kihagy</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Kihagy Mind</translation>
     </message>
     <message>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír</translation>
     </message>
     <message>
         <source>Overwrite All</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír Mind</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégse</translation>
     </message>
 </context>
 <context>
@@ -245,22 +245,22 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::CapsLockWidget</name>
     <message>
         <source>Caps Lock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Caps Lock:</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>ON</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>OFF</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::CustomWizard</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <source>Failed to open URL in default web browser</source>
@@ -286,7 +286,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::EulaWidget</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <source>Failed to open EULA in default viewer!</source>
@@ -298,6 +298,13 @@ You must accept the terms of this agreement before continuing.</source>
     <message>
         <source>&amp;Copy Full Text</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Nyelv</translation>
     </message>
 </context>
 <context>
@@ -454,7 +461,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::ProgressDialog</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mégse</translation>
     </message>
     <message>
         <source>%1 of %2: %3</source>
@@ -465,114 +472,121 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::QtCopyDialog</name>
     <message>
         <source>%1 B</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 B</translation>
     </message>
     <message>
         <source>%1 kB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kB</translation>
     </message>
     <message>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 GB</translation>
     </message>
     <message>
         <source>100% of %1 (Done)</source>
-        <translation type="unfinished"></translation>
+        <translation>100% a %1 (Készen)</translation>
     </message>
     <message>
         <source>%1 / %2 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 fájl</translation>
     </message>
     <message>
         <source>%1 / %2 dirs</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 mappa</translation>
     </message>
     <message>
         <source>%1 of %2 completed</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 of %2 teljesítve</translation>
     </message>
     <message>
         <source>Copying...</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolás...</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Készen</translation>
     </message>
     <message>
         <source>%1% of %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1% a %2 (%3)</translation>
     </message>
     <message>
         <source>0 B</source>
-        <translation type="unfinished"></translation>
+        <translation>0 B</translation>
     </message>
     <message>
         <source>%1/s ( %2 remaining )</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/s ( %2 maradt )</translation>
     </message>
 </context>
 <context>
     <name>cppdevtk::gui::QtCopyDialogPrivate</name>
     <message>
         <source>Copy Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolási Figyelmeztető</translation>
     </message>
     <message>
         <source>Source doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrás nem létezik.</translation>
     </message>
     <message>
         <source>Source file is a directory. Omitting source directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrásfájl egy mappa. Forrásmappa mellőzés.</translation>
     </message>
     <message>
         <source>Source directory is a file. Omitting source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrásmappa egy fájl. Forrásfájl mellőzés.</translation>
     </message>
     <message>
         <source>Path to destination does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem létezik útvonal a célhoz.</translation>
     </message>
     <message>
         <source>Cannot create destination directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Célmappát nem sikerült létrehozni.</translation>
     </message>
     <message>
         <source>Cannot open source file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrásfájlt nem sikerült megnyitni. Kérjük ellenőrízze a jogosultságokat.</translation>
     </message>
     <message>
         <source>Cannot open destination file. Please check permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Célfájlt nem sikerült létrehozni. Kérjük ellenőrízze a jogosultságokat.</translation>
     </message>
     <message>
         <source>Force: Cannot remove destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kényszerít: A célfájlt nem lehet eltávolítani.</translation>
     </message>
     <message>
         <source>Cannot create symbolic link targeting to source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült létrehozni a forráshoz vezető szimbolikus linket.</translation>
     </message>
     <message>
         <source>Cannot read source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült elolvasni a forrásfájlt.</translation>
     </message>
     <message>
         <source>Cannot write destination file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült célfájlt írni.</translation>
     </message>
     <message>
         <source>Cannot remove source.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült eltávolítani a forrást.</translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hibakód: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Magyar</translation>
     </message>
 </context>
 </TS>

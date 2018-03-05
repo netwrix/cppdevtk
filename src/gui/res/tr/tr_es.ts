@@ -307,6 +307,13 @@ Debes aceptar las condiciones de este acuerdo antes de continuar.</translation>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>&amp;Idioma</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
@@ -579,6 +586,13 @@ Debes aceptar las condiciones de este acuerdo antes de continuar.</translation>
     <message>
         <source>Error code: %1</source>
         <translation>Código de error: %1</translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>Español</translation>
     </message>
 </context>
 </TS>

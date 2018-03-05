@@ -260,6 +260,7 @@ HEADERS += \
 	../../include/cppdevtk/util/filesystem_utils.hpp \
 	../../include/cppdevtk/util/get_user_name.hpp \
 	../../include/cppdevtk/util/info.hpp \
+	../../include/cppdevtk/util/info_customization.hpp	\
 	../../include/cppdevtk/util/init_resources.hpp \
 	../../include/cppdevtk/util/json/json-forwards.h	\
 	../../include/cppdevtk/util/json/json.h	\

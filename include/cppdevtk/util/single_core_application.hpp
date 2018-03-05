@@ -34,9 +34,13 @@ class CPPDEVTK_UTIL_API SingleCoreApplication: public QtSingleCoreApplication, p
 	friend class CoreApplicationBase;
 	
 	Q_OBJECT
-public:	
+public:
+	/// \pre !IsSystemLocalePreferred() or SetQmInfo()
+	/// \pre !organizationName().isEmpty()
+	/// \pre !applicationName().isEmpty()
+	/// \remark The application identifier will be GetId()
 	SingleCoreApplication(int& argc, char** argv);
-	SingleCoreApplication(int& argc, char** argv, const QString& id);
+	SingleCoreApplication(int& argc, char** argv, const QString& id);	///< \pre !IsSystemLocalePreferred() or SetQmInfo()
 	virtual ~SingleCoreApplication();
 public slots:
 	/// \note We can not use ::cppdevtk::util::CoreApplicationBase::NotifyThrowAction here because enum must

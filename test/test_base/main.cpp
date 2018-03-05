@@ -341,9 +341,15 @@ using ::std::exception;
 
 
 int main(int argc, char* argv[]) try {
+	using ::cppdevtk::util::CoreApplication;
+	
+	
 	::cppdevtk::test_base::InitResources();
 	
-	::cppdevtk::util::CoreApplication coreApplication(argc, argv);
+	CoreApplication::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
+			(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_BASE_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
+	
+	CoreApplication coreApplication(argc, argv);
 	
 #	if 0
 	// make sure npos works (issue with msvc >= 2010 when exporting string from dll)

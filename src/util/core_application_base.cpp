@@ -22,6 +22,7 @@
 #include <cppdevtk/util/single_core_application.hpp>
 #include <cppdevtk/util/filesystem_utils.hpp>
 #include <cppdevtk/base/exception.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/qiostream.hpp>
 #include <cppdevtk/base/dbc.hpp>
@@ -30,6 +31,7 @@
 #include <QtCore/QString>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <QtCore/QtAlgorithms>
 
 
 using ::cppdevtk::base::Exception;
@@ -42,11 +44,10 @@ namespace util {
 
 QString CoreApplicationBase::qmPath_;
 QString CoreApplicationBase::qmNamePrefix_;
-QTranslator CoreApplicationBase::helperTranslator_;
 
 
 CoreApplicationBase::CoreApplicationBase(): NonCopyable(), notifyThrowAction_(ntaRethrow),
-		isSystemLocalePreferred_(true), currentLanguageInfo_(QLocale(QLocale::English, QLocale::UnitedStates), "English"),
+		isSystemLocalePreferred_(false), currentLanguageInfo_(LanguageInfo::GetCodeLanguageInfo()),
 		qtTranslator_(), baseTranslator_(), utilTranslator_() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 }
@@ -56,36 +57,49 @@ CoreApplicationBase::~CoreApplicationBase() {
 }
 
 LanguageInfo CoreApplicationBase::GetDefaultLanguageInfo() const {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmPath_.isEmpty(), "qmPath is empty; call SetQmInfo() first");
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmNamePrefix_.isEmpty(), "qmNamePrefix_ is empty; call SetQmInfo() first");
-	
-	LanguageInfo defaultLanguageInfo(QLocale(QLocale::English, QLocale::UnitedStates), "English");
+	LanguageInfo defaultLanguageInfo(LanguageInfo::GetCodeLanguageInfo());
 	
 	if (isSystemLocalePreferred_) {
-		const QList<LanguageInfo> kSupportedLanguageInfos = GetSupportedLanguageInfos();
-		const QLocale kSystemLocale = QLocale::system();
-		for (QList<LanguageInfo>::ConstIterator kIter = kSupportedLanguageInfos.constBegin();
-				kIter != kSupportedLanguageInfos.constEnd(); ++kIter) {
-			if (kIter->GetLocale() == kSystemLocale) {
-				CPPDEVTK_LOG_INFO("system locale " << kSystemLocale.name() << " is supported");
-				defaultLanguageInfo = *kIter;
-				break;
+		bool isSystemLocaleSupported = false;
+		
+		const QString kSystemLocaleName = QLocale::system().name();
+		CPPDEVTK_LOG_INFO("kSystemLocaleName: " << kSystemLocaleName);
+		if (kSystemLocaleName == LanguageInfo::GetCodeName()) {
+			isSystemLocaleSupported = true;
+		}
+		else {
+			CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmPath_.isEmpty(), "qmPath is empty; call SetQmInfo() first");
+			CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmNamePrefix_.isEmpty(), "qmNamePrefix_ is empty; call SetQmInfo() first");
+			
+			const QList<LanguageInfo> kSupportedLanguageInfos = GetSupportedLanguageInfos();
+			for (QList<LanguageInfo>::ConstIterator kIter = kSupportedLanguageInfos.constBegin();
+					kIter != kSupportedLanguageInfos.constEnd(); ++kIter) {
+				if (kIter->GetName() == kSystemLocaleName) {
+					isSystemLocaleSupported = true;
+					defaultLanguageInfo = *kIter;
+					break;
+				}
 			}
 		}
+		
+		CPPDEVTK_LOG_INFO("isSystemLocaleSupported: " << isSystemLocaleSupported);
 	}
 	
 	return defaultLanguageInfo;
 }
 
 void CoreApplicationBase::SetCurrentLanguageInfo(const LanguageInfo& languageInfo) {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG((QCoreApplication::instance() != NULL),
-			"create app instance first");
-	CPPDEVTK_DBC_CHECK_ARGUMENT((GetSupportedLanguageInfos().contains(languageInfo)),
-			"languageInfo is not supported");
+	CPPDEVTK_DBC_CHECK_ARGUMENT((languageInfo != LanguageInfo::GetCLanguageInfo()), "languageInfo: C is not supported");
+	// check is good but it will trigger exception if qm info not set...
+	//CPPDEVTK_DBC_CHECK_ARGUMENT((GetSupportedLanguageInfos().contains(languageInfo)),
+	//		"languageInfo is not supported");
 	
 	currentLanguageInfo_ = languageInfo;
 	
-	SetupTranslators();
+	if (!SetupTranslators()) {
+		CPPDEVTK_LOG_ERROR("failed to setup translators");
+		//CPPDEVTK_ASSERT(0 && "failed to setup translators");
+	}
 }
 
 void CoreApplicationBase::SetQmInfo(const QString& qmPath, const QString& qmNamePrefix) {
@@ -100,55 +114,61 @@ QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmPath_.isEmpty(), "qmPath is empty; call SetQmInfo() first");
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmNamePrefix_.isEmpty(), "qmNamePrefix_ is empty; call SetQmInfo() first");
 	
-	const QLocale kLocaleEnUs(QLocale::English, QLocale::UnitedStates);
+	QList<LanguageInfo> supportedLanguageInfos;
 	
-	QList<LanguageInfo> languageInfos;
-	languageInfos.append(LanguageInfo(kLocaleEnUs, "English"));
+	supportedLanguageInfos.append(LanguageInfo::GetCodeLanguageInfo());
 	
 	const QList<QLocale> kSupportedLocales = GetSupportedLocales();
 	for (QList<QLocale>::ConstIterator kIter = kSupportedLocales.constBegin(); kIter != kSupportedLocales.constEnd();
 			++kIter) {
-		if (*kIter == kLocaleEnUs) {	// there is no tr_en_US.qm
+		if (kIter->name() == LanguageInfo::GetCodeName()) {	// there is no tr_en(_US).qm
 			continue;
 		}
 		
 		const QString kQmFileName = qmNamePrefix_ + kIter->name();
-		if (!helperTranslator_.load(kQmFileName, qmPath_)) {
-			CPPDEVTK_LOG_ERROR("failed to load translator for: kQmFileName: " << kQmFileName << "; qmPath_: " << qmPath_);
-			//CPPDEVTK_ASSERT(0 && "failed to load translator");
-			
-			//CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, "English")));
-			//languageInfos.append(LanguageInfo(*kIter, "English"));
-			
-			continue;
-		}
-		const QString kNativeName = helperTranslator_.translate("language_native_name", "English");
-		if (kNativeName.isEmpty()) {
-			CPPDEVTK_LOG_ERROR("failed to translate kNativeName for: kQmFileName: " << kQmFileName
-					<< "; qmPath_: " << qmPath_);
-			//CPPDEVTK_ASSERT(0 && "failed to translate kNativeName");
-			
-			//CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, "English")));
-			//languageInfos.append(LanguageInfo(*kIter, "English"));
-			
-			continue;
-		}
-		if (kNativeName == "English") {
-			CPPDEVTK_LOG_ERROR("kNativeName is not properly translated for: kQmFileName: " << kQmFileName
-					<< "; qmPath_: " << qmPath_);
-			CPPDEVTK_ASSERT(0 && "kNativeName is not properly translated");
-			
-			//CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, "English")));
-			//languageInfos.append(LanguageInfo(*kIter, "English"));
-			
-			continue;
+		QTranslator translator;
+		if (!translator.load(kQmFileName, qmPath_)) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION(QString("failed to load translator for: kQmFileName: '%1'; qmPath_: '%2'").arg(
+					kQmFileName, qmPath_));
 		}
 		
-		CPPDEVTK_ASSERT(!languageInfos.contains(LanguageInfo(*kIter, kNativeName)));
-		languageInfos.append(LanguageInfo(*kIter, kNativeName));
+		const QString kLanguageNativeName = translator.translate("language_native_name", "English");
+		if (kLanguageNativeName.isEmpty()) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION(
+					QString("failed to translate language_native_name for: kQmFileName: '%1'; qmPath_: '%2'").arg(
+					kQmFileName, qmPath_));
+		}
+		if (kLanguageNativeName == LanguageInfo::GetCodeNativeName()) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION(
+					QString("language_native_name is not translated for: kQmFileName: '%1'; qmPath_: '%2'").arg(
+					kQmFileName, qmPath_));
+		}
+		
+		CPPDEVTK_ASSERT(!supportedLanguageInfos.contains(LanguageInfo(*kIter, kLanguageNativeName)));
+		supportedLanguageInfos.append(LanguageInfo(*kIter, kLanguageNativeName));
 	}
 	
-	return languageInfos;
+	qSort(supportedLanguageInfos.begin(), supportedLanguageInfos.end());
+	
+	CPPDEVTK_LOG_INFO("supportedLanguageInfos.count(): " << supportedLanguageInfos.count());
+	
+	return supportedLanguageInfos;
+}
+
+void CoreApplicationBase::SetCompanyInfo(const QString& companyName, const QString& companyHomepage) {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(companyName.isEmpty(), "companyName");
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(companyHomepage.isEmpty(), "companyHomepage");
+	
+	QCoreApplication::setOrganizationName(companyName);
+	QCoreApplication::setOrganizationDomain(companyHomepage);
+}
+
+void CoreApplicationBase::SetProductInfo(const QString& productName, const QString& productVersion) {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productName.isEmpty(), "productName");
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productVersion.isEmpty(), "productVersion");
+	
+	QCoreApplication::setApplicationName(productName);
+	QCoreApplication::setApplicationVersion(productVersion);
 }
 
 QString CoreApplicationBase::GetAppDirPath() {
@@ -178,6 +198,15 @@ QString CoreApplicationBase::GetAppDirPath() {
 #	endif
 	
 	return appDirPath;
+}
+
+QString CoreApplicationBase::GetId() {
+	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!QCoreApplication::organizationName().isEmpty(),
+			"organizationName() is empty; call setOrganizationName() first");
+	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!QCoreApplication::applicationName().isEmpty(),
+			"applicationName() is empty; call setApplicationName() first");
+	
+	return QString("com.%1.%2").arg(QCoreApplication::organizationName(), QCoreApplication::applicationName());
 }
 
 bool CoreApplicationBase::notify(QObject* pReceiver, QEvent* pEvent) {
@@ -238,18 +267,24 @@ bool CoreApplicationBase::NotifyThrowHandler(const ::std::exception* pExc) {
 bool CoreApplicationBase::SetupTranslators() {
 	bool retCode = true;
 	
-	QCoreApplication::removeTranslator(&utilTranslator_);
-	QCoreApplication::removeTranslator(&baseTranslator_);
-	QCoreApplication::removeTranslator(&qtTranslator_);
+	if (!utilTranslator_.isEmpty()) {
+		QCoreApplication::removeTranslator(&utilTranslator_);
+	}
+	if (!baseTranslator_.isEmpty()) {
+		QCoreApplication::removeTranslator(&baseTranslator_);
+	}
+	if (!qtTranslator_.isEmpty()) {
+		QCoreApplication::removeTranslator(&qtTranslator_);
+	}
 	
-	if (GetCurrentLanguageInfo().GetLocale() == QLocale(QLocale::English, QLocale::UnitedStates)) {
+	if (currentLanguageInfo_ == LanguageInfo::GetCodeLanguageInfo()) {
 		return retCode;
 	}
 	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	if (qtTranslator_.load((QString("qtbase_") + currentLanguageInfo_.GetLocale().name()), ":/cppdevtk/util/res/tr")) {
+	if (qtTranslator_.load((QString("qtbase_") + currentLanguageInfo_.GetName()), ":/cppdevtk/util/res/tr")) {
 #	else
-	if (qtTranslator_.load((QString("qt_") + currentLanguageInfo_.GetLocale().name()), ":/cppdevtk/util/res/tr")) {
+	if (qtTranslator_.load((QString("qt_") + currentLanguageInfo_.GetName()), ":/cppdevtk/util/res/tr")) {
 #	endif
 		QCoreApplication::installTranslator(&qtTranslator_);
 	}
@@ -259,14 +294,14 @@ bool CoreApplicationBase::SetupTranslators() {
 	}
 	
 	const QString kQmNamePrefix("tr_");
-	if (baseTranslator_.load((kQmNamePrefix + currentLanguageInfo_.GetLocale().name()), ":/cppdevtk/base/res/tr")) {
+	if (baseTranslator_.load((kQmNamePrefix + currentLanguageInfo_.GetName()), ":/cppdevtk/base/res/tr")) {
 		QCoreApplication::installTranslator(&baseTranslator_);
 	}
 	else {
 		CPPDEVTK_LOG_ERROR("failed to load baseTranslator_");
 		retCode = false;
 	}
-	if (utilTranslator_.load((kQmNamePrefix + currentLanguageInfo_.GetLocale().name()), ":/cppdevtk/util/res/tr")) {
+	if (utilTranslator_.load((kQmNamePrefix + currentLanguageInfo_.GetName()), ":/cppdevtk/util/res/tr")) {
 		QCoreApplication::installTranslator(&utilTranslator_);
 	}
 	else {
@@ -279,35 +314,44 @@ bool CoreApplicationBase::SetupTranslators() {
 
 QList<QLocale> CoreApplicationBase::GetSupportedLocales() {
 	QList<QLocale> supportedLocales;
-	supportedLocales.append(QLocale(QLocale::English, QLocale::UnitedStates));
+	
+	supportedLocales.append(LanguageInfo::GetCodeName());
 	
 	CPPDEVTK_ASSERT(!qmPath_.isEmpty());
+	CPPDEVTK_LOG_DEBUG("qmPath_: " << qmPath_);
 	QDir qmDir(qmPath_);
-	CPPDEVTK_ASSERT(!qmNamePrefix_.isEmpty());
+	
 	QStringList qmNameFilters;
+	CPPDEVTK_ASSERT(!qmNamePrefix_.isEmpty());
+	CPPDEVTK_LOG_DEBUG("qmNamePrefix_: " << qmNamePrefix_);
 	qmNameFilters.append(qmNamePrefix_ + "??.qm");
 	qmNameFilters.append(qmNamePrefix_ + "??_??.qm");
+	
 	const QStringList qmEntryList = qmDir.entryList(qmNameFilters,
-			(QDir::Files | QDir::NoSymLinks | QDir::Readable | QDir::Hidden | QDir::System));
+			(QDir::Files | QDir::Readable | QDir::Hidden /* | QDir::System */ /* | QDir::NoSymLinks */));
+	CPPDEVTK_LOG_DEBUG("qmEntryList.count(): " << qmEntryList.count());
 	for (QStringList::ConstIterator kIter = qmEntryList.constBegin(); kIter != qmEntryList.constEnd(); ++kIter) {
 		QString localeName = *kIter;
 		localeName.remove(0, qmNamePrefix_.length());
 		localeName.chop(3);	// .qm
-		if ((localeName.length() != 2) && (localeName.length() != 5)) {
-			CPPDEVTK_LOG_WARN("skipping invalid localeName: " << localeName);
-			CPPDEVTK_ASSERT(0 && "invalid localeName");
-			continue;
+		if (!((localeName.length() == 2) || ((localeName.length() == 5) && (localeName[2] == '_')))) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION(QString("qm file '%1': invalid localeName: '%2'").arg(*kIter, localeName));
 		}
+		
 		const QLocale kLocale(localeName);
-		if (kLocale == QLocale::c()) {
-			CPPDEVTK_LOG_WARN("skipping invalid localeName: " << localeName);
-			CPPDEVTK_ASSERT(0 && "invalid localeName");
-			continue;
+		if (kLocale.name() == QLocale::c().name()) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION(QString("qm file '%1': invalid localeName: '%2'").arg(*kIter, localeName));
+		}
+		if (kLocale.name() == LanguageInfo::GetCodeName()) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION(QString(
+					"qm file '%1': invalid localeName (qm file with code language): '%2'").arg(*kIter, localeName));
 		}
 		
 		CPPDEVTK_ASSERT(!supportedLocales.contains(kLocale));
 		supportedLocales.append(kLocale);
 	}
+	
+	CPPDEVTK_LOG_INFO("supportedLocales.count(): " << supportedLocales.count());
 	
 	return supportedLocales;
 }

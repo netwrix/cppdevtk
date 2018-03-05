@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>114</width>
+    <height>146</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">MainWindow</string>
+  </property>
+  <widget class="QWidget" name="pCentralwidget_">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>13</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>13</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="::cppdevtk::gui::LanguageWidget" name="pLanguageWidget_" native="true"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>13</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>13</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>13</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="pLabel_">
+        <property name="text">
+         <string>Hello world!</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>13</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>13</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="pMenubar_">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>114</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="pMenuFile_">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="pActionExit_"/>
+   </widget>
+   <widget class="QMenu" name="pMenuHelp_">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="pActionAbout_"/>
+    <addaction name="pActionAboutQt_"/>
+    <addaction name="separator"/>
+    <addaction name="pActionHomepage_"/>
+    <addaction name="pActionSupport_"/>
+    <addaction name="pActionEmail_"/>
+   </widget>
+   <widget class="QMenu" name="pMenuOptions_">
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+    <widget class="::cppdevtk::gui::LanguageMenu" name="pMenuLanguage_">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+    </widget>
+    <addaction name="pMenuLanguage_"/>
+   </widget>
+   <addaction name="pMenuFile_"/>
+   <addaction name="pMenuOptions_"/>
+   <addaction name="pMenuHelp_"/>
+  </widget>
+  <action name="pActionExit_">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit application</string>
+   </property>
+  </action>
+  <action name="pActionAbout_">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+  </action>
+  <action name="pActionAboutQt_">
+   <property name="text">
+    <string>About &amp;Qt...</string>
+   </property>
+  </action>
+  <action name="pActionHomepage_">
+   <property name="text">
+    <string>&amp;Homepage</string>
+   </property>
+  </action>
+  <action name="pActionSupport_">
+   <property name="text">
+    <string>&amp;Support</string>
+   </property>
+  </action>
+  <action name="pActionEmail_">
+   <property name="text">
+    <string>&amp;Email</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>::cppdevtk::gui::LanguageWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cppdevtk/gui/language_widget.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>::cppdevtk::gui::LanguageMenu</class>
+   <extends>QMenu</extends>
+   <header location="global">cppdevtk/gui/language_menu.hpp</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

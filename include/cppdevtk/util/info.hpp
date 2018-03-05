@@ -17,19 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_UTIL_INFO_HPP_INCLUDED_
 #define CPPDEVTK_UTIL_INFO_HPP_INCLUDED_
 
 
 #include <cppdevtk/config/info.hpp>
-
-
-#define CPPDEVTK_UTIL_DESCRIPTION CPPDEVTK_LONG_NAME " util library."
+#include "info_customization.hpp"
 
 
 #endif	// CPPDEVTK_UTIL_INFO_HPP_INCLUDED_

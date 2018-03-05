@@ -44,10 +44,6 @@ namespace gui {
 
 
 /// \brief Extends the QMessageBox static functions API to support detailedText and exception.
-/// \attention In every file you use ::cppdevtk::gui::MessageBox undefine MessageBox (Windows macro...) first!
-/// Otherwise you will get compilation errors if windows.h is included (directly or indirectly)
-/// after cppdevtk/gui/message_box.hpp
-/// And no, we did not want to give our class other stupid name (ZMessageBox?) due to Windows...
 class CPPDEVTK_GUI_API MessageBox: public QMessageBox, public WidgetBase {
 	Q_OBJECT
 public:

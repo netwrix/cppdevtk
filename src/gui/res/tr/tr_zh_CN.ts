@@ -21,11 +21,11 @@ Message: %2</source>
     <name>CustomWizard</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;取消</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;帮助</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -33,7 +33,7 @@ Message: %2</source>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>下一步(&amp;N)</translation>
     </message>
 </context>
 <context>
@@ -86,7 +86,7 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
     <message>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>设置密码</translation>
     </message>
 </context>
 <context>
@@ -260,7 +260,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::CustomWizard</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>错误</translation>
     </message>
     <message>
         <source>Failed to open URL in default web browser</source>
@@ -286,7 +286,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::EulaWidget</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>错误</translation>
     </message>
     <message>
         <source>Failed to open EULA in default viewer!</source>
@@ -301,10 +301,17 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk::gui::LanguageMenu</name>
+    <message>
+        <source>&amp;Language</source>
+        <translation>语言</translation>
+    </message>
+</context>
+<context>
     <name>cppdevtk::gui::LoginWidget</name>
     <message>
         <source>Password Hint:</source>
-        <translation type="unfinished"></translation>
+        <translation>密碼提示:</translation>
     </message>
 </context>
 <context>
@@ -454,7 +461,7 @@ You must accept the terms of this agreement before continuing.</source>
     <name>cppdevtk::gui::ProgressDialog</name>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;取消</translation>
     </message>
     <message>
         <source>%1 of %2: %3</source>
@@ -573,6 +580,13 @@ You must accept the terms of this agreement before continuing.</source>
     <message>
         <source>Error code: %1</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>language_native_name</name>
+    <message>
+        <source>English</source>
+        <translation>简体中文</translation>
     </message>
 </context>
 </TS>

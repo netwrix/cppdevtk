@@ -1,7 +1,10 @@
 Version 1.0.9.1:
 - Release date:
 - New features:
+	- added localization test/sample app
 - Improvements:
+	- localization support review
+	- translations
 - Fixed bugs:
 	- fixed CoreApplicationBase::GetSupportedLanguageInfos()
 

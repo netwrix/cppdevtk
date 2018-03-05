@@ -24,6 +24,7 @@
 #include <cppdevtk/gui/set_stylesheet_from_file.hpp>
 #include <cppdevtk/util/filesystem_utils.hpp>
 #include <cppdevtk/util/get_user_name.hpp>
+#include <cppdevtk/util/language_info.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/exception.hpp>
@@ -52,8 +53,10 @@ namespace cppdevtk {
 namespace gui {
 
 
-ApplicationBase::ApplicationBase(): CoreApplicationBase(), translator_() {
+ApplicationBase::ApplicationBase(): CoreApplicationBase(), guiTranslator_() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
+	
+	QApplication::translate("language_native_name", "English");	// to generate translation
 }
 
 ApplicationBase::~ApplicationBase() {
@@ -207,19 +210,22 @@ bool ApplicationBase::NotifyThrowHandler(const ::std::exception* pExc) {
 }
 
 bool ApplicationBase::SetupTranslators() {
-	QCoreApplication::removeTranslator(&translator_);
+	if (!guiTranslator_.isEmpty()) {
+		QApplication::removeTranslator(&guiTranslator_);
+	}
 	
 	bool retCode = CoreApplicationBase::SetupTranslators();
 	
-	if (GetCurrentLanguageInfo().GetLocale() == QLocale(QLocale::English, QLocale::UnitedStates)) {
+	const QString kCurrentLanguageInfoName = GetCurrentLanguageInfo().GetName();
+	if (kCurrentLanguageInfoName == ::cppdevtk::util::LanguageInfo::GetCodeName()) {
 		return retCode;
 	}
 	
-	if (translator_.load((QString("tr_") + GetCurrentLanguageInfo().GetLocale().name()), ":/cppdevtk/gui/res/tr")) {
-		QCoreApplication::installTranslator(&translator_);
+	if (guiTranslator_.load((QString("tr_") + kCurrentLanguageInfoName), ":/cppdevtk/gui/res/tr")) {
+		QApplication::installTranslator(&guiTranslator_);
 	}
 	else {
-		CPPDEVTK_LOG_ERROR("failed to load translator_");
+		CPPDEVTK_LOG_ERROR("failed to load guiTranslator_");
 		retCode = false;
 	}
 	

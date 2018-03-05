@@ -27,20 +27,19 @@
 
 
 #include "features.hpp"
+#include "company_info_customization.hpp"
+#include "platform.hpp"
+
+#if (defined(__cplusplus) && !defined(RC_INVOKED))
+#	include <QtCore/QString>
+#endif
 
 
-/// \defgroup config_info_company_info Company Info
-/// \ingroup config_info
+/// \ingroup config_info_company_info
 /// @{
 
-#define CPPDEVTK_COMPANY_SHORT_NAME "CoSoSys"
 #define CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED QString(CPPDEVTK_COMPANY_SHORT_NAME).toLower().replace(' ', '_')
-#define CPPDEVTK_COMPANY_LONG_NAME "CoSoSys Ltd."
 #define CPPDEVTK_COMPANY_LONG_NAME_SANITIZED QString(CPPDEVTK_COMPANY_LONG_NAME).toLower().replace(' ', '_')
-#define CPPDEVTK_COMPANY_COPYRIGHT "Copyright (C) 2015 - 2018 " CPPDEVTK_COMPANY_LONG_NAME ". All rights reserved. " CPPDEVTK_COMPANY_EMAIL "."
-#define CPPDEVTK_COMPANY_TRADEMARKS "TM " CPPDEVTK_COMPANY_LONG_NAME "."
-#define CPPDEVTK_COMPANY_HOMEPAGE "http://www.cososys.com"
-#define CPPDEVTK_COMPANY_EMAIL "info@cososys.com"
 
 /// @}	// config_info_company_info
 

@@ -95,7 +95,7 @@ Details: %3</source>
     <name>language_native_name</name>
     <message>
         <source>English</source>
-        <translation>Latvian</translation>
+        <translation>Latviešu Valoda</translation>
     </message>
 </context>
 </TS>

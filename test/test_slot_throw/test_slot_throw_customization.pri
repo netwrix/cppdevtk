@@ -21,36 +21,4 @@ CPPDEVTK_UTIL_TARGET = cppdevtk_util
 CPPDEVTK_BASE_TARGET = cppdevtk_base
 
 
-TRANSLATIONS += res/tr/tr_ar.ts	\
-	res/tr/tr_bg.ts	\
-	res/tr/tr_cs.ts	\
-	res/tr/tr_da.ts	\
-	res/tr/tr_de.ts	\
-	res/tr/tr_el.ts	\
-	res/tr/tr_en_GB.ts	\
-	res/tr/tr_es.ts	\
-	res/tr/tr_et.ts	\
-	res/tr/tr_fi.ts	\
-	res/tr/tr_fr.ts	\
-	res/tr/tr_he.ts	\
-	res/tr/tr_hi.ts	\
-	res/tr/tr_hr.ts	\
-	res/tr/tr_hu.ts	\
-	res/tr/tr_it.ts	\
-	res/tr/tr_ja.ts	\
-	res/tr/tr_ko.ts	\
-	res/tr/tr_lt.ts	\
-	res/tr/tr_lv.ts	\
-	res/tr/tr_nb.ts	\
-	res/tr/tr_nl.ts	\
-	res/tr/tr_nn_NO.ts	\
-	res/tr/tr_pl.ts	\
-	res/tr/tr_pt_PT.ts	\
-	res/tr/tr_pt_BR.ts	\
-	res/tr/tr_ro_RO.ts	\
-	res/tr/tr_ru.ts	\
-	res/tr/tr_sr.ts	\
-	res/tr/tr_sv.ts	\
-	res/tr/tr_tr.ts	\
-	res/tr/tr_zh_CN.ts	\
-	res/tr/tr_zh_TW.ts
+TRANSLATIONS +=

@@ -21,10 +21,12 @@
 #	error "Do not include directly; please include <cppdevtk/config/compiler.hpp> instead!!!"
 #endif
 
-#ifndef RC_INVOKED
+#ifdef RC_INVOKED
+#	error "Internal error: This file should not be included when RC_INVOKED!!!"
+#endif
+
 #if (!CPPDEVTK_COMPILER_MSVC)
 #	error "This file is MSVC specific!!!"
-#endif
 #endif
 
 
@@ -54,12 +56,10 @@
 // We need TR1 and it was first introduced in MSVC 2008 (9.0) with Feature Pack Release,
 // but Feature Pack Release was not available in Express Edition.
 
-#ifndef RC_INVOKED
 // MSVC 2008 (9.0) SP1: _MSC_VER: 1500; MSC_FULL_VER: 150030729; _MSC_BUILD: 1
 #if ((_MSC_VER < 1500) || ((_MSC_VER == 1500) && ((_MSC_FULL_VER < 150030729)	\
 		|| ((_MSC_FULL_VER == 150030729) && (_MSC_BUILD < 1)))))
 #	error "MSVC >= 2008 (9.0) SP1 required!!!"
-#endif
 #endif
 
 
@@ -80,7 +80,6 @@
 // _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT are defined as 0 (disabled) and
 // _CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES is defined as 1 (enabled).
 
-#ifndef RC_INVOKED
 #ifdef CPPDEVTK_DETAIL_BUILD
 #	ifdef _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES
 #		if (_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES)
@@ -117,16 +116,13 @@
 #		define _CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES 1
 #	endif
 #endif	// CPPDEVTK_DETAIL_BUILD
-#endif	// !RC_INVOKED
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // sprintf: https://msdn.microsoft.com/en-us/library/ybk95axf%28v=vs.90%29.aspx
-#ifndef RC_INVOKED
 #ifdef _CRT_NON_CONFORMING_SWPRINTFS
 	CPPDEVTK_COMPILER_WARNING("undefining _CRT_NON_CONFORMING_SWPRINTFS")
 #	undef _CRT_NON_CONFORMING_SWPRINTFS
-#endif
 #endif
 
 
@@ -248,14 +244,10 @@
 #endif
 
 
-#ifndef RC_INVOKED
-#	ifdef _CPPRTTI
-#		define CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI 1
-#	else
-#		define CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI 0
-#	endif
-#else
+#ifdef _CPPRTTI
 #	define CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI 1
+#else
+#	define CPPDEVTK_DETAIL_COMPILER_ENABLE_RTTI 0
 #endif
 
 

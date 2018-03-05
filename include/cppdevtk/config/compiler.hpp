@@ -17,11 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_CONFIG_COMPILER_HPP_INCLUDED_
 #define CPPDEVTK_CONFIG_COMPILER_HPP_INCLUDED_
 
@@ -224,7 +219,7 @@
 #	include "compiler/gcc.hpp"
 #elif (CPPDEVTK_COMPILER_CLANG)
 #	include "compiler/clang.hpp"
-#elif (CPPDEVTK_COMPILER_MSVC || defined(RC_INVOKED))
+#elif (CPPDEVTK_COMPILER_MSVC)
 #	include "compiler/msvc.hpp"
 #else
 #	error "Unsupported compiler!!!"
