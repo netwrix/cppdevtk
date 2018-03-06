@@ -62,6 +62,7 @@ int main(int argc, char* argv[]) try {
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
 	Application::SetInfo();
 	Application::SetQmInfo();
+	CPPDEVTK_ASSERT(Application::GetNumberOfSupportedLanguages() > 1);
 	
 	Application application(argc, argv);
 	

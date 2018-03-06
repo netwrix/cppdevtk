@@ -38,6 +38,7 @@ Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget() {
 	
 	setupUi(this);
 	
+	//pCapsLockWidget_->SetBold(true);
 	SetStyleSheetFromFileCross(":/cppdevtk/test_caps_lock_widget/res/qss", "widget");
 	setWindowIcon(QIcon(":/cppdevtk/test_caps_lock_widget/res/ico/application.ico"));
 	

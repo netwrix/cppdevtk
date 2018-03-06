@@ -137,13 +137,15 @@ void DiskSpaceWidget::DoRefresh(qreal totalSize, qreal freeSpace) {
 	
 	if (mountPoint_.isEmpty()) {
 		try {
-			const QStringList kMountPoints = util::GetMountPointsFromPath(path_);
+			base::ErrorCode errorCode;
+			const QStringList kMountPoints = util::GetMountPointsFromPath(path_, errorCode);
 			if (!kMountPoints.isEmpty()) {
 				mountPoint_ = kMountPoints[0];
 				CPPDEVTK_ASSERT(!mountPoint_.isEmpty());
 			}
 			else {
-				CPPDEVTK_LOG_ERROR("failed to GetMountPointsFromPath() for path: " << path_);
+				CPPDEVTK_LOG_ERROR("failed to GetMountPointsFromPath() for path: " << path_ <<
+						"; error code: " << errorCode.ToString());
 			}
 		}
 		catch (const ::std::exception& exc) {

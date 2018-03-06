@@ -74,14 +74,13 @@ public:
 	NotifyThrowAction GetNotifyThrowAction() const;
 	
 	/// \name Localization support
+	/// \note To enable localization call SetQmInfo()
 	///@{
 	
-	/// Default is \c false (code locale) so that an app that does not need localization has nothing to do
-	void SetPreferSystemLocale(bool preferSystemLocale);
+	void SetPreferSystemLocale(bool preferSystemLocale);	///< Default is \c false
 	bool IsSystemLocalePreferred() const;
 	
 	/// If IsSystemLocalePreferred() then system, English (United States) otherwise
-	/// \pre !IsSystemLocalePreferred() or SetQmInfo()
 	LanguageInfo GetDefaultLanguageInfo() const;
 	
 	void SetCurrentLanguageInfo(const LanguageInfo& languageInfo);
@@ -90,7 +89,8 @@ public:
 	static void SetQmInfo(const QString& qmPath, const QString& qmNamePrefix);
 	static void GetQmInfo(QString& qmPath, QString& qmNamePrefix);
 	
-	/// \pre SetQmInfo()
+	static int GetNumberOfSupportedLanguages();
+	
 	/// \remark For convenience returned list is sorted by native name.
 	static QList<LanguageInfo> GetSupportedLanguageInfos();
 	
@@ -156,6 +156,10 @@ inline LanguageInfo CoreApplicationBase::GetCurrentLanguageInfo() const {
 inline void CoreApplicationBase::GetQmInfo(QString& qmPath, QString& qmNamePrefix) {
 	qmPath = qmPath_;
 	qmNamePrefix = qmNamePrefix_;
+}
+
+inline int CoreApplicationBase::GetNumberOfSupportedLanguages() {
+	return GetSupportedLocales().size();
 }
 
 inline void CoreApplicationBase::SetInfo(const QString& companyName, const QString& companyHomepage,

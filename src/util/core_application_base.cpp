@@ -68,9 +68,6 @@ LanguageInfo CoreApplicationBase::GetDefaultLanguageInfo() const {
 			isSystemLocaleSupported = true;
 		}
 		else {
-			CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmPath_.isEmpty(), "qmPath is empty; call SetQmInfo() first");
-			CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmNamePrefix_.isEmpty(), "qmNamePrefix_ is empty; call SetQmInfo() first");
-			
 			const QList<LanguageInfo> kSupportedLanguageInfos = GetSupportedLanguageInfos();
 			for (QList<LanguageInfo>::ConstIterator kIter = kSupportedLanguageInfos.constBegin();
 					kIter != kSupportedLanguageInfos.constEnd(); ++kIter) {
@@ -90,9 +87,8 @@ LanguageInfo CoreApplicationBase::GetDefaultLanguageInfo() const {
 
 void CoreApplicationBase::SetCurrentLanguageInfo(const LanguageInfo& languageInfo) {
 	CPPDEVTK_DBC_CHECK_ARGUMENT((languageInfo != LanguageInfo::GetCLanguageInfo()), "languageInfo: C is not supported");
-	// check is good but it will trigger exception if qm info not set...
-	//CPPDEVTK_DBC_CHECK_ARGUMENT((GetSupportedLanguageInfos().contains(languageInfo)),
-	//		"languageInfo is not supported");
+	CPPDEVTK_DBC_CHECK_ARGUMENT((GetSupportedLanguageInfos().contains(languageInfo)),
+			"languageInfo is not supported");
 	
 	currentLanguageInfo_ = languageInfo;
 	
@@ -111,17 +107,13 @@ void CoreApplicationBase::SetQmInfo(const QString& qmPath, const QString& qmName
 }
 
 QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmPath_.isEmpty(), "qmPath is empty; call SetQmInfo() first");
-	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!qmNamePrefix_.isEmpty(), "qmNamePrefix_ is empty; call SetQmInfo() first");
-	
 	QList<LanguageInfo> supportedLanguageInfos;
-	
-	supportedLanguageInfos.append(LanguageInfo::GetCodeLanguageInfo());
 	
 	const QList<QLocale> kSupportedLocales = GetSupportedLocales();
 	for (QList<QLocale>::ConstIterator kIter = kSupportedLocales.constBegin(); kIter != kSupportedLocales.constEnd();
 			++kIter) {
-		if (kIter->name() == LanguageInfo::GetCodeName()) {	// there is no tr_en(_US).qm
+		if (kIter->name() == LanguageInfo::GetCodeName()) {
+			supportedLanguageInfos.append(LanguageInfo::GetCodeLanguageInfo());
 			continue;
 		}
 		
@@ -135,7 +127,7 @@ QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
 		const QString kLanguageNativeName = translator.translate("language_native_name", "English");
 		if (kLanguageNativeName.isEmpty()) {
 			throw CPPDEVTK_RUNTIME_EXCEPTION(
-					QString("failed to translate language_native_name for: kQmFileName: '%1'; qmPath_: '%2'").arg(
+					QString("translated language_native_name is empty for: kQmFileName: '%1'; qmPath_: '%2'").arg(
 					kQmFileName, qmPath_));
 		}
 		if (kLanguageNativeName == LanguageInfo::GetCodeNativeName()) {
@@ -315,14 +307,20 @@ bool CoreApplicationBase::SetupTranslators() {
 QList<QLocale> CoreApplicationBase::GetSupportedLocales() {
 	QList<QLocale> supportedLocales;
 	
-	supportedLocales.append(LanguageInfo::GetCodeName());
+	supportedLocales.append(LanguageInfo::GetCodeName());	// there is no tr_en(_US).qm
 	
-	CPPDEVTK_ASSERT(!qmPath_.isEmpty());
+	if (qmPath_.isEmpty()) {
+		CPPDEVTK_LOG_DEBUG("qmPath_ is empty");
+		return supportedLocales;
+	}
 	CPPDEVTK_LOG_DEBUG("qmPath_: " << qmPath_);
 	QDir qmDir(qmPath_);
 	
 	QStringList qmNameFilters;
-	CPPDEVTK_ASSERT(!qmNamePrefix_.isEmpty());
+	if (qmNamePrefix_.isEmpty()) {
+		CPPDEVTK_LOG_DEBUG("qmNamePrefix_ is empty");
+		return supportedLocales;
+	}
 	CPPDEVTK_LOG_DEBUG("qmNamePrefix_: " << qmNamePrefix_);
 	qmNameFilters.append(qmNamePrefix_ + "??.qm");
 	qmNameFilters.append(qmNamePrefix_ + "??_??.qm");

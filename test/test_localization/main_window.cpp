@@ -46,6 +46,9 @@ MainWindow::MainWindow(QWidget* pParent): QMainWindow(pParent), WidgetBase(), Ui
 	
 	SetupStrings();
 	
+	//pLanguageWidget_->SetBold(true);
+	//pLanguageWidget_->SetMaxVisibleItems(4);
+	
 	PopulateLanguages();
 	
 	MakeConnections();

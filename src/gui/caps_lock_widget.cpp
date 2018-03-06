@@ -25,7 +25,6 @@
 #include <cppdevtk/base/dbc.hpp>
 
 #include <QtCore/QtGlobal>
-#include <QtGui/QColor>
 #include <QtGui/QShowEvent>
 #include <QtGui/QKeyEvent>
 
@@ -37,7 +36,7 @@ namespace gui {
 
 
 CapsLockWidget::CapsLockWidget(QWidget* pParent): QWidget(pParent), WidgetBase(), pUiCapsLockWidget_(new Ui::CapsLockWidget()),
-		onColor_(Qt::darkRed), offColor_(Qt::darkGreen) {
+		onColor_(Qt::darkRed), offColor_(Qt::darkGreen), bold_(false) {
 	pUiCapsLockWidget_->setupUi(this);
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "caps_lock_widget");
 	CPPDEVTK_ASSERT(pUiCapsLockWidget_->pGridLayout_->contentsMargins() == QMargins(0, 0, 0, 0));
@@ -57,15 +56,22 @@ void CapsLockWidget::Refresh() {
 	}
 	*/
 	
+	QString capsLockStatus = "?";
 	bool isCapsLockOn = false;
-	if (!IsCapsLockOn(isCapsLockOn)) {
+	if (IsCapsLockOn(isCapsLockOn)) {
+		capsLockStatus = isCapsLockOn ? tr("ON") : tr("OFF");
+	}
+	else {
 		CPPDEVTK_LOG_ERROR("failed to detect caps lock status");
-		return;
 	}
 	
-	const QString kMsg = QString("%1 <FONT COLOR=%2>%3</FONT>").arg(tr("Caps Lock:"),
-			(isCapsLockOn ? onColor_.name() : offColor_.name()), (isCapsLockOn ? tr("ON") : tr("OFF")));
-	pUiCapsLockWidget_->pLabelCapsLock_->setText(kMsg);
+	QString msg = QString("%1 <FONT COLOR=%2>%3</FONT>").arg(tr("Caps Lock:"),
+			(isCapsLockOn ? onColor_.name() : offColor_.name()), capsLockStatus);
+	if (bold_) {
+		msg.prepend("<b>");
+		msg.append("</b>");
+	}
+	pUiCapsLockWidget_->pLabelCapsLock_->setText(msg);
 }
 
 void CapsLockWidget::changeEvent(QEvent* pEvent) {

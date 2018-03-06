@@ -26,6 +26,7 @@
 
 #include <QtCore/QVariant>
 #include <QtCore/QtAlgorithms>
+#include <QtGui/QFont>
 
 #include <new>
 
@@ -100,6 +101,26 @@ void LanguageWidget::RemoveLanguageInfo(const ::cppdevtk::util::LanguageInfo& la
 	if (kIdx != -1) {
 		pUiLanguageWidget_->pComboBoxLanguage_->removeItem(kIdx);
 	}
+}
+
+void LanguageWidget::SetBold(bool value) {
+	QFont font = pUiLanguageWidget_->pLabelLanguage_->font();
+	if (font.bold() != value) {
+		font.setBold(value);
+		pUiLanguageWidget_->pLabelLanguage_->setFont(font);
+	}
+}
+
+bool LanguageWidget::GetBold() const {
+	return pUiLanguageWidget_->pLabelLanguage_->font().bold();
+}
+
+void LanguageWidget::SetMaxVisibleItems(int value) {
+	pUiLanguageWidget_->pComboBoxLanguage_->setMaxVisibleItems(value);
+}
+
+int LanguageWidget::GetMaxVisibleItems() const {
+	return pUiLanguageWidget_->pComboBoxLanguage_->maxVisibleItems();
 }
 
 void LanguageWidget::Clear() {

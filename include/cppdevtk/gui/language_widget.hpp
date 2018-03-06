@@ -64,6 +64,12 @@ public:
 	
 	/// \attention May not emit CurrentLanguageInfoChanged()
 	void RemoveLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
+	
+	void SetBold(bool value);
+	bool GetBold() const;
+	
+	void SetMaxVisibleItems(int value);
+	int GetMaxVisibleItems() const;
 public slots:
 	void Clear();
 	void SetCurrentLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);

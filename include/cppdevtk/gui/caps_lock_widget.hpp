@@ -114,6 +114,9 @@ public:
 	
 	void SetOffColor(const QColor& offColor);
 	QColor GetOffColor() const;
+	
+	void SetBold(bool value);
+	bool GetBold() const;
 public slots:
 	void Refresh();
 protected:
@@ -130,6 +133,7 @@ private:
 	Ui::CapsLockWidget* pUiCapsLockWidget_;
 	QColor onColor_;
 	QColor offColor_;
+	bool bold_;
 };
 
 
@@ -156,6 +160,14 @@ inline void CapsLockWidget::SetOffColor(const QColor& offColor) {
 
 inline QColor CapsLockWidget::GetOffColor() const {
 	return offColor_;
+}
+
+inline void CapsLockWidget::SetBold(bool value) {
+	bold_ = value;
+}
+
+inline bool CapsLockWidget::GetBold() const {
+	return bold_;
 }
 
 inline void CapsLockWidget::showEvent(QShowEvent* pShowEvent) {	
