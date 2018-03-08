@@ -5,8 +5,13 @@ Version 1.0.9.1:
 - Improvements:
 	- localization support review
 	- translations
+	- verify connect in qt solutions integration
+	- updated KSqueezedTextLabel to KF5
+	- improved DiskSpaceWidget layout
 - Fixed bugs:
 	- fixed CoreApplicationBase::GetSupportedLanguageInfos()
+	- fixed meta type issues in qt solutions integration
+	- partial fix for KSqueezedTextLabel rich text
 
 
 Version 1.0.8.1:

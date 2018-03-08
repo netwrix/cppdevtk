@@ -16,28 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KSQUEEZEDTEXTLABEL_H
+#define KSQUEEZEDTEXTLABEL_H
 
-#ifndef CPPDEVTK_GUI_K_SQUEEZED_TEXT_LABEL_HPP_INCLUDED_
-#define CPPDEVTK_GUI_K_SQUEEZED_TEXT_LABEL_HPP_INCLUDED_
-
-
-#include "config.hpp"
-#include "widget_base.hpp"
-
-#include <QtCore/QString>
-#include <QtCore/QSize>
-#include <QtCore/Qt>
-#include <QtCore/QtGlobal>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#include <QtWidgets/QLabel>
-#else
-#include <QtGui/QLabel>
-#endif
-
-
-namespace cppdevtk {
-namespace gui {
-
+#include <kwidgetsaddons_export.h>
+#include <QLabel>
 
 class KSqueezedTextLabelPrivate;
 
@@ -84,28 +67,25 @@ class KSqueezedTextLabelPrivate;
 /*
  * QLabel
  */
-class CPPDEVTK_GUI_API KSqueezedTextLabel : public QLabel, public WidgetBase
+class KWIDGETSADDONS_EXPORT KSqueezedTextLabel : public QLabel
 {
     Q_OBJECT
     Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
     Q_PROPERTY(int indent READ indent WRITE setIndent)
     Q_PROPERTY(int margin READ margin WRITE setMargin)
-signals:
-	void Pressed();
-	void Released();
-	void DoubleClicked();
+
 public:
     /**
      * Default constructor.
      * @param parent the label's parent object
      */
-    explicit KSqueezedTextLabel(QWidget *parent = NULL);
+    explicit KSqueezedTextLabel(QWidget *parent = nullptr);
 
     /**
      * @param text the text that will be displayed
      * @param parent the label's parent object
      */
-    explicit KSqueezedTextLabel(const QString &text, QWidget *parent = NULL);
+    explicit KSqueezedTextLabel(const QString &text, QWidget *parent = nullptr);
 
     virtual ~KSqueezedTextLabel();
 
@@ -114,13 +94,13 @@ public:
      * will be -1 to indicate the label's ability to shrink its width
      * by squeezing the text
      */
-    virtual QSize minimumSizeHint() const;
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     /**
      * @return the label's preferred size, which is wide enough
      * to display the text without squeezing it
      */
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /**
      * Sets the indentation of the label.
@@ -174,8 +154,6 @@ public:
      * @since 4.4
      */
     QString fullText() const;
-	
-	QString plainText() const;
 
     /**
      * @returns true if the text displayed is currently squeezed,
@@ -224,24 +202,20 @@ public Q_SLOTS:
     void clear();
 
 protected:
-	virtual void mousePressEvent(QMouseEvent* pEvent);
-	
     /**
      * \reimp
      */
-    virtual void mouseReleaseEvent(QMouseEvent *);
-	
-	virtual void mouseDoubleClickEvent(QMouseEvent* pEvent);
+    void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
 
     /**
      * Called when widget is resized
      */
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
 
     /**
      * \reimp
      */
-    virtual void contextMenuEvent(QContextMenuEvent *);
+    void contextMenuEvent(QContextMenuEvent *) Q_DECL_OVERRIDE;
 
     /**
      * does the dirty work
@@ -252,9 +226,4 @@ private:
     KSqueezedTextLabelPrivate *const d;
 };
 
-
-}	// namespace gui
-}	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_GUI_K_SQUEEZED_TEXT_LABEL_HPP_INCLUDED_
+#endif // KSQUEEZEDTEXTLABEL_H

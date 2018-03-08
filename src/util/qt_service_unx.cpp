@@ -44,6 +44,7 @@
 #endif
 
 #include <cppdevtk/base/unused.hpp>
+#include <cppdevtk/base/verify.h>
 #include "qt_service_p.hpp"
 #include "qt_unix_socket_unx.hpp"
 #include "qt_unix_server_socket_unx.hpp"
@@ -335,8 +336,8 @@ void QtServiceSysPrivate::incomingConnection(int socketDescriptor)
 {
     QTcpSocket *s = new QTcpSocket(this);
     s->setSocketDescriptor(socketDescriptor);
-    connect(s, SIGNAL(readyRead()), this, SLOT(slotReady()));
-    connect(s, SIGNAL(disconnected()), this, SLOT(slotClosed()));
+    CPPDEVTK_VERIFY(connect(s, SIGNAL(readyRead()), this, SLOT(slotReady())));
+    CPPDEVTK_VERIFY(connect(s, SIGNAL(disconnected()), this, SLOT(slotClosed())));
 }
 
 void QtServiceSysPrivate::slotReady()

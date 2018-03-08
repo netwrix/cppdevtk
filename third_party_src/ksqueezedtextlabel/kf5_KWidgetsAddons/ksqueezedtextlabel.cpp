@@ -16,53 +16,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <cppdevtk/gui/k_squeezed_text_label.hpp>
+#include "ksqueezedtextlabel.h"
+#include <QAction>
+#include <QContextMenuEvent>
+#include <QDesktopWidget>
+#include <QMenu>
+#include <QClipboard>
+#include <QApplication>
+#include <QMimeData>
+#include <QTextDocument>
 
-#include <QtCore/QtDebug>
-#include <QtCore/QLocale>
-#include <QtCore/QMimeData>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QClipboard>
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextDocumentFragment>
-#include <QtCore/QtGlobal>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
-#else
-#include <QtGui/QAction>
-#include <QtGui/QMenu>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
-#endif
-
-
-namespace cppdevtk {
-namespace gui {
-
-
-class KSqueezedTextLabelPrivate: public QObject
+class KSqueezedTextLabelPrivate
 {
-	Q_OBJECT
-public Q_SLOTS:
-    void _k_copyFullText() {
+public:
+
+    void _k_copyFullText()
+    {
         QApplication::clipboard()->setText(fullText);
     }
 
-public:
     QString fullText;
     Qt::TextElideMode elideMode;
 };
 
-
 KSqueezedTextLabel::KSqueezedTextLabel(const QString &text, QWidget *parent)
-    : QLabel(parent), WidgetBase(),
+    : QLabel(parent),
       d(new KSqueezedTextLabelPrivate)
 {
-	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "ksqueezed_text_label");
-	
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     d->fullText = text;
     d->elideMode = Qt::ElideMiddle;
@@ -70,11 +50,9 @@ KSqueezedTextLabel::KSqueezedTextLabel(const QString &text, QWidget *parent)
 }
 
 KSqueezedTextLabel::KSqueezedTextLabel(QWidget *parent)
-    : QLabel(parent), WidgetBase(),
+    : QLabel(parent),
       d(new KSqueezedTextLabelPrivate)
 {
-	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "ksqueezed_text_label");
-	
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     d->elideMode = Qt::ElideMiddle;
 }
@@ -100,7 +78,7 @@ QSize KSqueezedTextLabel::sizeHint() const
 {
     int maxWidth = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
     QFontMetrics fm(fontMetrics());
-    int textWidth = fm.width(plainText());
+    int textWidth = fm.width(d->fullText);
     if (textWidth > maxWidth) {
         textWidth = maxWidth;
     }
@@ -138,7 +116,7 @@ void KSqueezedTextLabel::squeezeTextToLabel()
     const int labelWidth = contentsRect().width();
     QStringList squeezedLines;
     bool squeezed = false;
-    Q_FOREACH (const QString &line, plainText().split(QLatin1Char('\n'))) {
+    Q_FOREACH (const QString &line, d->fullText.split(QLatin1Char('\n'))) {
         int lineWidth = fm.width(line);
         if (lineWidth > labelWidth) {
             squeezed = true;
@@ -149,7 +127,7 @@ void KSqueezedTextLabel::squeezeTextToLabel()
     }
 
     if (squeezed) {
-        QLabel::setText(squeezedLines.join("\n"));
+        QLabel::setText(squeezedLines.join(QStringLiteral("\n")));
         setToolTip(d->fullText);
     } else {
         QLabel::setText(d->fullText);
@@ -215,14 +193,6 @@ QString KSqueezedTextLabel::fullText() const
     return d->fullText;
 }
 
-QString KSqueezedTextLabel::plainText() const {
-	QString plainText = d->fullText;
-	if (textFormat() == Qt::RichText || (textFormat() == Qt::AutoText && Qt::mightBeRichText(plainText))) {
-		plainText = QTextDocumentFragment::fromHtml(plainText).toPlainText();
-	}
-	return plainText;
-}
-
 bool KSqueezedTextLabel::isSqueezed() const
 {
     return d->fullText != text();
@@ -243,7 +213,7 @@ void KSqueezedTextLabel::contextMenuEvent(QContextMenuEvent *ev)
         QMenu menu(this);
 
         QAction *act = new QAction(tr("&Copy Full Text"), &menu);
-        connect(act, SIGNAL(triggered()), d, SLOT(_k_copyFullText()));
+        connect(act, &QAction::triggered, this, [this]() { d->_k_copyFullText(); });
         menu.addAction(act);
 
         ev->accept();
@@ -253,15 +223,9 @@ void KSqueezedTextLabel::contextMenuEvent(QContextMenuEvent *ev)
     }
 }
 
-void KSqueezedTextLabel::mousePressEvent(QMouseEvent* pEvent) {
-	QLabel::mousePressEvent(pEvent);
-	
-	emit Pressed();
-}
-
 void KSqueezedTextLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+#if QT_VERSION >= 0x040700
     if (QApplication::clipboard()->supportsSelection() &&
             textInteractionFlags() != Qt::NoTextInteraction &&
             ev->button() == Qt::LeftButton &&
@@ -278,8 +242,14 @@ void KSqueezedTextLabel::mouseReleaseEvent(QMouseEvent *ev)
             // final selection length= 26 - 2 - 1 = 23
             const int start = selectionStart();
             int charsAfterSelection = text().length() - start - selectedText().length();
-            txt = plainText();	// Strip markup tags
-			charsAfterSelection -= d->fullText.length() - txt.length();	// account for stripped characters
+            txt = d->fullText;
+            // Strip markup tags
+            if (textFormat() == Qt::RichText
+                    || (textFormat() == Qt::AutoText && Qt::mightBeRichText(txt))) {
+                txt.replace(QRegExp(QStringLiteral("<[^>]*>")), QStringLiteral(""));
+                // account for stripped characters
+                charsAfterSelection -= d->fullText.length() - txt.length();
+            }
             txt = txt.mid(selectionStart(), txt.length() - start - charsAfterSelection);
         }
         QApplication::clipboard()->setText(txt, QClipboard::Selection);
@@ -288,20 +258,6 @@ void KSqueezedTextLabel::mouseReleaseEvent(QMouseEvent *ev)
     {
         QLabel::mouseReleaseEvent(ev);
     }
-	
-	emit Released();
 }
 
-void KSqueezedTextLabel::mouseDoubleClickEvent(QMouseEvent* pEvent) {
-	QLabel::mouseDoubleClickEvent(pEvent);
-	
-	emit DoubleClicked();
-}
-
-
-}	// namespace gui
-}	// namespace cppdevtk
-
-
-//#include "moc_k_squeezed_text_label.cpp"
-#include "k_squeezed_text_label.moc"
+#include "moc_ksqueezedtextlabel.cpp"

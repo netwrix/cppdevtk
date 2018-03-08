@@ -42,7 +42,11 @@ LanguageWidget::LanguageWidget(QWidget* pParent): QWidget(pParent), WidgetBase()
 		pUiLanguageWidget_(new Ui::LanguageWidget()) {
 #	ifndef NDEBUG
 	LanguageInfo languageInfo;
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != QMetaType::UnknownType);
+#	else
+	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != 0);
+#	endif
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
 	CPPDEVTK_ASSERT(QMetaType::hasRegisteredComparators< ::cppdevtk::util::LanguageInfo>());
 #	endif

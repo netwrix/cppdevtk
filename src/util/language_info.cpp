@@ -53,9 +53,18 @@ void LanguageInfo::Set(const QLocale& locale, const QString& nativeName) {
 	CPPDEVTK_ASSERT(QLocale("en_US").name() == GetCodeName());
 	
 	// NOTE: do not global qualify because moc will generate bad code
-	if (QMetaType::type("cppdevtk::util::LanguageInfo") == QMetaType::UnknownType) {
+	if (QMetaType::type("cppdevtk::util::LanguageInfo")
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			== QMetaType::UnknownType) {
+#			else
+			== 0) {
+#			endif
 		if (qRegisterMetaType< ::cppdevtk::util::LanguageInfo>("cppdevtk::util::LanguageInfo")
+#				if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 				== QMetaType::UnknownType) {
+#				else
+				== 0) {
+#				endif
 			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::util::LanguageInfo");
 		}
 	}

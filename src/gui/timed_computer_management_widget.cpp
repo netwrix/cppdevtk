@@ -35,9 +35,19 @@ namespace gui {
 TimedComputerManagementWidget::TimedComputerManagementWidget(QWidget* pParent): QWidget(pParent), WidgetBase(),
 		pUiTimedComputerManagementWidget_(new Ui::TimedComputerManagementWidget()) {
 	// NOTE: do not global qualify because moc will generate bad code
-	if (QMetaType::type("cppdevtk::gui::TimedComputerManagementWidget::Method") == QMetaType::UnknownType) {
+	if (QMetaType::type("cppdevtk::gui::TimedComputerManagementWidget::Method")
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			== QMetaType::UnknownType) {
+#			else
+			== 0) {
+#			endif
 		if (qRegisterMetaType< ::cppdevtk::gui::TimedComputerManagementWidget::Method>(
-				"cppdevtk::gui::TimedComputerManagementWidget::Method") == QMetaType::UnknownType) {
+				"cppdevtk::gui::TimedComputerManagementWidget::Method")
+#				if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+				== QMetaType::UnknownType) {
+#				else
+				== 0) {
+#				endif
 			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::gui::TimedComputerManagementWidget::Method");
 		}
 	}

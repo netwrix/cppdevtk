@@ -64,6 +64,9 @@ namespace gui {
 /// void Widget::changeEvent(QEvent* pEvent) {
 /// 	QWidget::changeEvent(pEvent);
 /// 	switch (pEvent->type()) {
+///			case QEvent::ApplicationActivate:
+///				pUi_->pCapsLockWidget_->Refresh();
+///				break;
 /// 		case QEvent::WindowActivate:
 /// 			pUi_->pCapsLockWidget_->Refresh();
 /// 			break;

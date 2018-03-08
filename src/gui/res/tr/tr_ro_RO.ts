@@ -60,10 +60,6 @@ Trebuie să acceptați termenii acestui acord înainte de a continua.</translati
 <context>
     <name>LoginWidget</name>
     <message>
-        <source>&amp;Login</source>
-        <translation type="obsolete">&amp;Autentificare</translation>
-    </message>
-    <message>
         <source>&amp;Password:</source>
         <translation>&amp;Parolă:</translation>
     </message>
@@ -395,40 +391,8 @@ Trebuie să acceptați termenii acestui acord înainte de a continua.</translati
         <translation>Parola contine %1 caractene non-ASCII.</translation>
     </message>
     <message>
-        <source>Password length (%1) exceeds maximum (%2).</source>
-        <translation type="obsolete">Lungime parolă (%1) depășesște maximul (%2).</translation>
-    </message>
-    <message>
-        <source>Password length (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Lungime parolă (%1) este mai mică decât minimul (%2).</translation>
-    </message>
-    <message>
-        <source>Password number of letters (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Numărul de litere parolă (%1) este mai mic decât minimul (%2).</translation>
-    </message>
-    <message>
-        <source>Password number of upper case letters (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Numărul de litere mari parolă (%1) este mai mic decât minimul (%2).</translation>
-    </message>
-    <message>
-        <source>Password number of lower case letters (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Numărul de litere mici parolă (%1) este mai mic decât minimul (%2).</translation>
-    </message>
-    <message>
-        <source>Password number of digits (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Numărul de cifre parolă (%1) este mai mic decât minimul (%2).</translation>
-    </message>
-    <message>
-        <source>Password number of symbols (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Numărul de simboluri parolă (%1) este mai mic decât minimul (%2).</translation>
-    </message>
-    <message>
         <source>New password can not be equal with old password.</source>
         <translation>Prola nouă nu poate să concidă cu parola veche.</translation>
-    </message>
-    <message>
-        <source>New password similarity with old password (%1) is less than minimum (%2).</source>
-        <translation type="obsolete">Similaritatea parolei noi cu parola veche (%1) este mai mică decât (%2).</translation>
     </message>
     <message>
         <source>Password confirmation in progress.</source>
@@ -445,10 +409,6 @@ Trebuie să acceptați termenii acestui acord înainte de a continua.</translati
     <message>
         <source>Password hint contains %1 non-ASCII characters.</source>
         <translation>Indciu parolă conține %1 caracrete non-ASCII.</translation>
-    </message>
-    <message>
-        <source>Password hint length (%1) exceeds maximum (%2).</source>
-        <translation type="obsolete">Indiciu parolă (%1) depășesște maximul (%2).</translation>
     </message>
     <message>
         <source>Password hint length (%1) is less than minimum (%2).</source>

@@ -42,11 +42,16 @@ Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget() {
 	SetStyleSheetFromFileCross(":/cppdevtk/test_disk_space_widget/res/qss", "widget");
 	setWindowIcon(QIcon(":/cppdevtk/test_disk_space_widget/res/ico/application.ico"));
 	
+	pDiskSpaceWidget_->SetDiskNameColor(Qt::darkRed);
+	pDiskSpaceWidget_->SetSpaceInfoColor(Qt::darkBlue);
+	pDiskSpaceWidget_->SetBold(true);
 #	if (!CPPDEVTK_DETAIL_TEST_DISK_SPACE_WIDGET_PATH_EMPTY)
 	const QString kPath = QDir::currentPath();
 	CPPDEVTK_LOG_DEBUG("setting path to: " << kPath);
 	pDiskSpaceWidget_->SetPath(kPath);
 #	endif
+	
+	pSpinBoxAutoRefreshInterval_->setValue(pDiskSpaceWidget_->GetAutoRefreshInterval());
 	
 	CPPDEVTK_VERIFY(connect(pPushButtonRefresh_, SIGNAL(clicked()),
 			pDiskSpaceWidget_, SLOT(Refresh())));
@@ -63,7 +68,7 @@ Widget::~Widget() {
 }
 
 void Widget::SetAutoRefreshInterval(int sec) {
-	pDiskSpaceWidget_->SetAutoRefreshInterval(sec * 1000);
+	pDiskSpaceWidget_->SetAutoRefreshInterval(sec);
 }
 
 void Widget::changeEvent(QEvent* pEvent) {

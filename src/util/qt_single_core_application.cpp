@@ -41,6 +41,7 @@
 
 #include <cppdevtk/util/qt_single_core_application.hpp>
 #include <cppdevtk/util/qt_local_peer.hpp>
+#include <cppdevtk/base/verify.h>
 
 
 namespace cppdevtk {
@@ -79,7 +80,7 @@ QtSingleCoreApplication::QtSingleCoreApplication(int &argc, char **argv)
     : QCoreApplication(argc, argv)
 {
     peer = new QtLocalPeer(this);
-    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
+    CPPDEVTK_VERIFY(connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&))));
 }
 
 
@@ -92,7 +93,7 @@ QtSingleCoreApplication::QtSingleCoreApplication(const QString &appId, int &argc
     : QCoreApplication(argc, argv)
 {
     peer = new QtLocalPeer(this, appId);
-    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
+    CPPDEVTK_VERIFY(connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&))));
 }
 
 

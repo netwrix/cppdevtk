@@ -37,8 +37,8 @@ public:
 	Application(int& argc, char** argv);
 	
 	
-	static void SetQmInfo();
 	static void SetInfo();
+	static void SetQmInfo();
 protected:
 	virtual bool SetupTranslators();
 private:
@@ -54,13 +54,13 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-inline void Application::SetQmInfo() {
-	SingleApplication::SetQmInfo(":/cppdevtk/test_localization/res/tr", "tr_");
-}
-
 inline void Application::SetInfo() {
 	::cppdevtk::gui::SingleApplication::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
 			(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_LOCALIZATION_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
+}
+
+inline void Application::SetQmInfo() {
+	::cppdevtk::gui::SingleApplication::SetQmInfo(":/cppdevtk/test_localization/res/tr", "tr_");
 }
 
 

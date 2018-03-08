@@ -50,27 +50,30 @@ namespace gui {
 /// - default DiskNameColor is Qt::black
 /// - default SpaceInfoColor is Qt::darkBlue
 /// - auto-refresh is disabled by default.
-/// - default auto-refresh interval is 2.5 seconds.
+/// - default auto-refresh interval is 5 seconds.
 class CPPDEVTK_GUI_API DiskSpaceWidget: public QWidget, public WidgetBase {
 	Q_OBJECT
 public:
 	explicit DiskSpaceWidget(QWidget* pParent = NULL);
 	virtual ~DiskSpaceWidget();
 	
+	void SetDiskNameColor(const QColor& color);
 	QColor GetDiskNameColor() const;
+	
+	void SetSpaceInfoColor(const QColor& color);
 	QColor GetSpaceInfoColor() const;
+	
+	void SetBold(bool value);
+	bool GetBold() const;
 	
 	QString GetPath() const;
 	
 	int GetAutoRefreshInterval() const;
 	bool IsAutoRefreshEnabled() const;
 public slots:
-	void SetDiskNameColor(const QColor& color);
-	void SetSpaceInfoColor(const QColor& color);
-	
 	void SetPath(const QString& path);
 	
-	void SetAutoRefreshInterval(int msec);
+	void SetAutoRefreshInterval(int sec);
 	void SetAutoRefreshEnabled(bool value);
 	
 	void Refresh();
@@ -103,8 +106,20 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
+inline void DiskSpaceWidget::SetDiskNameColor(const QColor& color) {
+	diskNameColor_ = color;
+	
+	Refresh();
+}
+
 inline QColor DiskSpaceWidget::GetDiskNameColor() const {
 	return diskNameColor_;
+}
+
+inline void DiskSpaceWidget::SetSpaceInfoColor(const QColor& color) {
+	spaceInfoColor_ = color;
+	
+	Refresh();
 }
 
 inline QColor DiskSpaceWidget::GetSpaceInfoColor() const {
@@ -116,23 +131,11 @@ inline QString DiskSpaceWidget::GetPath() const {
 }
 
 inline int DiskSpaceWidget::GetAutoRefreshInterval() const {
-	return autoRefreshTimer_.interval();
+	return autoRefreshTimer_.interval() / 1000;
 }
 
 inline bool DiskSpaceWidget::IsAutoRefreshEnabled() const {
 	return autoRefreshTimer_.isActive();
-}
-
-inline void DiskSpaceWidget::SetDiskNameColor(const QColor& color) {
-	diskNameColor_ = color;
-	
-	Refresh();
-}
-
-inline void DiskSpaceWidget::SetSpaceInfoColor(const QColor& color) {
-	spaceInfoColor_ = color;
-	
-	Refresh();
 }
 
 inline void DiskSpaceWidget::SetPath(const QString& path) {
@@ -142,8 +145,8 @@ inline void DiskSpaceWidget::SetPath(const QString& path) {
 	Refresh();
 }
 
-inline void DiskSpaceWidget::SetAutoRefreshInterval(int msec) {
-	autoRefreshTimer_.setInterval(msec);
+inline void DiskSpaceWidget::SetAutoRefreshInterval(int sec) {
+	autoRefreshTimer_.setInterval(sec * 1000);
 }
 
 inline void DiskSpaceWidget::SetAutoRefreshEnabled(bool value) {

@@ -160,8 +160,7 @@ void MainWindow::SetupStrings() {
 }
 
 void MainWindow::PopulateLanguages() {
-	const QList<LanguageInfo> kSupportedLanguageInfos =
-			static_cast<Application*>(Application::instance())->GetSupportedLanguageInfos();
+	const QList<LanguageInfo> kSupportedLanguageInfos = Application::GetSupportedLanguageInfos();
 	
 	pMenuLanguage_->AddLanguageInfos(kSupportedLanguageInfos);
 	CPPDEVTK_ASSERT(pMenuLanguage_->GetCount() == kSupportedLanguageInfos.count());

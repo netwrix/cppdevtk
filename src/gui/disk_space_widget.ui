@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>142</width>
-    <height>68</height>
+    <width>115</width>
+    <height>40</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -44,9 +44,14 @@
    </item>
    <item>
     <widget class="::cppdevtk::gui::KSqueezedTextLabel" name="pLabel_">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string notr="true">C: 75 GB free of 100 GB
-line2</string>
+      <string notr="true">C: 75 GB free of 100 GB</string>
      </property>
     </widget>
    </item>

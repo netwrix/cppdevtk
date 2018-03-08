@@ -60,10 +60,6 @@ Debes aceptar las condiciones de este acuerdo antes de continuar.</translation>
 <context>
     <name>LoginWidget</name>
     <message>
-        <source>&amp;Login</source>
-        <translation type="obsolete">&amp;Iniciar sesión</translation>
-    </message>
-    <message>
         <source>&amp;Password:</source>
         <translation>&amp;Contraseña:</translation>
     </message>

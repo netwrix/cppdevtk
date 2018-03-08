@@ -54,6 +54,8 @@
 #include <cppdevtk/gui/qt_file_copier.hpp>
 #include <cppdevtk/gui/message_box.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include "ui_qt_copy_dialog.h"
 #include "ui_qt_overwrite_dialog.h"
@@ -129,11 +131,11 @@ private:
 QtOverwriteDialog::QtOverwriteDialog(QWidget *parent) : QDialog(parent)
 {
     ui.setupUi(this);
-    connect(ui.skipButton, SIGNAL(clicked()), this, SLOT(skip()));
-    connect(ui.skipAllButton, SIGNAL(clicked()), this, SLOT(skipAll()));
-    connect(ui.overwriteButton, SIGNAL(clicked()), this, SLOT(overwrite()));
-    connect(ui.overwriteAllButton, SIGNAL(clicked()), this, SLOT(overwriteAll()));
-    connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
+    CPPDEVTK_VERIFY(connect(ui.skipButton, SIGNAL(clicked()), this, SLOT(skip())));
+    CPPDEVTK_VERIFY(connect(ui.skipAllButton, SIGNAL(clicked()), this, SLOT(skipAll())));
+    CPPDEVTK_VERIFY(connect(ui.overwriteButton, SIGNAL(clicked()), this, SLOT(overwrite())));
+    CPPDEVTK_VERIFY(connect(ui.overwriteAllButton, SIGNAL(clicked()), this, SLOT(overwriteAll())));
+    CPPDEVTK_VERIFY(connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel())));
     ui.iconLabel->setPixmap(QApplication::style()->standardPixmap(QStyle::SP_MessageBoxWarning));
 }
 
@@ -177,10 +179,10 @@ private:
 QtOtherDialog::QtOtherDialog(QWidget *parent) : QDialog(parent)
 {
     ui.setupUi(this);
-    connect(ui.skipButton, SIGNAL(clicked()), this, SLOT(skip()));
-    connect(ui.skipAllButton, SIGNAL(clicked()), this, SLOT(skipAll()));
-    connect(ui.retryButton, SIGNAL(clicked()), this, SLOT(retry()));
-    connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
+    CPPDEVTK_VERIFY(connect(ui.skipButton, SIGNAL(clicked()), this, SLOT(skip())));
+    CPPDEVTK_VERIFY(connect(ui.skipAllButton, SIGNAL(clicked()), this, SLOT(skipAll())));
+    CPPDEVTK_VERIFY(connect(ui.retryButton, SIGNAL(clicked()), this, SLOT(retry())));
+    CPPDEVTK_VERIFY(connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(cancel())));
     ui.iconLabel->setPixmap(QApplication::style()->standardPixmap(QStyle::SP_MessageBoxWarning));
 }
 
@@ -254,7 +256,22 @@ void QtCopyDialogPrivate::init()
 {
     Q_Q(QtCopyDialog);
     ui.setupUi(q);
-    qRegisterMetaType<qint64>("qint64");
+	
+	if (QMetaType::type("qint64")
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			== QMetaType::UnknownType) {
+#			else
+			== 0) {
+#			endif
+		if (qRegisterMetaType<qint64>("qint64")
+#				if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+				== QMetaType::UnknownType) {
+#				else
+				== 0) {
+#				endif
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype qint64");
+		}
+	}
 
     fileCopier = 0;
 
@@ -273,12 +290,12 @@ void QtCopyDialogPrivate::init()
     showTimer = new QTimer(q);
     showTimer->setInterval(2000);
     showTimer->setSingleShot(true);
-    q->connect(showTimer, SIGNAL(timeout()),
-                q, SLOT(showDialog()));
+    CPPDEVTK_VERIFY(q->connect(showTimer, SIGNAL(timeout()),
+                q, SLOT(showDialog())));
 
 }
 
-void QtCopyDialogPrivate::error(int id, QtFileCopier::Error error, bool stopped)
+void QtCopyDialogPrivate::error(int id, ::cppdevtk::gui::QtFileCopier::Error error, bool stopped)
 {
     Request r = requests[id];
     if (!stopped)
@@ -383,7 +400,7 @@ void QtCopyDialogPrivate::error(int id, QtFileCopier::Error error, bool stopped)
     }
 }
 
-void QtCopyDialogPrivate::stateChanged(QtFileCopier::State state)
+void QtCopyDialogPrivate::stateChanged(::cppdevtk::gui::QtFileCopier::State state)
 {
     Q_Q(QtCopyDialog);
     if (state == QtFileCopier::Busy) {
@@ -724,12 +741,29 @@ void QtCopyDialog::setFileCopier(QtFileCopier *copier)
         // can't start track copier while not idle
         return;
     }
-
+	
+	// NOTE: do not global qualify because moc will generate bad code
+	if (QMetaType::type("cppdevtk::gui::QtFileCopier::State")
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			== QMetaType::UnknownType) {
+#			else
+			== 0) {
+#			endif
+		if (qRegisterMetaType< ::cppdevtk::gui::QtFileCopier::State>("cppdevtk::gui::QtFileCopier::State")
+#				if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+				== QMetaType::UnknownType) {
+#				else
+				== 0) {
+#				endif
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::gui::QtFileCopier::State");
+		}
+	}
+	
     if (d->fileCopier) {
-        disconnect(d->fileCopier, SIGNAL(error(int, QtFileCopier::Error, bool)),
-                this, SLOT(error(int, QtFileCopier::Error, bool)));
-        disconnect(d->fileCopier, SIGNAL(stateChanged(QtFileCopier::State)),
-                this, SLOT(stateChanged(QtFileCopier::State)));
+        disconnect(d->fileCopier, SIGNAL(error(int, ::cppdevtk::gui::QtFileCopier::Error, bool)),
+                this, SLOT(error(int, ::cppdevtk::gui::QtFileCopier::Error, bool)));
+        disconnect(d->fileCopier, SIGNAL(stateChanged(::cppdevtk::gui::QtFileCopier::State)),
+                this, SLOT(stateChanged(::cppdevtk::gui::QtFileCopier::State)));
         disconnect(d->fileCopier, SIGNAL(started(int)),
                 this, SLOT(started(int)));
         disconnect(d->fileCopier, SIGNAL(done(bool)),
@@ -745,20 +779,20 @@ void QtCopyDialog::setFileCopier(QtFileCopier *copier)
     d->fileCopier = copier;
 
     if (d->fileCopier) {
-        connect(d->fileCopier, SIGNAL(error(int, QtFileCopier::Error, bool)),
-                this, SLOT(error(int, QtFileCopier::Error, bool)));
-        connect(d->fileCopier, SIGNAL(stateChanged(QtFileCopier::State)),
-                this, SLOT(stateChanged(QtFileCopier::State)));
-        connect(d->fileCopier, SIGNAL(started(int)),
-                this, SLOT(started(int)));
-        connect(d->fileCopier, SIGNAL(done(bool)),
-                this, SLOT(done(bool)));
-        connect(d->fileCopier, SIGNAL(dataTransferProgress(int, qint64)),
-                this, SLOT(dataTransferProgress(int, qint64)));
-        connect(d->fileCopier, SIGNAL(finished(int, bool)),
-                this, SLOT(finished(int, bool)));
-        connect(d->fileCopier, SIGNAL(canceled()),
-                this, SLOT(canceled()));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(error(int, ::cppdevtk::gui::QtFileCopier::Error, bool)),
+                this, SLOT(error(int, ::cppdevtk::gui::QtFileCopier::Error, bool))));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(stateChanged(::cppdevtk::gui::QtFileCopier::State)),
+                this, SLOT(stateChanged(::cppdevtk::gui::QtFileCopier::State))));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(started(int)),
+                this, SLOT(started(int))));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(done(bool)),
+                this, SLOT(done(bool))));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(dataTransferProgress(int, qint64)),
+                this, SLOT(dataTransferProgress(int, qint64))));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(finished(int, bool)),
+                this, SLOT(finished(int, bool))));
+        CPPDEVTK_VERIFY(connect(d->fileCopier, SIGNAL(canceled()),
+                this, SLOT(canceled())));
     }
 }
 

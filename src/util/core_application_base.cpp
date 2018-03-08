@@ -87,7 +87,7 @@ LanguageInfo CoreApplicationBase::GetDefaultLanguageInfo() const {
 
 void CoreApplicationBase::SetCurrentLanguageInfo(const LanguageInfo& languageInfo) {
 	CPPDEVTK_DBC_CHECK_ARGUMENT((languageInfo != LanguageInfo::GetCLanguageInfo()), "languageInfo: C is not supported");
-	CPPDEVTK_DBC_CHECK_ARGUMENT((GetSupportedLanguageInfos().contains(languageInfo)),
+	CPPDEVTK_DBC_CHECK_ARGUMENT(GetSupportedLanguageInfos().contains(languageInfo),
 			"languageInfo is not supported");
 	
 	currentLanguageInfo_ = languageInfo;

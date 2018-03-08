@@ -58,10 +58,6 @@ You must accept the terms of this agreement before continuing.</source>
 <context>
     <name>LoginWidget</name>
     <message>
-        <source>&amp;Login</source>
-        <translation type="obsolete">&amp;Identifiant</translation>
-    </message>
-    <message>
         <source>&amp;Password:</source>
         <translation>&amp;Mot de passe:</translation>
     </message>

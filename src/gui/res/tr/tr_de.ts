@@ -60,10 +60,6 @@ Sie müssen vor dem Fortsetzen die Bedingungen dieser Vereinbarung akzeptieren.<
 <context>
     <name>LoginWidget</name>
     <message>
-        <source>&amp;Login</source>
-        <translation type="obsolete">&amp;Login</translation>
-    </message>
-    <message>
         <source>&amp;Password:</source>
         <translation>&amp;Passwort:</translation>
     </message>

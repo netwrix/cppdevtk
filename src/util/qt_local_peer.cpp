@@ -46,6 +46,7 @@
 #endif
 
 #include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/verify.h>
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
@@ -132,7 +133,7 @@ bool QtLocalPeer::isClient()
 #endif
     if (!res)
         CPPDEVTK_LOG_WARN("listen on local socket failed, " << qPrintable(server->errorString()));
-    QObject::connect(server, SIGNAL(newConnection()), SLOT(receiveConnection()));
+    CPPDEVTK_VERIFY(QObject::connect(server, SIGNAL(newConnection()), SLOT(receiveConnection())));
     return false;
 }
 

@@ -47,7 +47,11 @@ using ::cppdevtk::util::LanguageInfo;
 LanguageMenu::LanguageMenu(QWidget* pParent): QMenu(pParent), pActionGroup_(new QActionGroup(this)) {
 #	ifndef NDEBUG
 	LanguageInfo languageInfo;
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != QMetaType::UnknownType);
+#	else
+	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != 0);
+#	endif
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
 	CPPDEVTK_ASSERT(QMetaType::hasRegisteredComparators< ::cppdevtk::util::LanguageInfo>());
 #	endif

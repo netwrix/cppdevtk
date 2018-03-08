@@ -52,6 +52,7 @@
 #include "config.hpp"
 
 #include <QtCore/QObject>
+#include <QtCore/QMetaType>
 
 
 namespace cppdevtk {
@@ -65,6 +66,8 @@ class CPPDEVTK_GUI_API QtFileCopier : public QObject
     Q_OBJECT
     Q_PROPERTY(int progressInterval READ progressInterval WRITE setProgressInterval)
     Q_PROPERTY(bool autoReset READ autoReset WRITE setAutoReset)
+	Q_ENUMS(State)
+	Q_ENUMS(Error)
 public:
 
     QtFileCopier(QObject *parent = 0);
@@ -176,6 +179,11 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QtFileCopier::CopyFlags)
 
 }	// namespace gui
 }	// namespace cppdevtk
+
+
+// NOTE: do not global qualify because moc will generate bad code
+Q_DECLARE_METATYPE(cppdevtk::gui::QtFileCopier::State)
+Q_DECLARE_METATYPE(cppdevtk::gui::QtFileCopier::Error)
 
 
 #endif	// CPPDEVTK_GUI_QT_FILE_COPIER_HPP_INCLUDED_

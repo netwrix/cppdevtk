@@ -52,9 +52,18 @@ PasswordWidget::PasswordWidget(QWidget* pParent): QWidget(pParent), WidgetBase()
 	CPPDEVTK_ASSERT(passwordRequirements_.GetHintMaxLen() <= 0);
 	
 	// NOTE: do not global qualify because moc will generate bad code
-	if (QMetaType::type("cppdevtk::gui::PasswordWidget::Mode") == QMetaType::UnknownType) {
+	if (QMetaType::type("cppdevtk::gui::PasswordWidget::Mode")
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			== QMetaType::UnknownType) {
+#			else
+			== 0) {
+#			endif
 		if (qRegisterMetaType< ::cppdevtk::gui::PasswordWidget::Mode>("cppdevtk::gui::PasswordWidget::Mode")
+#				if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 				== QMetaType::UnknownType) {
+#				else
+				== 0) {
+#				endif
 			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::gui::PasswordWidget::Mode");
 		}
 	}

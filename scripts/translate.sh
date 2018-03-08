@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-lupdate-qt5 -recursive -locations none -no-ui-lines -source-language en_US ./../cppdevtk.pro
+lupdate-qt5 -recursive -locations none -no-ui-lines -no-obsolete -source-language en_US ./../cppdevtk.pro
 
 
 # lrelease does not handle SUBDIRS

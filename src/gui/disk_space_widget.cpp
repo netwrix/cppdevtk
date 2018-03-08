@@ -52,7 +52,7 @@ DiskSpaceWidget::DiskSpaceWidget(QWidget* pParent): QWidget(pParent), WidgetBase
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "disk_space_widget");
 	ValidateUi();
 	
-	autoRefreshTimer_.setInterval(2500);
+	SetAutoRefreshInterval(5);
 	CPPDEVTK_ASSERT(!autoRefreshTimer_.isActive());
 	CPPDEVTK_ASSERT(!autoRefreshTimer_.isSingleShot());
 	
@@ -96,6 +96,18 @@ void DiskSpaceWidget::Refresh() {
 	DoRefresh(kSizeInGb, kUserFreeInGb);
 }
 
+void DiskSpaceWidget::SetBold(bool value) {
+	QFont font = pUiDiskSpaceWidget_->pLabel_->font();
+	if (font.bold() != value) {
+		font.setBold(value);
+		pUiDiskSpaceWidget_->pLabel_->setFont(font);
+	}
+}
+
+bool DiskSpaceWidget::GetBold() const {
+	return pUiDiskSpaceWidget_->pLabel_->font().bold();
+}
+
 void DiskSpaceWidget::changeEvent(QEvent* pEvent) {
 	CPPDEVTK_ASSERT(pEvent != NULL);
 	
@@ -113,10 +125,16 @@ void DiskSpaceWidget::changeEvent(QEvent* pEvent) {
 
 void DiskSpaceWidget::ValidateUi() const {
 	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pProgressBar_->isTextVisible() == false);
+	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pProgressBar_->sizePolicy().horizontalPolicy() == QSizePolicy::Expanding);
+	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pProgressBar_->sizePolicy().verticalPolicy() == QSizePolicy::Fixed);
+	
+	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pLabel_->sizePolicy().horizontalPolicy() == QSizePolicy::Expanding);
+	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pLabel_->sizePolicy().verticalPolicy() == QSizePolicy::Fixed);
+	
+	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pVerticalLayout_->contentsMargins() == QMargins(0, 0, 0, 0));
 	
 	CPPDEVTK_ASSERT(sizePolicy().horizontalPolicy() == QSizePolicy::Expanding);
-	CPPDEVTK_ASSERT(sizePolicy().verticalPolicy() == QSizePolicy::Maximum);
-	CPPDEVTK_ASSERT(pUiDiskSpaceWidget_->pVerticalLayout_->contentsMargins() == QMargins(0, 0, 0, 0));
+	CPPDEVTK_ASSERT(sizePolicy().verticalPolicy() == QSizePolicy::Fixed);
 }
 
 void DiskSpaceWidget::MakeConnections() {

@@ -1,4 +1,4 @@
-C:\Qt\5.6.3\msvc2015_64\bin\lupdate -recursive -locations none -no-ui-lines -source-language en_US ./../cppdevtk.pro
+C:\Qt\5.6.3\msvc2015_64\bin\lupdate -recursive -locations none -no-ui-lines -no-obsolete -source-language en_US ./../cppdevtk.pro
 
 
 REM lrelease does not handle SUBDIRS

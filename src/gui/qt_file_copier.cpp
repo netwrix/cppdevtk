@@ -56,6 +56,8 @@
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/stdexcept.hpp>
 
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
@@ -215,20 +217,34 @@ QtCopyThread::QtCopyThread(QtFileCopier *fileCopier)
       autoReset(true)
 {
 	// NOTE: do not global qualify because moc will generate bad code
-    qRegisterMetaType<cppdevtk::gui::QtFileCopier::Error>("cppdevtk::gui::QtFileCopier::Error");
+	if (QMetaType::type("cppdevtk::gui::QtFileCopier::Error")
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			== QMetaType::UnknownType) {
+#			else
+			== 0) {
+#			endif
+		if (qRegisterMetaType< ::cppdevtk::gui::QtFileCopier::Error>("cppdevtk::gui::QtFileCopier::Error")
+#				if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+				== QMetaType::UnknownType) {
+#				else
+				== 0) {
+#				endif
+			throw CPPDEVTK_RUNTIME_EXCEPTION("failed to register metatype cppdevtk::gui::QtFileCopier::Error");
+		}
+	}
 	
-    connect(this, SIGNAL(error(int, QtFileCopier::Error, bool)),
-                copier, SLOT(copyError(int, QtFileCopier::Error, bool)));
-    connect(this, SIGNAL(started(int)),
-                copier, SLOT(copyStarted(int)));
-    connect(this, SIGNAL(dataTransferProgress(int, qint64)),
-                copier, SIGNAL(dataTransferProgress(int, qint64)));
-    connect(this, SIGNAL(finished(int, bool)),
-                copier, SLOT(copyFinished(int, bool)));
-    connect(this, SIGNAL(canceled()),
-                copier, SLOT(copyCanceled()));
-    connect(copier, SIGNAL(destroyed()),
-                this, SLOT(copierDestroyed()));
+    CPPDEVTK_VERIFY(connect(this, SIGNAL(error(int, ::cppdevtk::gui::QtFileCopier::Error, bool)),
+                copier, SLOT(copyError(int, ::cppdevtk::gui::QtFileCopier::Error, bool))));
+    CPPDEVTK_VERIFY(connect(this, SIGNAL(started(int)),
+                copier, SLOT(copyStarted(int))));
+    CPPDEVTK_VERIFY(connect(this, SIGNAL(dataTransferProgress(int, qint64)),
+                copier, SIGNAL(dataTransferProgress(int, qint64))));
+    CPPDEVTK_VERIFY(connect(this, SIGNAL(finished(int, bool)),
+                copier, SLOT(copyFinished(int, bool))));
+    CPPDEVTK_VERIFY(connect(this, SIGNAL(canceled()),
+                copier, SLOT(copyCanceled())));
+    CPPDEVTK_VERIFY(connect(copier, SIGNAL(destroyed()),
+                this, SLOT(copierDestroyed())));
 }
 
 QtCopyThread::~QtCopyThread()
@@ -1385,8 +1401,8 @@ QtFileCopier::QtFileCopier(QObject *parent) : QObject(parent)
     d_ptr->copyThread = new QtCopyThread(this);
     d_ptr->progressTimer = new QTimer(this);
     d_ptr->progressTimer->setInterval(200);
-    connect(d_ptr->progressTimer, SIGNAL(timeout()),
-                this, SLOT(progressRequest()));
+    CPPDEVTK_VERIFY(connect(d_ptr->progressTimer, SIGNAL(timeout()),
+                this, SLOT(progressRequest())));
 }
 
 /*!
