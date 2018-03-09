@@ -377,7 +377,7 @@ void PasswordWidget::DoValidateOldPassword() {
 		if (kPwdLen > reqMaxLen) {
 			MarkOldPasswordInvalid();
 			if (isValid_) {
-				SetInvalidValidationMessage(tr("Old password length (%1) exceeds maximum (%2).").arg(kPwdLen).arg(reqMaxLen));
+				SetInvalidValidationMessage(tr("Old password length (%1) exceeds maximum (%2).").arg(QString::number(kPwdLen), QString::number(reqMaxLen)));
 				isValid_ = false;
 			}
 			return;
@@ -391,7 +391,7 @@ void PasswordWidget::DoValidateOldPassword() {
 				MarkOldPasswordIntermediate();
 				if (isValid_) {
 					SetIntermediateValidationMessage(tr("Old password length (%1) is less than minimum (%2).").arg(
-							kPwdLen).arg(kReqMinLen));
+							QString::number(kPwdLen), QString::number(kReqMinLen)));
 					isValid_ = false;
 				}
 				return;
@@ -408,7 +408,7 @@ void PasswordWidget::DoValidateOldPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Old password number of letters (%1) is less than minimum (%2).").arg(
-							kPwdCountLetters).arg(kReqMinLetters));
+							QString::number(kPwdCountLetters), QString::number(kReqMinLetters)));
 					isValid_ = false;
 				}
 				return;
@@ -425,7 +425,7 @@ void PasswordWidget::DoValidateOldPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Old password number of upper case letters (%1) is less than minimum (%2).").arg(
-							kPwdCountUpper).arg(kReqMinUpper));
+							QString::number(kPwdCountUpper), QString::number(kReqMinUpper)));
 					isValid_ = false;
 				}
 				return;
@@ -442,7 +442,7 @@ void PasswordWidget::DoValidateOldPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Old password number of lower case letters (%1) is less than minimum (%2).").arg(
-							kPwdCountLower).arg(kReqMinLower));
+							QString::number(kPwdCountLower), QString::number(kReqMinLower)));
 					isValid_ = false;
 				}
 				return;
@@ -459,7 +459,7 @@ void PasswordWidget::DoValidateOldPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Old password number of digits (%1) is less than minimum (%2).").arg(
-							kPwdCountDigits).arg(kReqMinDigits));
+							QString::number(kPwdCountDigits), QString::number(kReqMinDigits)));
 					isValid_ = false;
 				}
 				return;
@@ -476,7 +476,7 @@ void PasswordWidget::DoValidateOldPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Old password number of symbols (%1) is less than minimum (%2).").arg(
-							kPwdCountSymbols).arg(kReqMinSymbols));
+							QString::number(kPwdCountSymbols), QString::number(kReqMinSymbols)));
 					isValid_ = false;
 				}
 				return;
@@ -519,7 +519,7 @@ void PasswordWidget::DoValidateNewPassword() {
 		if (kPwdLen > reqMaxLen) {
 			MarkNewPasswordInvalid();
 			if (isValid_) {
-				SetInvalidValidationMessage(tr("Password length (%1) exceeds maximum permitted (%2).").arg(kPwdLen).arg(reqMaxLen));
+				SetInvalidValidationMessage(tr("Password length (%1) exceeds maximum permitted (%2).").arg(QString::number(kPwdLen), QString::number(reqMaxLen)));
 				isValid_ = false;
 			}
 			return;
@@ -533,7 +533,7 @@ void PasswordWidget::DoValidateNewPassword() {
 				MarkNewPasswordIntermediate();
 				if (isValid_) {
 					SetIntermediateValidationMessage(tr("Password length (%1) is less than minimum required (%2).").arg(
-							kPwdLen).arg(kReqMinLen));
+							QString::number(kPwdLen), QString::number(kReqMinLen)));
 					isValid_ = false;
 				}
 				return;
@@ -550,7 +550,7 @@ void PasswordWidget::DoValidateNewPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Password number of letters (%1) is less than minimum required (%2).").arg(
-							kPwdCountLetters).arg(kReqMinLetters));
+							QString::number(kPwdCountLetters), QString::number(kReqMinLetters)));
 					isValid_ = false;
 				}
 				return;
@@ -567,7 +567,7 @@ void PasswordWidget::DoValidateNewPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Password number of upper case letters (%1) is less than minimum required (%2).").arg(
-							kPwdCountUpper).arg(kReqMinUpper));
+							QString::number(kPwdCountUpper), QString::number(kReqMinUpper)));
 					isValid_ = false;
 				}
 				return;
@@ -584,7 +584,7 @@ void PasswordWidget::DoValidateNewPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Password number of lower case letters (%1) is less than minimum required (%2).").arg(
-							kPwdCountLower).arg(kReqMinLower));
+							QString::number(kPwdCountLower), QString::number(kReqMinLower)));
 					isValid_ = false;
 				}
 				return;
@@ -601,7 +601,7 @@ void PasswordWidget::DoValidateNewPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Password number of digits (%1) is less than minimum required (%2).").arg(
-							kPwdCountDigits).arg(kReqMinDigits));
+							QString::number(kPwdCountDigits), QString::number(kReqMinDigits)));
 					isValid_ = false;
 				}
 				return;
@@ -618,7 +618,7 @@ void PasswordWidget::DoValidateNewPassword() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Password number of symbols (%1) is less than minimum required (%2).").arg(
-							kPwdCountSymbols).arg(kReqMinSymbols));
+							QString::number(kPwdCountSymbols), QString::number(kReqMinSymbols)));
 					isValid_ = false;
 				}
 				return;
@@ -665,7 +665,7 @@ void PasswordWidget::DoValidateNewPassword() {
 					if (isValid_) {
 						SetInvalidValidationMessage(
 								tr("New password similarity with old password (%1) is less than minimum allowed (%2).").arg(
-								kNewOldSimilarity).arg(kReqNewOldMinSimilarity));
+								QString::number(kNewOldSimilarity), QString::number(kReqNewOldMinSimilarity)));
 						isValid_ = false;
 					}
 					return;
@@ -775,7 +775,7 @@ void PasswordWidget::DoValidateNewPasswordHint() {
 			MarkNewPasswordHintInvalid();
 			if (isValid_) {
 				SetInvalidValidationMessage(tr("Password hint length (%1) exceeds maximum allowed (%2).").arg(
-						kPwdHintLen).arg(reqMaxLen));
+						QString::number(kPwdHintLen), QString::number(reqMaxLen)));
 				isValid_ = false;
 			}
 			return;
@@ -789,7 +789,7 @@ void PasswordWidget::DoValidateNewPasswordHint() {
 				MarkNewPasswordHintIntermediate();
 				if (isValid_) {
 					SetIntermediateValidationMessage(tr("Password hint length (%1) is less than minimum (%2).").arg(
-							kPwdHintLen).arg(kReqMinLen));
+							QString::number(kPwdHintLen), QString::number(kReqMinLen)));
 					isValid_ = false;
 				}
 				return;
@@ -834,7 +834,7 @@ void PasswordWidget::DoValidateNewPasswordHint() {
 				if (isValid_) {
 					SetInvalidValidationMessage(
 							tr("Password hint similarity with password (%1) is less than minimum (%2).").arg(
-							kHintSimilarity).arg(kReqHintMinSimilarity));
+							QString::number(kHintSimilarity), QString::number(kReqHintMinSimilarity)));
 					isValid_ = false;
 				}
 				return;

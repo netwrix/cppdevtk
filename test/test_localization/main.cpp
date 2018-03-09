@@ -60,8 +60,9 @@ int main(int argc, char* argv[]) try {
 	::cppdevtk::test_localization::InitResources();
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
-	Application::SetInfo();
-	Application::SetQmInfo();
+	Application::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
+				(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_LOCALIZATION_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
+	Application::SetQmInfo(":/cppdevtk/test_localization/res/tr", "tr_");
 	CPPDEVTK_ASSERT(Application::GetNumberOfSupportedLanguages() > 1);
 	
 	Application application(argc, argv);

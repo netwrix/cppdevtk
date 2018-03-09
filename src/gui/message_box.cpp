@@ -35,7 +35,7 @@ namespace gui {
 
 
 // NOTE: this function (including implementation) was taken from Qt 4.8.7 showNewMessageBox() and added detailedText
-MessageBox::StandardButton MessageBox::ExecNewMessageBox(QWidget* pParent, Icon icon,
+MessageBox::StandardButton MessageBox::ExecNewMessageBox(QWidget* pParent, Icon icon, const QPixmap* pIconPixmap,
 		const QString& title, const QString& text, const QString& detailedText,
 		StandardButtons buttons, StandardButton defaultButton) {
 	// MessageBoxPrivate not accesible here
@@ -50,6 +50,9 @@ MessageBox::StandardButton MessageBox::ExecNewMessageBox(QWidget* pParent, Icon 
 	*/
 	
 	MessageBox msgBox(icon, title, text, NoButton, pParent);
+	if (pIconPixmap != NULL) {
+		msgBox.setIconPixmap(*pIconPixmap);
+	}
 	msgBox.setDetailedText(detailedText);
 	
 	QDialogButtonBox *buttonBox = msgBox.findChild<QDialogButtonBox*>();

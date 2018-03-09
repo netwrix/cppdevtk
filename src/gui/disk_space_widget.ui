@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>115</width>
-    <height>40</height>
+    <width>127</width>
+    <height>50</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -51,7 +51,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string notr="true">C: 75 GB free of 100 GB</string>
+      <string notr="true">C: 1 GB free of 10 GB</string>
      </property>
     </widget>
    </item>

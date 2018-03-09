@@ -114,7 +114,7 @@ void MainWindow::Homepage() {
 	const QUrl kUrl(CPPDEVTK_HOMEPAGE, QUrl::TolerantMode);
 	if (!QDesktopServices::openUrl(kUrl)) {
 		MessageBox::Critical(this, Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
-				tr("Failed to open product homepage"), QString("URL: ").arg(kUrl.toString()));
+				tr("Failed to open product homepage"), QString("URL: %1").arg(kUrl.toString()));
 	}
 }
 
@@ -122,7 +122,7 @@ void MainWindow::Support() {
 	const QUrl kUrl(CPPDEVTK_ONLINE_SUPPORT, QUrl::TolerantMode);
 	if (!QDesktopServices::openUrl(kUrl)) {
 		MessageBox::Critical(this, Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
-				tr("Failed to open online support"), QString("URL: ").arg(kUrl.toString()));
+				tr("Failed to open online support"), QString("URL: %1").arg(kUrl.toString()));
 	}
 }
 
@@ -134,7 +134,7 @@ void MainWindow::Email() {
 	const QUrl kUrl(kEmail, QUrl::TolerantMode);
 	if (!QDesktopServices::openUrl(kUrl)) {
 		MessageBox::Critical(this, Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
-				tr("Failed to open default E-Mail client"), QString("URL: ").arg(kUrl.toString()));
+				tr("Failed to open default E-Mail client"), QString("URL: %1").arg(kUrl.toString()));
 	}
 }
 

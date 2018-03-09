@@ -27,15 +27,7 @@
 
 #include <QtCore/QUrl>
 #include <QtCore/QtGlobal>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#	if (CPPDEVTK_COMPILER_CLANG)
-#		include <QtGui/QDesktopServices>
-#	else
-#		include <QtWidgets/QDesktopServices>
-#	endif
-#else
-#	include <QtGui/QDesktopServices>
-#endif
+#include <QtGui/QDesktopServices>
 
 #if (!CPPDEVTK_PLATFORM_IOS)
 #include <IOKit/IOKitLib.h>

@@ -48,6 +48,9 @@ EulaWidget::EulaWidget(QWidget* pParent): QWidget(pParent), WidgetBase(), pUiEul
 	pUiEulaWidget_->setupUi(this);
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "eula_widget");
 	ValidateUi();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	adjustSize();
+#	endif
 	
 	//Refresh();
 	
@@ -97,9 +100,14 @@ void EulaWidget::OpenEula() {
 
 void EulaWidget::ValidateUi() const {
 	CPPDEVTK_ASSERT(pUiEulaWidget_->pLabelEula_->wordWrap() == true);
+	
 	CPPDEVTK_ASSERT(pUiEulaWidget_->pTextBrowserEula_->tabChangesFocus() == true);
 	CPPDEVTK_ASSERT(pUiEulaWidget_->pTextBrowserEula_->openExternalLinks() == true);
 	CPPDEVTK_ASSERT(pUiEulaWidget_->pTextBrowserEula_->minimumHeight() == 192);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	pUiEulaWidget_->pTextBrowserEula_->setMinimumHeight(0);
+	pUiEulaWidget_->pTextBrowserEula_->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
+#	endif
 	
 	CPPDEVTK_ASSERT(pUiEulaWidget_->pVerticalLayout_->contentsMargins() == QMargins(0, 0, 0, 0));
 }
