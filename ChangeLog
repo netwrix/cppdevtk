@@ -9,6 +9,7 @@ Version 1.0.9.1:
 	- updated KSqueezedTextLabel to KF5
 	- improved DiskSpaceWidget layout
 	- added icon pixmap to MessageBox
+	- updated qt-solutions
 - Fixed bugs:
 	- fixed CoreApplicationBase::GetSupportedLanguageInfos()
 	- fixed meta type issues in qt solutions integration

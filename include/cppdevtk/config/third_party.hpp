@@ -117,11 +117,10 @@
 
 
 #if (CPPDEVTK_PLATFORM_WINDOWS)
+#	ifndef ZLIB_WINAPI
+#		define ZLIB_WINAPI
+#	endif
 #	ifdef CPPDEVTK_SHARED
-#		ifndef ZLIB_WINAPI
-#			define ZLIB_WINAPI
-#		endif
-
 #		ifndef ZLIB_DLL
 #			define ZLIB_DLL
 #		endif
