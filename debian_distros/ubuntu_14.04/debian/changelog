@@ -1,8 +1,20 @@
 cppdevtk (1.0.9-0ubuntu1) trusty; urgency=medium
 
-  * to fill
+  * added localization test/sample app
+  * localization support review
+  * translations
+  * verify connect in qt solutions integration
+  * updated KSqueezedTextLabel to KF5
+  * improved DiskSpaceWidget layout
+  * added icon pixmap to MessageBox
+  * updated qt-solutions
+  * CoreApplicationBase::GetSupportedLanguageInfos() use app qm info
+  * updated Qt to 5.9.4 on Ubuntu
+  * updated boost to 1_66_0
+  * fixed meta type issues in qt solutions integration
+  * partial fix for KSqueezedTextLabel rich text
 
- -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Wed, 31 Jan 2018 14:19:46 +0300
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Wed, 14 Mar 2018 14:19:46 +0300
 
 
 cppdevtk (1.0.8-0ubuntu1) trusty; urgency=medium

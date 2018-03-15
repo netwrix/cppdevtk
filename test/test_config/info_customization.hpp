@@ -18,7 +18,7 @@
 
 
 #ifndef CPPDEVTK_TEST_CONFIG_INFO_HPP_INCLUDED_
-#	error "Do not include directly; Please include "info.hpp" instead!!!"
+#	error "Do not include directly; please include info.hpp instead!!!"
 #endif
 
 

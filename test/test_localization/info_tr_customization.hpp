@@ -18,7 +18,7 @@
 
 
 #ifndef CPPDEVTK_TEST_LOCALIZATION_INFO_TR_HPP_INCLUDED_
-#	error "Do not include directly; Please include "info_tr.hpp" instead!!!"
+#	error "Do not include directly; please include info_tr.hpp instead!!!"
 #endif
 
 

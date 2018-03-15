@@ -580,6 +580,7 @@ exit 0
 %{_bindir}/%{name}_test_disk_space_widget
 %{_bindir}/%{name}_test_invisible_widget
 %{_bindir}/%{name}_test_slot_throw
+%{_bindir}/%{name}_test_localization
 %{_datadir}/applications/*.desktop
 %{_datadir}/pixmaps
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
@@ -591,9 +592,21 @@ exit 0
 
 
 %changelog
-* Wed Jan 31 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Wed Mar 14 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.9.1
-- to fill
+- added localization test/sample app
+- localization support review
+- translations
+- verify connect in qt solutions integration
+- updated KSqueezedTextLabel to KF5
+- improved DiskSpaceWidget layout
+- added icon pixmap to MessageBox
+- updated qt-solutions
+- CoreApplicationBase::GetSupportedLanguageInfos() use app qm info
+- updated Qt to 5.9.4 on Ubuntu
+- updated boost to 1_66_0
+- fixed meta type issues in qt solutions integration
+- partial fix for KSqueezedTextLabel rich text
 * Tue Jan 30 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.8.1
 - added GetMountPoints()
