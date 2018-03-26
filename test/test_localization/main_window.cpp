@@ -170,19 +170,19 @@ void MainWindow::PopulateLanguages() {
 }
 
 void MainWindow::MakeConnections() {
-	CPPDEVTK_VERIFY(connect(pActionExit_, SIGNAL(triggered()), this, SLOT(Exit())));
+	CPPDEVTK_VERIFY(connect(pActionExit_, SIGNAL(triggered()), SLOT(Exit())));
 	
 	CPPDEVTK_VERIFY(connect(pMenuLanguage_, SIGNAL(Triggered(const::cppdevtk::util::LanguageInfo&)),
-			this, SLOT(ChangeLanguage(const::cppdevtk::util::LanguageInfo&))));	
+			SLOT(ChangeLanguage(const::cppdevtk::util::LanguageInfo&))));	
 	
-	CPPDEVTK_VERIFY(connect(pActionAbout_, SIGNAL(triggered()), this, SLOT(About())));
-	CPPDEVTK_VERIFY(connect(pActionAboutQt_, SIGNAL(triggered()), this, SLOT(AboutQt())));
-	CPPDEVTK_VERIFY(connect(pActionHomepage_, SIGNAL(triggered()), this, SLOT(Homepage())));
-	CPPDEVTK_VERIFY(connect(pActionSupport_, SIGNAL(triggered()), this, SLOT(Support())));
-	CPPDEVTK_VERIFY(connect(pActionEmail_, SIGNAL(triggered()), this, SLOT(Email())));
+	CPPDEVTK_VERIFY(connect(pActionAbout_, SIGNAL(triggered()), SLOT(About())));
+	CPPDEVTK_VERIFY(connect(pActionAboutQt_, SIGNAL(triggered()), SLOT(AboutQt())));
+	CPPDEVTK_VERIFY(connect(pActionHomepage_, SIGNAL(triggered()), SLOT(Homepage())));
+	CPPDEVTK_VERIFY(connect(pActionSupport_, SIGNAL(triggered()), SLOT(Support())));
+	CPPDEVTK_VERIFY(connect(pActionEmail_, SIGNAL(triggered()), SLOT(Email())));
 	
 	CPPDEVTK_VERIFY(connect(pLanguageWidget_, SIGNAL(CurrentLanguageInfoChanged(const::cppdevtk::util::LanguageInfo&)),
-			this, SLOT(ChangeLanguage(const::cppdevtk::util::LanguageInfo&))));
+			SLOT(ChangeLanguage(const::cppdevtk::util::LanguageInfo&))));
 }
 
 void MainWindow::SetCurrentLanguage() {

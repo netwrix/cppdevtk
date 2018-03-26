@@ -58,6 +58,10 @@
 
 #include "config.hpp"
 
+
+#if (CPPDEVTK_WITH_ZLIB)
+
+
 #include <QtCore/QDateTime>
 #include <QtCore/QFile>
 #include <QtCore/QString>
@@ -131,4 +135,5 @@ private:
 }	// namespace cppdevtk
 
 
+#endif	// (CPPDEVTK_WITH_ZLIB)
 #endif	// CPPDEVTK_UTIL_Q_ZIP_READER_HPP_INCLUDED_

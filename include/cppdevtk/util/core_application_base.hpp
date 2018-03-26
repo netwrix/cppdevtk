@@ -33,6 +33,10 @@
 
 #include <cstddef>
 
+#if (CPPDEVTK_PLATFORM_WINDOWS)
+#include <Windows.h>
+#endif
+
 
 class QObject;
 class QEvent;
@@ -47,6 +51,7 @@ namespace cppdevtk {
 namespace util {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Q_ENUMS(), qualified enum, Q_DECLARE_METATYPE(), qRegisterMetaType() can not be used here
 // because we do not inherit QObject.
 
@@ -109,6 +114,13 @@ public:
 	/// \pre !organizationName().isEmpty()
 	/// \pre !applicationName().isEmpty()
 	static QString GetId();
+	
+	/// \note Termination signals are:
+	/// - Unix: SIGTERM and SIGINT
+	/// - Windows: CTRL_C_EVENT, CTRL_BREAK_EVENT and CTRL_CLOSE_EVENT
+	/// \remark If not set, default is false (as Qt does)
+	void SetQuitOnTerminationSignals(bool value);
+	bool GetQuitOnTerminationSignals() const;
 protected:
 	virtual bool notify(QObject* pReceiver, QEvent* pEvent);
 	virtual bool NotifyThrowHandler(const ::std::exception* pExc = NULL);
@@ -117,6 +129,10 @@ protected:
 private:
 	static QList<QLocale> GetSupportedLocales();
 	
+#	if (CPPDEVTK_PLATFORM_WINDOWS)
+	static BOOL WINAPI ConsoleCtrlHandler(_In_ DWORD dwCtrlType);
+#	endif
+	
 	
 	NotifyThrowAction notifyThrowAction_;
 	bool isSystemLocalePreferred_;
@@ -124,6 +140,11 @@ private:
 	QTranslator qtTranslator_;
 	QTranslator baseTranslator_;
 	QTranslator utilTranslator_;
+	bool quitOnTerminationSignals_;
+#	if (CPPDEVTK_PLATFORM_UNIX)
+	bool unwatchSigTerm_;
+	bool unwatchSigInt_;
+#	endif
 	
 	static QString qmPath_;
 	static QString qmNamePrefix_;
@@ -166,6 +187,10 @@ inline void CoreApplicationBase::SetInfo(const QString& companyName, const QStri
 		const QString& productName, const QString& productVersion) {
 	SetCompanyInfo(companyName, companyHomepage);
 	SetProductInfo(productName, productVersion);
+}
+
+inline bool CoreApplicationBase::GetQuitOnTerminationSignals() const {
+	return quitOnTerminationSignals_;
 }
 
 

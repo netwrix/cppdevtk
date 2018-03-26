@@ -118,7 +118,7 @@ public:
     };
 
     ResultButton execute(const QString &sourceFile, const QString &destinationFile);
-private slots:
+private Q_SLOTS:
     void cancel()       { done(Cancel); }
     void skip()         { done(Skip); }
     void skipAll()      { done(SkipAll); }
@@ -167,7 +167,7 @@ public:
 
     ResultButton execute(const QString &sourceFile, const QString &destinationFile,
                     const QString &title, const QString &message);
-private slots:
+private Q_SLOTS:
     void cancel()       { done(Cancel); }
     void skip()         { done(Skip); }
     void skipAll()      { done(SkipAll); }

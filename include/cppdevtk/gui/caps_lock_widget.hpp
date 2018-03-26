@@ -48,6 +48,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \details Example:
 /// \code
 /// // widget.hpp
@@ -120,7 +121,7 @@ public:
 	
 	void SetBold(bool value);
 	bool GetBold() const;
-public slots:
+public Q_SLOTS:
 	void Refresh();
 protected:
 	virtual void changeEvent(QEvent* pEvent);

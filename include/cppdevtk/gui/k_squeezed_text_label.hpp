@@ -90,7 +90,7 @@ class CPPDEVTK_GUI_API KSqueezedTextLabel : public QLabel, public WidgetBase
     Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
     Q_PROPERTY(int indent READ indent WRITE setIndent)
     Q_PROPERTY(int margin READ margin WRITE setMargin)
-signals:
+Q_SIGNALS:
 	void Pressed();
 	void Released();
 	void DoubleClicked();

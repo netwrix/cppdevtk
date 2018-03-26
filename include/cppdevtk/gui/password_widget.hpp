@@ -48,11 +48,12 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Set or Change password widget.
 class CPPDEVTK_GUI_API PasswordWidget: public QWidget, public WidgetBase {
 	Q_OBJECT
 	Q_ENUMS(Mode)
-signals:
+Q_SIGNALS:
 	void ShowCharactersToggled(bool checked);
 	void ValidChanged(bool value);
 public:
@@ -93,7 +94,7 @@ public:
 	
 	void SetCapsLockOffColor(const QColor& color);
 	QColor GetCapsLockOffColor() const;
-public slots:
+public Q_SLOTS:
 	void Clear();
 	
 	void SetShowCharactersChecked(bool checked);
@@ -128,9 +129,9 @@ protected:
 	void MarkNewPasswordHintAcceptable();
 	void MarkNewPasswordHintIntermediate();
 	void MarkNewPasswordHintInvalid();
-protected slots:
+protected Q_SLOTS:
 	virtual bool Validate();	// virtual just in case...
-private slots:
+private Q_SLOTS:
 	void ShowCharacters(bool show);
 	void ShowRequirements();
 private:

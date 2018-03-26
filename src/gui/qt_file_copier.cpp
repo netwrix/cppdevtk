@@ -118,7 +118,7 @@ public:
 
     void emitProgress(int id, qint64 progress) {
         QMutexLocker l(&mutex);
-        emit dataTransferProgress(id, progress);
+        Q_EMIT dataTransferProgress(id, progress);
         progressRequest = 0;
     }
     bool isCanceled(int id) const {
@@ -151,7 +151,7 @@ public:
     void overwriteChildRequests(int id);
 
     void setAutoReset(bool on);
-public slots:
+public Q_SLOTS:
     void restart();
 
     void copy(int id, const CopyRequest &request);
@@ -171,7 +171,7 @@ public slots:
     void resetSkip();
 
     void progress();
-signals:
+Q_SIGNALS:
     void error(int id, ::cppdevtk::gui::QtFileCopier::Error error, bool stopped);
     void started(int id);
     void dataTransferProgress(int id, qint64 progress);
@@ -179,7 +179,7 @@ signals:
     void canceled();
 protected:
     void run();
-protected slots:
+protected Q_SLOTS:
     void copierDestroyed();
 private:
 
@@ -751,7 +751,7 @@ void QtCopyThread::renameChildren(int id)
     int oldCurrentId = currentId;
     currentId = it.key();
     mutex.unlock();
-    emit started(id);
+    Q_EMIT started(id);
 
     while (!r.childrenQueue.isEmpty())
         renameChildren(r.childrenQueue.dequeue());
@@ -761,7 +761,7 @@ void QtCopyThread::renameChildren(int id)
         emitProgress(id, fid.size());
     }
 
-    emit finished(id, false);
+    Q_EMIT finished(id, false);
     mutex.lock();
     currentId = oldCurrentId;
     requestQueue.remove(id);
@@ -786,7 +786,7 @@ void QtCopyThread::cancelChildren(int id)
 //    int oldCurrentId = currentId;
 //    currentId = it.key();
 //    mutex.unlock();
-//    emit started(id);
+//    Q_EMIT started(id);
 
     while (!r.childrenQueue.isEmpty()) {
         int childId = r.childrenQueue.dequeue();
@@ -795,9 +795,9 @@ void QtCopyThread::cancelChildren(int id)
         requestQueue.remove(childId);
     }
 
-//    emit error(id, QtFileCopier::Canceled, false);
+//    Q_EMIT error(id, QtFileCopier::Canceled, false);
 
-//    emit finished(id, true);
+//    Q_EMIT finished(id, true);
 //    mutex.lock();
 //    currentId = oldCurrentId;
 
@@ -816,7 +816,7 @@ void QtCopyThread::handle(int id)
     currentId = it.key();
     mutex.unlock();
 
-    emit started(id);
+    Q_EMIT started(id);
     bool done = false;
     QtFileCopier::Error err = QtFileCopier::NoError;;
     while (!done) {
@@ -845,15 +845,15 @@ void QtCopyThread::handle(int id)
         if (done || copyRequest.copyFlags & QtFileCopier::NonInteractive) {
             done = true;
             if (err != QtFileCopier::NoError)
-                emit error(id, err, false);
+                Q_EMIT error(id, err, false);
         } else {
             mutex.lock();
             if (stopRequest || skipAllError.contains(err)) {
                 done = true;
                 if (!stopRequest)
-                    emit error(id, err, false);
+                    Q_EMIT error(id, err, false);
             } else {
-                emit error(id, err, true);
+                Q_EMIT error(id, err, true);
                 waitingForInteraction = true;
                 interactionCondition.wait(&mutex);
                 if (skipAllRequest) {
@@ -866,7 +866,7 @@ void QtCopyThread::handle(int id)
         }
     }
 
-    emit finished(id, err != QtFileCopier::NoError);
+    Q_EMIT finished(id, err != QtFileCopier::NoError);
     mutex.lock();
     currentId = oldCurrentId;
     requestQueue.remove(id);
@@ -897,7 +897,7 @@ void QtCopyThread::run()
             if (cancelRequest) {
                 requestQueue.clear();
                 cancelRequest = false;
-                emit canceled();
+                Q_EMIT canceled();
                 mutex.unlock();
             } else {
                 mutex.unlock();
@@ -970,7 +970,7 @@ void QtFileCopierPrivate::setState(QtFileCopier::State s)
     {
         progressTimer->stop();
     }
-    emit q->stateChanged(s);
+    Q_EMIT q->stateChanged(s);
     state = s;
 }
 
@@ -979,7 +979,7 @@ void QtFileCopierPrivate::copyError(int id, ::cppdevtk::gui::QtFileCopier::Error
     Q_Q(QtFileCopier);
     if (stopped == true)
         setState(QtFileCopier::WaitingForInteraction);
-    emit q->error(id, error, stopped);
+    Q_EMIT q->error(id, error, stopped);
 }
 
 void QtFileCopierPrivate::copyStarted(int id)
@@ -987,7 +987,7 @@ void QtFileCopierPrivate::copyStarted(int id)
     Q_Q(QtFileCopier);
     setState(QtFileCopier::Busy);
     currentStack.push(id);
-    emit q->started(id);
+    Q_EMIT q->started(id);
 }
 
 void QtFileCopierPrivate::copyFinished(int id, bool err)
@@ -996,7 +996,7 @@ void QtFileCopierPrivate::copyFinished(int id, bool err)
     int pop = currentStack.pop();
     CPPDEVTK_ASSERT(pop == id);
     ::cppdevtk::base::SuppressUnusedWarning(pop);
-    emit q->finished(id, err);
+    Q_EMIT q->finished(id, err);
     if (err) {
         error = err;
         removeChildren(id);
@@ -1004,7 +1004,7 @@ void QtFileCopierPrivate::copyFinished(int id, bool err)
     requests.remove(id);
     if (requests.isEmpty()) {
         setState(QtFileCopier::Idle);
-        emit q->done(error);
+        Q_EMIT q->done(error);
     }
 }
 
@@ -1026,9 +1026,9 @@ void QtFileCopierPrivate::copyCanceled()
 {
     Q_Q(QtFileCopier);
     requests.clear();
-    emit q->canceled();
+    Q_EMIT q->canceled();
     setState(QtFileCopier::Idle);
-    emit q->done(false);
+    Q_EMIT q->done(false);
 }
 
 CopyRequest QtFileCopierPrivate::prepareRequest(bool checkPath, const QString &sourceFile,

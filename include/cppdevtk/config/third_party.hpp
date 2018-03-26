@@ -116,6 +116,7 @@
 /// @}	// config_third_party_supported_boost
 
 
+#if (CPPDEVTK_WITH_ZLIB)
 #if (CPPDEVTK_PLATFORM_WINDOWS)
 #	ifndef ZLIB_WINAPI
 #		define ZLIB_WINAPI
@@ -125,6 +126,7 @@
 #			define ZLIB_DLL
 #		endif
 #	endif
+#endif
 #endif
 
 

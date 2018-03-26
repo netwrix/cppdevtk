@@ -61,7 +61,7 @@ class CPPDEVTK_GUI_API CustomWizard: public QDialog, public WidgetBase {
     Q_PROPERTY(Qt::TextFormat subTitleFormat READ subTitleFormat WRITE setSubTitleFormat)
     Q_PROPERTY(int startId READ startId WRITE setStartId)
     Q_PROPERTY(int currentId READ currentId NOTIFY currentIdChanged)
-signals:
+Q_SIGNALS:
 	void currentIdChanged(int id);
 	void helpRequested();
 	//void customButtonClicked(int which);
@@ -176,7 +176,7 @@ public:
 	
 	void setHomepage(const QString& homepage);
 	QString getHomepage() const;
-public slots:
+public Q_SLOTS:
 	void back();
 	void next();
 	void restart();
@@ -213,7 +213,7 @@ private:
     //int currentId_;
 	QSet<int> initializedPageIds_;
 	QString homepage_;
-private slots:
+private Q_SLOTS:
 	void updateButtonStates();
 	void openHomepage();
 };

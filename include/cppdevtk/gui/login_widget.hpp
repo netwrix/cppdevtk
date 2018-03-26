@@ -48,7 +48,7 @@ namespace gui {
 
 class CPPDEVTK_GUI_API LoginWidget: public QWidget, public WidgetBase {
 	Q_OBJECT
-signals:
+Q_SIGNALS:
 	void RequestPasswordHint();
 	
 	void ShowCharactersToggled(bool checked);
@@ -95,7 +95,7 @@ public:
 	
 	void SetCapsLockOffColor(const QColor& color);
 	QColor GetCapsLockOffColor() const;
-public slots:
+public Q_SLOTS:
 	void Clear();
 	
 	void SetTitle(const QString& title);
@@ -111,7 +111,7 @@ public slots:
 	void RefreshCapsLockWidget();
 protected:
 	virtual void changeEvent(QEvent* pEvent);
-private slots:
+private Q_SLOTS:
 	void ShowCharacters(bool show);
 	bool Validate();
 private:

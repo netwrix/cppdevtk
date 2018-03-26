@@ -27,4 +27,5 @@ SUBDIRS +=	\
 	test_invisible_widget	\
 	test_caps_lock_widget	\
 	test_disk_space_widget	\
-	test_localization
+	test_localization	\
+	test_term_sig

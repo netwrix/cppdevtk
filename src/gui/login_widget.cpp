@@ -193,7 +193,7 @@ bool LoginWidget::Validate() {
 	isValid_ = true;
 	DoValidate();
 	if (kWasValid != isValid_) {
-		emit ValidChanged(isValid_);
+		Q_EMIT ValidChanged(isValid_);
 	}
 	return isValid_;
 }
@@ -205,18 +205,18 @@ void LoginWidget::ValidateUi() const {
 }
 
 void LoginWidget::MakeConnections() {
-	CPPDEVTK_VERIFY(connect(pUiLoginWidget_->pLineEditPassword_, SIGNAL(textEdited(QString)), this, SLOT(Validate())));
+	CPPDEVTK_VERIFY(connect(pUiLoginWidget_->pLineEditPassword_, SIGNAL(textEdited(QString)), SLOT(Validate())));
 	
 	CPPDEVTK_VERIFY(connect(pUiLoginWidget_->pLabelPasswordHint_, SIGNAL(linkActivated(QString)),
-			this, SIGNAL(RequestPasswordHint())));
+			SIGNAL(RequestPasswordHint())));
 	
 	CPPDEVTK_VERIFY(connect(pUiLoginWidget_->pCheckBoxShowCharacters_, SIGNAL(toggled(bool)),
-			this, SLOT(ShowCharacters(bool))));
+			SLOT(ShowCharacters(bool))));
 	CPPDEVTK_VERIFY(connect(pUiLoginWidget_->pCheckBoxShowCharacters_, SIGNAL(toggled(bool)),
-			this, SIGNAL(ShowCharactersToggled(bool))));
+			SIGNAL(ShowCharactersToggled(bool))));
 	
 	CPPDEVTK_VERIFY(connect(pUiLoginWidget_->pCheckBoxReadOnly_, SIGNAL(toggled(bool)),
-			this, SIGNAL(ReadOnlyToggled(bool))));
+			SIGNAL(ReadOnlyToggled(bool))));
 }
 
 void LoginWidget::SetupStrings() {

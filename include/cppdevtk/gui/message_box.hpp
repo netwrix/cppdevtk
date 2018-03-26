@@ -43,6 +43,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Extends the QMessageBox static functions API to support icon pixmap, detailedText and exception.
 class CPPDEVTK_GUI_API MessageBox: public QMessageBox, public WidgetBase {
 	Q_OBJECT

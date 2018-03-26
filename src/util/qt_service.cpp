@@ -447,7 +447,7 @@ class QtServiceStarter : public QObject
 public:
     QtServiceStarter(QtServiceBasePrivate *service)
         : QObject(), d_ptr(service) {}
-public slots:
+public Q_SLOTS:
     void slotStart()
     {
         d_ptr->startService();

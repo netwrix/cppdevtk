@@ -46,7 +46,7 @@ namespace gui {
 
 class CPPDEVTK_GUI_API LanguageWidget: public QWidget, public WidgetBase {
 	Q_OBJECT
-signals:
+Q_SIGNALS:
 	void CurrentLanguageInfoChanged(const ::cppdevtk::util::LanguageInfo& languageInfo);
 public:
 	explicit LanguageWidget(QWidget* pParent = NULL);
@@ -70,12 +70,12 @@ public:
 	
 	void SetMaxVisibleItems(int value);
 	int GetMaxVisibleItems() const;
-public slots:
+public Q_SLOTS:
 	void Clear();
 	void SetCurrentLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
 protected:
 	virtual void changeEvent(QEvent* pEvent);
-private slots:
+private Q_SLOTS:
 	void ConvertCurrentChanged(int index);
 private:
 	Q_DISABLE_COPY(LanguageWidget)

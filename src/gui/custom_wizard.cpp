@@ -90,9 +90,9 @@ void CustomWizard::setPage(int pageId, QWizardPage* pPage) {
 		startId_ = kInsertedPageId;
 	}
 	
-	CPPDEVTK_VERIFY(connect(pPage, SIGNAL(completeChanged()), this, SLOT(updateButtonStates())));
+	CPPDEVTK_VERIFY(connect(pPage, SIGNAL(completeChanged()), SLOT(updateButtonStates())));
 	
-	emit pageAdded(pageId);
+	Q_EMIT pageAdded(pageId);
 }
 
 QWizardPage* CustomWizard::page(int pageId) const {
@@ -294,16 +294,16 @@ void CustomWizard::validateUi() const {
 
 void CustomWizard::makeConnections() {
 	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pStackedWidgetWizardPages_, SIGNAL(currentChanged(int)),
-			this, SLOT(updateButtonStates())));
+			SLOT(updateButtonStates())));
 	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pStackedWidgetWizardPages_, SIGNAL(currentChanged(int)),
-			this, SIGNAL(currentIdChanged(int))));
+			SIGNAL(currentIdChanged(int))));
 	
-	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pToolButtonLogo_, SIGNAL(clicked()), this, SLOT(openHomepage())));
+	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pToolButtonLogo_, SIGNAL(clicked()), SLOT(openHomepage())));
 	
-	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonBack_, SIGNAL(clicked()), this, SLOT(back())));
-	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonNext_, SIGNAL(clicked()), this, SLOT(next())));
-	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonCancel_, SIGNAL(clicked()), this, SLOT(reject())));
-	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonHelp_, SIGNAL(clicked()), this, SIGNAL(helpRequested())));
+	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonBack_, SIGNAL(clicked()), SLOT(back())));
+	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonNext_, SIGNAL(clicked()), SLOT(next())));
+	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonCancel_, SIGNAL(clicked()), SLOT(reject())));
+	CPPDEVTK_VERIFY(connect(pUiCustomWizard_->pPushButtonHelp_, SIGNAL(clicked()), SIGNAL(helpRequested())));
 }
 
 void CustomWizard::switchToPage(int pageId) {

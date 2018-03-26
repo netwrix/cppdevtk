@@ -46,8 +46,10 @@ namespace util {
 
 #if (CPPDEVTK_PLATFORM_UNIX)
 typedef int socket_t;
+static const socket_t kInvalidSocket = -1;
 #elif (CPPDEVTK_PLATFORM_WINDOWS)
 typedef SOCKET socket_t;
+static const socket_t kInvalidSocket = INVALID_SOCKET;
 #else
 #	error "Unsupported platform!!!"
 #endif

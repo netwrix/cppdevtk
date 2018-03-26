@@ -57,7 +57,7 @@ LanguageWidget::LanguageWidget(QWidget* pParent): QWidget(pParent), WidgetBase()
 	ValidateUi();
 	
 	CPPDEVTK_VERIFY(connect(pUiLanguageWidget_->pComboBoxLanguage_, SIGNAL(currentIndexChanged(int)),
-			this, SLOT(ConvertCurrentChanged(int))));
+			SLOT(ConvertCurrentChanged(int))));
 }
 
 LanguageWidget::~LanguageWidget() {
@@ -164,10 +164,10 @@ void LanguageWidget::changeEvent(QEvent* pEvent) {
 
 void LanguageWidget::ConvertCurrentChanged(int index) {
 	if (index != -1) {
-		emit CurrentLanguageInfoChanged(pUiLanguageWidget_->pComboBoxLanguage_->itemData(index).value<LanguageInfo>());
+		Q_EMIT CurrentLanguageInfoChanged(pUiLanguageWidget_->pComboBoxLanguage_->itemData(index).value<LanguageInfo>());
 	}
 	else {
-		emit CurrentLanguageInfoChanged(LanguageInfo::GetCLanguageInfo());
+		Q_EMIT CurrentLanguageInfoChanged(LanguageInfo::GetCLanguageInfo());
 	}
 }
 

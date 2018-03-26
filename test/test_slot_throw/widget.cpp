@@ -46,13 +46,13 @@ Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget() {
 	CPPDEVTK_ASSERT(pRethrowRadioButton_->isChecked());
 	
 	CPPDEVTK_VERIFY(connect(pRethrowRadioButton_, SIGNAL(toggled(bool)),
-			this, SLOT(OnRethrowRadioButtonToggled(bool))));
+			SLOT(OnRethrowRadioButtonToggled(bool))));
 	CPPDEVTK_VERIFY(connect(pQuitRadioButton_, SIGNAL(toggled(bool)),
-			this, SLOT(OnQuitRadioButtonToggled(bool))));
+			SLOT(OnQuitRadioButtonToggled(bool))));
 	CPPDEVTK_VERIFY(connect(pReturnFalseRadioButton_, SIGNAL(toggled(bool)),
-			this, SLOT(OnReturnFalseRadioButtonToggled(bool))));
+			SLOT(OnReturnFalseRadioButtonToggled(bool))));
 	CPPDEVTK_VERIFY(connect(pThrowPushButton_, SIGNAL(clicked()),
-			this, SLOT(OnThrowPushButtonClicked())));
+			SLOT(OnThrowPushButtonClicked())));
 	
 	adjustSize();
 }
@@ -89,19 +89,19 @@ void Widget::closeEvent(QCloseEvent* pCloseEvent) {
 
 void Widget::OnRethrowRadioButtonToggled(bool checked) {
 	if (checked) {
-		emit NotifyThrowChanged(gui::SingleApplication::ntaRethrow);
+		Q_EMIT NotifyThrowChanged(gui::SingleApplication::ntaRethrow);
 	}
 }
 
 void Widget::OnQuitRadioButtonToggled(bool checked) {
 	if (checked) {
-		emit NotifyThrowChanged(gui::SingleApplication::ntaQuit);
+		Q_EMIT NotifyThrowChanged(gui::SingleApplication::ntaQuit);
 	}
 }
 
 void Widget::OnReturnFalseRadioButtonToggled(bool checked) {
 	if (checked) {
-		emit NotifyThrowChanged(gui::SingleApplication::ntaAbsorb);
+		Q_EMIT NotifyThrowChanged(gui::SingleApplication::ntaAbsorb);
 	}
 }
 

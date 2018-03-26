@@ -258,7 +258,7 @@ bool PasswordWidget::Validate() {
 	isValid_ = true;
 	DoValidate();
 	if (kWasValid != isValid_) {
-		emit ValidChanged(isValid_);
+		Q_EMIT ValidChanged(isValid_);
 	}
 	return isValid_;
 }
@@ -284,21 +284,21 @@ void PasswordWidget::ValidateUi() const {
 
 void PasswordWidget::MakeConnections() {
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pCheckBoxShowCharacters_, SIGNAL(toggled(bool)),
-			this, SLOT(ShowCharacters(bool))));
+			SLOT(ShowCharacters(bool))));
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pCheckBoxShowCharacters_, SIGNAL(toggled(bool)),
-			this, SIGNAL(ShowCharactersToggled(bool))));
+			SIGNAL(ShowCharactersToggled(bool))));
 	
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pPushButtonShowRequirements_, SIGNAL(clicked()),
-			this, SLOT(ShowRequirements())));
+			SLOT(ShowRequirements())));
 	
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pLineEditOldPassword_, SIGNAL(textEdited(QString)),
-			this, SLOT(Validate())));
+			SLOT(Validate())));
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pLineEditNewPassword_, SIGNAL(textEdited(QString)),
-			this, SLOT(Validate())));
+			SLOT(Validate())));
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pLineEditConfirmNewPassword_, SIGNAL(textEdited(QString)),
-			this, SLOT(Validate())));
+			SLOT(Validate())));
 	CPPDEVTK_VERIFY(connect(pUiPasswordWidget_->pLineEditNewPasswordHint_, SIGNAL(textEdited(QString)),
-			this, SLOT(Validate())));
+			SLOT(Validate())));
 }
 
 void PasswordWidget::SetupStrings() {

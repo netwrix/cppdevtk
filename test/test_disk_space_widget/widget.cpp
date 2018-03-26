@@ -58,7 +58,7 @@ Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget() {
 	CPPDEVTK_VERIFY(connect(pGroupBoxAutoRefresh_, SIGNAL(toggled(bool)),
 			pDiskSpaceWidget_, SLOT(SetAutoRefreshEnabled(bool))));
 	CPPDEVTK_VERIFY(connect(pSpinBoxAutoRefreshInterval_, SIGNAL(valueChanged(int)),
-			this, SLOT(SetAutoRefreshInterval(int))));
+			SLOT(SetAutoRefreshInterval(int))));
 	
 	adjustSize();
 }

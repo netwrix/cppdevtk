@@ -1,0 +1,4 @@
+<RCC>
+    <qresource prefix="/cppdevtk/test_term_sig">
+    </qresource>
+</RCC>

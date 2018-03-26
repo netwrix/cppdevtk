@@ -80,11 +80,11 @@ public:
 	int GetCurrentTimeout() const;
 	void SetCurrentTimeout(int timeout);
 	void RemoveCurrentTimeoutItem();
-signals:
+Q_SIGNALS:
 	void Toggled(bool checked);
 	void CurrentMethodChanged(::cppdevtk::gui::TimedComputerManagementWidget::Method method);
 	void CurrentTimeoutChanged(int timeout);
-public slots:
+public Q_SLOTS:
 	void SetChecked(bool value);
 	void SetCurrentMethod(::cppdevtk::gui::TimedComputerManagementWidget::Method method);
 	
@@ -92,7 +92,7 @@ public slots:
 	void SetCurrentTimeoutIndex(int index);
 protected:
 	virtual void changeEvent(QEvent* pEvent);
-private slots:
+private Q_SLOTS:
 	void OnMethodRadioButtonToggled(bool checked);
 	void OnCurrentTimeoutIndexChanged(const QString& text);
 private:

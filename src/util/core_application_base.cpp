@@ -48,7 +48,11 @@ QString CoreApplicationBase::qmNamePrefix_;
 
 CoreApplicationBase::CoreApplicationBase(): NonCopyable(), notifyThrowAction_(ntaRethrow),
 		isSystemLocalePreferred_(false), currentLanguageInfo_(LanguageInfo::GetCodeLanguageInfo()),
-		qtTranslator_(), baseTranslator_(), utilTranslator_() {
+		qtTranslator_(), baseTranslator_(), utilTranslator_(), quitOnTerminationSignals_(false)
+#		if (CPPDEVTK_PLATFORM_UNIX)
+		, unwatchSigTerm_(false), unwatchSigInt_(false)
+#		endif
+		{
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 }
 

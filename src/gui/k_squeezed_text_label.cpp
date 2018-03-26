@@ -256,7 +256,7 @@ void KSqueezedTextLabel::contextMenuEvent(QContextMenuEvent *ev)
 void KSqueezedTextLabel::mousePressEvent(QMouseEvent* pEvent) {
 	QLabel::mousePressEvent(pEvent);
 	
-	emit Pressed();
+	Q_EMIT Pressed();
 }
 
 void KSqueezedTextLabel::mouseReleaseEvent(QMouseEvent *ev)
@@ -289,13 +289,13 @@ void KSqueezedTextLabel::mouseReleaseEvent(QMouseEvent *ev)
         QLabel::mouseReleaseEvent(ev);
     }
 	
-	emit Released();
+	Q_EMIT Released();
 }
 
 void KSqueezedTextLabel::mouseDoubleClickEvent(QMouseEvent* pEvent) {
 	QLabel::mouseDoubleClickEvent(pEvent);
 	
-	emit DoubleClicked();
+	Q_EMIT DoubleClicked();
 }
 
 

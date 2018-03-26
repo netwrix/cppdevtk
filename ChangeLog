@@ -1,8 +1,14 @@
-Version 1.0.10.1:
+Version 1.1.0.1:
 - Release date:
 - New features:
+	- added PosixSignalsWatcher (Unix)
+	- CoreApplicationBase: added support for termination signals (Unix + Windows)
+	- added test app for termination signals
 - Improvements:
+	- do not conflict with boost signals
+	- zlib dependency is optional (affects QZipReader and QZipWriter)
 - Fixed bugs:
+	- fixed enabling GCC extensions
 
 
 Version 1.0.9.1:

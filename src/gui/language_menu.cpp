@@ -59,7 +59,7 @@ LanguageMenu::LanguageMenu(QWidget* pParent): QMenu(pParent), pActionGroup_(new 
 	
 	SetTitle();
 	
-	CPPDEVTK_VERIFY(connect(this, SIGNAL(triggered(QAction*)), this, SLOT(ConvertTriggered(QAction*))));
+	CPPDEVTK_VERIFY(connect(this, SIGNAL(triggered(QAction*)), SLOT(ConvertTriggered(QAction*))));
 }
 
 int LanguageMenu::GetCount() const {
@@ -161,10 +161,10 @@ void LanguageMenu::changeEvent(QEvent* pEvent) {
 
 void LanguageMenu::ConvertTriggered(QAction* pAction) {
 	if (pAction != NULL) {
-		emit Triggered(pAction->data().value<LanguageInfo>());
+		Q_EMIT Triggered(pAction->data().value<LanguageInfo>());
 	}
 	else {
-		emit Triggered(LanguageInfo::GetCLanguageInfo());
+		Q_EMIT Triggered(LanguageInfo::GetCLanguageInfo());
 	}
 }
 

@@ -51,9 +51,9 @@
 	<key>CFBundleDisplayName</key>
 	<string>CppDevTk Test Disk Space Widget</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.10</string>
+	<string>1.1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.10</string>
+	<string>1.1.0</string>
 	<key>CFBundleGetInfoString</key>
 	<string>CppDevTk test application.</string>
 	<key>CFBundleIdentifier</key>

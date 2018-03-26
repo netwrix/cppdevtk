@@ -47,6 +47,7 @@ namespace cppdevtk {
 namespace base {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \attention
 /// - On Linux, it is necessary to use the -rdynamic linker option.
 /// - On Windows need to link with version.lib and advapi32.lib libraries

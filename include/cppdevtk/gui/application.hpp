@@ -43,7 +43,7 @@ class CPPDEVTK_GUI_API Application: public QApplication, public ApplicationBase 
 public:
 	Application(int& argc, char** argv);
 	virtual ~Application();
-public slots:
+public Q_SLOTS:
 	/// \note We can not use ::cppdevtk::util::CoreApplicationBase::NotifyThrowAction here because enum must
 	/// be registered to meta-object system and CoreApplicationBase does not inherit QObject, so we use int.
 	void SetNotifyThrowAction(int notifyThrowAction);

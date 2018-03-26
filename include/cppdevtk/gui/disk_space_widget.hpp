@@ -46,6 +46,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \note
 /// - default DiskNameColor is Qt::black
 /// - default SpaceInfoColor is Qt::darkBlue
@@ -70,7 +71,7 @@ public:
 	
 	int GetAutoRefreshInterval() const;
 	bool IsAutoRefreshEnabled() const;
-public slots:
+public Q_SLOTS:
 	void SetPath(const QString& path);
 	
 	void SetAutoRefreshInterval(int sec);

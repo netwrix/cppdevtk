@@ -53,7 +53,8 @@ HEADERS += \
 	tinyxml2.h
 
 unix {
-	HEADERS += filesystem_utils_unx.hpp
+	HEADERS += filesystem_utils_unx.hpp	\
+		posix_signals_watcher_unx.hpp
 	
 	linux* {
 		HEADERS += filesystem_utils_lnx.hpp

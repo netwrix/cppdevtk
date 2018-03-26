@@ -171,22 +171,22 @@ void TimedComputerManagementWidget::OnMethodRadioButtonToggled(bool checked) {
 	}
 	
 	if (pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementNone_->isChecked()) {
-		emit CurrentMethodChanged(cmmNone);
+		Q_EMIT CurrentMethodChanged(cmmNone);
 		return;
 	}
 	
 	if (pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementLock_->isChecked()) {
-		emit CurrentMethodChanged(cmmLockComputer);
+		Q_EMIT CurrentMethodChanged(cmmLockComputer);
 		return;
 	}
 	
 	if (pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementLogout_->isChecked()) {
-		emit CurrentMethodChanged(cmmLogoutUser);
+		Q_EMIT CurrentMethodChanged(cmmLogoutUser);
 		return;
 	}
 	
 	CPPDEVTK_ASSERT(pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementShutdown_->isChecked());
-	emit CurrentMethodChanged(cmmShutdownComputer);
+	Q_EMIT CurrentMethodChanged(cmmShutdownComputer);
 }
 
 void TimedComputerManagementWidget::OnCurrentTimeoutIndexChanged(const QString& text) {
@@ -195,7 +195,7 @@ void TimedComputerManagementWidget::OnCurrentTimeoutIndexChanged(const QString& 
 	CPPDEVTK_ASSERT(convOk);
 	::cppdevtk::base::SuppressUnusedWarning(convOk);
 	
-	emit CurrentTimeoutChanged(kTimeout);
+	Q_EMIT CurrentTimeoutChanged(kTimeout);
 }
 
 void TimedComputerManagementWidget::ValidateUi() const {
@@ -208,19 +208,19 @@ void TimedComputerManagementWidget::ValidateUi() const {
 
 void TimedComputerManagementWidget::MakeConnections() {
 	CPPDEVTK_VERIFY(connect(pUiTimedComputerManagementWidget_->pGroupBoxTimedComputerManagement_, SIGNAL(toggled(bool)),
-			this, SIGNAL(Toggled(bool))));
+			SIGNAL(Toggled(bool))));
 	
 	CPPDEVTK_VERIFY(connect(pUiTimedComputerManagementWidget_->pComboBoxTimeout_, SIGNAL(currentIndexChanged(QString)),
-			this, SLOT(OnCurrentTimeoutIndexChanged(QString))));
+			SLOT(OnCurrentTimeoutIndexChanged(QString))));
 	
 	CPPDEVTK_VERIFY(connect(pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementNone_, SIGNAL(toggled(bool)),
-			this, SLOT(OnMethodRadioButtonToggled(bool))));
+			SLOT(OnMethodRadioButtonToggled(bool))));
 	CPPDEVTK_VERIFY(connect(pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementLock_, SIGNAL(toggled(bool)),
-			this, SLOT(OnMethodRadioButtonToggled(bool))));
+			SLOT(OnMethodRadioButtonToggled(bool))));
 	CPPDEVTK_VERIFY(connect(pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementLogout_, SIGNAL(toggled(bool)),
-			this, SLOT(OnMethodRadioButtonToggled(bool))));
+			SLOT(OnMethodRadioButtonToggled(bool))));
 	CPPDEVTK_VERIFY(connect(pUiTimedComputerManagementWidget_->pRadioButtonComputerManagementShutdown_, SIGNAL(toggled(bool)),
-			this, SLOT(OnMethodRadioButtonToggled(bool))));
+			SLOT(OnMethodRadioButtonToggled(bool))));
 }
 
 

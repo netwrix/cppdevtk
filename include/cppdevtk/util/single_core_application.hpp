@@ -41,7 +41,7 @@ public:
 	SingleCoreApplication(int& argc, char** argv);
 	SingleCoreApplication(int& argc, char** argv, const QString& id);
 	virtual ~SingleCoreApplication();
-public slots:
+public Q_SLOTS:
 	/// \note We can not use ::cppdevtk::util::CoreApplicationBase::NotifyThrowAction here because enum must
 	/// be registered to meta-object system and CoreApplicationBase does not inherit QObject, so we use int.
 	void SetNotifyThrowAction(int notifyThrowAction);

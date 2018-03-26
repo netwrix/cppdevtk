@@ -42,6 +42,11 @@
 
 #include <cppdevtk/util/q_zip_reader.hpp>
 #include <cppdevtk/util/q_zip_writer.hpp>
+
+
+#if (CPPDEVTK_WITH_ZLIB)
+
+
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/logger.hpp>
 
@@ -934,7 +939,7 @@ bool QZipReader::extractAll(const QString &destinationDir) const
 
     // create directories first
     QList<FileInfo> allFiles = fileInfoList();
-    foreach (FileInfo fi, allFiles) {
+    Q_FOREACH (FileInfo fi, allFiles) {
         const QString absPath = destinationDir + QDir::separator() + fi.filePath;
         if (fi.isDir) {
             if (!baseDir.mkpath(fi.filePath))
@@ -945,7 +950,7 @@ bool QZipReader::extractAll(const QString &destinationDir) const
     }
 
     // set up symlinks
-    foreach (FileInfo fi, allFiles) {
+    Q_FOREACH (FileInfo fi, allFiles) {
         const QString absPath = destinationDir + QDir::separator() + fi.filePath;
         if (fi.isSymLink) {
             QString destination = QFile::decodeName(fileData(fi.filePath));
@@ -963,7 +968,7 @@ bool QZipReader::extractAll(const QString &destinationDir) const
         }
     }
 
-    foreach (FileInfo fi, allFiles) {
+    Q_FOREACH (FileInfo fi, allFiles) {
         const QString absPath = destinationDir + QDir::separator() + fi.filePath;
         if (fi.isFile) {
             QFile f(absPath);
@@ -1275,3 +1280,6 @@ void QZipWriter::close()
 
 }	// namespace util
 }	// namespace cppdevtk
+
+
+#endif	// (CPPDEVTK_WITH_ZLIB)

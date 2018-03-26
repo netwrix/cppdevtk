@@ -42,7 +42,7 @@ namespace test_slot_throw {
 
 class Widget: public QWidget, public ::cppdevtk::gui::WidgetBase, private Ui::Widget {
 	Q_OBJECT
-signals:
+Q_SIGNALS:
 	void NotifyThrowChanged(int notifyThrowAction);
 public:
 	explicit Widget(QWidget* pParent = NULL);
@@ -50,7 +50,7 @@ public:
 protected:
 	virtual void changeEvent(QEvent* pEvent);
 	virtual void closeEvent(QCloseEvent* pCloseEvent);
-private slots:
+private Q_SLOTS:
 	void OnRethrowRadioButtonToggled(bool checked);
 	void OnQuitRadioButtonToggled(bool checked);
 	void OnReturnFalseRadioButtonToggled(bool checked);

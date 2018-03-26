@@ -97,7 +97,7 @@ public:
         fprintf(stderr, "\n");
     }
 
-signals:
+Q_SIGNALS:
     void stringConsumed(const QString &text);
 
 protected:

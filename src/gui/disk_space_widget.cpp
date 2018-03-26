@@ -138,7 +138,7 @@ void DiskSpaceWidget::ValidateUi() const {
 }
 
 void DiskSpaceWidget::MakeConnections() {
-	CPPDEVTK_VERIFY(connect(&autoRefreshTimer_, SIGNAL(timeout()), this, SLOT(Refresh())));
+	CPPDEVTK_VERIFY(connect(&autoRefreshTimer_, SIGNAL(timeout()), SLOT(Refresh())));
 }
 
 void DiskSpaceWidget::DoRefresh(qreal totalSize, qreal freeSpace) {

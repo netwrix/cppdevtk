@@ -113,7 +113,7 @@ void EulaWidget::ValidateUi() const {
 }
 
 void EulaWidget::MakeConnections() {
-	CPPDEVTK_VERIFY(connect(pUiEulaWidget_->pPushButtonOpenEula_, SIGNAL(clicked()), this, SLOT(OpenEula())));
+	CPPDEVTK_VERIFY(connect(pUiEulaWidget_->pPushButtonOpenEula_, SIGNAL(clicked()), SLOT(OpenEula())));
 }
 
 void EulaWidget::Refresh() {

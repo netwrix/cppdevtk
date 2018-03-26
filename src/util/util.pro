@@ -91,9 +91,12 @@ INSTALLS += target
 	}
 	
 	unix {
-		# -lz also on Mac OS X debug (not z_debug)
-		#LIBS *= -l$${qtLibraryTarget(z)}
-		LIBS *= -lz
+		cppdevtk_with_zlib {
+			# -lz also on Mac OS X debug (not z_debug)
+			#LIBS *= -l$${qtLibraryTarget(z)}
+			LIBS *= -lz
+		}
+		
 		linux* {
 			#LIBS *= -ludev
 			LIBS *= -ldl
@@ -115,12 +118,14 @@ INSTALLS += target
 	}
 	else {
 		win32 {
-			!static_and_shared|build_pass {
-				CONFIG(static, static|shared) {
-					LIBS *= -l$${qtLibraryTarget(zlibstat)}
-				}
-				else {
-					LIBS *= -l$${qtLibraryTarget(zlibwapi)}
+			cppdevtk_with_zlib {
+				!static_and_shared|build_pass {
+					CONFIG(static, static|shared) {
+						LIBS *= -l$${qtLibraryTarget(zlibstat)}
+					}
+					else {
+						LIBS *= -l$${qtLibraryTarget(zlibwapi)}
+					}
 				}
 			}
 			
@@ -212,7 +217,9 @@ unix {
 		qt_service_unx.cpp \
 		qt_unix_server_socket_unx.cpp \
 		qt_unix_socket_unx.cpp	\
-		socket_pair_unx.cpp
+		socket_pair_unx.cpp	\
+		posix_signals_watcher_unx.cpp	\
+		core_application_base_unx.cpp
 	
 	linux* {
 		SOURCES += filesystem_utils_lnx.cpp
@@ -239,7 +246,8 @@ else {
 			get_user_name_win.cpp	\
 			qt_locked_file_win.cpp \
 			qt_service_win.cpp	\
-			socket_pair_win.cpp
+			socket_pair_win.cpp	\
+			core_application_base_win.cpp
 	}
 	else {
 		error("Unsupported platform!!!")
@@ -278,7 +286,8 @@ HEADERS += \
 	../../include/cppdevtk/util/tinyxml2.h
 
 unix {
-	HEADERS += ../../include/cppdevtk/util/filesystem_utils_unx.hpp
+	HEADERS += ../../include/cppdevtk/util/filesystem_utils_unx.hpp	\
+		../../include/cppdevtk/util/posix_signals_watcher_unx.hpp
 	
 	linux* {
 		HEADERS += ../../include/cppdevtk/util/filesystem_utils_lnx.hpp

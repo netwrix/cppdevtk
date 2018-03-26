@@ -33,6 +33,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief This class provides common functionality for our widgets.
 /// \details This is a workaround for Qt multiple (virtual) inheritance limitations.
 /// \sa <a href="http://doc.qt.io/qt-4.8/moc.html#multiple-inheritance-requires-qobject-to-be-first">Qt multiple inheritance</a>

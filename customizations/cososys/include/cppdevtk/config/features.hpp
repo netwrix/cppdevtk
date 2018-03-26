@@ -264,6 +264,10 @@
 /// If not needed disable for performance
 #define CPPDEVTK_ENABLE_THREAD_INTERRUPTION (CPPDEVTK_HAVE_THREAD_STORAGE && 1)
 
+// TODO: keep in sync with cppdevtk_with_zlib in common_customization.pri
+/// In case zlib is missing (on Windows); affects QZipReader and QZipWriter
+#define CPPDEVTK_WITH_ZLIB (CPPDEVTK_PLATFORM_UNIX || 1)
+
 
 /// @}	// config_features_compile_time
 

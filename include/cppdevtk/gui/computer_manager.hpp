@@ -29,6 +29,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \attention On Mac OS X need to link with frameworks IOKit, Carbon and CoreFoundation
 class CPPDEVTK_GUI_API ComputerManager: private ::cppdevtk::base::NonCopyable {
 public:

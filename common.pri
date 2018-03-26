@@ -57,8 +57,8 @@ else {
 #****************************************************************************************************************************
 # version
 CPPDEVTK_VERSION_MAJOR = 1
-CPPDEVTK_VERSION_MINOR = 0
-CPPDEVTK_VERSION_PATCH = 10
+CPPDEVTK_VERSION_MINOR = 1
+CPPDEVTK_VERSION_PATCH = 0
 win32 {
 	CPPDEVTK_VERSION_BUILD = 1
 }
@@ -92,6 +92,7 @@ CONFIG *= no_include_pwd
 #CONFIG *= no_lflags_merge
 #CONFIG *= no_smart_library_merge
 CONFIG *= debug_and_release_target
+CONFIG *= no_keywords
 
 unix {
 	# rpath_libdirs is related to QMAKE_LFLAGS_RPATH and we use QMAKE_RPATHDIR
@@ -207,26 +208,60 @@ build_pass {
 	lessThan(QT_GCC_MAJOR_VERSION, 6) {
 		greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
 			!c++11:!c++14:!c++1z {
-				!contains(QMAKE_CXXFLAGS, -std=c++0x):!contains(QMAKE_CXXFLAGS, -std=gnu++0x) {
-					!contains(QMAKE_CXXFLAGS, -std=c++11):!contains(QMAKE_CXXFLAGS, -std=gnu++11) {
-						!contains(QMAKE_CXXFLAGS, -std=c++1y):!contains(QMAKE_CXXFLAGS, -std=gnu++1y) {
-							!contains(QMAKE_CXXFLAGS, -std=c++14):!contains(QMAKE_CXXFLAGS, -std=gnu++14) {
-								!contains(QMAKE_CXXFLAGS, -std=c++1z):!contains(QMAKE_CXXFLAGS, -std=gnu++1z) {
-									# g++ >= 4.7.0 use -std=c++11 or -std=gnu++11
-									# g++ 4.3 - 4.6 use -std=c++0x or -std=gnu++0x
-									greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 6) {
-										QMAKE_CXXFLAGS += -std=gnu++11
-									}
-									else {
-										QMAKE_CXXFLAGS += -std=gnu++0x
-									}
-								}
+				!contains(QMAKE_CXXFLAGS, -std=c++0x):!contains(QMAKE_CXXFLAGS, -std=gnu++0x):!contains(QMAKE_CXXFLAGS, -std=c++11):!contains(QMAKE_CXXFLAGS, -std=gnu++11) {
+					!contains(QMAKE_CXXFLAGS, -std=c++1y):!contains(QMAKE_CXXFLAGS, -std=gnu++1y):!contains(QMAKE_CXXFLAGS, -std=c++14):!contains(QMAKE_CXXFLAGS, -std=gnu++14) {
+						!contains(QMAKE_CXXFLAGS, -std=c++1z):!contains(QMAKE_CXXFLAGS, -std=gnu++1z):!contains(QMAKE_CXXFLAGS, -std=c++17):!contains(QMAKE_CXXFLAGS, -std=gnu++17) {
+							# g++ 4.3 - 4.6 use -std=c++0x or -std=gnu++0x
+							# g++ >= 4.7.0 use -std=c++11 or -std=gnu++11
+							greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 6) {
+								QMAKE_CXXFLAGS += -std=gnu++11
+							}
+							else {
+								QMAKE_CXXFLAGS += -std=gnu++0x
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	# enable extensions
+	contains(QMAKE_CXXFLAGS, -std=c++98) {
+		QMAKE_CXXFLAGS -= -std=c++98
+		QMAKE_CXXFLAGS += -std=gnu++98
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++03) {
+		QMAKE_CXXFLAGS -= -std=c++03
+		QMAKE_CXXFLAGS += -std=gnu++03
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++0x) {
+		QMAKE_CXXFLAGS -= -std=c++0x
+		QMAKE_CXXFLAGS += -std=gnu++0x
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++11) {
+		QMAKE_CXXFLAGS -= -std=c++11
+		QMAKE_CXXFLAGS += -std=gnu++11
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++1y) {
+		QMAKE_CXXFLAGS -= -std=c++1y
+		QMAKE_CXXFLAGS += -std=gnu++1y
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++14) {
+		QMAKE_CXXFLAGS -= -std=c++14
+		QMAKE_CXXFLAGS += -std=gnu++14
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++1z) {
+		QMAKE_CXXFLAGS -= -std=c++1z
+		QMAKE_CXXFLAGS += -std=gnu++1z
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++17) {
+		QMAKE_CXXFLAGS -= -std=c++17
+		QMAKE_CXXFLAGS += -std=gnu++17
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++2a) {
+		QMAKE_CXXFLAGS -= -std=c++2a
+		QMAKE_CXXFLAGS += -std=gnu++2a
 	}
 	
 	# safety checks

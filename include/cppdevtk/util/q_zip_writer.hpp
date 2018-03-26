@@ -58,6 +58,10 @@
 
 #include "config.hpp"
 
+
+#if (CPPDEVTK_WITH_ZLIB)
+
+
 #include <QtCore/QString>
 #include <QtCore/QFile>
 
@@ -123,4 +127,5 @@ private:
 }	// namespace cppdevtk
 
 
+#endif	// (CPPDEVTK_WITH_ZLIB)
 #endif	// CPPDEVTK_UTIL_Q_ZIP_WRITER_HPP_INCLUDED_

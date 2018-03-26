@@ -54,11 +54,7 @@
 // Evaluate expr, and repeat as long as it returns -1 with errno set to EINTR.
 // Please see The GNU C Library: Interrupted Primitives, TEMP_FAILURE_RETRY(expression)
 // http://www.gnu.org/software/libc/manual/html_node/Interrupted-Primitives.html
-// TODO: investigate why Android NDK TEMP_FAILURE_RETRY fail to compile
-#if (!defined(TEMP_FAILURE_RETRY) || (CPPDEVTK_PLATFORM_ANDROID))
-#	if (CPPDEVTK_PLATFORM_ANDROID)
-#		undef TEMP_FAILURE_RETRY
-#	endif
+#if (!defined(TEMP_FAILURE_RETRY))
 #	define TEMP_FAILURE_RETRY(expr)	\
 		(	\
 			__extension__	\

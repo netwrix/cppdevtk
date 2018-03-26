@@ -39,6 +39,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \note Defaults:
 /// - modality: window modal
 /// - minimumDuration: 0
@@ -63,7 +64,7 @@ public:
 	void SetNumStages(int numStages);
 	
 	virtual void reject();
-public slots:
+public Q_SLOTS:
 	/// \pre \a numStage must be in range specified by SetNumStages()
 	/// \note label will have text: numStage of numStages: labelText (ex: 1 of 4: Reading file)
 	void SetStage(int numStage, const QString& labelText);

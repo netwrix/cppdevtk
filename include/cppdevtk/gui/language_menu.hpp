@@ -42,7 +42,7 @@ namespace gui {
 
 class CPPDEVTK_GUI_API LanguageMenu: public QMenu {
 	Q_OBJECT
-signals:
+Q_SIGNALS:
 	void Triggered(const ::cppdevtk::util::LanguageInfo& languageInfo);
 public:
 	explicit LanguageMenu(QWidget* pParent = NULL);
@@ -60,12 +60,12 @@ public:
 	
 	/// \attention May not emit Triggered()
 	void RemoveLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
-public slots:
+public Q_SLOTS:
 	void Clear();
 	void SetCheckedLanguageInfo(const ::cppdevtk::util::LanguageInfo& languageInfo);
 protected:
 	virtual void changeEvent(QEvent* pEvent);
-private slots:
+private Q_SLOTS:
 	void ConvertTriggered(QAction* pAction);
 private:
 	Q_DISABLE_COPY(LanguageMenu)

@@ -44,6 +44,7 @@ namespace cppdevtk {
 namespace gui {
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \attention EULA file must have the following format: path/completeBaseName[_localeLanguage[_localeCountry]].suffix
 /// Example: C:/eula_en_US.htm
 /// \remarks
@@ -56,11 +57,11 @@ class CPPDEVTK_GUI_API EulaWidget: public QWidget, public WidgetBase {
 public:
 	explicit EulaWidget(QWidget* pParent = NULL);
 	virtual ~EulaWidget();
-public slots:
+public Q_SLOTS:
 	void SetSourceInfo(const QString& fileNamePrefix, const QString& fileExt);
 protected:
 	virtual void changeEvent(QEvent* pEvent);
-private slots:
+private Q_SLOTS:
 	void OpenEula();
 private:
 	Q_DISABLE_COPY(EulaWidget)

@@ -45,7 +45,7 @@ class Widget: public QWidget, public ::cppdevtk::gui::WidgetBase, private Ui::Wi
 public:
 	explicit Widget(QWidget* pParent = NULL);
 	virtual ~Widget();
-public slots:
+public Q_SLOTS:
 	void SetAutoRefreshInterval(int sec);
 protected:
 	virtual void changeEvent(QEvent* pEvent);

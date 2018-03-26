@@ -51,7 +51,7 @@ public:
 protected:
 	virtual void changeEvent(QEvent* pEvent);
 	virtual void showEvent(QShowEvent* pShowEvent);
-private slots:
+private Q_SLOTS:
 	void Exit();
 	
 	void ChangeLanguage(const ::cppdevtk::util::LanguageInfo& languageInfo);
