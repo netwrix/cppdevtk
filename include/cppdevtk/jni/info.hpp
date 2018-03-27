@@ -21,8 +21,12 @@
 #define CPPDEVTK_JNI_INFO_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 #include "info_customization.hpp"
+
+
+#define CPPDEVTK_JNI_SHORT_NAME_SANITIZED QString(CPPDEVTK_JNI_SHORT_NAME).toLower().replace(' ', '_')
+#define CPPDEVTK_JNI_LONG_NAME_SANITIZED QString(CPPDEVTK_JNI_LONG_NAME).toLower().replace(' ', '_')
 
 
 #endif	// CPPDEVTK_JNI_INFO_HPP_INCLUDED_

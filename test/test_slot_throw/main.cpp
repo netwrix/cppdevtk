@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) try {
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
 	Application::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
-			(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_SLOT_THROW_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
+			CPPDEVTK_SHORT_NAME_SANITIZED, CPPDEVTK_VERSION_STRING, CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME_SANITIZED);
 	
 	Application application(argc, argv);
 	
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) try {
 	catch (const exception& exc) {
 		CPPDEVTK_LOG_ERROR("caught ::std::exception: " << Exception::GetDetailedInfo(exc));
 		MessageBox::Critical(application.GetDefaultWindow(),
-				CPPDEVTK_TEST_SLOT_THROW_NAME,
+				CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME,
 				QString("Caught exception: %1").arg(exc.what()), exc);
 		
 		return EXIT_FAILURE;
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) try {
 	catch (...) {
 		CPPDEVTK_LOG_ERROR("caught unknown exception!");
 		MessageBox::Critical(application.GetDefaultWindow(),
-				CPPDEVTK_TEST_SLOT_THROW_NAME,
+				CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME,
 				QString("Caught unknown exception!"));
 		
 		return EXIT_FAILURE;

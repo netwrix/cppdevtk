@@ -587,6 +587,17 @@ You must accept the terms of this agreement before continuing.</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk_gui</name>
+    <message>
+        <source>gui</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C++ Development Toolkit gui library.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>language_native_name</name>
     <message>
         <source>English</source>

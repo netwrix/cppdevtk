@@ -26,9 +26,11 @@
 #define CPPDEVTK_GUI_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 
 
+#define CPPDEVTK_GUI_SHORT_NAME "gui"
+#define CPPDEVTK_GUI_LONG_NAME "gui"
 #define CPPDEVTK_GUI_DESCRIPTION CPPDEVTK_LONG_NAME " gui library."
 
 

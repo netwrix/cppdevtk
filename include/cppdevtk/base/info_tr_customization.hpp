@@ -31,20 +31,25 @@
 #include <QtCore/QtGlobal>
 
 
-#define CPPDEVTK_INFO_TR_CTX "cppdevtk_info"
+#define CPPDEVTK_BASE_TR_CTX "cppdevtk_base"
 
-#define CPPDEVTK_COMPANY_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CoSoSys")
-#define CPPDEVTK_COMPANY_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CoSoSys Ltd.")
-#define CPPDEVTK_COMPANY_COPYRIGHT_TR QT_TRANSLATE_NOOP("cppdevtk_info", "Copyright (C) 2015 - 2018 CoSoSys Ltd. All rights reserved. info@cososys.com.")
-#define CPPDEVTK_COMPANY_TRADEMARKS_TR QT_TRANSLATE_NOOP("cppdevtk_info", "TM CoSoSys Ltd.")
+#define CPPDEVTK_COMPANY_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_base", "CoSoSys")
+#define CPPDEVTK_COMPANY_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_base", "CoSoSys Ltd.")
+#define CPPDEVTK_COMPANY_COPYRIGHT_TR QT_TRANSLATE_NOOP("cppdevtk_base", "Copyright (C) 2015 - 2018 CoSoSys Ltd. All rights reserved. info@cososys.com.")
+#define CPPDEVTK_COMPANY_TRADEMARKS_TR QT_TRANSLATE_NOOP("cppdevtk_base", "TM CoSoSys Ltd.")
 
-#define CPPDEVTK_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CppDevTk")
-#define CPPDEVTK_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "C++ Development Toolkit")
-#define CPPDEVTK_DESCRIPTION_TR QT_TRANSLATE_NOOP("cppdevtk_info", "CppDevTk is a collection of libraries for C++ development.")
+#define CPPDEVTK_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_base", "CppDevTk")
+#define CPPDEVTK_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_base", "C++ Development Toolkit")
+#define CPPDEVTK_DESCRIPTION_TR QT_TRANSLATE_NOOP("cppdevtk_base", "CppDevTk is a collection of libraries for C++ development.")
+
+
+#define CPPDEVTK_BASE_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_base", "base")
+#define CPPDEVTK_BASE_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_base", "base")
+#define CPPDEVTK_BASE_DESCRIPTION_TR QT_TRANSLATE_NOOP("cppdevtk_base", "C++ Development Toolkit base library.")
 
 
 // at this time base is not translated so translator load fails (below tr fix this)
-#define CPPDEVTK_BASE_DETAIL_HELPER_TR QT_TRANSLATE_NOOP("cppdevtk_helper", "no_need_to_translate")
+#define CPPDEVTK_BASE_DETAIL_HELPER_TR QT_TRANSLATE_NOOP("cppdevtk_base", "no_need_to_translate")
 
 
 #endif	// CPPDEVTK_BASE_INFO_TR_CUSTOMIZATION_HPP_INCLUDED_

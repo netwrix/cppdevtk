@@ -21,12 +21,13 @@
 #define CPPDEVTK_TEST_LOCALIZATION_INFO_TR_HPP_INCLUDED_
 
 
-#include <cppdevtk/base/info_tr.hpp>
+#include <cppdevtk/gui/info_tr.hpp>
 #include "info_tr_customization.hpp"
 #include "info.hpp"
 
 
-#define CPPDEVTK_TEST_LOCALIZATION_NAME_SANITIZED QString(CPPDEVTK_TEST_LOCALIZATION_NAME).toLower().replace(' ', '_')
+#define CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR_SANITIZED QString(CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR).toLower().replace(' ', '_')
+#define CPPDEVTK_TEST_LOCALIZATION_LONG_NAME_TR_SANITIZED QString(CPPDEVTK_TEST_LOCALIZATION_LONG_NAME_TR).toLower().replace(' ', '_')
 
 
 #endif	// CPPDEVTK_TEST_LOCALIZATION_INFO_TR_HPP_INCLUDED_

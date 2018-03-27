@@ -31,6 +31,8 @@ HEADERS +=	\
 	exceptions_support.hpp	\
 	info.hpp	\
 	info_customization.hpp	\
+	info_tr.hpp	\
+	info_tr_customization.hpp	\
 	jni_loader.hpp	\
 	string_conv.hpp	\
 	tstring_conv.hpp

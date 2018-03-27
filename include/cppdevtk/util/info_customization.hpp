@@ -26,9 +26,11 @@
 #define CPPDEVTK_UTIL_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/base/info.hpp>
 
 
+#define CPPDEVTK_UTIL_SHORT_NAME "util"
+#define CPPDEVTK_UTIL_LONG_NAME "util"
 #define CPPDEVTK_UTIL_DESCRIPTION CPPDEVTK_LONG_NAME " util library."
 
 

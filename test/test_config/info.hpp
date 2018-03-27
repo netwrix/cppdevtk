@@ -21,11 +21,12 @@
 #define CPPDEVTK_TEST_CONFIG_INFO_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 #include "info_customization.hpp"
 
 
-#define CPPDEVTK_TEST_CONFIG_NAME_SANITIZED QString(CPPDEVTK_TEST_CONFIG_NAME).toLower().replace(' ', '_')
+#define CPPDEVTK_TEST_CONFIG_SHORT_NAME_SANITIZED QString(CPPDEVTK_TEST_CONFIG_SHORT_NAME).toLower().replace(' ', '_')
+#define CPPDEVTK_TEST_CONFIG_LONG_NAME_SANITIZED QString(CPPDEVTK_TEST_CONFIG_LONG_NAME).toLower().replace(' ', '_')
 
 
 #endif	// CPPDEVTK_TEST_CONFIG_INFO_HPP_INCLUDED_

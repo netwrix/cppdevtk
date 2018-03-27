@@ -21,8 +21,12 @@
 #define CPPDEVTK_GUI_INFO_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 #include "info_customization.hpp"
+
+
+#define CPPDEVTK_GUI_SHORT_NAME_SANITIZED QString(CPPDEVTK_GUI_SHORT_NAME).toLower().replace(' ', '_')
+#define CPPDEVTK_GUI_LONG_NAME_SANITIZED QString(CPPDEVTK_GUI_LONG_NAME).toLower().replace(' ', '_')
 
 
 #endif	// CPPDEVTK_GUI_INFO_HPP_INCLUDED_

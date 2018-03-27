@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) try {
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
 	Application::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
-				(CPPDEVTK_SHORT_NAME_SANITIZED + "_" + CPPDEVTK_TEST_LOCALIZATION_NAME_SANITIZED), CPPDEVTK_VERSION_STRING);
+				CPPDEVTK_SHORT_NAME_SANITIZED, CPPDEVTK_VERSION_STRING, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_SANITIZED);
 	Application::SetQmInfo(":/cppdevtk/test_localization/res/tr", "tr_");
 	CPPDEVTK_ASSERT(Application::GetNumberOfSupportedLanguages() > 1);
 	
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) try {
 	if (application.isRunning()) {
 		if (!application.sendMessage("", 5000)) {
 			MessageBox::Warning(application.GetDefaultWindow(),
-					Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+					Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 					Application::translate("main", "Another instance is running but it is not responding!"));
 		}
 		return EXIT_SUCCESS;
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) try {
 	catch (const exception& exc) {
 		CPPDEVTK_LOG_ERROR("caught ::std::exception: " << Exception::GetDetailedInfo(exc));
 		MessageBox::Critical(application.GetDefaultWindow(),
-				Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+				Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 				Application::translate("main", "Caught exception: %1").arg(exc.what()), exc);
 		
 		return EXIT_FAILURE;
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) try {
 	catch (...) {
 		CPPDEVTK_LOG_ERROR("caught unknown exception!");
 		MessageBox::Critical(application.GetDefaultWindow(),
-				Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+				Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 				Application::translate("main", "Caught unknown exception!"));
 		
 		return EXIT_FAILURE;

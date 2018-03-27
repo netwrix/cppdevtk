@@ -29,6 +29,8 @@
 #include <cppdevtk/config/info.hpp>
 
 
+#define CPPDEVTK_BASE_SHORT_NAME "base"
+#define CPPDEVTK_BASE_LONG_NAME "base"
 #define CPPDEVTK_BASE_DESCRIPTION CPPDEVTK_LONG_NAME " base library."
 
 

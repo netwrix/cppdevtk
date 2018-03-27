@@ -2,14 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="sv_SE" sourcelanguage="en_US">
 <context>
-    <name>cppdevtk_helper</name>
+    <name>cppdevtk_base</name>
     <message>
         <source>no_need_to_translate</source>
         <translation>no_need_to_translate</translation>
     </message>
-</context>
-<context>
-    <name>cppdevtk_info</name>
     <message>
         <source>CoSoSys</source>
         <translation type="unfinished"></translation>
@@ -36,6 +33,14 @@
     </message>
     <message>
         <source>CppDevTk is a collection of libraries for C++ development.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C++ Development Toolkit base library.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

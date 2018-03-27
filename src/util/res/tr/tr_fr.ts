@@ -106,6 +106,17 @@ Details: %3</source>
     </message>
 </context>
 <context>
+    <name>cppdevtk_util</name>
+    <message>
+        <source>util</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C++ Development Toolkit util library.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>language_native_name</name>
     <message>
         <source>English</source>

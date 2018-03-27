@@ -25,4 +25,8 @@
 #include "info_customization.hpp"
 
 
+#define CPPDEVTK_BASE_SHORT_NAME_SANITIZED QString(CPPDEVTK_BASE_SHORT_NAME).toLower().replace(' ', '_')
+#define CPPDEVTK_BASE_LONG_NAME_SANITIZED QString(CPPDEVTK_BASE_LONG_NAME).toLower().replace(' ', '_')
+
+
 #endif	// CPPDEVTK_BASE_INFO_HPP_INCLUDED_

@@ -26,10 +26,11 @@
 #define CPPDEVTK_TEST_SLOT_THROW_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/gui/info.hpp>
 
 
-#define CPPDEVTK_TEST_SLOT_THROW_NAME "Test Slot Throw"
+#define CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME "Test Slot Throw"
+#define CPPDEVTK_TEST_SLOT_THROW_LONG_NAME "Test Slot Throw"
 #define CPPDEVTK_TEST_SLOT_THROW_DESCRIPTION CPPDEVTK_LONG_NAME " test application."
 
 

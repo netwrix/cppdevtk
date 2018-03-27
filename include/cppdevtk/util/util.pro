@@ -38,6 +38,8 @@ HEADERS += \
 	get_user_name.hpp \
 	info.hpp \
 	info_customization.hpp	\
+	info_tr.hpp	\
+	info_tr_customization.hpp	\
 	init_resources.hpp \
 	language_info.hpp \
 	no_such_file_or_directory_exception.hpp	\

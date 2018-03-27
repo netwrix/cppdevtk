@@ -151,19 +151,17 @@ QList<LanguageInfo> CoreApplicationBase::GetSupportedLanguageInfos() {
 	return supportedLanguageInfos;
 }
 
-void CoreApplicationBase::SetCompanyInfo(const QString& companyName, const QString& companyHomepage) {
+void CoreApplicationBase::SetInfo(const QString& companyName, const QString& companyHomepage,
+		const QString& productName, const QString& productVersion, const QString& componentName) {
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(companyName.isEmpty(), "companyName");
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(companyHomepage.isEmpty(), "companyHomepage");
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productName.isEmpty(), "productName");
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productVersion.isEmpty(), "productVersion");
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productName.isEmpty(), "componentName");
 	
 	QCoreApplication::setOrganizationName(companyName);
 	QCoreApplication::setOrganizationDomain(companyHomepage);
-}
-
-void CoreApplicationBase::SetProductInfo(const QString& productName, const QString& productVersion) {
-	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productName.isEmpty(), "productName");
-	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(productVersion.isEmpty(), "productVersion");
-	
-	QCoreApplication::setApplicationName(productName);
+	QCoreApplication::setApplicationName(QString("%1.%2").arg(productName, componentName));
 	QCoreApplication::setApplicationVersion(productVersion);
 }
 

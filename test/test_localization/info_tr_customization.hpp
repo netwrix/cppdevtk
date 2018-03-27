@@ -26,11 +26,14 @@
 #define CPPDEVTK_TEST_LOCALIZATION_INFO_TR_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/base/info_tr.hpp>
+#include <cppdevtk/gui/info_tr.hpp>
 
 
-#define CPPDEVTK_TEST_LOCALIZATION_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_info", "Test Localization")
-#define CPPDEVTK_TEST_LOCALIZATION_DESCRIPTION_TR QT_TRANSLATE_NOOP("cppdevtk_info", "C++ Development Toolkit test application.")
+#define CPPDEVTK_TEST_LOCALIZATION_TR_CTX "cppdevtk_test_localization"
+
+#define CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_test_localization", "Test Localization")
+#define CPPDEVTK_TEST_LOCALIZATION_LONG_NAME_TR QT_TRANSLATE_NOOP("cppdevtk_test_localization", "Test Localization")
+#define CPPDEVTK_TEST_LOCALIZATION_DESCRIPTION_TR QT_TRANSLATE_NOOP("cppdevtk_test_localization", "C++ Development Toolkit test application.")
 
 
 #endif	// CPPDEVTK_TEST_LOCALIZATION_INFO_TR_CUSTOMIZATION_HPP_INCLUDED_

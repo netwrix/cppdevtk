@@ -102,18 +102,18 @@ void MainWindow::ChangeLanguage(const ::cppdevtk::util::LanguageInfo& languageIn
 }
 
 void MainWindow::About() {
-	const QString kTitle = tr("About %1").arg(Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR));
+	const QString kTitle = tr("About %1").arg(Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR));
 	const QString kText = tr("%1 version %2.\n%3").arg(
-			Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+			Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 			CPPDEVTK_VERSION_STRING,
-			Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_COMPANY_COPYRIGHT_TR));
+			Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_COMPANY_COPYRIGHT_TR));
 	MessageBox::about(this, kTitle, kText);
 }
 
 void MainWindow::Homepage() {
 	const QUrl kUrl(CPPDEVTK_HOMEPAGE, QUrl::TolerantMode);
 	if (!QDesktopServices::openUrl(kUrl)) {
-		MessageBox::Critical(this, Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+		MessageBox::Critical(this, Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 				tr("Failed to open product homepage"), QString("URL: %1").arg(kUrl.toString()));
 	}
 }
@@ -121,7 +121,7 @@ void MainWindow::Homepage() {
 void MainWindow::Support() {
 	const QUrl kUrl(CPPDEVTK_ONLINE_SUPPORT, QUrl::TolerantMode);
 	if (!QDesktopServices::openUrl(kUrl)) {
-		MessageBox::Critical(this, Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+		MessageBox::Critical(this, Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 				tr("Failed to open online support"), QString("URL: %1").arg(kUrl.toString()));
 	}
 }
@@ -133,7 +133,7 @@ void MainWindow::Email() {
 	
 	const QUrl kUrl(kEmail, QUrl::TolerantMode);
 	if (!QDesktopServices::openUrl(kUrl)) {
-		MessageBox::Critical(this, Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR),
+		MessageBox::Critical(this, Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 				tr("Failed to open default E-Mail client"), QString("URL: %1").arg(kUrl.toString()));
 	}
 }
@@ -147,10 +147,10 @@ void MainWindow::SetupUi() {
 }
 
 void MainWindow::SetupStrings() {
-	setWindowTitle(Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR));
+	setWindowTitle(Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_LONG_NAME_TR));
 	
 	pActionAbout_->setText(tr("&About %1").arg(
-			Application::translate(CPPDEVTK_INFO_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_NAME_TR)));
+			Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR)));
 	
 #	if (CPPDEVTK_PLATFORM_WINDOWS)	// Exit has no shortcut on Windows
 	pActionExit_->setShortcut(QKeySequence(tr("Ctrl+Q")));

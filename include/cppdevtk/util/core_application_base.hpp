@@ -101,10 +101,8 @@ public:
 	
 	///@}
 	
-	static void SetCompanyInfo(const QString& companyName, const QString& companyHomepage);
-	static void SetProductInfo(const QString& productName, const QString& productVersion);
 	static void SetInfo(const QString& companyName, const QString& companyHomepage,
-			const QString& productName, const QString& productVersion);
+			const QString& productName, const QString& productVersion, const QString& componentName);
 	
 	/// Same as QCoreApplication::applicationDirPath() but on Unix dereference symlinks
 	/// and on Mac OS X does not include bundle
@@ -181,12 +179,6 @@ inline void CoreApplicationBase::GetQmInfo(QString& qmPath, QString& qmNamePrefi
 
 inline int CoreApplicationBase::GetNumberOfSupportedLanguages() {
 	return GetSupportedLocales().size();
-}
-
-inline void CoreApplicationBase::SetInfo(const QString& companyName, const QString& companyHomepage,
-		const QString& productName, const QString& productVersion) {
-	SetCompanyInfo(companyName, companyHomepage);
-	SetProductInfo(productName, productVersion);
 }
 
 inline bool CoreApplicationBase::GetQuitOnTerminationSignals() const {

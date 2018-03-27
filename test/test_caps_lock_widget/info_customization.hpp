@@ -26,10 +26,11 @@
 #define CPPDEVTK_TEST_CAPS_LOCK_WIDGET_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/gui/info.hpp>
 
 
-#define CPPDEVTK_TEST_CAPS_LOCK_WIDGET_NAME "Test CapsLock Widget"
+#define CPPDEVTK_TEST_CAPS_LOCK_WIDGET_SHORT_NAME "Test CapsLock Widget"
+#define CPPDEVTK_TEST_CAPS_LOCK_WIDGET_LONG_NAME "Test CapsLock Widget"
 #define CPPDEVTK_TEST_CAPS_LOCK_WIDGET_DESCRIPTION CPPDEVTK_LONG_NAME " test application."
 
 

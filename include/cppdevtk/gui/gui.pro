@@ -35,6 +35,8 @@ HEADERS += \
 	eula_widget.hpp \
 	info.hpp \
 	info_customization.hpp	\
+	info_tr.hpp	\
+	info_tr_customization.hpp	\
 	init_resources.hpp \
 	invisible_widget.hpp \
 	is_caps_lock_on.hpp \

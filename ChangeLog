@@ -7,6 +7,7 @@ Version 1.1.0.1:
 - Improvements:
 	- do not conflict with boost signals
 	- zlib dependency is optional (affects QZipReader and QZipWriter)
+	- CoreApplicationBase::SetInfo(): added componentName
 - Fixed bugs:
 	- fixed enabling GCC/Clang C++11 and extensions
 

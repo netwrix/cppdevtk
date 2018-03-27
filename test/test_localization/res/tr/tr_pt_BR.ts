@@ -97,7 +97,7 @@
     </message>
 </context>
 <context>
-    <name>cppdevtk_info</name>
+    <name>cppdevtk_test_localization</name>
     <message>
         <source>Test Localization</source>
         <translation type="unfinished"></translation>

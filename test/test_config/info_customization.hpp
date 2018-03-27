@@ -26,10 +26,11 @@
 #define CPPDEVTK_TEST_CONFIG_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 
 
-#define CPPDEVTK_TEST_CONFIG_NAME "Test Config"
+#define CPPDEVTK_TEST_CONFIG_SHORT_NAME "Test Config"
+#define CPPDEVTK_TEST_CONFIG_LONG_NAME "Test Config"
 #define CPPDEVTK_TEST_CONFIG_DESCRIPTION CPPDEVTK_LONG_NAME " test application."
 
 

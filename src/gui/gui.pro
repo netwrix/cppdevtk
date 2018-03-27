@@ -245,6 +245,8 @@ HEADERS += \
 	../../include/cppdevtk/gui/eula_widget.hpp \
 	../../include/cppdevtk/gui/info.hpp \
 	../../include/cppdevtk/gui/info_customization.hpp	\
+	../../include/cppdevtk/gui/info_tr.hpp	\
+	../../include/cppdevtk/gui/info_tr_customization.hpp	\
 	../../include/cppdevtk/gui/init_resources.hpp \
 	../../include/cppdevtk/gui/invisible_widget.hpp \
 	../../include/cppdevtk/gui/is_caps_lock_on.hpp \

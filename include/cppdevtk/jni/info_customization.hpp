@@ -26,9 +26,11 @@
 #define CPPDEVTK_JNI_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 
 
+#define CPPDEVTK_JNI_SHORT_NAME "jni"
+#define CPPDEVTK_JNI_LONG_NAME "jni"
 #define CPPDEVTK_JNI_DESCRIPTION CPPDEVTK_LONG_NAME " jni library."
 
 

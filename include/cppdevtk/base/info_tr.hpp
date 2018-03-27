@@ -17,11 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef APSTUDIO_INVOKED
-#	error "This file is not editable by Microsoft Visual C++!!!"
-#endif
-
-
 #ifndef CPPDEVTK_BASE_INFO_TR_HPP_INCLUDED_
 #define CPPDEVTK_BASE_INFO_TR_HPP_INCLUDED_
 
@@ -35,6 +30,9 @@
 
 #define CPPDEVTK_COPYRIGHT_TR CPPDEVTK_COMPANY_COPYRIGHT_TR
 #define CPPDEVTK_TRADEMARKS_TR CPPDEVTK_COMPANY_TRADEMARKS_TR
+
+#define CPPDEVTK_BASE_SHORT_NAME_TR_SANITIZED QString(CPPDEVTK_BASE_SHORT_NAME_TR).toLower().replace(' ', '_')
+#define CPPDEVTK_BASE_LONG_NAME_TR_SANITIZED QString(CPPDEVTK_BASE_LONG_NAME_TR).toLower().replace(' ', '_')
 
 
 #endif	// CPPDEVTK_BASE_INFO_TR_HPP_INCLUDED_

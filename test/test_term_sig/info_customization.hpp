@@ -26,10 +26,11 @@
 #define CPPDEVTK_TEST_TERMINATION_SIGNALS_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/info.hpp>
+#include <cppdevtk/util/info.hpp>
 
 
-#define CPPDEVTK_TEST_TERMINATION_SIGNALS_NAME "Test Termination Signals"
+#define CPPDEVTK_TEST_TERMINATION_SIGNALS_SHORT_NAME "Test Termination Signals"
+#define CPPDEVTK_TEST_TERMINATION_SIGNALS_LONG_NAME "Test Termination Signals"
 #define CPPDEVTK_TEST_TERMINATION_SIGNALS_DESCRIPTION CPPDEVTK_LONG_NAME " test application."
 
 
