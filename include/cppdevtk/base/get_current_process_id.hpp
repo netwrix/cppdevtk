@@ -17,42 +17,39 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/gui/user_idle_time.hpp>
-#if (!CPPDEVTK_PLATFORM_MACOSX)
-#	error "This file is Mac OS X specific!!!"
-#endif
-#include <cppdevtk/base/unused.hpp>
+#ifndef CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
+#define CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
 
-#if (!CPPDEVTK_PLATFORM_IOS)
-#	include <ApplicationServices/ApplicationServices.h>
+
+#include "config.hpp"
+#if (CPPDEVTK_PLATFORM_UNIX)
+#include <sys/types.h>
+#include <unistd.h>
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#	include <windows.h>
+#else
+#	error "Unsupported platform!!!"
 #endif
 
 
 namespace cppdevtk {
-namespace gui {
+namespace base {
 
 
-// TODO: Test on Mac OS X 10.4 Tiger
-// According to some articles CGEventSourceSecondsSinceLastEventType() does not work on 10.4.
-// If it does not work try:
-// - kIOHIDIdleTimeKey: http://www.danandcheryl.com/2010/06/how-to-check-the-system-idle-time-using-cocoa
-// - kEventLoopIdleTimerStarted + kEventLoopIdleTimerIdling
-CPPDEVTK_GUI_API bool GetUserIdleTime(idle_time_t& userIdleTime) {
-#	if (!CPPDEVTK_PLATFORM_IOS)
-	
-	userIdleTime = CGEventSourceSecondsSinceLastEventType(
-			kCGEventSourceStateCombinedSessionState, kCGAnyInputEventType) * 1000;
-	
-	return true;
-	
-#	else
-	// TODO: iOS port
-	::cppdevtk::base::SuppressUnusedWarning(userIdleTime);
-	CPPDEVTK_COMPILER_WARNING("GetUserIdleTime() not ported on iOS");
-	return false;
-#	endif
-}
+#if (CPPDEVTK_PLATFORM_UNIX)
+using ::pid_t;
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
+typedef DWORD pid_t;
+#else
+#	error "Unsupported platform!!!"
+#endif
 
 
-}	// namespace gui
+CPPDEVTK_BASE_API pid_t GetCurrentProcessId();
+
+
+}	// namespace base
 }	// namespace cppdevtk
+
+
+#endif	// CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_

@@ -284,12 +284,14 @@ else {
 }
 
 unix {
-	SOURCES += thread_unx.cpp
+	SOURCES += thread_unx.cpp	\
+		get_current_process_id_unx.cpp
 }
 else {
 	win32 {
 		SOURCES += thread_win.cpp	\
-			thread_data_win.cpp
+			thread_data_win.cpp	\
+			get_current_process_id_win.cpp
 	}
 	else {
 		error("Unsupported platform!!!")
@@ -334,6 +336,7 @@ HEADERS += \
 	../../include/cppdevtk/base/future_exception.hpp	\
 	../../include/cppdevtk/base/future.hpp	\
 	../../include/cppdevtk/base/generic_locking_algorithms.hpp	\
+	../../include/cppdevtk/base/get_current_process_id.hpp	\
 	../../include/cppdevtk/base/info.hpp	\
 	../../include/cppdevtk/base/info_customization.hpp	\
 	../../include/cppdevtk/base/info_tr.hpp	\

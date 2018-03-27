@@ -209,13 +209,13 @@ SOURCES += \
 unix {
 	linux* {
 		SOURCES += is_caps_lock_on_lnx.cpp	\
-			user_idle_time_lnx.cpp	\
+			get_user_idle_time_lnx.cpp	\
 			computer_manager_lnx.cpp
 	}
 	else {
 		macx|ios {
 			SOURCES += is_caps_lock_on_mac.cpp	\
-				user_idle_time_mac.cpp	\
+				get_user_idle_time_mac.cpp	\
 				computer_manager_mac.cpp
 		}
 		else {
@@ -226,7 +226,7 @@ unix {
 else {
 	win32 {
 		SOURCES += is_caps_lock_on_win.cpp	\
-			user_idle_time_win.cpp	\
+			get_user_idle_time_win.cpp	\
 			computer_manager_win.cpp
 	}
 	else {
@@ -243,6 +243,7 @@ HEADERS += \
 	../../include/cppdevtk/gui/custom_wizard.hpp \
 	../../include/cppdevtk/gui/disk_space_widget.hpp \
 	../../include/cppdevtk/gui/eula_widget.hpp \
+	../../include/cppdevtk/gui/get_user_idle_time.hpp \
 	../../include/cppdevtk/gui/info.hpp \
 	../../include/cppdevtk/gui/info_customization.hpp	\
 	../../include/cppdevtk/gui/info_tr.hpp	\
@@ -263,5 +264,4 @@ HEADERS += \
 	../../include/cppdevtk/gui/set_stylesheet_from_file.hpp \
 	../../include/cppdevtk/gui/single_application.hpp \
 	../../include/cppdevtk/gui/timed_computer_management_widget.hpp \
-	../../include/cppdevtk/gui/user_idle_time.hpp \
 	../../include/cppdevtk/gui/widget_base.hpp

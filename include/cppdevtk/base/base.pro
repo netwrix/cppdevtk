@@ -57,6 +57,7 @@ HEADERS += \
 	future_exception.hpp	\
 	future.hpp	\
 	generic_locking_algorithms.hpp	\
+	get_current_process_id.hpp	\
 	info.hpp	\
 	info_customization.hpp	\
 	info_tr.hpp	\

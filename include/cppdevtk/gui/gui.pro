@@ -33,6 +33,7 @@ HEADERS += \
 	custom_wizard.hpp \
 	disk_space_widget.hpp \
 	eula_widget.hpp \
+	get_user_idle_time.hpp \
 	info.hpp \
 	info_customization.hpp	\
 	info_tr.hpp	\
@@ -53,7 +54,6 @@ HEADERS += \
 	set_stylesheet_from_file.hpp \
 	single_application.hpp \
 	timed_computer_management_widget.hpp \
-	user_idle_time.hpp \
 	widget_base.hpp
 
 

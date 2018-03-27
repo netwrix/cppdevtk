@@ -17,8 +17,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_GUI_USER_IDLE_TIME_HPP_INCLUDED_
-#define CPPDEVTK_GUI_USER_IDLE_TIME_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_GET_USER_IDLE_TIME_HPP_INCLUDED_
+#define CPPDEVTK_GUI_GET_USER_IDLE_TIME_HPP_INCLUDED_
 
 
 #include "config.hpp"
@@ -72,4 +72,4 @@ CPPDEVTK_GUI_API bool GetUserIdleTime(idle_time_t& userIdleTime);
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_GUI_USER_IDLE_TIME_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_GET_USER_IDLE_TIME_HPP_INCLUDED_

@@ -17,7 +17,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/gui/user_idle_time.hpp>
+#include <cppdevtk/gui/get_user_idle_time.hpp>
 #if (!CPPDEVTK_PLATFORM_LINUX)
 #	error "This file is Linux specific!!!"
 #endif
