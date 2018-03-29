@@ -1,0 +1,126 @@
+Source: cppdevtk
+Priority: optional
+Maintainer: Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+Build-Depends: debhelper (>=9),
+	zlib1g-dev, libsystemd-login-dev, libudev-dev, libdbus-1-dev, libboost-all-dev, libxss-dev, libgl1-mesa-dev, default-jdk, qt-latest (>=5.9.4)
+Standards-Version: 3.9.6
+Section: libs
+Homepage: https://github.com/cososys/cppdevtk
+#Vcs-Git: git://anonscm.debian.org/collab-maint/cppdevtk.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/cppdevtk.git
+
+
+Package: libcppdevtk-base
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk base library
+ CppDevTk C++ base library.
+
+
+Package: libcppdevtk-util
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk util library
+ CppDevTk C++ util library.
+
+
+Package: libcppdevtk-jni
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk jni library
+ CppDevTk C++ jni library.
+
+
+Package: libcppdevtk-gui
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk gui library
+ CppDevTk C++ gui library.
+
+
+Package: libcppdevtk
+Section: libs
+Architecture: any
+Depends: libcppdevtk-gui (= ${binary:Version}), libcppdevtk-jni (= ${binary:Version}), libcppdevtk-util (= ${binary:Version}), libcppdevtk-base (= ${binary:Version}), ${misc:Depends}
+Description: CppDevTk libraries
+ Convenience package to install all CppDevTk C++ libraries.
+
+
+Package: cppdevtk-base-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-base (= ${binary:Version}), ${misc:Depends},
+	libboost-all-dev, qt-latest (>=5.9.4)
+Description: Development files for libcppdevtk-base
+ The cppdevtk-base-dev package contains libraries and header files for developing applications that use libcppdevtk-base.
+
+
+Package: cppdevtk-util-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-util (= ${binary:Version}), ${misc:Depends},
+	zlib1g-dev, libsystemd-login-dev, libudev-dev, libdbus-1-dev, cppdevtk-base-dev (= ${binary:Version})
+Description: Development files for libcppdevtk-util
+ The cppdevtk-util-dev package contains libraries and header files for developing applications that use libcppdevtk-util.
+
+
+Package: cppdevtk-jni-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-jni (= ${binary:Version}), ${misc:Depends},
+	default-jdk, cppdevtk-util-dev (= ${binary:Version})
+Description: Development files for libcppdevtk-jni
+ The cppdevtk-jni-dev package contains libraries and header files for developing applications that use libcppdevtk-jni.
+
+
+Package: cppdevtk-gui-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-gui (= ${binary:Version}), ${misc:Depends},
+	libxss-dev, libgl1-mesa-dev, cppdevtk-util-dev (= ${binary:Version})
+Description: Development files for libcppdevtk-gui
+ The cppdevtk-gui-dev package contains libraries and header files for developing applications that use libcppdevtk-gui.
+
+
+Package: cppdevtk-dev
+Section: libdevel
+Architecture: any
+Depends: cppdevtk-gui-dev (= ${binary:Version}), cppdevtk-jni-dev (= ${binary:Version}), cppdevtk-util-dev (= ${binary:Version}), cppdevtk-base-dev (= ${binary:Version}), ${misc:Depends}
+Description: Development files for libcppdevtk
+ Convenience package to install all libcppdevtk-devel packages.
+
+
+Package: cppdevtk-test-base
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Test applications for libcppdevtk-base
+ The cppdevtk-test-base package contains applications for testing libcppdevtk-base.
+
+
+Package: cppdevtk-test-util
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Test applications for libcppdevtk-util
+ The cppdevtk-test-util package contains applications for testing libcppdevtk-util.
+
+
+Package: cppdevtk-test-gui
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Test applications for libcppdevtk-gui
+ The cppdevtk-test-gui package contains applications for testing libcppdevtk-gui.
+
+
+Package: cppdevtk-test
+Section: utils
+Architecture: any
+Depends: cppdevtk-test-gui (= ${binary:Version}), cppdevtk-test-util (= ${binary:Version}), cppdevtk-test-base (= ${binary:Version}), ${misc:Depends}
+Description: Test applications for libcppdevtk
+ Convenience package to install all cppdevtk-test packages.

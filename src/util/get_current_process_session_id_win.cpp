@@ -17,39 +17,28 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
-#define CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
-
-
-#include "config.hpp"
-#if (CPPDEVTK_PLATFORM_UNIX)
-#include <sys/types.h>
-#include <unistd.h>
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	include <windows.h>
-#else
-#	error "Unsupported platform!!!"
+#include <cppdevtk/util/get_current_process_session_id.hpp>
+#if (!CPPDEVTK_PLATFORM_WINDOWS)
+#	error "This file is Windows specific!!!"
 #endif
+#include <cppdevtk/base/get_current_process_id.hpp>
+#include <cppdevtk/base/system_exception.hpp>
+
+#include <windows.h>
 
 
 namespace cppdevtk {
-namespace base {
+namespace util {
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-using ::pid_t;
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-typedef DWORD pid_t;
-#else
-#	error "Unsupported platform!!!"
-#endif
+CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
+	DWORD sessionId = 0;
+	if (!ProcessIdToSessionId(base::GetCurrentProcessId(), &sessionId)) {
+		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(base::GetLastSystemErrorCode(), "ProcessIdToSessionId() failed");
+	}
+	return QString::number(sessionId);
+}
 
 
-CPPDEVTK_BASE_API pid_t GetCurrentProcessId();	///< \remark nothrow guarantee
-
-
-}	// namespace base
+}	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_

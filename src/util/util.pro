@@ -98,12 +98,16 @@ INSTALLS += target
 		}
 		
 		linux* {
+			cppdevtk_have_logind {
+				LIBS *= -lsystemd
+			}
+			
 			#LIBS *= -ludev
 			LIBS *= -ldl
 		}
 		else {
 			macx {
-				LIBS += -framework DiskArbitration -framework IOKit -framework CoreFoundation
+				LIBS += -framework Security -framework DiskArbitration -framework IOKit -framework CoreFoundation
 				#LIBS *= -ldyld
 			}
 			else {
@@ -189,6 +193,7 @@ SOURCES += \
 	core_application.cpp \
 	core_application_base.cpp \
 	damerau_levenshtein_distance.cpp \
+	dbus_exception.cpp	\
 	dynamic_library.cpp \
 	exception_to_errno.cpp	\
 	filesystem_exception.cpp \
@@ -224,10 +229,18 @@ unix {
 	linux* {
 		SOURCES += filesystem_utils_lnx.cpp
 		!android {
-			SOURCES += libudev_lnx.cpp
+			SOURCES += libudev_lnx.cpp	\
+				get_current_process_session_id_lnx.cpp	\
+				console_kit_manager_lnx.cpp	\
+				console_kit_session_lnx.cpp	\
+				logind_manager_lnx.cpp	\
+				logind_session_lnx.cpp
 		}
 	}
 	else {
+		macx {
+			SOURCES += get_current_process_session_id_mac.cpp
+		}
 		macx|ios {
 			SOURCES += filesystem_utils_mac.cpp
 		}
@@ -243,6 +256,7 @@ else {
 			dynamic_loader_exception_win.cpp \
 			dynamic_loader_win.cpp	\
 			filesystem_utils_win.cpp	\
+			get_current_process_session_id_win.cpp	\
 			get_user_name_win.cpp	\
 			qt_locked_file_win.cpp \
 			qt_service_win.cpp	\
@@ -260,12 +274,14 @@ HEADERS += \
 	../../include/cppdevtk/util/core_application.hpp \
 	../../include/cppdevtk/util/core_application_base.hpp \
 	../../include/cppdevtk/util/damerau_levenshtein_distance.hpp \
+	../../include/cppdevtk/util/dbus_exception.hpp	\
 	../../include/cppdevtk/util/dynamic_library.hpp \
 	../../include/cppdevtk/util/dynamic_loader.hpp \
 	../../include/cppdevtk/util/dynamic_loader_exception.hpp \
 	../../include/cppdevtk/util/exception_to_errno.hpp	\
 	../../include/cppdevtk/util/filesystem_exception.hpp \
 	../../include/cppdevtk/util/filesystem_utils.hpp \
+	../../include/cppdevtk/util/get_current_process_session_id.hpp	\
 	../../include/cppdevtk/util/get_user_name.hpp \
 	../../include/cppdevtk/util/info.hpp \
 	../../include/cppdevtk/util/info_customization.hpp	\
@@ -294,7 +310,11 @@ unix {
 	linux* {
 		HEADERS += ../../include/cppdevtk/util/filesystem_utils_lnx.hpp
 		!android {
-			HEADERS += ../../include/cppdevtk/util/libudev_lnx.hpp
+			HEADERS += ../../include/cppdevtk/util/libudev_lnx.hpp	\
+				../../include/cppdevtk/util/console_kit_manager_lnx.hpp	\
+				../../include/cppdevtk/util/console_kit_session_lnx.hpp	\
+				../../include/cppdevtk/util/logind_manager_lnx.hpp	\
+				../../include/cppdevtk/util/logind_session_lnx.hpp
 		}
 	}
 	else {

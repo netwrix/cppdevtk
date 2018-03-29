@@ -30,8 +30,7 @@ namespace cppdevtk {
 namespace util {
 
 
-/// \return User name (empty if fails)
-CPPDEVTK_UTIL_API QString GetUserName();
+CPPDEVTK_UTIL_API QString GetUserName();	///< \return User name (empty if fails)
 
 
 }	// namespace util

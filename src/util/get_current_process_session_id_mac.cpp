@@ -17,39 +17,36 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
-#define CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
-
-
-#include "config.hpp"
-#if (CPPDEVTK_PLATFORM_UNIX)
-#include <sys/types.h>
-#include <unistd.h>
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	include <windows.h>
-#else
-#	error "Unsupported platform!!!"
+#include <cppdevtk/util/get_current_process_session_id.hpp>
+#if (!CPPDEVTK_PLATFORM_MACOSX)
+#	error "This file is Mac OS X specific!!!"
 #endif
+#if (CPPDEVTK_PLATFORM_IOS)
+#	error "This file is not for iOS!!!"
+#endif
+#include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
+
+#include <Security/Security.h>
 
 
 namespace cppdevtk {
-namespace base {
+namespace util {
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-using ::pid_t;
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-typedef DWORD pid_t;
-#else
-#	error "Unsupported platform!!!"
-#endif
+CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
+	SecuritySessionId securitySessionId;
+	SessionAttributeBits sessionAttributeBits;
+	const OSStatus kSessionsApiRetCode = SessionGetInfo(callerSecuritySession, &securitySessionId, &sessionAttributeBits);
+	if (kSessionsApiRetCode != errSessionSuccess) {
+		if (kSessionsApiRetCode == errSessionAuthorizationDenied) {
+			throw CPPDEVTK_RUNTIME_EXCEPTION("SessionGetInfo() failed: errSessionAuthorizationDenied");
+		}
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("SessionGetInfo() failed; kSessionsApiRetCode:: %1").arg(kSessionsApiRetCode));
+	}
+	return QString::number(securitySessionId);
+}
 
 
-CPPDEVTK_BASE_API pid_t GetCurrentProcessId();	///< \remark nothrow guarantee
-
-
-}	// namespace base
+}	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_

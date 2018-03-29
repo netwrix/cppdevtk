@@ -31,6 +31,7 @@
 #include <new>
 #include <cstddef>
 #include <cstring>
+#include <climits>
 #include <limits>
 
 #include <unistd.h>
@@ -335,7 +336,12 @@ void PosixSignalsWatcher::PosixSignalHandler(int sig) {
 	CPPDEVTK_ASSERT((1 <= sig) && (sig <= kNumSigs_));	// [1, kNumSigs_]
 	
 	const int kSigIdx = sig - 1;
+	// does not compile on CentOS 6, gcc 4.4.7
+#	if (!CPPDEVTK_COMPILER_GCC || (CPPDEVTK_GNUC_VERSION_NUM > CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 4, 7)))
 	CPPDEVTK_STATIC_ASSERT(::std::numeric_limits<byte>::max() >= kNumSigs_);
+#	else
+	CPPDEVTK_STATIC_ASSERT(UCHAR_MAX >= kNumSigs_);
+#	endif
 	const byte kMsg = sig;
 	CPPDEVTK_STATIC_ASSERT(sizeof(kMsg) == 1);
 	// write() is async-signal-safe

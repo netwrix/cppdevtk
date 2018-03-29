@@ -48,7 +48,12 @@ int main(int argc, char* argv[]) try {
 	application.SetQuitOnTerminationSignals(true);
 	CPPDEVTK_ASSERT(application.GetQuitOnTerminationSignals());
 	
+	// does not compile on CentOS 6, gcc 4.4.7
+#	if (!CPPDEVTK_COMPILER_GCC || (CPPDEVTK_GNUC_VERSION_NUM > CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 4, 7)))
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
+#	else
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN() {
+#	endif
 		try {
 			static_cast<Application*>(qApp)->SetQuitOnTerminationSignals(false);
 		}

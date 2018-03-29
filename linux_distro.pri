@@ -15,43 +15,4 @@
 #****************************************************************************************************************************
 
 
-TEMPLATE = subdirs
-
-
-include(./../../../../common.pri)
-
-
-SUBDIRS +=
-
-
-unix {
-	HEADERS += unix.hpp
-	
-	linux* {
-		HEADERS += linux.hpp
-		!android {
-			HEADERS += linux_distro.hpp
-		}
-	}
-	else {
-		macx|ios {
-			HEADERS += macosx.hpp
-		}
-		else {
-			error("Unsupported Unix platform!!!")
-		}
-	}
-}
-else {
-	win32 {
-		HEADERS += windows.hpp
-	}
-	else {
-		error("Unsupported platform!!!")
-	}
-}
-
-
-headers.files = $${HEADERS}
-headers.path = $${CPPDEVTK_INCLUDE_DIR}/config/platform
-INSTALLS += headers
+CONFIG += cppdevtk_have_logind

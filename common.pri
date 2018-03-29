@@ -741,6 +741,8 @@ android|ios {
 }
 QMAKE_PROJECT_DEPTH = 0
 
+greaterThan(QT_MAJOR_VERSION, 4): DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0
+
 # TARGET
 !isEmpty(TEMPLATE) {
 	isEqual(TEMPLATE, "app") {

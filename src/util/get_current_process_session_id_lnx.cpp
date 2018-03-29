@@ -17,39 +17,35 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
-#define CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
+#include <cppdevtk/util/get_current_process_session_id.hpp>
+#if (!CPPDEVTK_PLATFORM_LINUX)
+#	error "This file is Linux specific!!!"
+#endif
+#if (CPPDEVTK_PLATFORM_ANDROID)
+#	error "This file is not for Android!!!"
+#endif
 
-
-#include "config.hpp"
-#if (CPPDEVTK_PLATFORM_UNIX)
-#include <sys/types.h>
-#include <unistd.h>
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	include <windows.h>
+#if (CPPDEVTK_HAVE_LOGIND)
+#include <cppdevtk/util/logind_manager_lnx.hpp>
+#include <cppdevtk/util/logind_session_lnx.hpp>
 #else
-#	error "Unsupported platform!!!"
+#include <cppdevtk/util/console_kit_manager_lnx.hpp>
+#include <cppdevtk/util/console_kit_session_lnx.hpp>
 #endif
 
 
 namespace cppdevtk {
-namespace base {
+namespace util {
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-using ::pid_t;
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-typedef DWORD pid_t;
-#else
-#	error "Unsupported platform!!!"
-#endif
+CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
+#	if (CPPDEVTK_HAVE_LOGIND)
+	return LogindManager::GetInstance().GetCurrentSession()->GetId();
+#	else
+	return ConsoleKitManager::GetInstance().GetCurrentSession()->GetId().path();
+#	endif
+}
 
 
-CPPDEVTK_BASE_API pid_t GetCurrentProcessId();	///< \remark nothrow guarantee
-
-
-}	// namespace base
+}	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_

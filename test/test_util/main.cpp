@@ -22,6 +22,7 @@
 #include <cppdevtk/util/core_application.hpp>
 #include <cppdevtk/util/filesystem_utils.hpp>
 #include <cppdevtk/util/filesystem_exception.hpp>
+#include <cppdevtk/util/get_current_process_session_id.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/qiostream.hpp>
 #include <cppdevtk/base/exception.hpp>
@@ -64,6 +65,7 @@ int main(int argc, char* argv[]) try {
 			"testing fs exc", "aSrcPath", "aDstPath");
 	CPPDEVTK_COUT << "fsExc.What(): " << fsExc.What() << endl;
 	CPPDEVTK_COUT << "fsExc.ToString(): " << fsExc.ToString() << endl;
+	CPPDEVTK_COUT << "current process session ID: " << GetCurrentProcessSessionId() << endl;
 	
 	
 	/*

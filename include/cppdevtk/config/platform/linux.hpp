@@ -31,10 +31,11 @@
 
 
 #include "unix.hpp"
-
 #include <linux/version.h>
 #if (CPPDEVTK_PLATFORM_ANDROID)
 #	include <android/api-level.h>
+#else
+#	include "linux_distro.hpp"
 #endif
 
 

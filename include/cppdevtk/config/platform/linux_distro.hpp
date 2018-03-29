@@ -17,39 +17,31 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
-#define CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
+#ifndef CPPDEVTK_CONFIG_PLATFORM_HPP_INCLUDED_
+#	error "Do not include directly; please include <cppdevtk/config/platform.hpp> instead!!!"
+#endif
 
-
-#include "config.hpp"
-#if (CPPDEVTK_PLATFORM_UNIX)
-#include <sys/types.h>
-#include <unistd.h>
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	include <windows.h>
-#else
-#	error "Unsupported platform!!!"
+#if (!CPPDEVTK_PLATFORM_LINUX)
+#	error "This file is Linux specific!!!"
+#endif
+#if (CPPDEVTK_PLATFORM_ANDROID)
+#	error "This file is not for Android!!!"
 #endif
 
 
-namespace cppdevtk {
-namespace base {
+#ifndef CPPDEVTK_CONFIG_PLATFORM_LINUX_DISTRO_HPP_INCLUDED_
+#define CPPDEVTK_CONFIG_PLATFORM_LINUX_DISTRO_HPP_INCLUDED_
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-using ::pid_t;
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-typedef DWORD pid_t;
-#else
-#	error "Unsupported platform!!!"
-#endif
+#include "unix.hpp"
+
+#include <linux/version.h>
 
 
-CPPDEVTK_BASE_API pid_t GetCurrentProcessId();	///< \remark nothrow guarantee
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Distro Features.
+#define CPPDEVTK_HAVE_LOGIND 1	// 0 means ConsoleKit
 
 
-}	// namespace base
-}	// namespace cppdevtk
-
-
-#endif	// CPPDEVTK_BASE_GET_CURRENT_PROCESS_ID_HPP_INCLUDED_
+#endif	// CPPDEVTK_CONFIG_PLATFORM_LINUX_DISTRO_HPP_INCLUDED_

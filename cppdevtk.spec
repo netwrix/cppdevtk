@@ -130,6 +130,7 @@ BuildRequires: zlib-devel
 %if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 6 || 0%{?rhel} == 6)
 BuildRequires: libudev-devel
+BuildRequires: ConsoleKit-devel
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 BuildRequires: systemd-devel
@@ -137,6 +138,7 @@ BuildRequires: systemd-devel
 %endif
 %if (0%{?suse_version})
 BuildRequires: libudev-devel
+BuildRequires: systemd-devel
 %endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -231,6 +233,7 @@ Group: Development/Libraries/C and C++
 %if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 6 || 0%{?rhel} == 6)
 Requires: libudev-devel
+Requires: ConsoleKit-devel
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 Requires: systemd-devel
@@ -238,6 +241,7 @@ Requires: systemd-devel
 %endif
 %if (0%{?suse_version})
 Requires: libudev-devel
+Requires: systemd-devel
 %endif
 Requires: zlib-devel
 Requires: lib%{name}-util = %{version}

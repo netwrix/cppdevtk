@@ -5,6 +5,8 @@ Version 1.1.0.1:
 	- CoreApplicationBase: added support for termination signals (Unix + Windows)
 	- added test app for termination signals
 	- added GetCurrentProcessId()
+	- added GetCurrentProcessSessionId()
+	- Linux: added support for Consolekit and logind Manager and Session
 - Improvements:
 	- do not conflict with boost signals
 	- zlib dependency is optional (affects QZipReader and QZipWriter)
