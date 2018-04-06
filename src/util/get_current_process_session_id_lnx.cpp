@@ -25,13 +25,13 @@
 #	error "This file is not for Android!!!"
 #endif
 
-#if (CPPDEVTK_HAVE_LOGIND)
 #include <cppdevtk/util/logind_manager_lnx.hpp>
 #include <cppdevtk/util/logind_session_lnx.hpp>
-#else
 #include <cppdevtk/util/console_kit_manager_lnx.hpp>
 #include <cppdevtk/util/console_kit_session_lnx.hpp>
-#endif
+#include <cppdevtk/util/dbus_exception.hpp>
+
+#include <QtDBus/QDBusConnection>
 
 
 namespace cppdevtk {
@@ -39,11 +39,16 @@ namespace util {
 
 
 CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
-#	if (CPPDEVTK_HAVE_LOGIND)
+	if (!LogindManager::IsLogindServiceRegistered()) {
+		if (!ConsoleKitManager::IsConsoleKitServiceRegistered()) {
+			throw CPPDEVTK_DBUS_EXCEPTION("None of Logind or ConsoleKit services is registered",
+					QDBusConnection::systemBus().lastError());
+		}
+		
+		return ConsoleKitManager::GetInstance().GetCurrentSession()->GetId().path();
+	}
+	
 	return LogindManager::GetInstance().GetCurrentSession()->GetId();
-#	else
-	return ConsoleKitManager::GetInstance().GetCurrentSession()->GetId().path();
-#	endif
 }
 
 

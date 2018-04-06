@@ -75,6 +75,9 @@
 // https://gcc.gnu.org/onlinedocs/gcc-3.3/gcc/Thread-Local.html
 #define CPPDEVTK_THREAD __thread
 
+#define CPPDEVTK_FINAL final
+#define CPPDEVTK_OVERRIDE override
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compiler Features.
@@ -126,7 +129,14 @@
 #	define CPPDEVTK_HAVE_CPP11_STATIC_ASSERT 0
 #endif
 
-#define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR (defined(__has_include) && __has_include(<system_error>))
+#ifndef __has_include
+#error "__has_include needed"
+#endif
+#if (__has_include(<system_error>))
+#define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR 1
+#else
+#define CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR 0
+#endif
 
 #if ((__cplusplus >= 201103L) || defined(__GXX_EXPERIMENTAL_CXX0X__))
 #	define CPPDEVTK_HAVE_CPP11_MUTEX 1

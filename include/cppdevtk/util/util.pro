@@ -29,6 +29,7 @@ HEADERS += \
 	core_application.hpp \
 	core_application_base.hpp \
 	damerau_levenshtein_distance.hpp \
+	dbus_utils.hpp	\
 	dbus_exception.hpp	\
 	dynamic_library.hpp \
 	dynamic_loader.hpp \

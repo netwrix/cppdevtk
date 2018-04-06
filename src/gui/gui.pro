@@ -22,9 +22,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 		QT *= x11extras
 	}
 }
-linux*:!android {
+#linux*:!android {
 	QT *= dbus
-}
+#}
 android|ios {
 	QT *= network
 }
@@ -211,12 +211,21 @@ unix {
 		SOURCES += is_caps_lock_on_lnx.cpp	\
 			get_user_idle_time_lnx.cpp	\
 			computer_manager_lnx.cpp
+		
+		!android {
+			SOURCES +=	\
+				screensaver_lnx.cpp
+		}
 	}
 	else {
 		macx|ios {
 			SOURCES += is_caps_lock_on_mac.cpp	\
 				get_user_idle_time_mac.cpp	\
 				computer_manager_mac.cpp
+			
+			macx {
+				SOURCES += screensaver_mac.cpp
+			}
 		}
 		else {
 			error("Unsupported Unix platform!!!")
@@ -227,7 +236,8 @@ else {
 	win32 {
 		SOURCES += is_caps_lock_on_win.cpp	\
 			get_user_idle_time_win.cpp	\
-			computer_manager_win.cpp
+			computer_manager_win.cpp	\
+			screensaver_win.cpp
 	}
 	else {
 		error("Unsupported platform!!!")
@@ -265,3 +275,8 @@ HEADERS += \
 	../../include/cppdevtk/gui/single_application.hpp \
 	../../include/cppdevtk/gui/timed_computer_management_widget.hpp \
 	../../include/cppdevtk/gui/widget_base.hpp
+
+!android:!ios {
+	HEADERS += \
+		../../include/cppdevtk/gui/screensaver.hpp
+}

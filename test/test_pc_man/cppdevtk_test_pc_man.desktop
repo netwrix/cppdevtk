@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test PC Man
+GenericName=CppDevTk test application
+Comment=CppDevTk Test PC Man
+Exec=/opt/cososys/bin/cppdevtk_test_pc_man
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

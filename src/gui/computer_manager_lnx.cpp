@@ -28,18 +28,16 @@
 #include <cppdevtk/base/exception.hpp>
 
 #if (!CPPDEVTK_PLATFORM_ANDROID)
+#include <cppdevtk/util/logind_manager_lnx.hpp>
+#include <cppdevtk/util/logind_session_lnx.hpp>
+#include <cppdevtk/util/console_kit_manager_lnx.hpp>
+#include <cppdevtk/util/console_kit_session_lnx.hpp>
+#include <cppdevtk/util/dbus_exception.hpp>
+
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusError>
-#endif
-
-#if (CPPDEVTK_HAVE_LOGIND)
-#include <cppdevtk/util/logind_manager_lnx.hpp>
-#include <cppdevtk/util/logind_session_lnx.hpp>
-#else
-#include <cppdevtk/util/console_kit_manager_lnx.hpp>
-#include <cppdevtk/util/console_kit_session_lnx.hpp>
 #endif
 
 
@@ -58,21 +56,26 @@ static bool GnomeLogoutUser();
 bool ComputerManager::ShutdownComputer() try {
 #	if (!CPPDEVTK_PLATFORM_ANDROID)
 	
-#	if (CPPDEVTK_HAVE_LOGIND)
+	if (!util::LogindManager::IsLogindServiceRegistered()) {
+		if (!util::ConsoleKitManager::IsConsoleKitServiceRegistered()) {
+			throw CPPDEVTK_DBUS_EXCEPTION("None of Logind or ConsoleKit services is registered",
+					QDBusConnection::systemBus().lastError());
+		}
+		
+		util::ConsoleKitManager& theConsoleKitManager = util::ConsoleKitManager::GetInstance();
+		if (!theConsoleKitManager.CanStop()) {
+			CPPDEVTK_LOG_ERROR("theConsoleKitManager can not stop");
+			return false;
+		}
+		return theConsoleKitManager.Stop();
+	}
+	
 	util::LogindManager& theLogindManager = util::LogindManager::GetInstance();
 	if (theLogindManager.CanPowerOff() != "yes") {
 		CPPDEVTK_LOG_ERROR("theLogindManager can not power off");
 		return false;
 	}
 	return theLogindManager.PowerOff(false);
-#	else
-	util::ConsoleKitManager& theConsoleKitManager = util::ConsoleKitManager::GetInstance();
-	if (!theConsoleKitManager.CanStop()) {
-		CPPDEVTK_LOG_ERROR("theConsoleKitManager can not stop");
-		return false;
-	}
-	return theConsoleKitManager.Stop();
-#	endif
 		
 #	else
 	// TODO: Android port
@@ -89,13 +92,19 @@ bool ComputerManager::LockComputer() try {
 #	if (!CPPDEVTK_PLATFORM_ANDROID)
 	
 	try {
-#		if (CPPDEVTK_HAVE_LOGIND)
-		if (util::LogindManager::GetInstance().GetCurrentSession()->Lock()) {
-#		else
-		if (util::ConsoleKitManager::GetInstance().GetCurrentSession()->Lock()) {
-#		endif
-			return true;
+		if (util::LogindManager::IsLogindServiceRegistered()) {
+			if (util::LogindManager::GetInstance().GetCurrentSession()->Lock()) {
+				return true;
+			}
 		}
+		else {
+			if (util::ConsoleKitManager::IsConsoleKitServiceRegistered()) {
+				if (util::ConsoleKitManager::GetInstance().GetCurrentSession()->Lock()) {
+					return true;
+				}
+			}
+		}
+		
 		CPPDEVTK_LOG_WARN("failed to LockComputer using ConsoleKit/logind");
 	}
 	catch (const ::std::exception& exc) {

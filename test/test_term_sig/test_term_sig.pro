@@ -16,7 +16,7 @@
 
 
 QT -= gui
-QT *= network core
+QT *= dbus network core
 android {
 	QT *= androidextras
 }

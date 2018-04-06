@@ -18,18 +18,16 @@
 
 
 #include <cppdevtk/util/console_kit_manager_lnx.hpp>
-
-
-#if (!CPPDEVTK_HAVE_LOGIND)
-
-
 #include <cppdevtk/util/dbus_exception.hpp>
+#include <cppdevtk/util/dbus_utils.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
 
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusObjectPath>
 #include <QtDBus/QDBusArgument>
+#include <QtDBus/QDBusConnectionInterface>
+#include <QtDBus/QDBusReply>
 #include <QtCore/QVariant>
 #include <QtCore/QList>
 
@@ -145,9 +143,18 @@ bool ConsoleKitManager::CanStop() const {
 	return ::std::auto_ptr<ConsoleKitSession>(new ConsoleKitSession(kDBusObjectPath));
 }
 
+bool ConsoleKitManager::IsConsoleKitServiceRegistered() {
+	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
+	if (!kSystemBus.isConnected()) {
+		throw CPPDEVTK_DBUS_EXCEPTION("systemBus is not connected", kSystemBus.lastError());
+	}
+	
+	return IsDBusServiceRegistered("org.freedesktop.ConsoleKit", kSystemBus);
+}
+
 ConsoleKitManager::ConsoleKitManager(): ::cppdevtk::base::MeyersSingleton<ConsoleKitManager>(),
 		ckManagerInterface_("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager",
-		"org.freedesktop.ConsoleKit.Manager") {
+		"org.freedesktop.ConsoleKit.Manager", QDBusConnection::systemBus()) {
 	if (!ckManagerInterface_.isValid()) {
 		throw CPPDEVTK_DBUS_EXCEPTION("ConsoleKit.Manager DBus interface is not valid", ckManagerInterface_.lastError());
 	}
@@ -156,6 +163,3 @@ ConsoleKitManager::ConsoleKitManager(): ::cppdevtk::base::MeyersSingleton<Consol
 
 }	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// (!CPPDEVTK_HAVE_LOGIND)

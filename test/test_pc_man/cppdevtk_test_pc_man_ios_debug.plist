@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>cppdevtk_test_pc_man_debug</string>
+	<key>CFBundleIconFile</key>
+	<string>application.icns</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>app_icon_29x29.png</string>
+				<string>app_icon_29x29@2x.png</string>
+				<string>app_icon_40x40@2x.png</string>
+				<string>app_icon_57x57.png</string>
+				<string>app_icon_57x57@2x.png</string>
+				<string>app_icon_60x60@2x.png</string>
+			</array>
+		</dict>
+	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>app_icon_29x29.png</string>
+				<string>app_icon_29x29@2x.png</string>
+				<string>app_icon_40x40@2x.png</string>
+				<string>app_icon_57x57.png</string>
+				<string>app_icon_57x57@2x.png</string>
+				<string>app_icon_60x60@2x.png</string>
+				<string>app_icon_29x29~ipad.png</string>
+				<string>app_icon_29x29@2x~ipad.png</string>
+				<string>app_icon_40x40~ipad.png</string>
+				<string>app_icon_40x40@2x~ipad.png</string>
+				<string>app_icon_50x50~ipad.png</string>
+				<string>app_icon_50x50@2x~ipad.png</string>
+				<string>app_icon_72x72~ipad.png</string>
+				<string>app_icon_72x72@2x~ipad.png</string>
+				<string>app_icon_76x76~ipad.png</string>
+				<string>app_icon_76x76@2x~ipad.png</string>
+			</array>
+		</dict>
+	</dict>
+	<key>CFBundleName</key>
+	<string>cppdevtk_test_pc_man_debug</string>
+	<key>CFBundleDisplayName</key>
+	<string>CppDevTk Test PC Man Debug</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.1.0</string>
+	<key>CFBundleGetInfoString</key>
+	<string>CppDevTk test application.</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.cososys.cppdevtk.cppdevtk-test-caps-lock-widget-debug</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>	
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
+</plist>

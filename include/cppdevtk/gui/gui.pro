@@ -56,6 +56,11 @@ HEADERS += \
 	timed_computer_management_widget.hpp \
 	widget_base.hpp
 
+!android:!ios {
+	HEADERS += \
+		screensaver.hpp
+}
+
 
 headers.files = $${HEADERS}
 headers.path = $${CPPDEVTK_INCLUDE_DIR}/gui

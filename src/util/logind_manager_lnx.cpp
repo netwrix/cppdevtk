@@ -19,11 +19,8 @@
 
 #include <cppdevtk/util/logind_manager_lnx.hpp>
 
-
-#if (CPPDEVTK_HAVE_LOGIND)
-
-
 #include <cppdevtk/util/dbus_exception.hpp>
+#include <cppdevtk/util/dbus_utils.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/dbc.hpp>
@@ -31,18 +28,19 @@
 #include <cppdevtk/base/get_current_process_id.hpp>
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
-#include <cppdevtk/base/tstring_conv.hpp>
+#include <cppdevtk/base/get_current_process_id.hpp>
 
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusArgument>
+#include <QtDBus/QDBusObjectPath>
+#include <QtDBus/QDBusConnectionInterface>
+#include <QtDBus/QDBusReply>
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 
 #include <cstddef>
 #include <cstdlib>
 #include <new>
-
-#include <systemd/sd-login.h>
 
 
 namespace cppdevtk {
@@ -157,25 +155,12 @@ bool LogindManager::HybridSleep(bool interactive) {
 }
 
 ::std::auto_ptr<LogindSession> LogindManager::GetCurrentSession() const {
-	char* sessionId = NULL;
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&sessionId)) {
-		free(sessionId);
-	}
-	CPPDEVTK_ON_BLOCK_EXIT_END
-	
-	const int kRetCode = sd_pid_get_session(base::GetCurrentProcessId(), &sessionId);
-	if (kRetCode < 0) {
-		if (kRetCode == -ENODATA) {
-			throw CPPDEVTK_RUNTIME_EXCEPTION("this process is not part of a login session");
-		}
-		else {
-			throw CPPDEVTK_RUNTIME_EXCEPTION(QString("sd_pid_get_session() failed; kRetCode: %1").arg(kRetCode));
-		}
-	}
-	return ::std::auto_ptr<LogindSession>(new LogindSession(QDBusObjectPath(sessionId)));
+	return GetSessionByPID(base::GetCurrentProcessId());
 }
 
 ::std::auto_ptr<LogindSession> LogindManager::GetSession(const QString& sessionId) const {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(sessionId.isEmpty(), "sessionId");
+	
 	const QDBusMessage kReply = logindManagerInterface_.call("GetSession", sessionId);
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
 		throw CPPDEVTK_DBUS_EXCEPTION(
@@ -313,8 +298,18 @@ QString LogindManager::CanHybridSleep() const {
 	return kReplyArg.toString();
 }
 
+bool LogindManager::IsLogindServiceRegistered() {
+	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
+	if (!kSystemBus.isConnected()) {
+		throw CPPDEVTK_DBUS_EXCEPTION("systemBus is not connected", kSystemBus.lastError());
+	}
+	
+	return IsDBusServiceRegistered("org.freedesktop.login1", kSystemBus);
+}
+
 LogindManager::LogindManager(): ::cppdevtk::base::MeyersSingleton<LogindManager>(),
-		logindManagerInterface_("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager") {
+		logindManagerInterface_("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager",
+		QDBusConnection::systemBus()) {
 	if (!logindManagerInterface_.isValid()) {
 		throw CPPDEVTK_DBUS_EXCEPTION("Logind.Manager DBus interface is not valid", logindManagerInterface_.lastError());
 	}
@@ -323,6 +318,3 @@ LogindManager::LogindManager(): ::cppdevtk::base::MeyersSingleton<LogindManager>
 
 }	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// (CPPDEVTK_HAVE_LOGIND)

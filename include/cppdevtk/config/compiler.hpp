@@ -175,6 +175,12 @@
 #define CPPDEVTK_THREAD
 #undef CPPDEVTK_THREAD
 
+/// \brief C++11 final and override or C++03 compiler extensions.
+/// \attention Must be implemented by each \ref config_compiler_supported_compilers.
+#define CPPDEVTK_FINAL
+#undef CPPDEVTK_FINAL
+#define CPPDEVTK_OVERRIDE
+#undef CPPDEVTK_OVERRIDE
 
 /// \defgroup config_compiler_features Compiler Features
 /// Define to 1 if feature is available, 0 otherwise.
@@ -245,6 +251,13 @@
 
 #ifndef CPPDEVTK_THREAD
 #	error "Please define CPPDEVTK_THREAD for current compiler!!!"
+#endif
+
+#ifndef CPPDEVTK_FINAL
+#	error "Please define CPPDEVTK_FINAL for current compiler!!!"
+#endif
+#ifndef CPPDEVTK_OVERRIDE
+#	error "Please define CPPDEVTK_OVERRIDE for current compiler!!!"
 #endif
 
 #ifndef CPPDEVTK_HAVE_STDINT_H

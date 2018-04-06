@@ -29,14 +29,9 @@
 #	error "This file is not for Android!!!"
 #endif
 
-
-#if (CPPDEVTK_HAVE_LOGIND)
-
-
 #include "logind_session_lnx.hpp"
 #include <cppdevtk/base/singletons.hpp>
 
-#include <QtDBus/QDBusObjectPath>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusError>
 #include <QtCore/QString>
@@ -79,6 +74,9 @@ public:
 	QString CanHybridSleep() const;
 	
 	QDBusError GetLastError() const;
+	
+	
+	static bool IsLogindServiceRegistered();
 private:
 	LogindManager();
 	~LogindManager();
@@ -104,5 +102,4 @@ inline QDBusError LogindManager::GetLastError() const {
 }	// namespace cppdevtk
 
 
-#endif	// (CPPDEVTK_HAVE_LOGIND)
 #endif	// CPPDEVTK_UTIL_LOGIND_MANAGER_LNX_HPP_INCLUDED_

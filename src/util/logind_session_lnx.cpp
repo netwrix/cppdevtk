@@ -18,15 +18,11 @@
 
 
 #include <cppdevtk/util/logind_session_lnx.hpp>
-
-
-#if (CPPDEVTK_HAVE_LOGIND)
-
-
 #include <cppdevtk/util/dbus_exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
@@ -82,14 +78,32 @@ bool LogindSession::Unlock() {
 	return true;
 }
 
+void LogindSession::DBusPropertiesChangedHandler(const QString& interfaceName, const QVariantMap& changedProperties,
+		const QStringList& invalidatedProperties) {
+	base::SuppressUnusedWarning(interfaceName);
+	base::SuppressUnusedWarning(invalidatedProperties);
+	CPPDEVTK_ASSERT(interfaceName == logindSessionInterface_.interface());
+	
+	QVariantMap::ConstIterator kIter = changedProperties.constFind("Active");
+	if (kIter != changedProperties.constEnd()) {
+		const QVariant kValue = kIter.value();
+		CPPDEVTK_ASSERT(!kValue.isNull());
+		CPPDEVTK_ASSERT(kValue.isValid());
+		CPPDEVTK_ASSERT(kValue.type() == QVariant::Bool);
+		Q_EMIT ActiveChanged(kValue.toBool());
+	}
+}
+
 LogindSession::LogindSession(const QDBusObjectPath& logindSessionPath): QObject(),
-		logindSessionInterface_("org.freedesktop.login1", logindSessionPath.path(), "org.freedesktop.login1.Session") {
+		logindSessionInterface_("org.freedesktop.login1", logindSessionPath.path(), "org.freedesktop.login1.Session",
+		QDBusConnection::systemBus()), logindSessionPropertiesInterface_("org.freedesktop.login1", logindSessionPath.path(),
+		"org.freedesktop.DBus.Properties", QDBusConnection::systemBus()) {
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(logindSessionPath.path().isEmpty(), "logindSessionPath");
+	//CPPDEVTK_LOG_DEBUG("logindSessionPath: " << logindSessionPath.path());
 	
 	if (!logindSessionInterface_.isValid()) {
 		throw CPPDEVTK_DBUS_EXCEPTION("Logind.Session DBus interface is not valid", logindSessionInterface_.lastError());
 	}
-	
 	QDBusConnection connection = logindSessionInterface_.connection();
 	if (!connection.connect(logindSessionInterface_.service(), logindSessionInterface_.path(),
 			logindSessionInterface_.interface(), "Lock", this, SIGNAL(Locked()))) {
@@ -99,15 +113,28 @@ LogindSession::LogindSession(const QDBusObjectPath& logindSessionPath): QObject(
 			logindSessionInterface_.interface(), "Unlock", this, SIGNAL(Unlocked()))) {
 		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to Logind.Session::Unlock()", connection.lastError());
 	}
+	
+	if (!logindSessionPropertiesInterface_.isValid()) {
+		throw CPPDEVTK_DBUS_EXCEPTION("Logind.Session.Properties DBus interface is not valid",
+				logindSessionPropertiesInterface_.lastError());
+	}
+	connection = logindSessionPropertiesInterface_.connection();
+	if (!connection.connect(logindSessionPropertiesInterface_.service(), logindSessionPropertiesInterface_.path(),
+			logindSessionPropertiesInterface_.interface(), "PropertiesChanged",
+			this, SLOT(DBusPropertiesChangedHandler(QString,QVariantMap,QStringList)))) {
+		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to Logind.Session.Properties::PropertiesChanged()", connection.lastError());
+	}
 }
 
 QVariant LogindSession::GetProperty(const QString& propertyName) const {
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(propertyName.isEmpty(), "propertyName");
 	
-	const QDBusMessage kReply = logindSessionInterface_.call("Get", propertyName);
+	const QDBusMessage kReply = logindSessionPropertiesInterface_.call("Get",
+			logindSessionInterface_.interface(), propertyName);
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		throw CPPDEVTK_DBUS_EXCEPTION(QString("DBus call to Logind.Session::Get() failed for property '%1'").arg(propertyName),
-				logindSessionInterface_.lastError());
+		throw CPPDEVTK_DBUS_EXCEPTION(
+				QString("DBus call to Logind.Session.Properties::Get() failed for property '%1'").arg(propertyName),
+				logindSessionPropertiesInterface_.lastError());
 	}
 	CPPDEVTK_ASSERT(kReply.type() == QDBusMessage::ReplyMessage);
 	CPPDEVTK_ASSERT(kReply.signature() == "v");
@@ -124,6 +151,3 @@ QVariant LogindSession::GetProperty(const QString& propertyName) const {
 
 }	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// (CPPDEVTK_HAVE_LOGIND)

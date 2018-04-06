@@ -29,10 +29,6 @@
 #	error "This file is not for Android!!!"
 #endif
 
-
-#if (!CPPDEVTK_HAVE_LOGIND)
-
-
 #include "console_kit_session_lnx.hpp"
 #include <cppdevtk/base/singletons.hpp>
 
@@ -62,6 +58,9 @@ public:
 	::std::auto_ptr<ConsoleKitSession> GetSessionForUnixProcess(uint pid) const;	///< \note Returned pointer is not NULL
 	
 	QDBusError GetLastError() const;
+	
+	
+	static bool IsConsoleKitServiceRegistered();
 private:
 	ConsoleKitManager();
 	~ConsoleKitManager();
@@ -87,5 +86,4 @@ inline QDBusError ConsoleKitManager::GetLastError() const {
 }	// namespace cppdevtk
 
 
-#endif	// (!CPPDEVTK_HAVE_LOGIND)
 #endif	// CPPDEVTK_UTIL_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_

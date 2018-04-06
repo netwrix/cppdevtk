@@ -80,6 +80,24 @@
 #define CPPDEVTK_THREAD __thread
 
 
+#if ((__cplusplus >= 201103L) || defined(__GXX_EXPERIMENTAL_CXX0X__))
+#if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 7, 0))
+#define CPPDEVTK_FINAL final
+#define CPPDEVTK_OVERRIDE override
+#else
+#define CPPDEVTK_FINAL
+#define CPPDEVTK_OVERRIDE
+#endif
+#else
+#if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 7, 0))
+#define CPPDEVTK_FINAL __final
+#else
+#define CPPDEVTK_FINAL
+#endif
+#define CPPDEVTK_OVERRIDE
+#endif
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compiler Features.
 

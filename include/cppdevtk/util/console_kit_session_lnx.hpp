@@ -29,13 +29,11 @@
 #	error "This file is not for Android!!!"
 #endif
 
-
-#if (!CPPDEVTK_HAVE_LOGIND)
-
-
 #include <QtCore/QObject>
-#include <QtDBus/QDBusInterface>
+#include <QtCore/QString>
+#include <QtDBus/QDBusObjectPath>
 #include <QtDBus/QDBusError>
+#include <QtDBus/QDBusInterface>
 
 
 namespace cppdevtk {
@@ -51,6 +49,11 @@ class CPPDEVTK_UTIL_API ConsoleKitSession: public QObject {
 	Q_OBJECT
 Q_SIGNALS:
 	void ActiveChanged(bool isActive);
+	
+	/// \attention Tested and Locked()/Unlocked() signals:
+	/// - are not emitted when Lock/Unlock from DE (tested with KDE).
+	/// - are emitted when Lock()/Unlock() method are called
+	/// - verify: dbus-monitor --monitor --system "type='signal',sender='org.freedesktop.ConsoleKit',interface='org.freedesktop.ConsoleKit.Session',path='/org/freedesktop/ConsoleKit/Session2'"
 	void Locked();
 	void Unlocked();
 public Q_SLOTS:
@@ -59,6 +62,7 @@ public Q_SLOTS:
 	bool Unlock();
 public:
 	QDBusObjectPath GetId() const;
+	QString GetSessionType() const;
 	uint GetUnixUser() const;
 	QString GetRemoteHostName() const;
 	QString GetLoginSessionId() const;
@@ -102,5 +106,4 @@ inline bool ConsoleKitSession::operator!=(const ConsoleKitSession& other) const 
 }	// namespace cppdevtk
 
 
-#endif	// (!CPPDEVTK_HAVE_LOGIND)
 #endif	// CPPDEVTK_UTIL_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_

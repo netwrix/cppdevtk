@@ -88,10 +88,21 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QException>
 #include <QtCore/QUnhandledException>
+
 #define CPPDEVTK_QT_EXCEPTION QException
 #define CPPDEVTK_QT_UNHANDLED_EXCEPTION QUnhandledException
+#if (CPPDEVTK_PLATFORM_MACOSX)
+#ifndef QT_MAC_USE_COCOA
+#define QT_MAC_USE_COCOA 1
+#else
+#if (QT_MAC_USE_COCOA != 1)
+#error "QT_MAC_USE_COCOA is not 1"
+#endif
+#endif
+#endif
 #else
 #include <QtCore/QtCore>
+
 #define CPPDEVTK_QT_EXCEPTION QtConcurrent::Exception
 #define CPPDEVTK_QT_UNHANDLED_EXCEPTION QtConcurrent::UnhandledException
 #endif

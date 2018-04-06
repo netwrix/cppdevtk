@@ -7,6 +7,7 @@ Version 1.1.0.1:
 	- added GetCurrentProcessId()
 	- added GetCurrentProcessSessionId()
 	- Linux: added support for Consolekit and logind Manager and Session
+	- added ScreenSaver
 - Improvements:
 	- do not conflict with boost signals
 	- zlib dependency is optional (affects QZipReader and QZipWriter)

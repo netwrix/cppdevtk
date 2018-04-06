@@ -17,9 +17,9 @@
 
 QT -= gui
 QT *= network core
-linux*:!android {
+#linux*:!android {
 	QT *= dbus
-}
+#}
 
 
 TEMPLATE = lib
@@ -99,7 +99,7 @@ INSTALLS += target
 		
 		linux* {
 			cppdevtk_have_logind {
-				LIBS *= -lsystemd
+				#LIBS *= -lsystemd
 			}
 			
 			#LIBS *= -ludev
@@ -193,6 +193,7 @@ SOURCES += \
 	core_application.cpp \
 	core_application_base.cpp \
 	damerau_levenshtein_distance.cpp \
+	dbus_utils.cpp	\
 	dbus_exception.cpp	\
 	dynamic_library.cpp \
 	exception_to_errno.cpp	\
@@ -274,6 +275,7 @@ HEADERS += \
 	../../include/cppdevtk/util/core_application.hpp \
 	../../include/cppdevtk/util/core_application_base.hpp \
 	../../include/cppdevtk/util/damerau_levenshtein_distance.hpp \
+	../../include/cppdevtk/util/dbus_utils.hpp	\
 	../../include/cppdevtk/util/dbus_exception.hpp	\
 	../../include/cppdevtk/util/dynamic_library.hpp \
 	../../include/cppdevtk/util/dynamic_loader.hpp \

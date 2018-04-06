@@ -27,7 +27,7 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
 
-#include <Security/Security.h>
+#include <Security/AuthSession.h>
 
 
 namespace cppdevtk {

@@ -18,11 +18,6 @@
 
 
 #include <cppdevtk/util/console_kit_session_lnx.hpp>
-
-
-#if (!CPPDEVTK_HAVE_LOGIND)
-
-
 #include <cppdevtk/util/dbus_exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/dbc.hpp>
@@ -91,6 +86,24 @@ QDBusObjectPath ConsoleKitSession::GetId() const {
 	const QDBusObjectPath kDBusObjectPath = qvariant_cast<QDBusObjectPath>(kReplyArg);
 	CPPDEVTK_ASSERT(!kDBusObjectPath.path().isEmpty());
 	return kDBusObjectPath;
+}
+
+QString ConsoleKitSession::GetSessionType() const {
+	const QDBusMessage kReply = ckSessionInterface_.call("GetSessionType");
+	if (kReply.type() == QDBusMessage::ErrorMessage) {
+		throw CPPDEVTK_DBUS_EXCEPTION("DBus call to ConsoleKit.Session::GetSessionType() failed", ckSessionInterface_.lastError());
+	}
+	CPPDEVTK_ASSERT(kReply.type() == QDBusMessage::ReplyMessage);
+	CPPDEVTK_ASSERT(kReply.signature() == "s");
+	
+	const QList<QVariant> kReplyArgs = kReply.arguments();
+	CPPDEVTK_ASSERT(kReplyArgs.size() == 1);
+	
+	const QVariant kReplyArg = kReplyArgs[0];
+	CPPDEVTK_ASSERT(!kReplyArg.isNull());
+	CPPDEVTK_ASSERT(kReplyArg.isValid());
+	CPPDEVTK_ASSERT(kReplyArg.type() == QVariant::String);
+	return kReplyArg.toString();
 }
 
 uint ConsoleKitSession::GetUnixUser() const {
@@ -184,8 +197,10 @@ bool ConsoleKitSession::IsLocal() const {
 }
 
 ConsoleKitSession::ConsoleKitSession(const QDBusObjectPath& ckSessionPath): QObject(),
-		ckSessionInterface_("org.freedesktop.ConsoleKit", ckSessionPath.path(), "org.freedesktop.ConsoleKit.Session") {
+		ckSessionInterface_("org.freedesktop.ConsoleKit", ckSessionPath.path(), "org.freedesktop.ConsoleKit.Session",
+		QDBusConnection::systemBus()) {
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(ckSessionPath.path().isEmpty(), "ckSessionPath");
+	//CPPDEVTK_LOG_DEBUG("ckSessionPath: " << ckSessionPath.path());
 	
 	if (!ckSessionInterface_.isValid()) {
 		throw CPPDEVTK_DBUS_EXCEPTION("ConsoleKit.Session DBus interface is not valid", ckSessionInterface_.lastError());
@@ -196,12 +211,10 @@ ConsoleKitSession::ConsoleKitSession(const QDBusObjectPath& ckSessionPath): QObj
 			ckSessionInterface_.interface(), "ActiveChanged", this, SIGNAL(ActiveChanged(bool)))) {
 		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to ConsoleKit.Session::ActiveChanged()", connection.lastError());
 	}
-	
 	if (!connection.connect(ckSessionInterface_.service(), ckSessionInterface_.path(),
 			ckSessionInterface_.interface(), "Lock", this, SIGNAL(Locked()))) {
 		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to ConsoleKit.Session::Lock()", connection.lastError());
 	}
-	
 	if (!connection.connect(ckSessionInterface_.service(), ckSessionInterface_.path(),
 			ckSessionInterface_.interface(), "Unlock", this, SIGNAL(Unlocked()))) {
 		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to ConsoleKit.Session::Unlock()", connection.lastError());
@@ -211,6 +224,3 @@ ConsoleKitSession::ConsoleKitSession(const QDBusObjectPath& ckSessionPath): QObj
 
 }	// namespace util
 }	// namespace cppdevtk
-
-
-#endif	// (!CPPDEVTK_HAVE_LOGIND)

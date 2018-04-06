@@ -72,6 +72,13 @@
 // https://msdn.microsoft.com/en-us/library/6yh4a9k1.aspx
 #define CPPDEVTK_THREAD __declspec(thread)
 
+#if (_MSC_VER >= 1700)	// MSVC 2012 (11.0)
+#define CPPDEVTK_FINAL final
+#else
+#define CPPDEVTK_FINAL sealed
+#endif
+#define CPPDEVTK_OVERRIDE override
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CRT secure C++ overloads; please see:

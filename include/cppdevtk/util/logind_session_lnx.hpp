@@ -29,14 +29,15 @@
 #	error "This file is not for Android!!!"
 #endif
 
-
-#if (CPPDEVTK_HAVE_LOGIND)
-
-
 #include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QVariant>
-#include <QtDBus/QDBusInterface>
+#include <QtCore/QVariantMap>
+#include <QtDBus/QDBusVariant>
 #include <QtDBus/QDBusError>
+#include <QtDBus/QDBusObjectPath>
+#include <QtDBus/QDBusInterface>
 
 
 namespace cppdevtk {
@@ -51,6 +52,12 @@ class CPPDEVTK_UTIL_API LogindSession: public QObject {
 	
 	Q_OBJECT
 Q_SIGNALS:
+	void ActiveChanged(bool isActive);	///< \note This signal that is in ConsoleKit is not in logind, so we implemented it.
+	
+	/// \attention Tested and Locked()/Unlocked() signals:
+	/// - are not emitted when Lock/Unlock from DE (tested with KDE).
+	/// - are emitted when Lock()/Unlock() method are called
+	/// - verify: dbus-monitor --monitor --system "type='signal',sender='org.freedesktop.login1',interface='org.freedesktop.login1.Session',path='/org/freedesktop/login1/session/_32'"
 	void Locked();
 	void Unlocked();
 public Q_SLOTS:
@@ -60,6 +67,7 @@ public Q_SLOTS:
 	bool Unlock();
 public:
 	QString GetId() const;
+	QString GetType() const;
 	uint GetUser() const;
 	QString GetRemoteHost() const;
 	
@@ -70,6 +78,9 @@ public:
 	
 	bool operator==(const LogindSession& other) const;
 	bool operator!=(const LogindSession& other) const;
+private Q_SLOTS:
+	void DBusPropertiesChangedHandler(const QString& interfaceName, const QVariantMap& changedProperties,
+			const QStringList& invalidatedProperties);
 private:
 	Q_DISABLE_COPY(LogindSession)
 	
@@ -79,6 +90,7 @@ private:
 	
 	
 	mutable QDBusInterface logindSessionInterface_;
+	mutable QDBusInterface logindSessionPropertiesInterface_;
 };
 
 
@@ -89,6 +101,10 @@ private:
 
 inline QString LogindSession::GetId() const {
 	return GetProperty("Id").toString();
+}
+
+inline QString LogindSession::GetType() const {
+	return GetProperty("Type").toString();
 }
 
 inline uint LogindSession::GetUser() const {
@@ -124,5 +140,4 @@ inline bool LogindSession::operator!=(const LogindSession& other) const {
 }	// namespace cppdevtk
 
 
-#endif	// (CPPDEVTK_HAVE_LOGIND)
 #endif	// CPPDEVTK_UTIL_LOGIND_SESSION_LNX_HPP_INCLUDED_
