@@ -28,12 +28,10 @@ HEADERS += \
 	application.hpp \
 	application_base.hpp \
 	caps_lock_widget.hpp \
-	computer_manager.hpp \
 	config.hpp \
 	custom_wizard.hpp \
 	disk_space_widget.hpp \
 	eula_widget.hpp \
-	get_user_idle_time.hpp \
 	info.hpp \
 	info_customization.hpp	\
 	info_tr.hpp	\
@@ -58,7 +56,11 @@ HEADERS += \
 
 !android:!ios {
 	HEADERS += \
-		screensaver.hpp
+		screensaver.hpp	\
+		storage_device_notifier.hpp	\
+		power_notifier.hpp	\
+		session_manager.hpp	\
+		session.hpp
 }
 
 

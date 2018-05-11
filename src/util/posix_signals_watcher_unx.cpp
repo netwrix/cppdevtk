@@ -114,7 +114,7 @@ bool PosixSignalsWatcher::Watch(int sig) {
 			throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to register Posix signal handler");
 		}
 	}
-	catch (const ::std::exception& exc) {
+	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_ERROR("failed to create socket notifier or to register handler for Posix signal " << sig
 				<< "; exc: " << base::Exception::GetDetailedInfo(exc));
 		

@@ -111,7 +111,7 @@ public:
 	/// For single instance apps
 	/// \pre !organizationName().isEmpty()
 	/// \pre !applicationName().isEmpty()
-	static QString GetId();
+	static QString GetUniqueId();
 	
 	/// \note Termination signals are:
 	/// - Unix: SIGTERM and SIGINT

@@ -34,17 +34,34 @@
 #include <QtCore/QObject>
 
 #if (CPPDEVTK_PLATFORM_LINUX)
-#include <QtDBus/QDBusError>
 #include <QtDBus/QDBusInterface>
 #include <memory>
-#endif
-#if (CPPDEVTK_PLATFORM_WINDOWS)
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
 #include <QtCore/QTimer>
 #include <Windows.h>
-#endif
-#if (CPPDEVTK_PLATFORM_MACOSX)
-#include <QtCore/QTimer>
+#elif (CPPDEVTK_PLATFORM_MACOSX)
 #include <vector>
+#include <Carbon/Carbon.h>
+#ifdef QT_MAC_USE_COCOA
+#ifdef __OBJC__
+#include <Foundation/Foundation.h>
+#else
+#include <objc/objc-runtime.h>
+#endif
+#endif
+#else
+#error "Unsupported platform!!!"
+#endif
+
+
+#if (CPPDEVTK_PLATFORM_MACOSX)
+#ifdef QT_MAC_USE_COCOA
+#ifdef __OBJC__
+@class CocoaScreenSaver;
+#else
+typedef struct objc_object CocoaScreenSaver;
+#endif
+#endif
 #endif
 
 
@@ -54,36 +71,40 @@ namespace gui {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \note
-/// - All functions, except slots and destructor, may throw (DBusException on Linux, SystemException on Windows and Mac)
-/// - Linux: supported screensavers: kde, cinnamon, mate, gnome, freedesktop
-/// - Linux: uses session bus.
-/// - On Windows the only screensaver notification is SC_SCREENSAVE that works only for top-level active window so we use timer...
-/// - Mac: Carbon has no screensaver support, Cocoa had com.apple.screensaver.didstart, com.apple.screensaver.didstop,
-/// com.apple.screenIsLocked, and com.apple.screenIsUnlocked but the last two were removed in Snow Leopard...
-/// So Mac implementation is based on starting/polling ScreenSaverEngine...
-/// Also on 10.13 there are no defaults for com.apple.screensaver askForPassword and askForPasswordDelay
-/// so Lock() is in fact SetActive(true)...
+/// - All functions, except slots and destructor, may throw (DBusException on Linux, RuntimeException + SystemException on Windows and Mac)
+/// - Linux: supported screensavers (session bus): kde, cinnamon, mate, gnome, freedesktop
+/// - Mac: On 10.13 screensaver API changed (there are no defaults for com.apple.screensaver askForPassword and askForPasswordDelay)
+/// No time to investigate now so Lock() is in fact SetActive(true)...
 /// \sa <a href=https://blog.kolide.com/screensaver-security-on-macos-10-13-is-broken-a385726e2ae2">Screensaver Security on macOS 10.13 is broken</a>
 class CPPDEVTK_GUI_API ScreenSaver: public QObject, public ::cppdevtk::base::MeyersSingleton<ScreenSaver> {
 	friend class ::cppdevtk::base::MeyersSingleton<ScreenSaver>;
 	
 	Q_OBJECT
 Q_SIGNALS:
-	/// \attention On Windows uses QTimer (lighter than a dedicated monitoring thread) so needs qApp and event loop
 	void ActiveChanged(bool isActive);
 public Q_SLOTS:
-	// TODO: investigate why does not lock on Mac (no error reported but only starts screensaver)
+	void Uninit();	///< \attention Call before leaving main()
+	
+	// TODO: investigate why does not lock on Mac (no error reported but only starts screensaver even if in settings lock is enabled)
 	bool Lock();	///< Activates screensaver and lock screen on resume
 	bool SetActive(bool active);
 public:
 	bool IsActive() const;
 	
 #	if (CPPDEVTK_PLATFORM_LINUX)
-	QDBusError GetLastError() const;
 	static bool IsScreenSaverServiceRegistered();
+#	elif (CPPDEVTK_PLATFORM_WINDOWS)
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
+#	ifdef QT_MAC_USE_COCOA
+	void OnScreenSaverDidStart();
+	void OnScreenSaverDidStop();
+#	endif
+#	else
+#	error "Unsupported platform!!!"
 #	endif
 private Q_SLOTS:
-	void Refresh();	// if we put slot in ifdef guards moc will ommit slot...
+	// if we put slot in ifdef guards moc will ommit slot...
+	void Refresh();
 private:
 #	if (CPPDEVTK_PLATFORM_MACOSX)
 	enum AskForPassword {
@@ -94,37 +115,55 @@ private:
 #	endif
 	
 	
+	Q_DISABLE_COPY(ScreenSaver);
+	
 	ScreenSaver();
 	~ScreenSaver();
+
+#	if (CPPDEVTK_PLATFORM_LINUX)	
+#	elif (CPPDEVTK_PLATFORM_WINDOWS)
+	static bool SetScreenSaveSecure(BOOL value);
+	static bool GetScreenSaveSecure(BOOL& isScreenSaverSecure);
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
+	void CheckActiveChanged(bool wasActive);
 	
-#	if (CPPDEVTK_PLATFORM_WINDOWS)
-	static void SetScreenSaveSecure(BOOL value);
-	static BOOL GetScreenSaveSecure();
-#	endif
-#	if (CPPDEVTK_PLATFORM_MACOSX)
 	static const char* GetScreenSaverEngineAppPath();
 	static bool GetScreenSaverEnginePIds(::std::vector<int>& pids);
+	static OSErr GetProcessName(const ProcessSerialNumber& processSerialNumber, QString& processName);
 	
 	static void SetAskForPassword(AskForPassword value);
 	static AskForPassword GetAskForPassword();
 	
 	static void SetAskForPasswordDelay(int value);
 	static int GetAskForPasswordDelay();
+	
+#	ifndef QT_MAC_USE_COCOA
+	static OSStatus OnAppFrontSwitched(EventHandlerCallRef nextHandler, EventRef theEvent, void* pUserData);
 #	endif
+#	else
+#	error "Unsupported platform!!!"
+#	endif
+	
 	
 #	if (CPPDEVTK_PLATFORM_LINUX)
 	::std::auto_ptr<QDBusInterface> pScreenSaverInterface_;
-#	endif
-#	if (CPPDEVTK_PLATFORM_WINDOWS)
+#	elif (CPPDEVTK_PLATFORM_WINDOWS)
 	QTimer timer_;
 	bool isActive_;
+	bool restore_;
 	BOOL isScreenSaverSecure_;
-#	endif
-#	if (CPPDEVTK_PLATFORM_MACOSX)
-	QTimer timer_;
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
 	bool isActive_;
+	bool restore_;
 	AskForPassword askForPassword_;
 	int askForPasswordDelay_;
+#	ifdef QT_MAC_USE_COCOA
+	CocoaScreenSaver* pCocoaScreenSaver_;
+#	else
+	EventHandlerUPP eventHandlerUPP_;
+#	endif
+#	else
+#	error "Unsupported platform!!!"
 #	endif
 };
 

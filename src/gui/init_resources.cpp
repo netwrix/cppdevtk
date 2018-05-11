@@ -20,6 +20,13 @@
 #include <cppdevtk/gui/init_resources.hpp>
 
 
+CPPDEVTK_GUI_API void CppDevTkGuiInitResources() {
+#	ifndef CPPDEVTK_SHARED
+	Q_INIT_RESOURCE(cppdevtk_gui);
+	Q_INIT_RESOURCE(cppdevtk_gui_customization);
+#	endif
+}
+
 CPPDEVTK_GUI_API int cppdevtk_gui_init_resources(void) try {
 	CppDevTkGuiInitResources();
 	return 0;

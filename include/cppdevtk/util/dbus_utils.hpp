@@ -22,9 +22,16 @@
 
 
 #include "config.hpp"
+#ifdef QT_NO_DBUS
+#error "This file require QtDBus"
+#endif
 
 #include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusObjectPath>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QByteArray>
+#include <QtCore/QVariant>
 
 
 namespace cppdevtk {
@@ -36,6 +43,54 @@ namespace util {
 /// \throw DBusException
 CPPDEVTK_UTIL_API bool IsDBusServiceRegistered(const QString& dbusServiceName,
 		const QDBusConnection& dbusConnection = QDBusConnection::sessionBus());
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// DBus properties support
+/// \sa <a href="https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">org.freedesktop.DBus.Properties</a>
+/// \throw DBusException
+
+CPPDEVTK_UTIL_API QVariant GetDBusGenericProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API QDBusObjectPath GetDBusObjectPathProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API QString GetDBusStringProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API bool GetDBusBooleanProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API uchar GetDBusByteProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API short GetDBusInt16Property(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API ushort GetDBusUInt16Property(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API int GetDBusInt32Property(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API uint GetDBusUInt32Property(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API qlonglong GetDBusInt64Property(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API qulonglong GetDBusUInt64Property(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API double GetDBusDoubleProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API QByteArray GetDBusByteArrayProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
+
+CPPDEVTK_UTIL_API QStringList GetDBusStringArrayProperty(const QString& service, const QDBusObjectPath& path,
+		const QString& interface, const QDBusConnection& connection, const QString& property);
 
 
 }	// namespace util

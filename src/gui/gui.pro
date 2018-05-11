@@ -21,12 +21,12 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 	linux*:!android {
 		QT *= x11extras
 	}
+	win32 {
+		QT *= gui-private
+	}
 }
-#linux*:!android {
+contains(QT_CONFIG, dbus) {
 	QT *= dbus
-#}
-android|ios {
-	QT *= network
 }
 
 
@@ -111,7 +111,8 @@ INSTALLS += target
 		}
 		else {
 			macx {
-				LIBS += -framework ApplicationServices -framework Carbon -framework IOKit -framework CoreFoundation
+				LIBS += -framework Security -framework ApplicationServices -framework AppKit -framework IOKit
+				LIBS += -framework Foundation -framework Carbon -framework CoreFoundation
 			}
 			else {
 				ios {
@@ -125,7 +126,7 @@ INSTALLS += target
 	}
 	else {
 		win32 {
-			LIBS *= -ladvapi32 -luser32
+			LIBS *= -lWtsapi32 -ladvapi32 -luser32
 		}
 		else {
 			error("Unsupported platform!!!")
@@ -208,23 +209,46 @@ SOURCES += \
 
 unix {
 	linux* {
-		SOURCES += is_caps_lock_on_lnx.cpp	\
-			get_user_idle_time_lnx.cpp	\
-			computer_manager_lnx.cpp
+		SOURCES += is_caps_lock_on_lnx.cpp
 		
 		!android {
 			SOURCES +=	\
-				screensaver_lnx.cpp
+				screensaver_lnx.cpp	\
+				storage_device_notifier_lnx.cpp	\
+				storage_device_notifier_impl_lnx.cpp	\
+				udisks1_device_notifier_lnx.cpp	\
+				udisks2_device_notifier_lnx.cpp	\
+				udisks1_filesystem_block_device_lnx.cpp	\
+				udisks2_filesystem_block_device_lnx.cpp	\
+				power_notifier_lnx.cpp	\
+				power_notifier_impl_lnx.cpp	\
+				upower_notifier_lnx.cpp	\
+				logind_power_notifier_lnx.cpp	\
+				session_manager_lnx.cpp	\
+				session_lnx.cpp	\
+				console_kit_manager_lnx.cpp	\
+				console_kit_session_lnx.cpp	\
+				logind_manager_lnx.cpp	\
+				logind_session_lnx.cpp	\
+				session_impl_lnx.cpp	\
+				session_manager_impl_lnx.cpp
 		}
 	}
 	else {
 		macx|ios {
-			SOURCES += is_caps_lock_on_mac.cpp	\
-				get_user_idle_time_mac.cpp	\
-				computer_manager_mac.cpp
+			SOURCES += is_caps_lock_on_mac.cpp
 			
 			macx {
-				SOURCES += screensaver_mac.cpp
+				SOURCES += screensaver_mac.cpp	\
+					screensaver_mac_carbon.cpp	\
+					storage_device_notifier_mac.cpp	\
+					power_notifier_mac.cpp	\
+					session_manager_mac.cpp	\
+					session_mac.cpp	\
+					session_mac_carbon.cpp
+				
+				OBJECTIVE_SOURCES += screensaver_mac_cocoa.mm	\
+					session_mac_cocoa.mm
 			}
 		}
 		else {
@@ -235,9 +259,11 @@ unix {
 else {
 	win32 {
 		SOURCES += is_caps_lock_on_win.cpp	\
-			get_user_idle_time_win.cpp	\
-			computer_manager_win.cpp	\
-			screensaver_win.cpp
+			screensaver_win.cpp	\
+			storage_device_notifier_win.cpp	\
+			power_notifier_win.cpp	\
+			session_manager_win.cpp	\
+			session_win.cpp
 	}
 	else {
 		error("Unsupported platform!!!")
@@ -248,12 +274,10 @@ HEADERS += \
 	../../include/cppdevtk/gui/application.hpp \
 	../../include/cppdevtk/gui/application_base.hpp \
 	../../include/cppdevtk/gui/caps_lock_widget.hpp \
-	../../include/cppdevtk/gui/computer_manager.hpp \
 	../../include/cppdevtk/gui/config.hpp \
 	../../include/cppdevtk/gui/custom_wizard.hpp \
 	../../include/cppdevtk/gui/disk_space_widget.hpp \
 	../../include/cppdevtk/gui/eula_widget.hpp \
-	../../include/cppdevtk/gui/get_user_idle_time.hpp \
 	../../include/cppdevtk/gui/info.hpp \
 	../../include/cppdevtk/gui/info_customization.hpp	\
 	../../include/cppdevtk/gui/info_tr.hpp	\
@@ -278,5 +302,27 @@ HEADERS += \
 
 !android:!ios {
 	HEADERS += \
-		../../include/cppdevtk/gui/screensaver.hpp
+		../../include/cppdevtk/gui/screensaver.hpp	\
+		../../include/cppdevtk/gui/storage_device_notifier.hpp	\
+		../../include/cppdevtk/gui/power_notifier.hpp	\
+		../../include/cppdevtk/gui/session_manager.hpp	\
+		../../include/cppdevtk/gui/session.hpp
+}
+
+linux*:!android {
+	HEADERS += \
+		storage_device_notifier_impl_lnx.hpp	\
+		udisks1_device_notifier_lnx.hpp	\
+		udisks2_device_notifier_lnx.hpp	\
+		udisks1_filesystem_block_device_lnx.hpp	\
+		udisks2_filesystem_block_device_lnx.hpp	\
+		power_notifier_impl_lnx.hpp	\
+		upower_notifier_lnx.hpp	\
+		logind_power_notifier_lnx.hpp	\
+		console_kit_manager_lnx.hpp	\
+		console_kit_session_lnx.hpp	\
+		logind_manager_lnx.hpp	\
+		logind_session_lnx.hpp	\
+		session_impl_lnx.hpp	\
+		session_manager_impl_lnx.hpp
 }

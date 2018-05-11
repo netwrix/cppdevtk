@@ -37,7 +37,7 @@ class CPPDEVTK_GUI_API SingleApplication: public QtSingleApplication, public App
 public:
 	/// \pre !organizationName().isEmpty()
 	/// \pre !applicationName().isEmpty()
-	/// \remark The application identifier will be GetId()
+	/// \remark The application identifier will be GetUniqueId()
 	SingleApplication(int& argc, char** argv);
 	SingleApplication(int& argc, char** argv, const QString& id);
 	virtual ~SingleApplication();

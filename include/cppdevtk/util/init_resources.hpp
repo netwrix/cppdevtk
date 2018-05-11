@@ -42,18 +42,6 @@ CPPDEVTK_UTIL_API void CppDevTkUtilInitResources();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-inline CPPDEVTK_UTIL_API void CppDevTkUtilInitResources() {
-#	ifndef CPPDEVTK_SHARED
-	Q_INIT_RESOURCE(cppdevtk_util);
-	Q_INIT_RESOURCE(cppdevtk_util_customization);
-#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	Q_INIT_RESOURCE(cppdevtk_util_qt5qm);
-#	else
-	Q_INIT_RESOURCE(cppdevtk_util_qt4qm);
-#	endif
-#	endif
-}
-
 
 #endif	// __cplusplus
 

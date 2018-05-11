@@ -87,10 +87,10 @@ void EulaWidget::changeEvent(QEvent* pEvent) {
 
 void EulaWidget::OpenEula() {
 	CPPDEVTK_DBC_CHECK_NON_NULL_POINTER(qApp);
-	CPPDEVTK_DBC_CHECK_NON_NULL_POINTER(dynamic_cast<ApplicationBase*>(qApp));
+	CPPDEVTK_DBC_CHECK_NON_NULL_POINTER(dynamic_cast<ApplicationBase*>(QApplication::instance()));
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(util::IsValidPath(fileNamePrefix_), "fileNamePrefix_ must be valid");
 	
-	const bool kRetCode = dynamic_cast<ApplicationBase*>(qApp)->OpenLocalizedFileInDefaultApp(fileNamePrefix_, fileExt_);
+	const bool kRetCode = dynamic_cast<ApplicationBase*>(QApplication::instance())->OpenLocalizedFileInDefaultApp(fileNamePrefix_, fileExt_);
 	if (!kRetCode) {
 		CPPDEVTK_LOG_ERROR("failed to open EULA in default viewer; fileNamePrefix_: " << fileNamePrefix_
 				<< "; fileExt: " << fileExt_);
@@ -118,10 +118,10 @@ void EulaWidget::MakeConnections() {
 
 void EulaWidget::Refresh() {
 	CPPDEVTK_ASSERT(qApp != NULL);
-	CPPDEVTK_ASSERT(dynamic_cast<ApplicationBase*>(qApp) != NULL);
+	CPPDEVTK_ASSERT(dynamic_cast<ApplicationBase*>(QApplication::instance()) != NULL);
 	CPPDEVTK_ASSERT(util::IsValidPath(fileNamePrefix_));
 	
-	const QLocale kLocale(dynamic_cast<ApplicationBase*>(qApp)->GetCurrentLanguageInfo().GetName());
+	const QLocale kLocale(dynamic_cast<ApplicationBase*>(QApplication::instance())->GetCurrentLanguageInfo().GetName());
 	const QString kLocalizedFileName = util::GetLocalizedFileName(fileNamePrefix_, fileExt_, kLocale);
 	if (kLocalizedFileName.isEmpty()) {
 		CPPDEVTK_LOG_ERROR("failed to get localizedFileName for fileNamePrefix: " << fileNamePrefix_

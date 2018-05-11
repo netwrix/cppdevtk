@@ -29,14 +29,6 @@
 #include <QtCore/QtDebug>
 #endif
 
-// We use Application::exec() in this test, meaning event loop, so let's test here ConsoleKit/logind (no time for separate test app)
-#if (CPPDEVTK_PLATFORM_LINUX && ! CPPDEVTK_PLATFORM_ANDROID)
-#include <cppdevtk/util/logind_manager_lnx.hpp>
-#include <cppdevtk/util/logind_session_lnx.hpp>
-#include <cppdevtk/util/console_kit_manager_lnx.hpp>
-#include <cppdevtk/util/console_kit_session_lnx.hpp>
-#endif
-
 
 #if (!CPPDEVTK_PLATFORM_ANDROID)
 #define CPPDEVTK_COUT ::cppdevtk::base::qcout
@@ -56,19 +48,8 @@ class Application: public ::cppdevtk::util::CoreApplication {
 public:
 	Application(int& argc, char** argv);
 	virtual ~Application();
-public Q_SLOTS:
-#	if (CPPDEVTK_PLATFORM_LINUX && ! CPPDEVTK_PLATFORM_ANDROID)
-	void OnActiveSessionChanged(bool isActive);
-	void OnSessionLocked();
-	void OnSessionUnlocked();
-#	endif
 private:
 	Q_DISABLE_COPY(Application)
-	
-#	if (CPPDEVTK_PLATFORM_LINUX && ! CPPDEVTK_PLATFORM_ANDROID)
-	::std::auto_ptr< ::cppdevtk::util::LogindSession> pLogindSession_;
-	::std::auto_ptr< ::cppdevtk::util::ConsoleKitSession> pConsoleKitSession_;
-#	endif
 };
 
 
@@ -79,6 +60,10 @@ private:
 
 inline Application::~Application() {
 	CPPDEVTK_COUT << "Application dtor" << endl;
+}
+
+inline Application::Application(int& argc, char** argv): ::cppdevtk::util::CoreApplication(argc, argv) {
+	CPPDEVTK_COUT << "Application ctor" << endl;
 }
 
 

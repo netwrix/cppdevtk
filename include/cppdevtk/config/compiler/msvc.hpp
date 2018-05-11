@@ -259,17 +259,12 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CPPDEVTK_SHARED and _DLL
+// CPPDEVTK_SHARED and _DLL/_LIB
 
-// We do not support at this moment (and there is no plan, but users may change)
-// CppDevTk static library with shared runtime; force CppDevTk shared if _DLL!
-// This will also load dlls faster (dllimport) and avoid template explicit instantiation declaration/definition issues
-// if CPPDEVTK_SHARED is not defined by library users and CppDevTk is shared.
-#if (defined(_DLL) && !defined(CPPDEVTK_SHARED))
-#	define CPPDEVTK_SHARED
-#endif
+#ifdef CPPDEVTK_DETAIL_BUILD
 #if (defined(CPPDEVTK_SHARED) && (!defined(_DLL) || defined(_LIB)))
-#	error "CPPDEVTK shared library with static runtime is too dangerous!!!"
+#	error "CppDevTk shared library with static runtime is too dangerous!!!"
+#endif
 #endif
 
 

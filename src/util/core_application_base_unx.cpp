@@ -25,6 +25,7 @@
 #include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/cassert.hpp>
 
 #include <QtCore/QCoreApplication>
 
@@ -55,12 +56,12 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 			}
 			unwatchSigTerm_ = true;
 		}
-		QObject::connect(&thePosixSignalsWatcher, SIGNAL(SigTerm()),
-				qApp, SLOT(quit()), static_cast<Qt::ConnectionType>(Qt::AutoConnection | Qt::UniqueConnection));
+		qApp->connect(&thePosixSignalsWatcher, SIGNAL(SigTerm()),
+				SLOT(quit()), static_cast<Qt::ConnectionType>(Qt::AutoConnection | Qt::UniqueConnection));
 		
 		CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&commit)(&thePosixSignalsWatcher)(&unwatchSigTerm_)) {
 			if (!commit) {
-				CPPDEVTK_VERIFY(QObject::disconnect(&thePosixSignalsWatcher, SIGNAL(SigTerm()), qApp, SLOT(quit())));
+				CPPDEVTK_VERIFY(thePosixSignalsWatcher.disconnect(SIGNAL(SigTerm()), qApp, SLOT(quit())));
 				if (unwatchSigTerm_) {
 					CPPDEVTK_ASSERT(thePosixSignalsWatcher.IsWatched(SIGTERM));
 					if (thePosixSignalsWatcher.Unwatch(SIGTERM)) {
@@ -80,11 +81,11 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 			}
 			unwatchSigInt_ = true;
 		}
-		QObject::connect(&thePosixSignalsWatcher, SIGNAL(SigInt()),
-				qApp, SLOT(quit()), static_cast<Qt::ConnectionType>(Qt::AutoConnection | Qt::UniqueConnection));
+		qApp->connect(&thePosixSignalsWatcher, SIGNAL(SigInt()),
+				SLOT(quit()), static_cast<Qt::ConnectionType>(Qt::AutoConnection | Qt::UniqueConnection));
 	}
 	else {
-		QObject::disconnect(&thePosixSignalsWatcher, SIGNAL(SigInt()), qApp, SLOT(quit()));
+		thePosixSignalsWatcher.disconnect(SIGNAL(SigInt()), qApp, SLOT(quit()));
 		if (unwatchSigInt_) {
 			if (thePosixSignalsWatcher.IsWatched(SIGINT)) {
 				if (!thePosixSignalsWatcher.Unwatch(SIGINT)) {
@@ -100,8 +101,8 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 				CPPDEVTK_ASSERT(!thePosixSignalsWatcher.IsWatched(SIGINT));
 				
 				if (thePosixSignalsWatcher.Watch(SIGINT)) {
-					CPPDEVTK_VERIFY(QObject::connect(&thePosixSignalsWatcher, SIGNAL(SigInt()),
-							qApp, SLOT(quit()), static_cast<Qt::ConnectionType>(Qt::AutoConnection | Qt::UniqueConnection)));
+					CPPDEVTK_VERIFY(qApp->connect(&thePosixSignalsWatcher, SIGNAL(SigInt()),
+							SLOT(quit()), static_cast<Qt::ConnectionType>(Qt::AutoConnection | Qt::UniqueConnection)));
 					unwatchSigInt_ = true;
 				}
 				else {
@@ -112,7 +113,7 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 		CPPDEVTK_ON_BLOCK_EXIT_END
 		
 		
-		QObject::disconnect(&thePosixSignalsWatcher, SIGNAL(SigTerm()), qApp, SLOT(quit()));
+		thePosixSignalsWatcher.disconnect(SIGNAL(SigTerm()), qApp, SLOT(quit()));
 		if (unwatchSigTerm_) {
 			if (thePosixSignalsWatcher.IsWatched(SIGTERM)) {
 				if (!thePosixSignalsWatcher.Unwatch(SIGTERM)) {

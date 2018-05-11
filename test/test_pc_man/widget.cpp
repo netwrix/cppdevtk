@@ -18,30 +18,49 @@
 
 
 #include "widget.hpp"
+#include <cppdevtk/gui/screensaver.hpp>
+#include <cppdevtk/gui/power_notifier.hpp>
+#include <cppdevtk/gui/session_manager.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/info_tr.hpp>
-#include <cppdevtk/base/exception.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/gui/message_box.hpp>
+#include <cppdevtk/util/filesystem_utils.hpp>
 
 #include <QtCore/QString>
 #include <QtGui/QCloseEvent>
 #include <QtCore/QTimer>
+
+#include <stdexcept>
 
 
 namespace cppdevtk {
 namespace test_pc_man {
 
 
+using ::cppdevtk::gui::ScreenSaver;
+using ::cppdevtk::gui::StorageDeviceNotifier;
+using ::cppdevtk::gui::PowerNotifier;
+using ::cppdevtk::gui::Session;
+using ::cppdevtk::gui::SessionManager;
 using ::std::exception;
 using ::cppdevtk::base::Exception;
+using ::std::exception;
 
 
-Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget(),
-		theScreenSaver_(gui::ScreenSaver::GetInstance()) {
+Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget(), pSession_() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
+	
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	if (SessionManager::IsSessionManagerServiceRegistered()) {
+#	endif
+		pSession_ = SessionManager::GetInstance().GetThisProcessSession();
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	}
+#	endif
 	
 	setupUi(this);
 	CPPDEVTK_ASSERT(pPlainTextEditOutput_->isReadOnly());
@@ -107,40 +126,246 @@ void Widget::ScreenSaverActiveChanged(bool isActive) {
 }
 
 void Widget::ActivateScreenSaver() {
-	if (theScreenSaver_.SetActive(true)) {
-		pPlainTextEditOutput_->appendPlainText("screensaver activated");
+	if (ScreenSaver::GetInstance().SetActive(true)) {
+		pPlainTextEditOutput_->appendPlainText("ActivateScreenSaver(): OK");
 		
 		if (pCheckBoxAutoDeactivateScreenSaver_->isChecked()) {
 			QTimer::singleShot(5000, this, SLOT(DeactivateScreenSaver()));
 		}
 	}
 	else {
-		pPlainTextEditOutput_->appendPlainText("failed to activate screensaver");
+		pPlainTextEditOutput_->appendPlainText("ActivateScreenSaver(): ERR");
 	}
 }
 
 void Widget::DeactivateScreenSaver() {
-	if (theScreenSaver_.SetActive(false)) {
-		pPlainTextEditOutput_->appendPlainText("screensaver deactivated");
+	if (ScreenSaver::GetInstance().SetActive(false)) {
+		pPlainTextEditOutput_->appendPlainText("DeactivateScreenSaver(): OK");
 	}
 	else {
-		pPlainTextEditOutput_->appendPlainText("failed to deactivate screensaver");
+		pPlainTextEditOutput_->appendPlainText("DeactivateScreenSaver(): ERR");
 	}
 }
 
 void Widget::LockScreenSaver() {
-	if (theScreenSaver_.Lock()) {
-		pPlainTextEditOutput_->appendPlainText("screensaver locked");
+	if (ScreenSaver::GetInstance().Lock()) {
+		pPlainTextEditOutput_->appendPlainText("LockScreenSaver(): OK");
 	}
 	else {
-		pPlainTextEditOutput_->appendPlainText("failed to lock screensaver");
+		pPlainTextEditOutput_->appendPlainText("LockScreenSaver(): ERR");
 	}
 }
 
+void Widget::OnStorageDeviceAdded(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId) {
+	QString msg = QString("storage device added; storageDeviceId: %1").arg(
+#			if (!CPPDEVTK_PLATFORM_LINUX)
+			storageDeviceId
+#			else
+			storageDeviceId.path()
+#			endif
+	);
+	msg += QString("; storageDeviceName: ") + StorageDeviceNotifier::GetStorageDeviceName(storageDeviceId);
+	pPlainTextEditOutput_->appendPlainText(msg);
+}
+
+void Widget::OnStorageDeviceRemoved(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId) {
+	pPlainTextEditOutput_->appendPlainText(QString("storage device removed; storageDeviceId: %1").arg(
+#			if (!CPPDEVTK_PLATFORM_LINUX)
+			storageDeviceId
+#			else
+			storageDeviceId.path()
+#			endif
+	));
+}
+
+void Widget::OnStorageDeviceMounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId) {
+	QString msg = QString("storage device mounted; storageDeviceId: %1").arg(
+#			if (!CPPDEVTK_PLATFORM_LINUX)
+			storageDeviceId
+#			else
+			storageDeviceId.path()
+#			endif
+	);
+	const QString kStorageDeviceName = StorageDeviceNotifier::GetStorageDeviceName(storageDeviceId);
+	msg += QString("; storageDeviceName: ") + kStorageDeviceName;
+#	if (CPPDEVTK_PLATFORM_UNIX)
+	msg += QString("; storageDeviceMountPoints: ") + util::GetMountPointsFromDeviceName(kStorageDeviceName).join(" ");
+#	endif
+	pPlainTextEditOutput_->appendPlainText(msg);
+}
+
+void Widget::OnStorageDeviceUnmounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId) {
+	QString msg = QString("storage device unmounted; storageDeviceId: %1").arg(
+#			if (!CPPDEVTK_PLATFORM_LINUX)
+			storageDeviceId
+#			else
+			storageDeviceId.path()
+#			endif
+	);
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	try {
+		msg += QString("; storageDeviceName: ") + StorageDeviceNotifier::GetStorageDeviceName(storageDeviceId);
+	}
+	catch (const ::std::runtime_error& exc) {
+		CPPDEVTK_LOG_WARN("GetStorageDeviceName() failed for storageDeviceId "
+#				if (!CPPDEVTK_PLATFORM_LINUX)
+				<< storageDeviceId
+#				else
+				<< storageDeviceId.path()
+#				endif
+				<< "; exc: " << base::Exception::GetDetailedInfo(exc));
+	}
+#	endif
+	pPlainTextEditOutput_->appendPlainText(msg);
+}
+
+void Widget::OnSleeping() {
+	pPlainTextEditOutput_->appendPlainText("sleeping...");
+}
+
+void Widget::OnResuming() {
+	pPlainTextEditOutput_->appendPlainText("resuming...");
+}
+
+void Widget::OnSessionActivated() {
+	pPlainTextEditOutput_->appendPlainText("SessionActivated...");
+}
+
+void Widget::OnSessionDeactivated() {
+	pPlainTextEditOutput_->appendPlainText("SessionDeactivated...");
+}
+
+void Widget::OnSessionLocked() {
+	pPlainTextEditOutput_->appendPlainText("SessionLocked...");
+}
+
+void Widget::OnSessionUnlocked() {
+	pPlainTextEditOutput_->appendPlainText("SessionUnlocked...");
+}
+
+
+void Widget::LockSession() {
+	CPPDEVTK_ASSERT(pSession_.get() != NULL);
+	if (pSession_->Lock()) {
+		pPlainTextEditOutput_->appendPlainText("LockSession(): OK");
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("LockSession(): ERR");
+	}
+}
+
+void Widget::GetSessionId() try {
+	CPPDEVTK_ASSERT(pSession_.get() != NULL);
+	pPlainTextEditOutput_->appendPlainText(QString("sessionId: %1").arg(pSession_->GetId()));
+}
+catch (const exception& exc) {
+	pPlainTextEditOutput_->appendPlainText(QString("failed to get sessionId; exc: %1").arg(Exception::GetDetailedInfo(exc)));
+}
+
+void Widget::Logout() {
+	if (SessionManager::GetInstance().Logout()) {
+		pPlainTextEditOutput_->appendPlainText("Logout(): OK");
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("Logout(): ERR");
+	}
+}
+
+void Widget::Shutdown() {
+	if (SessionManager::GetInstance().Shutdown()) {
+		pPlainTextEditOutput_->appendPlainText("Shutdown(): OK");
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("Shutdown(): ERR");
+	}
+}
+
+void Widget::GetIdleTime() {
+	pPlainTextEditOutput_->appendPlainText("Scheduling idle timer 5s");
+	QTimer::singleShot(5000, this, SLOT(OnIdleTimerTimeout()));
+}
+
+void Widget::OnIdleTimerTimeout() try {
+	pPlainTextEditOutput_->appendPlainText(QString("idleTime: %1").arg(SessionManager::GetInstance().GetIdleTime()));
+}
+catch (const exception& exc) {
+	pPlainTextEditOutput_->appendPlainText(QString("failed to get idleTime; exc: %1").arg(Exception::GetDetailedInfo(exc)));
+}
+
 void Widget::MakeConnections() {
-	CPPDEVTK_VERIFY(connect(&theScreenSaver_, SIGNAL(ActiveChanged(bool)), SLOT(ScreenSaverActiveChanged(bool))));
-	CPPDEVTK_VERIFY(connect(pPushButtonActivateScreenSaver_, SIGNAL(clicked(bool)), SLOT(ActivateScreenSaver())));
-	CPPDEVTK_VERIFY(connect(pPushButtonLockScreenSaver_, SIGNAL(clicked(bool)), SLOT(LockScreenSaver())));
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	if (ScreenSaver::IsScreenSaverServiceRegistered()) {
+		pPlainTextEditOutput_->appendPlainText("ScreenSaver is supported");
+#	endif
+		CPPDEVTK_VERIFY(connect(&ScreenSaver::GetInstance(), SIGNAL(ActiveChanged(bool)), SLOT(ScreenSaverActiveChanged(bool))));
+		CPPDEVTK_VERIFY(connect(pPushButtonActivateScreenSaver_, SIGNAL(clicked(bool)), SLOT(ActivateScreenSaver())));
+		CPPDEVTK_VERIFY(connect(pPushButtonLockScreenSaver_, SIGNAL(clicked(bool)), SLOT(LockScreenSaver())));
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("ScreenSaver is not supported");
+	}
+#	endif
+	
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	if (SessionManager::IsSessionManagerServiceRegistered()) {
+		pPlainTextEditOutput_->appendPlainText("SessionManager is supported");
+#	endif
+		CPPDEVTK_ASSERT(pSession_.get() != NULL);
+		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Activated()), SLOT(OnSessionActivated())));
+		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Deactivated()), SLOT(OnSessionDeactivated())));
+		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Locked()), SLOT(OnSessionLocked())));
+		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Unlocked()), SLOT(OnSessionUnlocked())));
+		CPPDEVTK_VERIFY(connect(pPushButtonLockSession_, SIGNAL(clicked(bool)), SLOT(LockSession())));
+		CPPDEVTK_VERIFY(connect(pPushButtonGetSessionId_, SIGNAL(clicked(bool)), SLOT(GetSessionId())));
+		
+		CPPDEVTK_VERIFY(connect(pPushButtonLogout_, SIGNAL(clicked(bool)), SLOT(Logout())));
+		CPPDEVTK_VERIFY(connect(pPushButtonShutdown_, SIGNAL(clicked(bool)), SLOT(Shutdown())));
+		CPPDEVTK_VERIFY(connect(pPushButtonGetIdleTime_, SIGNAL(clicked(bool)), SLOT(GetIdleTime())));
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("SessionManager is not supported");
+	}
+#	endif
+	
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	if (PowerNotifier::IsPowerNotifierServiceRegistered()) {
+		pPlainTextEditOutput_->appendPlainText("PowerNotifier is supported");
+#	endif
+		PowerNotifier& thePowerNotifier = PowerNotifier::GetInstance();
+		CPPDEVTK_VERIFY(connect(&thePowerNotifier, SIGNAL(Sleeping()), SLOT(OnSleeping())));
+		CPPDEVTK_VERIFY(connect(&thePowerNotifier, SIGNAL(Resuming()), SLOT(OnResuming())));
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("PowerNotifier is not supported");
+	}
+#	endif
+	
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	if (StorageDeviceNotifier::IsStorageDeviceNotifierServiceRegistered()) {
+		pPlainTextEditOutput_->appendPlainText("StorageDeviceNotifier is supported");
+#	endif
+		StorageDeviceNotifier& theStorageDeviceNotifier = StorageDeviceNotifier::GetInstance();
+		CPPDEVTK_VERIFY(connect(&theStorageDeviceNotifier,
+				SIGNAL(StorageDeviceAdded(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId)),
+				SLOT(OnStorageDeviceAdded(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId))));
+		CPPDEVTK_VERIFY(connect(&theStorageDeviceNotifier,
+				SIGNAL(StorageDeviceRemoved(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId)),
+				SLOT(OnStorageDeviceRemoved(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId))));
+		CPPDEVTK_VERIFY(connect(&theStorageDeviceNotifier,
+				SIGNAL(StorageDeviceMounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId)),
+				SLOT(OnStorageDeviceMounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId))));
+		CPPDEVTK_VERIFY(connect(&theStorageDeviceNotifier,
+				SIGNAL(StorageDeviceUnmounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId)),
+				SLOT(OnStorageDeviceUnmounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId))));
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	}
+	else {
+		pPlainTextEditOutput_->appendPlainText("StorageDeviceNotifier is not supported");
+	}
+#	endif
 	
 	CPPDEVTK_VERIFY(connect(pPushButtonClearOutput_, SIGNAL(clicked(bool)), pPlainTextEditOutput_, SLOT(clear())));
 }

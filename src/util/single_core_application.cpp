@@ -26,7 +26,7 @@ namespace cppdevtk {
 namespace util {
 
 
-SingleCoreApplication::SingleCoreApplication(int& argc, char** argv): QtSingleCoreApplication(GetId(), argc, argv),
+SingleCoreApplication::SingleCoreApplication(int& argc, char** argv): QtSingleCoreApplication(GetUniqueId(), argc, argv),
 		CoreApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	

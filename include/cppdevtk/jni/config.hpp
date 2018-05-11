@@ -27,7 +27,7 @@
 #include <jni.h>
 
 
-#if (CPPDEVTK_PLATFORM_MACOSX)
+#if (CPPDEVTK_PLATFORM_MACOSX && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7))
 #	ifndef JNI_VERSION_1_8
 #		error "JNI >= 1.8 required"
 #	endif

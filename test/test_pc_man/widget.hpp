@@ -25,7 +25,8 @@
 #include "ui_widget.h"
 #include <cppdevtk/gui/widget_base.hpp>
 #include <cppdevtk/gui/single_application.hpp>
-#include <cppdevtk/gui/screensaver.hpp>
+#include <cppdevtk/gui/storage_device_notifier.hpp>
+#include <cppdevtk/gui/session.hpp>
 
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -35,6 +36,7 @@
 #endif
 
 #include <cstddef>
+#include <memory>
 
 
 namespace cppdevtk {
@@ -54,13 +56,33 @@ private Q_SLOTS:
 	void ActivateScreenSaver();
 	void DeactivateScreenSaver();
 	void LockScreenSaver();
+	
+	void OnStorageDeviceAdded(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId);
+	void OnStorageDeviceRemoved(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId);
+	void OnStorageDeviceMounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId);
+	void OnStorageDeviceUnmounted(::cppdevtk::gui::StorageDeviceNotifier::StorageDeviceId storageDeviceId);
+	
+	void OnSleeping();
+	void OnResuming();
+	
+	void OnSessionActivated();
+	void OnSessionDeactivated();
+	void OnSessionLocked();
+	void OnSessionUnlocked();
+	void LockSession();
+	void GetSessionId();
+	
+	void Logout();
+	void Shutdown();
+	void GetIdleTime();
+	
+	void OnIdleTimerTimeout();
 private:
 	Q_DISABLE_COPY(Widget)
 	
 	void MakeConnections();
 	
-	
-	::cppdevtk::gui::ScreenSaver& theScreenSaver_;
+	::std::auto_ptr< ::cppdevtk::gui::Session> pSession_;
 };
 
 

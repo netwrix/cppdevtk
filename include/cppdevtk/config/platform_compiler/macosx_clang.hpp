@@ -41,6 +41,15 @@
 #include "unix_clang.hpp"
 
 
+#ifdef CPPDEVTK_DETAIL_BUILD
+#ifdef __OBJC__
+#if (__has_feature(objc_arc))
+#error "internal error: CppDevTk does not use ARC!!!"
+#endif
+#endif
+#endif
+
+
 /// \cond
 
 

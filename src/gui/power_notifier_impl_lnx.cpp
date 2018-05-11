@@ -17,34 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/gui/get_user_idle_time.hpp>
-#if (!CPPDEVTK_PLATFORM_WINDOWS)
-#	error "This file is Windows specific!!!"
-#endif
-
-#include <cppdevtk/base/zeroize.hpp>
-#include <cppdevtk/base/logger.hpp>
+#include "power_notifier_impl_lnx.hpp"
 
 
 namespace cppdevtk {
 namespace gui {
-
-
-CPPDEVTK_GUI_API bool GetUserIdleTime(idle_time_t& userIdleTime) {
-	LASTINPUTINFO lastInputInfo;
-	::cppdevtk::base::Zeroize(&lastInputInfo, sizeof lastInputInfo);
-	lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
-	if (!GetLastInputInfo(&lastInputInfo)) {
-		CPPDEVTK_LOG_ERROR("GetLastInputInfo() failed");
-		return false;
-	}
-	
-	const DWORD kTickCount = GetTickCount();
-	
-	userIdleTime = (kTickCount - lastInputInfo.dwTime);
-	
-	return true;
-}
 
 
 }	// namespace gui

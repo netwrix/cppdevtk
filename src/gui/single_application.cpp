@@ -26,7 +26,7 @@ namespace cppdevtk {
 namespace gui {
 
 
-SingleApplication::SingleApplication(int& argc, char** argv): QtSingleApplication(GetId(), argc, argv), ApplicationBase() {
+SingleApplication::SingleApplication(int& argc, char** argv): QtSingleApplication(GetUniqueId(), argc, argv), ApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "single_application");

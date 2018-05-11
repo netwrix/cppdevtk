@@ -17,12 +17,6 @@
 
 QT *= gui core
 greaterThan(QT_MAJOR_VERSION, 4): QT *= widgets
-android|ios {
-	QT *= network
-}
-android {
-	QT *= androidextras
-}
 
 
 TEMPLATE = app
@@ -36,6 +30,9 @@ include(./../../common.pri)
 # CONFIG
 CONFIG *= windows app_bundle
 CONFIG *= link_prl
+android|ios {
+	error("This subproject is desktop only (not for mobiles)")
+}
 
 
 # TARGET + INSTALLS

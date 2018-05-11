@@ -17,36 +17,30 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/util/get_current_process_session_id.hpp>
-#if (!CPPDEVTK_PLATFORM_MACOSX)
-#	error "This file is Mac OS X specific!!!"
-#endif
-#if (CPPDEVTK_PLATFORM_IOS)
-#	error "This file is not for iOS!!!"
-#endif
-#include <cppdevtk/base/logger.hpp>
-#include <cppdevtk/base/stdexcept.hpp>
+#include "session_impl_lnx.hpp"
+#include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/util/dbus_exception.hpp>
 
-#include <Security/AuthSession.h>
+#include <QtDBus/QDBusConnection>
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
 
 
-CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
-	SecuritySessionId securitySessionId;
-	SessionAttributeBits sessionAttributeBits;
-	const OSStatus kSessionsApiRetCode = SessionGetInfo(callerSecuritySession, &securitySessionId, &sessionAttributeBits);
-	if (kSessionsApiRetCode != errSessionSuccess) {
-		if (kSessionsApiRetCode == errSessionAuthorizationDenied) {
-			throw CPPDEVTK_RUNTIME_EXCEPTION("SessionGetInfo() failed: errSessionAuthorizationDenied");
-		}
-		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("SessionGetInfo() failed; kSessionsApiRetCode:: %1").arg(kSessionsApiRetCode));
+Session::Impl::Impl(const QString& service, const QString& path, const QString& interface): QObject(),
+		dbusInterface_(service, path, interface, QDBusConnection::systemBus()) {
+	CPPDEVTK_ASSERT(!service.isEmpty());
+	CPPDEVTK_ASSERT(!path.isEmpty());
+	CPPDEVTK_ASSERT(!interface.isEmpty());
+	if (!dbusInterface_.isValid()) {
+		throw CPPDEVTK_DBUS_EXCEPTION("Session DBus interface is not valid", dbusInterface_.lastError());
 	}
-	return QString::number(securitySessionId);
+	
+	CPPDEVTK_VERIFY(connect(this, SIGNAL(ActiveChanged(bool)), SLOT(OnActiveChanged(bool))));
 }
 
 
-}	// namespace util
+}	// namespace gui
 }	// namespace cppdevtk

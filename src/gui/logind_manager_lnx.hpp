@@ -17,11 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_LOGIND_MANAGER_LNX_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_LOGIND_MANAGER_LNX_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_LOGIND_MANAGER_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_LOGIND_MANAGER_LNX_HPP_INCLUDED_
 
 
-#include "config.hpp"
+#include <cppdevtk/gui/config.hpp>
 #if (!CPPDEVTK_PLATFORM_LINUX)
 #	error "This file is Linux specific!!!"
 #endif
@@ -29,60 +29,34 @@
 #	error "This file is not for Android!!!"
 #endif
 
-#include "logind_session_lnx.hpp"
-#include <cppdevtk/base/singletons.hpp>
-
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusError>
-#include <QtCore/QString>
-
-#include <memory>
+#include "session_manager_impl_lnx.hpp"
+#include <cppdevtk/base/get_current_process_id.hpp>
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
+namespace detail {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa <a href=https://www.freedesktop.org/wiki/Software/systemd/logind">logind Manager</a>
 /// \note All functions, except slots and destructor, may throw DBusException
-class CPPDEVTK_UTIL_API LogindManager: public ::cppdevtk::base::MeyersSingleton<LogindManager> {
-	friend class ::cppdevtk::base::MeyersSingleton<LogindManager>;
-Q_SIGNALS:
-	void PrepareForShutdown(bool start);
-	void PrepareForSleep(bool start);
-public Q_SLOTS:
-	bool LockSession(const QString& sessionId);
-	bool UnlockSession(const QString& sessionId);
-	bool TerminateSession(const QString& sessionId);
-	bool ActivateSession(const QString& sessionId);
-	
-	bool PowerOff(bool interactive);
-	bool Reboot(bool interactive);
-	bool Suspend(bool interactive);
-	bool Hibernate(bool interactive);
-	bool HybridSleep(bool interactive);
+class LogindManager: public SessionManager::Impl {
+	friend class ::cppdevtk::gui::SessionManager;
 public:
-	::std::auto_ptr<LogindSession> GetCurrentSession() const;	///< \note Returned pointer is not NULL
-	::std::auto_ptr<LogindSession> GetSession(const QString& sessionId) const;	///< \note Returned pointer is not NULL
-	::std::auto_ptr<LogindSession> GetSessionByPID(uint pid) const;	///< \note Returned pointer is not NULL
+	virtual bool Shutdown();
 	
-	QString CanPowerOff() const;
-	QString CanReboot() const;
-	QString CanSuspend() const;
-	QString CanHibernate() const;
-	QString CanHybridSleep() const;
-	
-	QDBusError GetLastError() const;
+	virtual SessionManager::IdleTime GetIdleTime() const;
+	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetThisProcessSession() const;
 	
 	
 	static bool IsLogindServiceRegistered();
 private:
 	LogindManager();
-	~LogindManager();
 	
-	
-	mutable QDBusInterface logindManagerInterface_;
+	bool PowerOff(bool interactive);
+	qulonglong GetIdleSinceHint() const;	// CLOCK_REALTIME
+	::std::auto_ptr<Session> GetSessionByPID(uint pid) const;	///< \note Returned pointer is not NULL
 };
 
 
@@ -91,15 +65,21 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline LogindManager::~LogindManager() {}
+inline bool LogindManager::Shutdown() {
+	if (!SessionManager::Impl::Shutdown()) {
+		return PowerOff(false);
+	}
+	return true;
+}
 
-inline QDBusError LogindManager::GetLastError() const {
-	return logindManagerInterface_.lastError();
+inline ::std::auto_ptr< ::cppdevtk::gui::Session> LogindManager::GetThisProcessSession() const {
+	return GetSessionByPID(::cppdevtk::base::GetCurrentProcessId());
 }
 
 
-}	// namespace util
+}	// namespace detail
+}	// namespace gui
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_UTIL_LOGIND_MANAGER_LNX_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_LOGIND_MANAGER_LNX_HPP_INCLUDED_

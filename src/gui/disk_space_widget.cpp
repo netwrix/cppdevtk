@@ -166,7 +166,7 @@ void DiskSpaceWidget::DoRefresh(qreal totalSize, qreal freeSpace) {
 						"; error code: " << errorCode.ToString());
 			}
 		}
-		catch (const ::std::exception& exc) {
+		catch (const ::std::runtime_error& exc) {
 			CPPDEVTK_LOG_ERROR("failed to GetMountPointsFromPath() for path: " << path_
 					<< "\nreason: " << base::Exception::GetDetailedInfo(exc));
 			base::SuppressUnusedWarning(exc);
@@ -217,7 +217,7 @@ void DiskSpaceWidget::FileSystemSpaceInfoNotAvailable() {
 				CPPDEVTK_LOG_ERROR("failed to GetMountPointsFromPath() for path: " << path_);
 			}
 		}
-		catch (const ::std::exception& exc) {
+		catch (const ::std::runtime_error& exc) {
 			CPPDEVTK_LOG_ERROR("failed to GetMountPointsFromPath() for path: " << path_
 					<< "\nreason: " << base::Exception::GetDetailedInfo(exc));
 			base::SuppressUnusedWarning(exc);

@@ -37,7 +37,7 @@ class CPPDEVTK_UTIL_API SingleCoreApplication: public QtSingleCoreApplication, p
 public:
 	/// \pre !organizationName().isEmpty()
 	/// \pre !applicationName().isEmpty()
-	/// \remark The application identifier will be GetId()
+	/// \remark The application identifier will be GetUniqueId()
 	SingleCoreApplication(int& argc, char** argv);
 	SingleCoreApplication(int& argc, char** argv, const QString& id);
 	virtual ~SingleCoreApplication();

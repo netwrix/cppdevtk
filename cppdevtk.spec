@@ -585,6 +585,8 @@ exit 0
 %{_bindir}/%{name}_test_invisible_widget
 %{_bindir}/%{name}_test_slot_throw
 %{_bindir}/%{name}_test_localization
+%{_bindir}/%{name}_test_term_sig
+%{_bindir}/%{name}_test_pc_man
 %{_datadir}/applications/*.desktop
 %{_datadir}/pixmaps
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO

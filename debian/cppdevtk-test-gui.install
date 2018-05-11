@@ -3,9 +3,13 @@ opt/cososys/bin/cppdevtk_test_disk_space_widget
 opt/cososys/bin/cppdevtk_test_invisible_widget
 opt/cososys/bin/cppdevtk_test_slot_throw
 opt/cososys/bin/cppdevtk_test_localization
+opt/cososys/bin/cppdevtk_test_term_sig
+opt/cososys/bin/cppdevtk_test_pc_man
 usr/share/pixmaps/cppdevtk.png
 usr/share/applications/cppdevtk_test_invisible_widget.desktop
 usr/share/applications/cppdevtk_test_disk_space_widget.desktop
 usr/share/applications/cppdevtk_test_caps_lock_widget.desktop
 usr/share/applications/cppdevtk_test_slot_throw.desktop
 usr/share/applications/cppdevtk_test_localization.desktop
+usr/share/applications/cppdevtk_test_term_sig.desktop
+usr/share/applications/cppdevtk_test_pc_man.desktop

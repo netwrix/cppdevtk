@@ -17,40 +17,41 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/util/get_current_process_session_id.hpp>
-#if (!CPPDEVTK_PLATFORM_LINUX)
-#	error "This file is Linux specific!!!"
-#endif
-#if (CPPDEVTK_PLATFORM_ANDROID)
-#	error "This file is not for Android!!!"
-#endif
+#ifndef CPPDEVTK_GUI_UPOWER_NOTIFIER_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_UPOWER_NOTIFIER_LNX_HPP_INCLUDED_
 
-#include <cppdevtk/util/logind_manager_lnx.hpp>
-#include <cppdevtk/util/logind_session_lnx.hpp>
-#include <cppdevtk/util/console_kit_manager_lnx.hpp>
-#include <cppdevtk/util/console_kit_session_lnx.hpp>
-#include <cppdevtk/util/dbus_exception.hpp>
 
-#include <QtDBus/QDBusConnection>
+#include <cppdevtk/gui/config.hpp>
+#include "power_notifier_impl_lnx.hpp"
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
+namespace detail {
 
 
-CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
-	if (!LogindManager::IsLogindServiceRegistered()) {
-		if (!ConsoleKitManager::IsConsoleKitServiceRegistered()) {
-			throw CPPDEVTK_DBUS_EXCEPTION("None of Logind or ConsoleKit services is registered",
-					QDBusConnection::systemBus().lastError());
-		}
-		
-		return ConsoleKitManager::GetInstance().GetCurrentSession()->GetId().path();
-	}
+class UPowerNotifier: public PowerNotifier::Impl {
+	Q_OBJECT
+public:
+	UPowerNotifier();
+	virtual ~UPowerNotifier();
 	
-	return LogindManager::GetInstance().GetCurrentSession()->GetId();
-}
+	
+	static bool IsUPowerServiceRegistered();
+private:
+	Q_DISABLE_COPY(UPowerNotifier);
+};
 
 
-}	// namespace util
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Inline functions
+
+
+}	// namespace detail
+}	// namespace gui
 }	// namespace cppdevtk
+
+
+#endif	// CPPDEVTK_GUI_UPOWER_NOTIFIER_LNX_HPP_INCLUDED_

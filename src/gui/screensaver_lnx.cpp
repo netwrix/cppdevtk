@@ -25,11 +25,19 @@
 #include <cppdevtk/util/dbus_utils.hpp>
 #include <cppdevtk/util/dbus_exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/verify.h>
 
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusConnection>
 #include <QtCore/QList>
 #include <QtCore/QVariant>
+#include <QtDBus/QDBusError>
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusConnection>
+#include <QtCore/QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets/QApplication>
+#else
+#include <QtGui/QApplication>
+#endif
 
 #include <new>
 #include <cstddef>
@@ -68,13 +76,38 @@ namespace gui {
 using ::cppdevtk::util::IsDBusServiceRegistered;
 
 
+void ScreenSaver::Uninit() {
+	if (pScreenSaverInterface_.get() == NULL) {
+		return;
+	}
+	
+	QDBusConnection sessionBus = QDBusConnection::sessionBus();
+	if (sessionBus.isConnected()) {
+		if (!sessionBus.disconnect(pScreenSaverInterface_->service(), pScreenSaverInterface_->path(),
+				pScreenSaverInterface_->interface(), "ActiveChanged", this, SIGNAL(ActiveChanged(bool)))) {
+			const QDBusError kLastSessionBusError = sessionBus.lastError();
+			CPPDEVTK_LOG_WARN("failed to disconnect from DBus screensaver interface ActiveChanged signal"
+					<< "; errorType: " << QDBusError::errorString(kLastSessionBusError.type())
+					<< "; errorName: " << kLastSessionBusError.name() << "; errorMsg: " << kLastSessionBusError.message());
+		}
+	}
+	else {
+		const QDBusError kLastSessionBusError = sessionBus.lastError();
+		CPPDEVTK_LOG_WARN("failed to connect to session bus"
+				<< "; errorType: " << QDBusError::errorString(kLastSessionBusError.type())
+				<< "; errorName: " << kLastSessionBusError.name() << "; errorMsg: " << kLastSessionBusError.message());
+	}
+	
+	pScreenSaverInterface_.reset();
+}
+
 bool ScreenSaver::Lock() {
 	const QDBusMessage kReply = (pScreenSaverInterface_->service() != CPPDEVTK_CINNAMON_SCREENSAVER_SERVICE_NAME)
 			? pScreenSaverInterface_->call("Lock") : pScreenSaverInterface_->call("Lock", "");
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		const QDBusError kLastError = pScreenSaverInterface_->lastError();
-		CPPDEVTK_LOG_ERROR("DBus call to screensaver::Lock() failed; dbusErrorName: " << kLastError.name()
-				<< "; dbusErrorMessage: " << kLastError.message());
+		CPPDEVTK_LOG_ERROR("DBus call to screensaver::Lock() failed"
+				<< "; errorName: " << kReply.errorName()
+				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
 	}
 	return true;
@@ -83,9 +116,9 @@ bool ScreenSaver::Lock() {
 bool ScreenSaver::SetActive(bool active) {
 	const QDBusMessage kReply = pScreenSaverInterface_->call("SetActive", active);
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		const QDBusError kLastError = pScreenSaverInterface_->lastError();
-		CPPDEVTK_LOG_ERROR("DBus call to screensaver::SetActive() failed; dbusErrorName: " << kLastError.name()
-				<< "; dbusErrorMessage: " << kLastError.message());
+		CPPDEVTK_LOG_ERROR("DBus call to screensaver::SetActive() failed"
+				<< "; errorName: " << kReply.errorName()
+				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
 	}
 	return true;
@@ -107,11 +140,7 @@ bool ScreenSaver::IsActive() const {
 	CPPDEVTK_ASSERT(!kReplyArg.isNull());
 	CPPDEVTK_ASSERT(kReplyArg.isValid());
 	CPPDEVTK_ASSERT(kReplyArg.type() == QVariant::Bool);
-	return kReplyArg.toBool();
-}
-
-QDBusError ScreenSaver::GetLastError() const {
-	return pScreenSaverInterface_->lastError();
+	return kReplyArg.value<bool>();
 }
 
 bool ScreenSaver::IsScreenSaverServiceRegistered() {
@@ -131,6 +160,8 @@ void ScreenSaver::Refresh() {}
 
 ScreenSaver::ScreenSaver(): QObject(), ::cppdevtk::base::MeyersSingleton<ScreenSaver>(),
 		pScreenSaverInterface_() {
+	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG((qApp != NULL), "qApp is NULL; please create app first");
+	
 	QDBusConnection sessionBus = QDBusConnection::sessionBus();
 	if (!sessionBus.isConnected()) {
 		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to session bus", sessionBus.lastError());
@@ -162,7 +193,7 @@ ScreenSaver::ScreenSaver(): QObject(), ::cppdevtk::base::MeyersSingleton<ScreenS
 					}
 					else {
 						throw CPPDEVTK_DBUS_EXCEPTION("no supported DBus screensaver service registered",
-								sessionBus.lastError());
+								QDBusError(QDBusError::ServiceUnknown, "screensaver service unknown"));
 					}
 				}
 			}
@@ -171,22 +202,26 @@ ScreenSaver::ScreenSaver(): QObject(), ::cppdevtk::base::MeyersSingleton<ScreenS
 	
 	CPPDEVTK_ASSERT(pScreenSaverInterface_.get() != NULL);
 	
-	CPPDEVTK_LOG_DEBUG("ScreenSaverInterface: service: " << pScreenSaverInterface_->service()
-			<< "; path: " << pScreenSaverInterface_->path() << "; interface: " << pScreenSaverInterface_->interface());
+	CPPDEVTK_LOG_INFO("ScreenSaverInterface: service: " << pScreenSaverInterface_->service()
+			<< "; path: " << pScreenSaverInterface_->path()
+			<< "; interface: " << pScreenSaverInterface_->interface());
 	
 	if (!pScreenSaverInterface_->isValid()) {
-		throw CPPDEVTK_DBUS_EXCEPTION("DBus screensaver interface is not valid",
-				pScreenSaverInterface_->lastError());
+		throw CPPDEVTK_DBUS_EXCEPTION("DBus screensaver interface is not valid", pScreenSaverInterface_->lastError());
 	}
 	
 	if (!sessionBus.connect(pScreenSaverInterface_->service(), pScreenSaverInterface_->path(),
 			pScreenSaverInterface_->interface(), "ActiveChanged", this, SIGNAL(ActiveChanged(bool)))) {
-		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to DBus screensaver interface ActiveChanged() signal",
+		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to DBus screensaver interface ActiveChanged signal",
 				sessionBus.lastError());
 	}
+	
+	CPPDEVTK_VERIFY(connect(qApp, SIGNAL(aboutToQuit()), SLOT(Uninit())));
 }
 
-ScreenSaver::~ScreenSaver() {}
+ScreenSaver::~ScreenSaver() {
+	CPPDEVTK_ASSERT((pScreenSaverInterface_.get() == NULL) && "Call Uninit() before leaving main()");
+}
 
 
 }	// namespace gui

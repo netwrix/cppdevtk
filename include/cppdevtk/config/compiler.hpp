@@ -23,6 +23,7 @@
 
 #include "features.hpp"
 
+
 #ifndef RC_INVOKED
 #if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS && defined(_MSC_VER))
 #	pragma warning(disable: 4668)	// C4668: 'symbol' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'

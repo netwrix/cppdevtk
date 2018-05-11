@@ -17,28 +17,49 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/util/get_current_process_session_id.hpp>
-#if (!CPPDEVTK_PLATFORM_WINDOWS)
-#	error "This file is Windows specific!!!"
-#endif
-#include <cppdevtk/base/get_current_process_id.hpp>
-#include <cppdevtk/base/system_exception.hpp>
+#ifndef CPPDEVTK_GUI_POWER_NOTIFIER_IMPL_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_POWER_NOTIFIER_IMPL_LNX_HPP_INCLUDED_
 
-#include <windows.h>
+
+#include <cppdevtk/gui/config.hpp>
+#if (!CPPDEVTK_PLATFORM_LINUX)
+#	error "This file is Linux specific!!!"
+#endif
+
+#include <cppdevtk/gui/power_notifier.hpp>
+
+#include <QtCore/QObject>
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
 
 
-CPPDEVTK_UTIL_API QString GetCurrentProcessSessionId() {
-	DWORD sessionId = 0;
-	if (!ProcessIdToSessionId(base::GetCurrentProcessId(), &sessionId)) {
-		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(base::GetLastSystemErrorCode(), "ProcessIdToSessionId() failed");
-	}
-	return QString::number(sessionId);
-}
+// NOTE:
+// - until v0.9.23 UPower had Sleeping() and Resuming()
+// - since v0.99.1 (next version after 0.9.23) Sleeping() and Resuming() were removed from UPower and logind provides support
+class PowerNotifier::Impl: public QObject {
+	Q_OBJECT
+Q_SIGNALS:
+	void Sleeping();
+	void Resuming();
+protected:
+	Impl();
+private:
+	Q_DISABLE_COPY(Impl);
+};
 
 
-}	// namespace util
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Inline functions
+
+inline PowerNotifier::Impl::Impl(): QObject() {}
+
+
+}	// namespace gui
 }	// namespace cppdevtk
+
+
+#endif	// CPPDEVTK_GUI_POWER_NOTIFIER_IMPL_LNX_HPP_INCLUDED_

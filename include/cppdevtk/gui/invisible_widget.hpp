@@ -43,13 +43,12 @@ namespace gui {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief A widget that is not visible on screen.
-/// \remark The widget sets Qt::WA_DeleteOnClose to true; we consider this to be the expected behaviour
+/// \remark The widget sets Qt::WA_QuitOnClose to false; we consider this to be the expected behaviour
 /// and also Qt was inconsistent about this. If this is not desired, use QWidget::setAttribute(Qt::WA_QuitOnClose, true).
 class CPPDEVTK_GUI_API InvisibleWidget: public QWidget {
 	Q_OBJECT
 public:
 	explicit InvisibleWidget(QWidget* pParent = NULL, Qt::WindowFlags windowFlags = 0);
-	virtual ~InvisibleWidget();
 #	if (CPPDEVTK_DETAIL_GUI_INVISIBLE_WIDGET_ENABLE_TEST)
 	virtual ~InvisibleWidget();
 protected:
@@ -69,8 +68,6 @@ inline InvisibleWidget::InvisibleWidget(QWidget* pParent, Qt::WindowFlags window
 	setAttribute(Qt::WA_DontShowOnScreen, true);
 	setAttribute(Qt::WA_QuitOnClose, false);
 }
-
-inline InvisibleWidget::~InvisibleWidget() {}
 
 
 }	// namespace gui

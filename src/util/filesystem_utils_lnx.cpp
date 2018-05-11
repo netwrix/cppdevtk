@@ -257,7 +257,7 @@ CPPDEVTK_UTIL_API QString GetDeviceName(DeviceType deviceType, const QString& se
 	try {
 		pLibUDev.reset(new LibUDev1());
 	}
-	catch (const exception& exc) {
+	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_INFO("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
 		pLibUDev.reset(new LibUDev0());
 	}
@@ -588,7 +588,7 @@ void PrintUDevDevice(const udev_device& udevDevice) {
 	try {
 		pLibUDev.reset(new LibUDev1());
 	}
-	catch (const exception& exc) {
+	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_INFO("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
 		pLibUDev.reset(new LibUDev0());
 	}
@@ -665,7 +665,7 @@ void PrintUDevListEntry(const udev_list_entry& udevListEntry) {
 	try {
 		pLibUDev.reset(new LibUDev1());
 	}
-	catch (const exception& exc) {
+	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_INFO("failed to load LibUDev1; trying LibUDev0; reason: " << Exception::GetDetailedInfo(exc));
 		pLibUDev.reset(new LibUDev0());
 	}

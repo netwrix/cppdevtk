@@ -27,6 +27,10 @@
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/info_tr.hpp>
+#include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/gui/screensaver.hpp>
+#include <cppdevtk/gui/storage_device_notifier.hpp>
+#include <cppdevtk/gui/power_notifier.hpp>
 
 #include <QtCore/QString>
 #ifndef CPPDEVTK_SHARED
@@ -63,6 +67,37 @@ int main(int argc, char* argv[]) try {
 	Application application(argc, argv);
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_pc_man/res/ico/application.ico"));
+	
+#	if (BOOST_VERSION >= 105000)
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
+#	else
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN() {
+#	endif
+#		if (CPPDEVTK_PLATFORM_LINUX)
+		if (::cppdevtk::gui::ScreenSaver::IsScreenSaverServiceRegistered()) {
+#		endif
+			::cppdevtk::gui::ScreenSaver::GetInstance().Uninit();
+#		if (CPPDEVTK_PLATFORM_LINUX)
+		}
+#		endif
+		
+#		if (CPPDEVTK_PLATFORM_LINUX)
+		if (::cppdevtk::gui::StorageDeviceNotifier::IsStorageDeviceNotifierServiceRegistered()) {
+#		endif
+			::cppdevtk::gui::StorageDeviceNotifier::GetInstance().Uninit();
+#		if (CPPDEVTK_PLATFORM_LINUX)
+		}
+#		endif
+		
+#		if (CPPDEVTK_PLATFORM_LINUX)
+		if (::cppdevtk::gui::PowerNotifier::IsPowerNotifierServiceRegistered()) {
+#		endif
+			::cppdevtk::gui::PowerNotifier::GetInstance().Uninit();
+#		if (CPPDEVTK_PLATFORM_LINUX)
+		}
+#		endif
+	}
+	CPPDEVTK_ON_BLOCK_EXIT_END
 	
 	try {
 		::cppdevtk::test_pc_man::Widget widget;

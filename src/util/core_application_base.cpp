@@ -194,7 +194,7 @@ QString CoreApplicationBase::GetAppDirPath() {
 	return appDirPath;
 }
 
-QString CoreApplicationBase::GetId() {
+QString CoreApplicationBase::GetUniqueId() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!QCoreApplication::organizationName().isEmpty(),
 			"organizationName() is empty; call setOrganizationName() first");
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!QCoreApplication::applicationName().isEmpty(),

@@ -36,6 +36,10 @@ Application::Application(int& argc, char** argv): ::cppdevtk::gui::SingleApplica
 	translate("language_native_name", "English");	// to generate translation
 	SetPreferSystemLocale(true);
 	SetCurrentLanguageInfo(GetDefaultLanguageInfo());
+#	ifndef NDEBUG
+	qMetaTypeId< ::cppdevtk::util::LanguageInfo>();	// compile time
+#	endif
+	// runtime; do not global qualify because moc will generate bad code
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != QMetaType::UnknownType);
 #	else

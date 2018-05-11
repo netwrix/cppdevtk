@@ -373,7 +373,7 @@ unsigned __stdcall Thread::Run(void* pVoidData)
 #	if (BOOST_VERSION >= 105000)
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
 #	else
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&pThreadLocalData)) {
+	CPPDEVTK_ON_BLOCK_EXIT_BEGIN() {
 #	endif
 		pThreadLocalData = NULL;
 	}

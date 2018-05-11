@@ -17,11 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_LOGIND_SESSION_LNX_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_LOGIND_SESSION_LNX_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_LOGIND_SESSION_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_LOGIND_SESSION_LNX_HPP_INCLUDED_
 
 
-#include "config.hpp"
+#include <cppdevtk/gui/config.hpp>
 #if (!CPPDEVTK_PLATFORM_LINUX)
 #	error "This file is Linux specific!!!"
 #endif
@@ -29,67 +29,62 @@
 #	error "This file is not for Android!!!"
 #endif
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include "session_impl_lnx.hpp"
+#include <cppdevtk/util/dbus_utils.hpp>
+
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtCore/QVariantMap>
-#include <QtDBus/QDBusVariant>
-#include <QtDBus/QDBusError>
 #include <QtDBus/QDBusObjectPath>
 #include <QtDBus/QDBusInterface>
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
+namespace detail {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa <a href=https://www.freedesktop.org/wiki/Software/systemd/logind">logind Session</a>
 /// \note All functions, except slots and destructor, may throw DBusException
-class CPPDEVTK_UTIL_API LogindSession: public QObject {
+/// \attention Tested and Locked()/Unlocked() signals:
+/// - are not emitted when Lock/Unlock from DE (tested with KDE); screensaver signals are emitted.
+/// - are emitted when Lock()/Unlock() method are called
+/// - verify: dbus-monitor --monitor --system "type='signal',sender='org.freedesktop.login1',interface='org.freedesktop.login1.Session',path='/org/freedesktop/login1/session/_32'"
+class LogindSession: public Session::Impl {
+	friend class ::cppdevtk::gui::Session;
 	friend class LogindManager;
 	
 	Q_OBJECT
-Q_SIGNALS:
-	void ActiveChanged(bool isActive);	///< \note This signal that is in ConsoleKit is not in logind, so we implemented it.
-	
-	/// \attention Tested and Locked()/Unlocked() signals:
-	/// - are not emitted when Lock/Unlock from DE (tested with KDE).
-	/// - are emitted when Lock()/Unlock() method are called
-	/// - verify: dbus-monitor --monitor --system "type='signal',sender='org.freedesktop.login1',interface='org.freedesktop.login1.Session',path='/org/freedesktop/login1/session/_32'"
-	void Locked();
-	void Unlocked();
-public Q_SLOTS:
-	bool Terminate();
-	bool Activate();
-	bool Lock();
-	bool Unlock();
 public:
-	QString GetId() const;
-	QString GetType() const;
-	uint GetUser() const;
-	QString GetRemoteHost() const;
+	virtual ~LogindSession();
 	
-	bool IsActive() const;
-	bool IsRemote() const;
+	virtual bool Activate();
+	virtual bool Lock();
+	virtual bool Unlock();
 	
-	QDBusError GetLastError() const;
+	virtual QString GetId() const;
+	virtual QString GetType() const;
+	virtual uint GetUser() const;
+	virtual QString GetRemoteHost() const;
+	
+	virtual bool IsActive() const;
+	virtual bool IsRemote() const;
 	
 	bool operator==(const LogindSession& other) const;
 	bool operator!=(const LogindSession& other) const;
+	
+	
+	static bool IsLogindServiceRegistered();
 private Q_SLOTS:
-	void DBusPropertiesChangedHandler(const QString& interfaceName, const QVariantMap& changedProperties,
+	void OnDBusPropertiesChanged(const QString& interfaceName, const QVariantMap& changedProperties,
 			const QStringList& invalidatedProperties);
 private:
 	Q_DISABLE_COPY(LogindSession)
 	
 	explicit LogindSession(const QDBusObjectPath& logindSessionPath);
 	
-	QVariant GetProperty(const QString& propertyName) const;
 	
-	
-	mutable QDBusInterface logindSessionInterface_;
 	mutable QDBusInterface logindSessionPropertiesInterface_;
 };
 
@@ -100,31 +95,39 @@ private:
 // Inline functions
 
 inline QString LogindSession::GetId() const {
-	return GetProperty("Id").toString();
+	const QDBusInterface& kDBusInterface = DBusInterfaceRef();
+	return util::GetDBusStringProperty(kDBusInterface.service(), QDBusObjectPath(kDBusInterface.path()),
+			kDBusInterface.interface(), kDBusInterface.connection(), "Id");
 }
 
 inline QString LogindSession::GetType() const {
-	return GetProperty("Type").toString();
+	const QDBusInterface& kDBusInterface = DBusInterfaceRef();
+	return util::GetDBusStringProperty(kDBusInterface.service(), QDBusObjectPath(kDBusInterface.path()),
+			kDBusInterface.interface(), kDBusInterface.connection(), "Type");
 }
 
 inline uint LogindSession::GetUser() const {
-	return GetProperty("User").toUInt();
+	const QDBusInterface& kDBusInterface = DBusInterfaceRef();
+	return util::GetDBusUInt32Property(kDBusInterface.service(), QDBusObjectPath(kDBusInterface.path()),
+			kDBusInterface.interface(), kDBusInterface.connection(), "User");
 }
 
 inline QString LogindSession::GetRemoteHost() const {
-	return GetProperty("RemoteHost").toString();
+	const QDBusInterface& kDBusInterface = DBusInterfaceRef();
+	return util::GetDBusStringProperty(kDBusInterface.service(), QDBusObjectPath(kDBusInterface.path()),
+			kDBusInterface.interface(), kDBusInterface.connection(), "RemoteHost");
 }
 
 inline bool LogindSession::IsActive() const {
-	return GetProperty("Active").toBool();
+	const QDBusInterface& kDBusInterface = DBusInterfaceRef();
+	return util::GetDBusBooleanProperty(kDBusInterface.service(), QDBusObjectPath(kDBusInterface.path()),
+			kDBusInterface.interface(), kDBusInterface.connection(), "Active");
 }
 
 inline bool LogindSession::IsRemote() const {
-	return GetProperty("Remote").toBool();
-}
-
-inline QDBusError LogindSession::GetLastError() const {
-	return logindSessionInterface_.lastError();
+	const QDBusInterface& kDBusInterface = DBusInterfaceRef();
+	return util::GetDBusBooleanProperty(kDBusInterface.service(), QDBusObjectPath(kDBusInterface.path()),
+			kDBusInterface.interface(), kDBusInterface.connection(), "Remote");
 }
 
 inline bool LogindSession::operator==(const LogindSession& other) const {
@@ -136,8 +139,9 @@ inline bool LogindSession::operator!=(const LogindSession& other) const {
 }
 
 
-}	// namespace util
+}	// namespace detail
+}	// namespace gui
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_UTIL_LOGIND_SESSION_LNX_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_LOGIND_SESSION_LNX_HPP_INCLUDED_

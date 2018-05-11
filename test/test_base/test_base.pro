@@ -17,9 +17,6 @@
 
 QT -= gui
 QT *= core
-android {
-	QT *= network androidextras
-}
 
 
 TEMPLATE = app

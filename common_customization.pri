@@ -234,12 +234,25 @@ isEmpty(CPPDEVTK_PREFIX) {
 		}
 		else {
 			macx {
-				# QT_ARCH does not work in Qt 4 on mac; fortunatelly we use Qt 4 only on 32 bits.
+				# QT_ARCH does not work in Qt 4 on mac.
 				greaterThan(QT_MAJOR_VERSION, 4) {
 					isEmpty(QT_ARCH) {
 						error("QT_ARCH is empty!!!")
 					}
 					CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/$${QT_ARCH}
+				}
+				else {
+					x86 {
+						CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/x86
+					}
+					else {
+						x86_64 {
+							CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/x86_64
+						}
+						else {
+							error("arch missing from CONFIG!!!")
+						}
+					}
 				}
 			}
 			else {

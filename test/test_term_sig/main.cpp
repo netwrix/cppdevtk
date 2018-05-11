@@ -30,6 +30,11 @@
 #include <cstdlib>
 
 
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
+
 using ::cppdevtk::base::Exception;
 using ::std::exception;
 
@@ -48,18 +53,13 @@ int main(int argc, char* argv[]) try {
 	application.SetQuitOnTerminationSignals(true);
 	CPPDEVTK_ASSERT(application.GetQuitOnTerminationSignals());
 	
-	// does not compile on CentOS 6, gcc 4.4.7
-#	if (!CPPDEVTK_COMPILER_GCC)
-	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
-#	else
-#	if (CPPDEVTK_GNUC_VERSION_NUM > CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 4, 7))
+#	if (BOOST_VERSION >= 105000)
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {
 #	else
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN() {
 #	endif
-#	endif
 		try {
-			static_cast<Application*>(qApp)->SetQuitOnTerminationSignals(false);
+			static_cast<Application*>(QCoreApplication::instance())->SetQuitOnTerminationSignals(false);
 		}
 		catch (const exception& exc) {
 			CPPDEVTK_LOG_ERROR("failed to SetQuitOnTerminationSignals(false); exc: " << Exception::GetDetailedInfo(exc));

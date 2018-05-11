@@ -82,12 +82,12 @@ void MainWindow::showEvent(QShowEvent* pShowEvent) {
 	if (isShownFirstTime) {
 		isShownFirstTime = false;
 		
-		static_cast<Application*>(Application::instance())->setActivationWindow(this);
+		static_cast<Application*>(QApplication::instance())->setActivationWindow(this);
 	}
 }
 
 void MainWindow::ChangeLanguage(const ::cppdevtk::util::LanguageInfo& languageInfo) {
-	Application* pApplication = static_cast<Application*>(Application::instance());
+	Application* pApplication = static_cast<Application*>(QApplication::instance());
 	const LanguageInfo kRealLanguageInfo = (languageInfo != LanguageInfo::GetCLanguageInfo())
 			? languageInfo : pApplication->GetDefaultLanguageInfo();
 	CPPDEVTK_LOG_INFO("changing language to: " << kRealLanguageInfo.ToString());
@@ -186,7 +186,7 @@ void MainWindow::MakeConnections() {
 }
 
 void MainWindow::SetCurrentLanguage() {
-	const LanguageInfo kCurrentLanguageInfo = static_cast<Application*>(Application::instance())->GetCurrentLanguageInfo();
+	const LanguageInfo kCurrentLanguageInfo = static_cast<Application*>(QApplication::instance())->GetCurrentLanguageInfo();
 	CPPDEVTK_LOG_INFO("setting language to: " << kCurrentLanguageInfo.ToString());
 	pMenuLanguage_->SetCheckedLanguageInfo(kCurrentLanguageInfo);
 	pLanguageWidget_->SetCurrentLanguageInfo(kCurrentLanguageInfo);

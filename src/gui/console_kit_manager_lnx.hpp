@@ -17,11 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_
 
 
-#include "config.hpp"
+#include <cppdevtk/gui/config.hpp>
 #if (!CPPDEVTK_PLATFORM_LINUX)
 #	error "This file is Linux specific!!!"
 #endif
@@ -29,44 +29,37 @@
 #	error "This file is not for Android!!!"
 #endif
 
-#include "console_kit_session_lnx.hpp"
-#include <cppdevtk/base/singletons.hpp>
+#include "session_manager_impl_lnx.hpp"
+#include <cppdevtk/base/get_current_process_id.hpp>
 
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusError>
-
-#include <memory>
+#include <QtCore/QString>
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
+namespace detail {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa <a href=https://www.freedesktop.org/software/ConsoleKit/doc/ConsoleKit.html#Manager">org.freedesktop.ConsoleKit.Manager</a>
 /// \note All functions, except slots and destructor, may throw DBusException
-class CPPDEVTK_UTIL_API ConsoleKitManager: public ::cppdevtk::base::MeyersSingleton<ConsoleKitManager> {
-	friend class ::cppdevtk::base::MeyersSingleton<ConsoleKitManager>;
-public Q_SLOTS:
-	bool Restart();
-	bool Stop();
+class CPPDEVTK_UTIL_API ConsoleKitManager: public SessionManager::Impl {
+	friend class ::cppdevtk::gui::SessionManager;
 public:
-	bool CanRestart() const;
-	bool CanStop() const;
+	virtual bool Shutdown();
 	
-	::std::auto_ptr<ConsoleKitSession> GetCurrentSession() const;	///< \note Returned pointer is not NULL
-	::std::auto_ptr<ConsoleKitSession> GetSessionForUnixProcess(uint pid) const;	///< \note Returned pointer is not NULL
-	
-	QDBusError GetLastError() const;
+	virtual SessionManager::IdleTime GetIdleTime() const;
+	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetThisProcessSession() const;
 	
 	
 	static bool IsConsoleKitServiceRegistered();
 private:
 	ConsoleKitManager();
-	~ConsoleKitManager();
 	
+	bool Stop();
 	
-	mutable QDBusInterface ckManagerInterface_;
+	QString GetSystemIdleSinceHint() const;
+	::std::auto_ptr<Session> GetSessionForUnixProcess(uint pid) const;	///< \note Returned pointer is not NULL
 };
 
 
@@ -75,15 +68,21 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline ConsoleKitManager::~ConsoleKitManager() {}
+inline bool ConsoleKitManager::Shutdown() {
+	if (!SessionManager::Impl::Shutdown()) {
+		return Stop();
+	}
+	return true;
+}
 
-inline QDBusError ConsoleKitManager::GetLastError() const {
-	return ckManagerInterface_.lastError();
+inline ::std::auto_ptr< ::cppdevtk::gui::Session> ConsoleKitManager::GetThisProcessSession() const {
+	return GetSessionForUnixProcess(::cppdevtk::base::GetCurrentProcessId());
 }
 
 
-}	// namespace util
+}	// namespace detail
+}	// namespace gui
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_UTIL_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_CONSOLE_KIT_MANAGER_LNX_HPP_INCLUDED_

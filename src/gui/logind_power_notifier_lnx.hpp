@@ -17,59 +17,43 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_GUI_GET_USER_IDLE_TIME_HPP_INCLUDED_
-#define CPPDEVTK_GUI_GET_USER_IDLE_TIME_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_LOGIND_POWER_NOTIFIER_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_LOGIND_POWER_NOTIFIER_LNX_HPP_INCLUDED_
 
 
-#include "config.hpp"
-
-#if (CPPDEVTK_PLATFORM_UNIX)
-	// Unix specific code
-#	if (CPPDEVTK_PLATFORM_LINUX)
-		// Linux specific code
-#	elif (CPPDEVTK_PLATFORM_MACOSX)
-#		include <CoreFoundation/CFDate.h>
-#	else
-#		error "Unsupported Unix platform!!!"
-#	endif
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	include <windows.h>
-#else
-#	error "Unsupported platform!!!"
-#endif
+#include <cppdevtk/gui/config.hpp>
+#include "power_notifier_impl_lnx.hpp"
 
 
 namespace cppdevtk {
 namespace gui {
+namespace detail {
 
 
-#if (CPPDEVTK_PLATFORM_UNIX)
-// Unix specific code
-#if (CPPDEVTK_PLATFORM_LINUX)
-typedef unsigned long idle_time_t;
-#elif (CPPDEVTK_PLATFORM_MACOSX)
-typedef CFTimeInterval idle_time_t;
-#else
-#error "Unsupported Unix platform!!!"
-#endif
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-typedef DWORD idle_time_t;
-#else
-#error "Unsupported platform!!!"
-#endif
+class LogindPowerNotifier: public PowerNotifier::Impl {
+	Q_OBJECT
+public:
+	LogindPowerNotifier();
+	virtual ~LogindPowerNotifier();
+	
+	
+	static bool IsLogindServiceRegistered();
+private Q_SLOTS:
+	void OnPrepareForSleep(bool start);
+private:
+	Q_DISABLE_COPY(LogindPowerNotifier);
+};
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \return The time, in milliseconds, elapsed since the last input event.
-/// \attention
-/// - On Linux need to link with Xext and Xss
-/// - On Windows need to link with user32.lib
-/// - On Mac OS X need to link with framework ApplicationServices and framework Carbon
-CPPDEVTK_GUI_API bool GetUserIdleTime(idle_time_t& userIdleTime);
+// Inline functions
 
 
+}	// namespace detail
 }	// namespace gui
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_GUI_GET_USER_IDLE_TIME_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_LOGIND_POWER_NOTIFIER_LNX_HPP_INCLUDED_

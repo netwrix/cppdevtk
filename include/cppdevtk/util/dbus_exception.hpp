@@ -22,6 +22,9 @@
 
 
 #include "config.hpp"
+#ifdef QT_NO_DBUS
+#error "This file require QtDBus"
+#endif
 
 #include <cppdevtk/base/stdexcept.hpp>
 
@@ -82,8 +85,8 @@ CPPDEVTK_UTIL_API void swap(DBusException& x, DBusException& y) CPPDEVTK_NOEXCEP
 
 inline DBusException::DBusException(const ::cppdevtk::base::SourceCodeInfo& throwPoint, const QString& whatArg,
 		const QDBusError& dbusError): Exception(throwPoint),
-		RuntimeException(throwPoint, QString("%1; dbusErrorName: %2; dbusErrorMessage: %3").arg(
-		whatArg, dbusError.name(), dbusError.message())), dbusError_(dbusError) {}
+		RuntimeException(throwPoint, QString("%1; dbusErrorType: %2; dbusErrorName: %3; dbusErrorMessage: %4").arg(
+		whatArg, QDBusError::errorString(dbusError.type()), dbusError.name(), dbusError.message())), dbusError_(dbusError) {}
 
 inline DBusException::~DBusException() CPPDEVTK_NOEXCEPT {}
 

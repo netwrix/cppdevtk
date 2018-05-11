@@ -21,6 +21,7 @@
 #define CPPDEVTK_BASE_THREAD_LOCAL_DATA_PTR_HPP_INCLUDED_
 
 
+#include <cppdevtk/base/config.hpp>
 #include <cppdevtk/base/thread_data.hpp>
 
 

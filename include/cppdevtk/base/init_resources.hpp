@@ -42,13 +42,6 @@ CPPDEVTK_BASE_API void CppDevTkBaseInitResources();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-inline CPPDEVTK_BASE_API void CppDevTkBaseInitResources() {
-#	ifndef CPPDEVTK_SHARED
-	Q_INIT_RESOURCE(cppdevtk_base);
-	Q_INIT_RESOURCE(cppdevtk_base_customization);
-#	endif
-}
-
 
 #endif	// __cplusplus
 

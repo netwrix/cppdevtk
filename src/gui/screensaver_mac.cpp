@@ -28,11 +28,14 @@
 #include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/string_conv.hpp>
+#include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/dbc.hpp>
 
 #include <QtCore/QUrl>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtGui/QDesktopServices>
+#include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets/QApplication>
 #else
@@ -45,8 +48,6 @@
 #include <CoreServices/CoreServices.h>
 #if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
 #include <libproc.h>
-#else
-#include <cppdevtk/base/unused.hpp>
 #endif
 
 #include <csignal>
@@ -73,11 +74,18 @@ using ::std::vector;
 
 
 bool ScreenSaver::Lock() {
+	if (!restore_) {
+		askForPassword_ = GetAskForPassword();
+		askForPasswordDelay_ = GetAskForPasswordDelay();
+		restore_ = true;
+	}
+	
 	SetAskForPassword(afpTrue);
 	SetAskForPasswordDelay(0);
 	
 	if (!SetActive(true)) {
 		CPPDEVTK_LOG_ERROR("failed to activate screensaver");
+		restore_ = false;
 		return false;
 	}
 	
@@ -98,45 +106,51 @@ bool ScreenSaver::SetActive(bool active) {
 			CPPDEVTK_LOG_ERROR("failed to start ScreenSaverEngine: " << kScreenSaverEngineUrl.toLocalFile());
 			return false;
 		}
-		
-		//CPPDEVTK_LOG_DEBUG("started ScreenSaverEngine: " << kScreenSaverEngineUrl.toLocalFile());
-		return true;
 	}
-	
-	CPPDEVTK_ASSERT(!active);
-#	if 0
-	vector<int> screenSaverEnginePIds;
-	if (!GetScreenSaverEnginePIds(screenSaverEnginePIds)) {
-		CPPDEVTK_LOG_ERROR("failed to get ScreenSaverEnginePIds; errorCode: " << GetLastSystemErrorCode().ToString());
-		return false;
-	}
-	
-	//CPPDEVTK_LOG_DEBUG("found " << screenSaverEnginePIds.size() << " ScreenSaverEnginePIds");
-	bool retValue = true;
-	for (vector<int>::iterator iter = screenSaverEnginePIds.begin(); iter != screenSaverEnginePIds.end(); ++iter) {
-		if (kill(*iter, SIGTERM) != 0) {
-			CPPDEVTK_LOG_ERROR("failed to kill ScreenSaverEngine with pid " << *iter
-					<< "; errorCode: " << GetLastSystemErrorCode().ToString());
-			retValue = false;
+	else {
+		const OSErr kOSErr = UpdateSystemActivity(UsrActivity);
+		if (kOSErr != noErr) {
+				CPPDEVTK_LOG_ERROR("failed to UpdateSystemActivity(UsrActivity); kOSErr: " << kOSErr);
+				return false;
 		}
 	}
-	return retValue;
-#	else
-	const OSErr kOSErr = UpdateSystemActivity(UsrActivity);
-	if (kOSErr != noErr) {
-			CPPDEVTK_LOG_ERROR("failed to UpdateSystemActivity(UsrActivity); kOSErr: " << kOSErr);
-			return false;
-	}
+	
 	return true;
-#	endif
 }
 
 bool ScreenSaver::IsActive() const {
+	bool isActive = false;
+	
+//#	if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+#	if 0
+	
 	vector<int> screenSaverEnginePIds;
 	if (!GetScreenSaverEnginePIds(screenSaverEnginePIds)) {
 		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "failed to get ScreenSaverEngine pids");
 	}
-	return !screenSaverEnginePIds.empty();
+	isActive = !screenSaverEnginePIds.empty();
+	
+#	else
+	
+	ProcessSerialNumber frontProcessSerialNumber;
+	OSErr osErr = GetFrontProcess(&frontProcessSerialNumber);
+	if (osErr != noErr) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("failed to get FrontProcess; osErr: %1").arg(osErr));
+	}
+	
+	QString frontProcessName;
+	osErr = GetProcessName(frontProcessSerialNumber, frontProcessName);
+	if (osErr != noErr) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("failed to get FrontProcessName; osErr: %1").arg(osErr));
+	}
+	
+	//CPPDEVTK_LOG_DEBUG("frontProcessName: '" << frontProcessName << "'");
+	isActive = (QString::localeAwareCompare(frontProcessName, "ScreenSaverEngine") == 0);
+	
+#	endif
+	
+	//CPPDEVTK_LOG_DEBUG("isActive: " << isActive);
+	return isActive;
 }
 
 void ScreenSaver::Refresh() {
@@ -145,33 +159,26 @@ void ScreenSaver::Refresh() {
 	try {
 		isActive_ = IsActive();
 	}
-	catch (const exception& exc) {
+	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_ERROR("IsActive() failed; exc: " << Exception::GetDetailedInfo(exc));
 		return;
 	}
 	
+	CheckActiveChanged(wasActive);
+}
+
+void ScreenSaver::CheckActiveChanged(bool wasActive) {
 	if (isActive_ != wasActive) {
+		if (!isActive_) {
+			if (restore_) {
+				SetAskForPassword(askForPassword_);
+				SetAskForPasswordDelay(askForPasswordDelay_);
+				restore_ = false;
+			}
+		}
+		
 		Q_EMIT ActiveChanged(isActive_);
 	}
-}
-
-ScreenSaver::ScreenSaver(): QObject(), ::cppdevtk::base::MeyersSingleton<ScreenSaver>(), timer_(), isActive_(IsActive()),
-		askForPassword_(GetAskForPassword()), askForPasswordDelay_(GetAskForPasswordDelay()) {
-	CPPDEVTK_ASSERT(qApp != NULL);
-	
-	//CPPDEVTK_LOG_DEBUG("askForPassword_: " << askForPassword_);
-	//CPPDEVTK_LOG_DEBUG("askForPasswordDelay_: " << askForPasswordDelay_);
-	
-	timer_.setInterval(1000);
-	timer_.setSingleShot(false);
-	CPPDEVTK_VERIFY(connect(&timer_, SIGNAL(timeout()), SLOT(Refresh())));
-	CPPDEVTK_VERIFY(connect(qApp, SIGNAL(aboutToQuit()), &timer_, SLOT(stop())));
-	timer_.start();
-}
-
-ScreenSaver::~ScreenSaver() {
-	SetAskForPassword(askForPassword_);
-	SetAskForPasswordDelay(askForPasswordDelay_);
 }
 
 const char* ScreenSaver::GetScreenSaverEngineAppPath() {
@@ -244,11 +251,24 @@ bool ScreenSaver::GetScreenSaverEnginePIds(::std::vector<int>& pids) {
 	
 	return true;
 #	else	// (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
-	// TODO: Mac OS X 10.4 port
 	::cppdevtk::base::SuppressUnusedWarning(pids);
-	CPPDEVTK_COMPILER_WARNING("GetScreenSaverEnginePIds() not ported on Mac OS X 10.4");
 	return false;
 #	endif
+}
+
+OSErr ScreenSaver::GetProcessName(const ProcessSerialNumber& processSerialNumber, QString& processName) {
+	ProcessInfoRec processInfoRec;
+	memset(&processInfoRec, 0, sizeof(processInfoRec));
+	processInfoRec.processInfoLength = sizeof(processInfoRec);
+	StrFileName strProcessName;
+	memset(&strProcessName, 0, sizeof(strProcessName));
+	processInfoRec.processName = strProcessName;
+	//processInfoRec.processAppSpec = NULL;
+	const OSErr kOsErr = GetProcessInformation(&processSerialNumber, &processInfoRec);
+	if (kOsErr == noErr) {
+		processName = QString::fromUtf8((const char*)strProcessName);
+	}
+	return kOsErr;
 }
 
 void ScreenSaver::SetAskForPassword(AskForPassword value) {

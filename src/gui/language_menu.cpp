@@ -47,6 +47,8 @@ using ::cppdevtk::util::LanguageInfo;
 LanguageMenu::LanguageMenu(QWidget* pParent): QMenu(pParent), pActionGroup_(new QActionGroup(this)) {
 #	ifndef NDEBUG
 	LanguageInfo languageInfo;
+	qMetaTypeId< ::cppdevtk::util::LanguageInfo>();	// compile time
+	// runtime; do not global qualify because moc will generate bad code
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	CPPDEVTK_ASSERT(QMetaType::type("cppdevtk::util::LanguageInfo") != QMetaType::UnknownType);
 #	else

@@ -62,14 +62,14 @@ int main(int argc, char* argv[]) try {
 			CPPDEVTK_SHORT_NAME_SANITIZED, CPPDEVTK_VERSION_STRING, CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME_SANITIZED);
 	
 	Application application(argc, argv);
+	CPPDEVTK_ASSERT(application.GetNotifyThrowAction() == Application::ntaRethrow);
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_slot_throw/res/ico/application.ico"));
 	
 	try {
 		::cppdevtk::test_slot_throw::Widget widget;
 		
-		CPPDEVTK_VERIFY(QObject::connect(&widget, SIGNAL(NotifyThrowChanged(int)),
-				&application, SLOT(SetNotifyThrowAction(int))));
+		CPPDEVTK_VERIFY(application.connect(&widget, SIGNAL(NotifyThrowChanged(int)), SLOT(SetNotifyThrowAction(int))));
 		
 		widget.show();
 		

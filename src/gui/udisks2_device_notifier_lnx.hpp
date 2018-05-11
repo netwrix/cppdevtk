@@ -17,43 +17,58 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_GUI_COMPUTER_MANAGER_HPP_INCLUDED_
-#define CPPDEVTK_GUI_COMPUTER_MANAGER_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_UDISKS2_DEVICE_NOTIFIER_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_UDISKS2_DEVICE_NOTIFIER_LNX_HPP_INCLUDED_
 
 
-#include "config.hpp"
-#include <cppdevtk/base/non_copyable.hpp>
+#include <cppdevtk/gui/config.hpp>
+#include "storage_device_notifier_impl_lnx.hpp"
+#include "udisks2_filesystem_block_device_lnx.hpp"
+
+#include <QtCore/QVariant>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
+#include <QtDBus/QDBusObjectPath>
 
 
 namespace cppdevtk {
 namespace gui {
+namespace detail {
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \attention On Mac OS X need to link with frameworks IOKit, Carbon and CoreFoundation
-class CPPDEVTK_GUI_API ComputerManager: private ::cppdevtk::base::NonCopyable {
+class UDisks2DeviceNotifier: public StorageDeviceNotifier::Impl {
+	Q_OBJECT
 public:
-	static bool ShutdownComputer();
-	static bool LockComputer();
-	static bool LogoutUser();
+	UDisks2DeviceNotifier();
+	virtual ~UDisks2DeviceNotifier();
+	
+	
+	static bool IsUDisks2ServiceRegistered();
+	static QString GetStorageDeviceName(const QDBusObjectPath& dbusStorageDevicePath);
+private Q_SLOTS:
+	void OnInterfacesAdded(const QDBusObjectPath& dbusObjectPath, const QVariantMap& addedInterfacesAndProperties);
+	void OnInterfacesRemoved(const QDBusObjectPath& dbusObjectPath, const QStringList& removedInterfaces);
 private:
-	ComputerManager();
-	~ComputerManager();
+	Q_DISABLE_COPY(UDisks2DeviceNotifier);
+	
+	
+	static QList<QDBusObjectPath> GetUDisks2FilesystemBlockDevicePaths();
+	
+	
+	QList<UDisks2FilesystemBlockDevice*> udisks2FilesystemBlockDevices_;
 };
 
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Inline functions.
-
-inline ComputerManager::ComputerManager(): NonCopyable() {}
-
-inline ComputerManager::~ComputerManager() {}
+// Inline functions
 
 
+}	// namespace detail
 }	// namespace gui
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_GUI_COMPUTER_MANAGER_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_UDISKS2_DEVICE_NOTIFIER_LNX_HPP_INCLUDED_

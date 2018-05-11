@@ -86,12 +86,22 @@
 #endif
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
 #include <QtCore/QException>
 #include <QtCore/QUnhandledException>
 
 #define CPPDEVTK_QT_EXCEPTION QException
 #define CPPDEVTK_QT_UNHANDLED_EXCEPTION QUnhandledException
+
+#if (!defined(QT_SHARED) && !defined(QT_STATIC))
+#error "Both QT_SHARED and QT_STATIC are not defined. Please check your Qt configuration!!!"
+#endif
+#if (defined(QT_SHARED) && defined(QT_STATIC))
+#error "Both QT_SHARED and QT_STATIC are defined. Please check your Qt configuration!!!"
+#endif
+
 #if (CPPDEVTK_PLATFORM_MACOSX)
+
 #ifndef QT_MAC_USE_COCOA
 #define QT_MAC_USE_COCOA 1
 #else
@@ -99,12 +109,38 @@
 #error "QT_MAC_USE_COCOA is not 1"
 #endif
 #endif
+
+#if (!CPPDEVTK_COMPILER_CLANG)
+//#error "Qt5 Mac require clang!!!"
 #endif
-#else
+
+#endif	// (CPPDEVTK_PLATFORM_MACOSX)
+
+#else	// (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
 #include <QtCore/QtCore>
 
 #define CPPDEVTK_QT_EXCEPTION QtConcurrent::Exception
 #define CPPDEVTK_QT_UNHANDLED_EXCEPTION QtConcurrent::UnhandledException
+
+#if (CPPDEVTK_PLATFORM_MACOSX)
+#if (!CPPDEVTK_COMPILER_GCC)
+//#error "Qt4 Mac require gcc!!!"
+#endif
+#endif
+
+#endif	// (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
+#if (CPPDEVTK_PLATFORM_WINDOWS)
+#if (defined(CPPDEVTK_SHARED) && (defined(QT_STATIC) || defined(QT_NODLL)))
+#error "On Windows CppDevTk shared with static Qt is a dangerous combination that is not supported!!!"
+#endif
+#endif
+
+#if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
+#ifdef QT_NO_DBUS
+#error "QtDBus is required on Linux!!!"
+#endif
 #endif
 
 #endif	// __cplusplus
@@ -118,6 +154,8 @@
 
 #ifdef __cplusplus
 
+// Boost.ScopeExit was introduced in 1.38.0
+// Support for void was added in 1.50.0
 #if (BOOST_VERSION < 103800)
 #	error "Boost >= 1.38.0 is required!!!"
 #endif

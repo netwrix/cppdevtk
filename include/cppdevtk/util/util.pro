@@ -29,15 +29,12 @@ HEADERS += \
 	core_application.hpp \
 	core_application_base.hpp \
 	damerau_levenshtein_distance.hpp \
-	dbus_utils.hpp	\
-	dbus_exception.hpp	\
 	dynamic_library.hpp \
 	dynamic_loader.hpp \
 	dynamic_loader_exception.hpp \
 	exception_to_errno.hpp	\
 	filesystem_exception.hpp \
 	filesystem_utils.hpp \
-	get_current_process_session_id.hpp	\
 	get_user_name.hpp \
 	info.hpp \
 	info_customization.hpp	\
@@ -64,11 +61,7 @@ unix {
 	linux* {
 		HEADERS += filesystem_utils_lnx.hpp
 		!android {
-			HEADERS += libudev_lnx.hpp	\
-				console_kit_manager_lnx.hpp	\
-				console_kit_session_lnx.hpp	\
-				logind_manager_lnx.hpp	\
-				logind_session_lnx.hpp
+			HEADERS += libudev_lnx.hpp
 		}
 	}
 	else {
@@ -87,6 +80,16 @@ else {
 	else {
 		error("Unsupported platform!!!")
 	}
+}
+
+!android:!ios {
+	HEADERS += 
+}
+
+contains(QT_CONFIG, dbus) {
+	HEADERS += \
+		dbus_utils.hpp	\
+		dbus_exception.hpp
 }
 
 

@@ -42,13 +42,6 @@ CPPDEVTK_GUI_API void CppDevTkGuiInitResources();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions.
 
-inline CPPDEVTK_GUI_API void CppDevTkGuiInitResources() {
-#	ifndef CPPDEVTK_SHARED
-	Q_INIT_RESOURCE(cppdevtk_gui);
-	Q_INIT_RESOURCE(cppdevtk_gui_customization);
-#	endif
-}
-
 
 #endif	// __cplusplus
 

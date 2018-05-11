@@ -28,5 +28,8 @@ SUBDIRS +=	\
 	test_caps_lock_widget	\
 	test_disk_space_widget	\
 	test_localization	\
-	test_term_sig	\
-	test_pc_man
+	test_term_sig
+	
+!android:!ios {
+	SUBDIRS += test_pc_man
+}

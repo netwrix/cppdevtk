@@ -100,6 +100,12 @@ unix {
 	
 	linux* {
 		CONFIG *= largefile
+		
+		!android {
+			!contains(QT_CONFIG, dbus) {
+				error("qt dbus is required on Linux!!!")
+			}
+		}
 	}
 	else {
 		macx {
@@ -297,6 +303,15 @@ build_pass {
 		QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions-called-once
 	}
 	
+	# visibility hidden: gcc 4
+	!static_and_shared|build_pass {
+		CONFIG(shared, static|shared) {
+			QMAKE_CFLAGS *= -fvisibility=hidden
+			QMAKE_CXXFLAGS *= -fvisibility=hidden
+			QMAKE_CXXFLAGS *= -fvisibility-inlines-hidden
+		}
+	}
+	
 	# treat as error
 	# warning: control reaches end of non-void function [-Wreturn-type]
 	greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
@@ -397,6 +412,15 @@ else {
 		
 		#QMAKE_CFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
 		#QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
+		
+		# visibility hidden
+		!static_and_shared|build_pass {
+			CONFIG(shared, static|shared) {
+				QMAKE_CFLAGS *= -fvisibility=hidden
+				QMAKE_CXXFLAGS *= -fvisibility=hidden
+				QMAKE_CXXFLAGS *= -fvisibility-inlines-hidden
+			}
+		}
 		
 		# treat as error
 		# warning: control reaches end of non-void function [-Wreturn-type]
@@ -1305,7 +1329,9 @@ CPPDEVTK_HAVE_JNI = false
 				macx {
 					CPPDEVTK_HAVE_JNI = true
 					
-					#CONFIG += cppdevtk_mac_enable_javavm_framework
+					lessThan(CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED, 1070) {
+						CONFIG += cppdevtk_mac_enable_javavm_framework
+					}
 					
 					cppdevtk_mac_enable_javavm_framework {
 						INCLUDEPATH = /System/Library/Frameworks/JavaVM.framework/Headers $${INCLUDEPATH}
@@ -1422,6 +1448,7 @@ cppdevtk_verbose {
 		message("* Auxiliary static_and_shared pass")
 	}
 	
+	message("QT_CONFIG: $${QT_CONFIG}")
 	message("CONFIG: $${CONFIG}")
 	message("DEFINES: $${DEFINES}")
 	message("CPPDEVTK_THIRD_PARTY_PREFIX: $${CPPDEVTK_THIRD_PARTY_PREFIX}")

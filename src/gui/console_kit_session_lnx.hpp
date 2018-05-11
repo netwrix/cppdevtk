@@ -17,11 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_
+#ifndef CPPDEVTK_GUI_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_
+#define CPPDEVTK_GUI_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_
 
 
-#include "config.hpp"
+#include <cppdevtk/gui/config.hpp>
 #if (!CPPDEVTK_PLATFORM_LINUX)
 #	error "This file is Linux specific!!!"
 #endif
@@ -29,58 +29,57 @@
 #	error "This file is not for Android!!!"
 #endif
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include "session_impl_lnx.hpp"
+
 #include <QtDBus/QDBusObjectPath>
-#include <QtDBus/QDBusError>
-#include <QtDBus/QDBusInterface>
 
 
 namespace cppdevtk {
-namespace util {
+namespace gui {
+namespace detail {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa <a href=https://www.freedesktop.org/software/ConsoleKit/doc/ConsoleKit.html#Session">org.freedesktop.ConsoleKit.Session</a>
 /// \note All functions, except slots and destructor, may throw DBusException
-class CPPDEVTK_UTIL_API ConsoleKitSession: public QObject {
+/// \attention Tested and Locked()/Unlocked() signals:
+/// - are not emitted when Lock/Unlock from DE (tested with KDE); screensaver signals are emitted.
+/// - are emitted when Lock()/Unlock() method are called
+/// - verify: dbus-monitor --monitor --system "type='signal',sender='org.freedesktop.ConsoleKit',interface='org.freedesktop.ConsoleKit.Session',path='/org/freedesktop/ConsoleKit/Session2'"
+class ConsoleKitSession: public Session::Impl {
+	friend class ::cppdevtk::gui::Session;
 	friend class ConsoleKitManager;
 	
 	Q_OBJECT
-Q_SIGNALS:
-	void ActiveChanged(bool isActive);
-	
-	/// \attention Tested and Locked()/Unlocked() signals:
-	/// - are not emitted when Lock/Unlock from DE (tested with KDE).
-	/// - are emitted when Lock()/Unlock() method are called
-	/// - verify: dbus-monitor --monitor --system "type='signal',sender='org.freedesktop.ConsoleKit',interface='org.freedesktop.ConsoleKit.Session',path='/org/freedesktop/ConsoleKit/Session2'"
-	void Locked();
-	void Unlocked();
-public Q_SLOTS:
-	bool Activate();
-	bool Lock();
-	bool Unlock();
 public:
-	QDBusObjectPath GetId() const;
-	QString GetSessionType() const;
-	uint GetUnixUser() const;
-	QString GetRemoteHostName() const;
-	QString GetLoginSessionId() const;
+	virtual ~ConsoleKitSession();
 	
-	bool IsActive() const;
-	bool IsLocal() const;
+	virtual bool Activate();
+	virtual bool Lock();
+	virtual bool Unlock();
 	
-	QDBusError GetLastError() const;
+	virtual QString GetId() const;
+	virtual QString GetType() const;
+	virtual uint GetUser() const;
+	virtual QString GetRemoteHost() const;
+	
+	virtual bool IsActive() const;
+	virtual bool IsRemote() const;
 	
 	bool operator==(const ConsoleKitSession& other) const;
 	bool operator!=(const ConsoleKitSession& other) const;
+	
+	static bool IsConsoleKitServiceRegistered();
 private:
 	Q_DISABLE_COPY(ConsoleKitSession)
 	
 	explicit ConsoleKitSession(const QDBusObjectPath& ckSessionPath);
 	
+	QString GetSessionType() const;
+	uint GetUnixUser() const;
+	QString GetRemoteHostName() const;
 	
-	mutable QDBusInterface ckSessionInterface_;
+	bool IsLocal() const;
 };
 
 
@@ -89,21 +88,34 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-inline QDBusError ConsoleKitSession::GetLastError() const {
-	return ckSessionInterface_.lastError();
+inline QString ConsoleKitSession::GetType() const {
+	return GetSessionType();
+}
+
+inline uint ConsoleKitSession::GetUser() const {
+	return GetUnixUser();
+}
+
+inline QString ConsoleKitSession::GetRemoteHost() const {
+	return GetRemoteHostName();
+}
+
+inline bool ConsoleKitSession::IsRemote() const {
+	return !IsLocal();
 }
 
 inline bool ConsoleKitSession::operator==(const ConsoleKitSession& other) const {
-	return GetId().path() == other.GetId().path();
+	return GetId() == other.GetId();
 }
 
 inline bool ConsoleKitSession::operator!=(const ConsoleKitSession& other) const {
-	return GetId().path() != other.GetId().path();
+	return GetId() != other.GetId();
 }
 
 
-}	// namespace util
+}	// namespace detail
+}	// namespace gui
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_UTIL_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_
+#endif	// CPPDEVTK_GUI_CONSOLE_KIT_SESSION_LNX_HPP_INCLUDED_

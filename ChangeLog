@@ -5,13 +5,17 @@ Version 1.1.0.1:
 	- CoreApplicationBase: added support for termination signals (Unix + Windows)
 	- added test app for termination signals
 	- added GetCurrentProcessId()
-	- added GetCurrentProcessSessionId()
-	- Linux: added support for Consolekit and logind Manager and Session
-	- added ScreenSaver
+	- added ScreenSaver (desktops only)
+	- added DeviceNotifier (desktops only)
+	- added PowerNotifier (desktops only)
+	- added SessionManager + Session (desktops only)
+	- removed ComputerManager (replaced by SessionManager)
+	- removed GetUserIdleTime() (replaced by SessionManager::GetIdleTime())
 - Improvements:
 	- do not conflict with boost signals
 	- zlib dependency is optional (affects QZipReader and QZipWriter)
 	- CoreApplicationBase::SetInfo(): added componentName
+	- GCC/Clang visibility
 - Fixed bugs:
 	- fixed enabling GCC/Clang C++11 and extensions
 
