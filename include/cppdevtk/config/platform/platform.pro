@@ -29,9 +29,6 @@ unix {
 	
 	linux* {
 		HEADERS += linux.hpp
-		!android {
-			HEADERS += linux_distro.hpp
-		}
 	}
 	else {
 		macx|ios {

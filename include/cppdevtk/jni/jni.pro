@@ -21,6 +21,11 @@ TEMPLATE = subdirs
 include(./../../../common.pri)
 
 
+!isEqual(CPPDEVTK_HAVE_JNI, "true") {
+    error("This subproject require JNI!!!")
+}
+
+
 SUBDIRS +=
 
 

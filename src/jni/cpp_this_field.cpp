@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/jni/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
 #include <cppdevtk/jni/cpp_this_field.hpp>
 #if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
 #undef CPPDEVTK_ENABLE_DBC
@@ -35,11 +40,6 @@
 #include <cppdevtk/base/on_block_exit.hpp>
 
 #include <cstddef>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
-#endif
 
 
 namespace cppdevtk {

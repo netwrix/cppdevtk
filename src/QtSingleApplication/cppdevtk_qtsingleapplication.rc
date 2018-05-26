@@ -1,0 +1,95 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "cppdevtk_qtsingleapplication_res_win.hpp"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef CPPDEVTK_DETAIL_BUILD
+#	define CPPDEVTK_DETAIL_BUILD
+#endif
+#ifndef APSTUDIO_INVOKED
+#	ifndef _WIN32
+#		error "_WIN32 must be defined!!!"
+#	endif
+#	include <cppdevtk/config/platform_compiler.hpp>
+#endif	// APSTUDIO_INVOKED
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "cppdevtk_qtsingleapplication_res_win.hpp\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef CPPDEVTK_DETAIL_BUILD\r\n"
+    "#\tdefine CPPDEVTK_DETAIL_BUILD\r\n"
+    "#endif\r\n"
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#\tifndef _WIN32\r\n"
+    "#\t\terror ""_WIN32 must be defined!!!""\r\n"
+    "#\tendif\r\n"
+    "#\tinclude <cppdevtk/config/platform_compiler.hpp>\r\n"
+    "#endif\t// APSTUDIO_INVOKED\r\n"
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#if (!defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU))\r\n"
+    "#\tifdef _WIN32\r\n"
+    "\t\tLANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US\r\n"
+    "#\t\tpragma code_page(1252)\r\n"
+    "#\t\tinclude ""cppdevtk_qtsingleapplication.rc2""\t// non-Microsoft Visual C++ edited resources\r\n"
+    "#\tendif\t// _WIN32\r\n"
+    "#endif\r\n\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#if (!defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU))
+#	ifdef _WIN32
+		LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#		pragma code_page(1252)
+#		include "cppdevtk_qtsingleapplication.rc2"	// non-Microsoft Visual C++ edited resources
+#	endif	// _WIN32
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -299,12 +299,6 @@
 #	error "Please define CPPDEVTK_CHECK_INTERRUPT_REL_TIME properly for current platform!!!"
 #endif
 
-#if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
-#ifndef CPPDEVTK_HAVE_LOGIND
-#	error "Please define CPPDEVTK_HAVE_LOGIND properly for current distro!!!"
-#endif
-#endif
-
 /// \endcond
 
 

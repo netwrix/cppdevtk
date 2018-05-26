@@ -48,7 +48,7 @@ using ::cppdevtk::gui::Session;
 using ::cppdevtk::gui::SessionManager;
 using ::std::exception;
 using ::cppdevtk::base::Exception;
-using ::std::exception;
+using ::std::runtime_error;
 
 
 Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget(), pSession_() {
@@ -57,7 +57,13 @@ Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget(), 
 #	if (CPPDEVTK_PLATFORM_LINUX)
 	if (SessionManager::IsSessionManagerServiceRegistered()) {
 #	endif
-		pSession_ = SessionManager::GetInstance().GetThisProcessSession();
+		try {
+			pSession_ = SessionManager::GetInstance().GetCurrentProcessSession();
+		}
+		catch (const runtime_error& exc) {
+			pPlainTextEditOutput_->appendPlainText(QString("failed to GetCurrentProcessSession; exc: %1").arg(
+					Exception::GetDetailedInfo(exc)));
+		}
 #	if (CPPDEVTK_PLATFORM_LINUX)
 	}
 #	endif
@@ -245,7 +251,10 @@ void Widget::OnSessionUnlocked() {
 
 
 void Widget::LockSession() {
-	CPPDEVTK_ASSERT(pSession_.get() != NULL);
+	if (pSession_.get() == NULL) {
+		pPlainTextEditOutput_->appendPlainText("LockSession(): ERR (session not available)");
+	}
+	
 	if (pSession_->Lock()) {
 		pPlainTextEditOutput_->appendPlainText("LockSession(): OK");
 	}
@@ -255,10 +264,13 @@ void Widget::LockSession() {
 }
 
 void Widget::GetSessionId() try {
-	CPPDEVTK_ASSERT(pSession_.get() != NULL);
+	if (pSession_.get() == NULL) {
+		pPlainTextEditOutput_->appendPlainText("GetSessionId(): ERR (session not available)");
+	}
+	
 	pPlainTextEditOutput_->appendPlainText(QString("sessionId: %1").arg(pSession_->GetId()));
 }
-catch (const exception& exc) {
+catch (const runtime_error& exc) {
 	pPlainTextEditOutput_->appendPlainText(QString("failed to get sessionId; exc: %1").arg(Exception::GetDetailedInfo(exc)));
 }
 
@@ -286,9 +298,10 @@ void Widget::GetIdleTime() {
 }
 
 void Widget::OnIdleTimerTimeout() try {
-	pPlainTextEditOutput_->appendPlainText(QString("idleTime: %1").arg(SessionManager::GetInstance().GetIdleTime()));
+	pPlainTextEditOutput_->appendPlainText(QString("idleTime: %1").arg(
+			SessionManager::GetInstance().GetCurrentProcessSession()->GetIdleTime()));
 }
-catch (const exception& exc) {
+catch (const runtime_error& exc) {
 	pPlainTextEditOutput_->appendPlainText(QString("failed to get idleTime; exc: %1").arg(Exception::GetDetailedInfo(exc)));
 }
 
@@ -311,11 +324,12 @@ void Widget::MakeConnections() {
 	if (SessionManager::IsSessionManagerServiceRegistered()) {
 		pPlainTextEditOutput_->appendPlainText("SessionManager is supported");
 #	endif
-		CPPDEVTK_ASSERT(pSession_.get() != NULL);
-		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Activated()), SLOT(OnSessionActivated())));
-		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Deactivated()), SLOT(OnSessionDeactivated())));
-		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Locked()), SLOT(OnSessionLocked())));
-		CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Unlocked()), SLOT(OnSessionUnlocked())));
+		if (pSession_.get() != NULL) {
+			CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Activated()), SLOT(OnSessionActivated())));
+			CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Deactivated()), SLOT(OnSessionDeactivated())));
+			CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Locked()), SLOT(OnSessionLocked())));
+			CPPDEVTK_VERIFY(connect(pSession_.get(), SIGNAL(Unlocked()), SLOT(OnSessionUnlocked())));
+		}
 		CPPDEVTK_VERIFY(connect(pPushButtonLockSession_, SIGNAL(clicked(bool)), SLOT(LockSession())));
 		CPPDEVTK_VERIFY(connect(pPushButtonGetSessionId_, SIGNAL(clicked(bool)), SLOT(GetSessionId())));
 		

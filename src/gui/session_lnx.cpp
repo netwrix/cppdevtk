@@ -47,6 +47,10 @@ bool Session::Lock() {
 
 Session::~Session() {}
 
+Session::IdleTime Session::GetIdleTime() const {
+	return pImpl_->GetIdleTime();
+}
+
 Session::Session(const QString& service, const QString& path): QObject(), id_(), pImpl_() {
 	CPPDEVTK_ASSERT((service == CPPDEVTK_LOGIND_SERVICE_NAME) || (service == CPPDEVTK_CONSOLE_KIT_SERVICE_NAME));
 	CPPDEVTK_ASSERT(!path.isEmpty());

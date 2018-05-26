@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4702)	// C4702: unreachable code
+#endif
+
 #include <cppdevtk/base/any.hpp>
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/logger.hpp>
@@ -24,11 +29,6 @@
 #include <cppdevtk/base/unused.hpp>
 
 #include <typeinfo>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4702)	// C4702: unreachable code
-#endif
 
 
 namespace cppdevtk {

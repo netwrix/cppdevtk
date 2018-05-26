@@ -1,11 +1,11 @@
-cppdevtk (1.1.0-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.1.0-0ubuntu1) bionic; urgency=medium
 
   * to fill
 
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Thu, 15 Mar 2018 14:19:46 +0300
 
 
-cppdevtk (1.0.9-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.9-0ubuntu1) bionic; urgency=medium
 
   * added localization test/sample app
   * localization support review
@@ -24,7 +24,7 @@ cppdevtk (1.0.9-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Wed, 14 Mar 2018 14:19:46 +0300
 
 
-cppdevtk (1.0.8-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.8-0ubuntu1) bionic; urgency=medium
 
   * added GetMountPoints()
   * filesystem functions quick review
@@ -34,14 +34,14 @@ cppdevtk (1.0.8-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Tue, 30 Jan 2018 14:19:46 +0300
 
 
-cppdevtk (1.0.7-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.7-0ubuntu1) bionic; urgency=medium
 
   * qt 4 and qt 5: fixed support for qt static builds, static qico plugin, translations
 
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Thu, 18 Jan 2018 14:19:46 +0300
 
 
-cppdevtk (1.0.6-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.6-0ubuntu1) bionic; urgency=medium
 
   * added CallTraits
   * added Factory
@@ -50,7 +50,7 @@ cppdevtk (1.0.6-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Sun, 7 Jan 2018 14:19:46 +0300
 
 
-cppdevtk (1.0.5-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.5-0ubuntu1) bionic; urgency=medium
 
   * added Any
   * added future errc
@@ -64,7 +64,7 @@ cppdevtk (1.0.5-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Fri, 15 Dec 2017 14:19:46 +0300
 
 
-cppdevtk (1.0.4-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.4-0ubuntu1) bionic; urgency=medium
 
   * added CPPDEVTK_NOEXCEPT
   * added exception propagation
@@ -84,7 +84,7 @@ cppdevtk (1.0.4-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 27 Nov 2017 14:19:46 +0300
 
 
-cppdevtk (1.0.3-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.3-0ubuntu1) bionic; urgency=medium
 
   * added generic locking algorithms
   * added condition variable
@@ -98,7 +98,7 @@ cppdevtk (1.0.3-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Tue, 17 Oct 2017 14:19:46 +0300
 
 
-cppdevtk (1.0.2-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.2-0ubuntu1) bionic; urgency=medium
 
   * made public on GitHub: https://github.com/cososys/cppdevtk
   * packaging cleanup
@@ -109,7 +109,7 @@ cppdevtk (1.0.2-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 31 Jul 2017 14:19:46 +0300
 
 
-cppdevtk (1.0.1-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.1-0ubuntu1) bionic; urgency=medium
 
   * Debian based packaging
   * require C++11 enabled for clang and gcc >= 4.3.0
@@ -120,7 +120,7 @@ cppdevtk (1.0.1-0ubuntu1) xenial; urgency=medium
  -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 3 Jul 2017 14:19:46 +0300
 
 
-cppdevtk (1.0.0-0ubuntu1) xenial; urgency=medium
+cppdevtk (1.0.0-0ubuntu1) bionic; urgency=medium
 
   * Initial release
 

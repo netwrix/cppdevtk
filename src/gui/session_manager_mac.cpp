@@ -61,16 +61,7 @@ catch (const runtime_error& exc) {
 	return false;
 }
 
-SessionManager::IdleTime SessionManager::GetIdleTime() const {
-	// TODO: Test on Mac OS X 10.4 Tiger
-	// According to some articles CGEventSourceSecondsSinceLastEventType() does not work on 10.4.
-	// If it does not work try:
-	// - kIOHIDIdleTimeKey: http://www.danandcheryl.com/2010/06/how-to-check-the-system-idle-time-using-cocoa
-	// - kEventLoopIdleTimerStarted + kEventLoopIdleTimerIdling
-	return CGEventSourceSecondsSinceLastEventType(kCGEventSourceStateCombinedSessionState, kCGAnyInputEventType) * 1000;
-}
-
-::std::auto_ptr< ::cppdevtk::gui::Session> SessionManager::GetThisProcessSession() const {
+::std::auto_ptr< ::cppdevtk::gui::Session> SessionManager::GetCurrentProcessSession() const {
 	return ::std::auto_ptr<Session>(new Session());
 }
 

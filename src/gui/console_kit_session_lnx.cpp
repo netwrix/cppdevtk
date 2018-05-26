@@ -25,6 +25,7 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 
+#include <QtCore/QDateTime>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusError>
@@ -139,6 +140,66 @@ QString ConsoleKitSession::GetId() const {
 	const QDBusObjectPath kDBusObjectPath = kReplyArg.value<QDBusObjectPath>();
 	CPPDEVTK_ASSERT(!kDBusObjectPath.path().isEmpty());
 	return kDBusObjectPath.path();
+}
+
+bool ConsoleKitSession::GetIdleHint() const {
+	const QDBusMessage kReply = DBusInterfaceRef().call("GetSystemIdleHint");
+	if (kReply.type() == QDBusMessage::ErrorMessage) {
+		throw CPPDEVTK_DBUS_EXCEPTION("DBus call to ConsoleKit.Session::GetSystemIdleHint() failed", GetLastError());
+	}
+	CPPDEVTK_ASSERT(kReply.type() == QDBusMessage::ReplyMessage);
+	CPPDEVTK_ASSERT(kReply.signature() == "b");
+	
+	const QList<QVariant> kReplyArgs = kReply.arguments();
+	CPPDEVTK_ASSERT(kReplyArgs.size() == 1);
+	
+	const QVariant kReplyArg = kReplyArgs[0];
+	CPPDEVTK_ASSERT(!kReplyArg.isNull());
+	CPPDEVTK_ASSERT(kReplyArg.isValid());
+	CPPDEVTK_ASSERT(kReplyArg.type() == QVariant::Bool);
+	return kReplyArg.value<bool>();
+}
+
+Session::IdleTime ConsoleKitSession::GetIdleSinceHint() const {
+	const QString kStrSystemIdleSinceHint = DoGetSystemIdleSinceHint();
+	CPPDEVTK_ASSERT(!kStrSystemIdleSinceHint.isEmpty());
+	
+	const QDateTime kSystemIdleSinceHint = QDateTime::fromString(kStrSystemIdleSinceHint,
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 8, 0))
+			Qt::ISODateWithMs
+#			else
+			Qt::ISODate
+#			endif
+			);
+	CPPDEVTK_ASSERT(kSystemIdleSinceHint.isValid());
+	
+	const QDateTime kcurrentDateTime = QDateTime::currentDateTime();
+	CPPDEVTK_ASSERT(kcurrentDateTime.isValid());
+	
+#	if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+	const qint64 kIdleTime = kSystemIdleSinceHint.msecsTo(kcurrentDateTime);
+#	else
+	const qint64 kIdleTime = kSystemIdleSinceHint.secsTo(kcurrentDateTime) * 1000;
+#	endif
+	return (kIdleTime >= 0) ? kIdleTime : 0;
+}
+
+QString ConsoleKitSession::DoGetSystemIdleSinceHint() const {
+	const QDBusMessage kReply = DBusInterfaceRef().call("GetSystemIdleSinceHint");
+	if (kReply.type() == QDBusMessage::ErrorMessage) {
+		throw CPPDEVTK_DBUS_EXCEPTION("DBus call to ConsoleKit.Session::GetSystemIdleSinceHint() failed", GetLastError());
+	}
+	CPPDEVTK_ASSERT(kReply.type() == QDBusMessage::ReplyMessage);
+	CPPDEVTK_ASSERT(kReply.signature() == "s");
+	
+	const QList<QVariant> kReplyArgs = kReply.arguments();
+	CPPDEVTK_ASSERT(kReplyArgs.size() == 1);
+	
+	const QVariant kReplyArg = kReplyArgs[0];
+	CPPDEVTK_ASSERT(!kReplyArg.isNull());
+	CPPDEVTK_ASSERT(kReplyArg.isValid());
+	CPPDEVTK_ASSERT(kReplyArg.type() == QVariant::String);
+	return kReplyArg.value<QString>();
 }
 
 QString ConsoleKitSession::GetSessionType() const {

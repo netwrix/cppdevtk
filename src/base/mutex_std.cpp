@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4702)	// C4702: unreachable code
+#endif
+
 #include <cppdevtk/base/mutex.hpp>
 
 
@@ -27,11 +32,6 @@
 
 #include <system_error>
 #include <cstddef>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4702)	// C4702: unreachable code
-#endif
 
 
 using ::cppdevtk::base::detail::ThrowLockException;

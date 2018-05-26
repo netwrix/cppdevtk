@@ -28,7 +28,6 @@ namespace cppdevtk {
 namespace gui {
 
 
-/// \note QApplication::queryKeyboardModifiers() was introduced in Qt 4.8 and we need to support 4.6
 /// \attention
 /// - On Windows need to link with user32.lib
 /// - On Mac OS X need to link with framework Carbon

@@ -34,6 +34,7 @@
 
 // Cinnamon, Gnome 3, Mate (Gnome 2)
 // https://github.com/GNOME/gnome-session/blob/master/gnome-session/org.gnome.SessionManager.xml
+// https://github.com/mate-desktop/mate-session-manager/blob/master/mate-session/org.gnome.SessionManager.xml
 #define CPPDEVTK_GNOME_SM_SERVICE_NAME "org.gnome.SessionManager"
 #define CPPDEVTK_GNOME_SM_OBJ_PATH "/org/gnome/SessionManager"
 #define CPPDEVTK_GNOME_SM_INTERFACE "org.gnome.SessionManager"
@@ -104,12 +105,18 @@ bool SessionManager::Impl::Shutdown() {
 		return KdeSmShutdown();
 	}
 	if (IsDBusServiceRegistered(CPPDEVTK_GNOME_SM_SERVICE_NAME, kSessionBus)) {
+		if (GnomeSmRequestShutdown()) {
+			return true;
+		}
 		return GnomeSmShutdown();
 	}
 	if (IsDBusServiceRegistered(CPPDEVTK_XFCE_SM_SERVICE_NAME, kSessionBus)) {
 		return XfceSmShutdown();
 	}
 	if (IsDBusServiceRegistered(CPPDEVTK_LXDE_SM_SERVICE_NAME, kSessionBus)) {
+		if (LxdeSmRequestShutdown()) {
+			return true;
+		}
 		return LxdeSmShutdown();
 	}
 	if (IsDBusServiceRegistered(CPPDEVTK_LXQT_SM_SERVICE_NAME, kSessionBus)) {
@@ -168,7 +175,7 @@ bool SessionManager::Impl::KdeSmLogout() {
 	*/
 	const QDBusMessage kReply = dbusKsmInterface.call("logout", QVariant(0), QVariant(3), QVariant(1));
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusKsmInterface call to logout(0, 3, 1) failed"
+		CPPDEVTK_LOG_ERROR("dbusKsmInterface call to logout(0, 3, 1) failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -203,7 +210,7 @@ bool SessionManager::Impl::GnomeSmLogout() {
 	// Logout(): 0 = Normal; 1 = No confirmation inferface should be shown
 	const QDBusMessage kReply = dbusGnomeSmInterface.call("Logout", QVariant((uint)1));
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusGnomeSmInterface call to Logout(1) failed"
+		CPPDEVTK_LOG_ERROR("dbusGnomeSmInterface call to Logout(1) failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -243,7 +250,7 @@ bool SessionManager::Impl::XfceSmLogout() {
 	*/
 	const QDBusMessage kReply = dbusXfceSmInterface.call("Logout", QVariant(false), QVariant(true));
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusXfceSmInterface call to Logout(false, true) failed"
+		CPPDEVTK_LOG_ERROR("dbusXfceSmInterface call to Logout(false, true) failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -276,7 +283,7 @@ bool SessionManager::Impl::LxdeSmLogout() {
 	
 	const QDBusMessage kReply = dbusLxdeSmInterface.call("Logout");
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusLxdeSmInterface call to Logout() failed"
+		CPPDEVTK_LOG_ERROR("dbusLxdeSmInterface call to Logout() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -309,7 +316,7 @@ bool SessionManager::Impl::LxqtSmLogout() {
 	
 	const QDBusMessage kReply = dbusLxqtSmInterface.call("logout");
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusLxqtSmInterface call to logout() failed"
+		CPPDEVTK_LOG_ERROR("dbusLxqtSmInterface call to logout() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -355,7 +362,41 @@ bool SessionManager::Impl::KdeSmShutdown() {
 	*/
 	const QDBusMessage kReply = dbusKsmInterface.call("logout", QVariant(0), QVariant(2), QVariant(1));
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Shutdown() failed: dbusKsmInterface call to logout(0, 2, 1) failed"
+		CPPDEVTK_LOG_ERROR("dbusKsmInterface call to logout(0, 2, 1) failed"
+				<< "; errorName: " << kReply.errorName()
+				<< "; errorMessage: " << kReply.errorMessage());
+		return false;
+	}
+	
+	return true;
+}
+
+bool SessionManager::Impl::GnomeSmRequestShutdown() {
+	const QDBusConnection kSessionBus = QDBusConnection::sessionBus();
+	if (!kSessionBus.isConnected()) {
+		const QDBusError kLastSessionBusError = kSessionBus.lastError();
+		CPPDEVTK_LOG_ERROR("failed to connect to session bus"
+				<< "; errorType: " << QDBusError::errorString(kLastSessionBusError.type())
+				<< "; errorName: " << kLastSessionBusError.name() << "; errorMsg: " << kLastSessionBusError.message());
+		return false;
+	}
+	
+	CPPDEVTK_ASSERT(IsDBusServiceRegistered(CPPDEVTK_GNOME_SM_SERVICE_NAME, kSessionBus));
+	
+	// https://github.com/mate-desktop/mate-session-manager/blob/master/mate-session/org.gnome.SessionManager.xml
+	QDBusInterface dbusGnomeSmInterface(CPPDEVTK_GNOME_SM_SERVICE_NAME, CPPDEVTK_GNOME_SM_OBJ_PATH,
+			CPPDEVTK_GNOME_SM_INTERFACE, kSessionBus);
+	if (!dbusGnomeSmInterface.isValid()) {
+		const QDBusError kLastError = dbusGnomeSmInterface.lastError();
+		CPPDEVTK_LOG_ERROR("dbusGnomeSmInterface interface is not valid"
+				<< "; errorType: " << QDBusError::errorString(kLastError.type())
+				<< "; errorName: " << kLastError.name() << "; errorMsg: " << kLastError.message());
+		return false;
+	}
+	
+	const QDBusMessage kReply = dbusGnomeSmInterface.call("RequestShutdown");
+	if (kReply.type() == QDBusMessage::ErrorMessage) {
+		CPPDEVTK_LOG_ERROR("dbusGnomeSmInterface call to RequestShutdown() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -389,7 +430,7 @@ bool SessionManager::Impl::GnomeSmShutdown() {
 	
 	const QDBusMessage kReply = dbusGnomeSmInterface.call("Shutdown");
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusGnomeSmInterface call to Shutdown() failed"
+		CPPDEVTK_LOG_ERROR("dbusGnomeSmInterface call to Shutdown() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -428,7 +469,40 @@ bool SessionManager::Impl::XfceSmShutdown() {
 	*/
 	const QDBusMessage kReply = dbusXfceSmInterface.call("Shutdown", QVariant(true));
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusXfceSmInterface call to Shutdown(true) failed"
+		CPPDEVTK_LOG_ERROR("dbusXfceSmInterface call to Shutdown(true) failed"
+				<< "; errorName: " << kReply.errorName()
+				<< "; errorMessage: " << kReply.errorMessage());
+		return false;
+	}
+	
+	return true;
+}
+
+bool SessionManager::Impl::LxdeSmRequestShutdown() {
+	const QDBusConnection kSessionBus = QDBusConnection::sessionBus();
+	if (!kSessionBus.isConnected()) {
+		const QDBusError kLastSessionBusError = kSessionBus.lastError();
+		CPPDEVTK_LOG_ERROR("failed to connect to session bus"
+				<< "; errorType: " << QDBusError::errorString(kLastSessionBusError.type())
+				<< "; errorName: " << kLastSessionBusError.name() << "; errorMsg: " << kLastSessionBusError.message());
+		return false;
+	}
+	
+	CPPDEVTK_ASSERT(IsDBusServiceRegistered(CPPDEVTK_LXDE_SM_SERVICE_NAME, kSessionBus));
+	
+	QDBusInterface dbusLxdeSmInterface(CPPDEVTK_LXDE_SM_SERVICE_NAME, CPPDEVTK_LXDE_SM_OBJ_PATH,
+			CPPDEVTK_LXDE_SM_INTERFACE, kSessionBus);
+	if (!dbusLxdeSmInterface.isValid()) {
+		const QDBusError kLastError = dbusLxdeSmInterface.lastError();
+		CPPDEVTK_LOG_ERROR("dbusLxdeSmInterface interface is not valid"
+				<< "; errorType: " << QDBusError::errorString(kLastError.type())
+				<< "; errorName: " << kLastError.name() << "; errorMsg: " << kLastError.message());
+		return false;
+	}
+	
+	const QDBusMessage kReply = dbusLxdeSmInterface.call("RequestShutdown");
+	if (kReply.type() == QDBusMessage::ErrorMessage) {
+		CPPDEVTK_LOG_ERROR("dbusLxdeSmInterface call to RequestShutdown() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -461,7 +535,7 @@ bool SessionManager::Impl::LxdeSmShutdown() {
 	
 	const QDBusMessage kReply = dbusLxdeSmInterface.call("Shutdown");
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusLxdeSmInterface call to Shutdown() failed"
+		CPPDEVTK_LOG_ERROR("dbusLxdeSmInterface call to Shutdown() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;
@@ -494,7 +568,7 @@ bool SessionManager::Impl::LxqtSmShutdown() {
 	
 	const QDBusMessage kReply = dbusLxqtSmInterface.call("powerOff");
 	if (kReply.type() == QDBusMessage::ErrorMessage) {
-		CPPDEVTK_LOG_ERROR("Logout() failed: dbusLxqtSmInterface call to powerOff() failed"
+		CPPDEVTK_LOG_ERROR("dbusLxqtSmInterface call to powerOff() failed"
 				<< "; errorName: " << kReply.errorName()
 				<< "; errorMessage: " << kReply.errorMessage());
 		return false;

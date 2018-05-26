@@ -28,6 +28,7 @@
 #include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/get_current_process_id.hpp>
 #include <cppdevtk/base/dbc.hpp>
+#include <cppdevtk/base/zeroize.hpp>
 
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -204,6 +205,19 @@ bool Session::Lock() {
 }
 
 Session::~Session() {}
+
+Session::IdleTime Session::GetIdleTime() const {
+	LASTINPUTINFO lastInputInfo;
+	base::Zeroize(&lastInputInfo, sizeof lastInputInfo);
+	lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
+	if (!GetLastInputInfo(&lastInputInfo)) {
+		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "GetLastInputInfo() failed");
+	}
+	
+	const DWORD kTickCount = GetTickCount();
+	
+	return (kTickCount - lastInputInfo.dwTime);
+}
 
 Session::Session(): QObject(), id_(), wmWtSessionChange_(*this) {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG((qApp != NULL), "qApp is NULL; please create app first");

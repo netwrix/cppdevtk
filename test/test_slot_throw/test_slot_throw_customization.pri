@@ -17,7 +17,12 @@
 
 TARGET = cppdevtk_test_slot_throw
 CPPDEVTK_GUI_TARGET = cppdevtk_gui
+CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET = cppdevtk_qtsol_qtcopydialog
+CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET = cppdevtk_qtsol_qtsingleapplication
 CPPDEVTK_UTIL_TARGET = cppdevtk_util
+CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET = cppdevtk_qtsol_qtsinglecoreapplication
+CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET = cppdevtk_qtsol_qtlockedfile
+CPPDEVTK_QTSOL_QTSERVICE_TARGET = cppdevtk_qtsol_qtservice
 CPPDEVTK_BASE_TARGET = cppdevtk_base
 
 

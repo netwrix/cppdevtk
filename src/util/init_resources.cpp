@@ -19,6 +19,8 @@
 
 #include <cppdevtk/util/init_resources.hpp>
 
+#include <QtCore/QDir>
+
 
 CPPDEVTK_UTIL_API void CppDevTkUtilInitResources() {
 #	ifndef CPPDEVTK_SHARED

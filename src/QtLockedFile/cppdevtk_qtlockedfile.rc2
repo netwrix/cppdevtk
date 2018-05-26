@@ -1,0 +1,117 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file
+///
+/// \copyright Copyright (C) 2015 - 2018 CoSoSys Ltd <info@cososys.com>\n
+/// Licensed under the Apache License, Version 2.0 (the "License");\n
+/// you may not use this file except in compliance with the License.\n
+/// You may obtain a copy of the License at\n
+/// http://www.apache.org/licenses/LICENSE-2.0\n
+/// Unless required by applicable law or agreed to in writing, software\n
+/// distributed under the License is distributed on an "AS IS" BASIS,\n
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n
+/// See the License for the specific language governing permissions and\n
+/// limitations under the License.\n
+/// Please see the file COPYING.
+///
+/// \authors Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#ifdef APSTUDIO_INVOKED
+#	error "This file is not editable by Microsoft Visual C++!!!"
+#endif
+
+
+#include <cppdevtk/base/info.hpp>
+
+
+#define CPPDEVTK_QTLOCKEDFILE_DESCRIPTION "CppDevTk QtSolutions QtLockedFile"
+
+#ifdef NDEBUG
+#	define CPPDEVTK_QTLOCKEDFILE_FILE_COMPLETE_BASE_NAME "cppdevtk_qtlockedfile"
+#else
+#	define CPPDEVTK_QTLOCKEDFILE_FILE_COMPLETE_BASE_NAME "cppdevtk_qtlockedfiled"
+#endif
+
+#ifdef CPPDEVTK_SHARED
+#	define CPPDEVTK_QTLOCKEDFILE_FILE_NAME CPPDEVTK_QTLOCKEDFILE_FILE_COMPLETE_BASE_NAME ".dll"
+#else
+#	define CPPDEVTK_QTLOCKEDFILE_FILE_NAME CPPDEVTK_QTLOCKEDFILE_FILE_COMPLETE_BASE_NAME ".lib"
+#endif
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Add manually edited resources here...
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if (!defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU))
+#ifdef _WIN32
+	LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#	pragma code_page(1252)
+#endif	// _WIN32
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+// NOTE:
+// If version is enabled for static lib then linking app fails with:
+// "CVTRES:-1: error: CVT1100: duplicate resource.  type:VERSION"
+// To fix this "Link Library Dependencies" needs to be disabled
+// but there is no command line switch for this.
+#ifdef CPPDEVTK_SHARED
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION CPPDEVTK_VERSION_MAJOR,CPPDEVTK_VERSION_MINOR,CPPDEVTK_VERSION_PATCH,CPPDEVTK_VERSION_BUILD
+ PRODUCTVERSION CPPDEVTK_VERSION_MAJOR,CPPDEVTK_VERSION_MINOR,CPPDEVTK_VERSION_PATCH,CPPDEVTK_VERSION_BUILD
+ //FILEFLAGSMASK 0x17L
+ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+#ifdef NDEBUG
+ FILEFLAGS 0x0L
+#else
+ FILEFLAGS VS_FF_DEBUG
+#endif
+ FILEOS VOS_NT_WINDOWS32
+#ifdef CPPDEVTK_SHARED
+ FILETYPE VFT_DLL
+#else
+ FILETYPE VFT_STATIC_LIB
+#endif
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        //BLOCK "040904B0"
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName", CPPDEVTK_COMPANY_LONG_NAME
+            VALUE "FileDescription", CPPDEVTK_QTLOCKEDFILE_DESCRIPTION
+            VALUE "FileVersion", CPPDEVTK_VERSION_STRING "." CPPDEVTK_STRINGIZE(CPPDEVTK_VERSION_BUILD)
+            VALUE "InternalName", CPPDEVTK_QTLOCKEDFILE_FILE_COMPLETE_BASE_NAME
+            VALUE "LegalCopyright", CPPDEVTK_COPYRIGHT
+            VALUE "LegalTrademarks", CPPDEVTK_TRADEMARKS
+            VALUE "OriginalFilename", CPPDEVTK_QTLOCKEDFILE_FILE_NAME
+            VALUE "ProductName", CPPDEVTK_LONG_NAME
+            VALUE "ProductVersion", CPPDEVTK_VERSION_STRING "." CPPDEVTK_STRINGIZE(CPPDEVTK_VERSION_BUILD)
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        //VALUE "Translation", 0x409, 1200
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+#endif	// CPPDEVTK_SHARED
+
+
+#endif	// English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////

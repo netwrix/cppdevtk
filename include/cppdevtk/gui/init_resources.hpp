@@ -23,10 +23,6 @@
 
 #include "config.hpp"
 
-#ifdef __cplusplus
-#	include <QtCore/QDir>
-#endif
-
 
 #ifdef __cplusplus
 

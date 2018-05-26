@@ -22,7 +22,6 @@
 #include "application.hpp"
 #include "main_window.hpp"
 
-#include <cppdevtk/gui/application.hpp>
 #include <cppdevtk/gui/message_box.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
@@ -69,6 +68,7 @@ int main(int argc, char* argv[]) try {
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_localization/res/ico/application.ico"));
 	
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 	if (application.isRunning()) {
 		if (!application.sendMessage("", 5000)) {
 			MessageBox::Warning(application.GetDefaultWindow(),
@@ -77,6 +77,7 @@ int main(int argc, char* argv[]) try {
 		}
 		return EXIT_SUCCESS;
 	}
+#	endif
 	
 	try {
 		::cppdevtk::test_localization::MainWindow mainWindow;

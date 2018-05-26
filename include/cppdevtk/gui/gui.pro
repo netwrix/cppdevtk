@@ -46,11 +46,7 @@ HEADERS += \
 	message_box.hpp \
 	password_widget.hpp \
 	progress_dialog.hpp \
-	qt_copy_dialog.hpp \
-	qt_file_copier.hpp \
-	qt_single_application.hpp \
 	set_stylesheet_from_file.hpp \
-	single_application.hpp \
 	timed_computer_management_widget.hpp \
 	widget_base.hpp
 
@@ -61,6 +57,12 @@ HEADERS += \
 		power_notifier.hpp	\
 		session_manager.hpp	\
 		session.hpp
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	HEADERS +=	\
+		single_application.hpp	\
+		copy_dialog.hpp
 }
 
 

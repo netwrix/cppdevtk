@@ -19,6 +19,8 @@
 
 #include <cppdevtk/gui/init_resources.hpp>
 
+#include <QtCore/QDir>
+
 
 CPPDEVTK_GUI_API void CppDevTkGuiInitResources() {
 #	ifndef CPPDEVTK_SHARED

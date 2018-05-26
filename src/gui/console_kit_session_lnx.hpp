@@ -59,6 +59,8 @@ public:
 	virtual bool Unlock();
 	
 	virtual QString GetId() const;
+	virtual bool GetIdleHint() const;
+	virtual Session::IdleTime GetIdleSinceHint() const;
 	virtual QString GetType() const;
 	virtual uint GetUser() const;
 	virtual QString GetRemoteHost() const;
@@ -75,10 +77,10 @@ private:
 	
 	explicit ConsoleKitSession(const QDBusObjectPath& ckSessionPath);
 	
+	QString DoGetSystemIdleSinceHint() const;
 	QString GetSessionType() const;
 	uint GetUnixUser() const;
 	QString GetRemoteHostName() const;
-	
 	bool IsLocal() const;
 };
 

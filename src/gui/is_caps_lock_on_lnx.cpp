@@ -54,12 +54,13 @@ CPPDEVTK_GUI_API bool IsCapsLockOn(bool& value) {
 #	if (!CPPDEVTK_PLATFORM_ANDROID)
 	
 	Display* pDisplay = QX11Info::display();
-	CPPDEVTK_ASSERT(pDisplay != NULL);
+	if (pDisplay == NULL) {
+		CPPDEVTK_LOG_ERROR("failed to get X11 display");
+		return false;
+	}
 	
-	//XSynchronize(pDisplay, True);
-	
-	KeyCode keyCode = XKeysymToKeycode(pDisplay, XK_Caps_Lock);
-	if(keyCode == NoSymbol) {
+	const KeyCode kKeyCode = XKeysymToKeycode(pDisplay, XK_Caps_Lock);
+	if(kKeyCode == NoSymbol) {
 		CPPDEVTK_LOG_ERROR("XKeysymToKeycode() failed");
 		return false;
 	}
@@ -72,13 +73,17 @@ CPPDEVTK_GUI_API bool IsCapsLockOn(bool& value) {
 	
 	int keyMask = 0;
 	for (int i = 0; i < 8; ++i) {
-		if (pModifierKeymap->modifiermap[pModifierKeymap->max_keypermod * i] == keyCode) {
+		if (pModifierKeymap->modifiermap[pModifierKeymap->max_keypermod * i] == kKeyCode) {
 			keyMask = 1 << i;
 		}
 	}
 	
-	Window root_return = None, child_return = None;
-	int root_x_return = 0, root_y_return = 0, win_x_return = 0, win_y_return = 0;
+	Window root_return = None;
+	Window child_return = None;
+	int root_x_return = 0;
+	int root_y_return = 0;
+	int win_x_return = 0;
+	int win_y_return = 0;
 	unsigned int mask = 0;
 	if (XQueryPointer(pDisplay, DefaultRootWindow(pDisplay), &root_return, &child_return, &root_x_return, &root_y_return,
 			&win_x_return, &win_y_return, &mask) != True) {

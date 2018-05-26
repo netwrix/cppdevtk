@@ -71,13 +71,12 @@ license you like.
 
 
 
-
-
-#include <cppdevtk/util/json/json.h>
-
+#include <cppdevtk/util/config.hpp>
 #if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(disable: 4774)	// C4774: 'sprintf_s' : format string expected in argument 3 is not a string literal
 #endif
+
+#include <cppdevtk/util/json/json.h>
 
 
 #ifndef JSON_IS_AMALGAMATION

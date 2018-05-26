@@ -87,12 +87,6 @@
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
-#include <QtCore/QException>
-#include <QtCore/QUnhandledException>
-
-#define CPPDEVTK_QT_EXCEPTION QException
-#define CPPDEVTK_QT_UNHANDLED_EXCEPTION QUnhandledException
-
 #if (!defined(QT_SHARED) && !defined(QT_STATIC))
 #error "Both QT_SHARED and QT_STATIC are not defined. Please check your Qt configuration!!!"
 #endif
@@ -119,9 +113,6 @@
 #else	// (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 #include <QtCore/QtCore>
-
-#define CPPDEVTK_QT_EXCEPTION QtConcurrent::Exception
-#define CPPDEVTK_QT_UNHANDLED_EXCEPTION QtConcurrent::UnhandledException
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
 #if (!CPPDEVTK_COMPILER_GCC)

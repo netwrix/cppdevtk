@@ -17,6 +17,18 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/gui/config.hpp>
+
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#if (CPPDEVTK_COMPILER_GCC)
+#if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 2, 0))
+// deleting object of polymorphic class type cppdevtk::util::LanguageInfo which has non-virtual destructor
+// might cause undefined behaviour [-Wdelete-non-virtual-dtor]
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+#endif
+#endif
+
 #include "main_window.hpp"
 #include "info_tr.hpp"
 
@@ -82,7 +94,9 @@ void MainWindow::showEvent(QShowEvent* pShowEvent) {
 	if (isShownFirstTime) {
 		isShownFirstTime = false;
 		
+#		if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 		static_cast<Application*>(QApplication::instance())->setActivationWindow(this);
+#		endif
 	}
 }
 

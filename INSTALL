@@ -5,15 +5,21 @@
 - Android SDK r25.2.3 needed on Windows (maybe it works with r24.x >= r24.4, r25.x): SDK Build-tools must be 25.x and Android 4.2.2 (API level 17)
 - Android NDK r10e needed on Windows
 
+
+- Ubuntu:
+> sudo apt-get install build-essential ubuntu-dev-tools debhelper dpkg-sig apt-file
+
 - Ubuntu Qt 5:
 Use ppa:beineri (https://launchpad.net/~beineri)
-16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt594-xenial
-14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt594-trusty
+16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt595-xenial
+14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt595-trusty
 12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt563
 > sudo apt-get update
 > sudo apt-get install qt-latest qtcreator-latest
-or
-> sudo apt-get install qt59-meta-full qt59creator
+
+18.04 (bionic):
+> sudo apt-get install qtbase5-dev libqt5x11extras5-dev qtcreator
+
 
 - CentOS Qt 5:
 Use EPEL repo
@@ -81,6 +87,13 @@ Windows msvc 2015 cmd prompt:
 Mac OS X:
 > make -j1 install
 
+Mac OS X deployment:
+> cd /Applications/Qt/5.6.3/clang_64/bin
+> ./macdeployqt ~/TestApplication/Build/Release/TestApplication.app -always-overwrite -appstore-compliant
+Optional to codesign append:
+-codesign=<ident>
+
+
 6.2 Mac OS X 10.4
 Qt Creator does not work on Mac OS X 10.4 so use CLI...
 Open terminal in cppdevtk
@@ -95,6 +108,7 @@ shared:
 
 make
 make -j1 install
+
 
 6.3 On Linux if packaging:
 RPM: rpmbuild -ta --sign cppdevtk-1.0.0.tar.bz2

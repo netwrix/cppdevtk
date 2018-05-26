@@ -26,7 +26,8 @@ namespace cppdevtk {
 namespace gui {
 
 
-SingleApplication::SingleApplication(int& argc, char** argv): QtSingleApplication(GetUniqueId(), argc, argv), ApplicationBase() {
+SingleApplication::SingleApplication(int& argc, char** argv):
+		::cppdevtk::qtsol::QtSingleApplication(GetUniqueId(), argc, argv), ApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	SetStyleSheetFromFileCross(":/cppdevtk/gui/res/qss", "single_application");
@@ -34,8 +35,8 @@ SingleApplication::SingleApplication(int& argc, char** argv): QtSingleApplicatio
 	SetCurrentLanguageInfo(GetDefaultLanguageInfo());
 }
 
-SingleApplication::SingleApplication(int& argc, char** argv, const QString& id): QtSingleApplication(id, argc, argv),
-		ApplicationBase() {
+SingleApplication::SingleApplication(int& argc, char** argv, const QString& id):
+		::cppdevtk::qtsol::QtSingleApplication(id, argc, argv), ApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(id.isEmpty(), "id");

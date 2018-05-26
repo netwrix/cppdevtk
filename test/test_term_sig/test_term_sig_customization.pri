@@ -17,6 +17,9 @@
 
 TARGET = cppdevtk_test_term_sig
 CPPDEVTK_UTIL_TARGET = cppdevtk_util
+CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET = cppdevtk_qtsol_qtsinglecoreapplication
+CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET = cppdevtk_qtsol_qtlockedfile
+CPPDEVTK_QTSOL_QTSERVICE_TARGET = cppdevtk_qtsol_qtservice
 CPPDEVTK_BASE_TARGET = cppdevtk_base
 
 

@@ -24,7 +24,6 @@
 #include "config.hpp"
 #include "ui_widget.h"
 #include <cppdevtk/gui/widget_base.hpp>
-#include <cppdevtk/gui/single_application.hpp>
 #include <cppdevtk/gui/storage_device_notifier.hpp>
 #include <cppdevtk/gui/session.hpp>
 

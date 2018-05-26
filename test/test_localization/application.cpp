@@ -30,7 +30,13 @@ namespace cppdevtk {
 namespace test_localization {
 
 
-Application::Application(int& argc, char** argv): ::cppdevtk::gui::SingleApplication(argc, argv), translator_() {
+Application::Application(int& argc, char** argv):
+#		if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+		::cppdevtk::gui::SingleApplication(argc, argv),
+#		else
+		::cppdevtk::gui::Application(argc, argv),
+#		endif
+		translator_() {
 	SetStyleSheetFromFileCross(":/cppdevtk/test_localization/res/qss", "application");
 	
 	translate("language_native_name", "English");	// to generate translation
@@ -55,7 +61,11 @@ bool Application::SetupTranslators() {
 		removeTranslator(&translator_);
 	}
 	
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 	bool retCode = SingleApplication::SetupTranslators();
+#	else
+	bool retCode = Application::SetupTranslators();
+#	endif
 	
 	const QString kCurrentLanguageInfoName = GetCurrentLanguageInfo().GetName();
 	if (kCurrentLanguageInfoName == ::cppdevtk::util::LanguageInfo::GetCodeName()) {

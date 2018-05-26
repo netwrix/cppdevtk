@@ -15,8 +15,9 @@
 #****************************************************************************************************************************
 
 
-QT *= core
+greaterThan(QT_MAJOR_VERSION, 4): QT -= widgets
 QT -= gui
+QT *= core
 android {
 	QT *= androidextras
 }
@@ -27,6 +28,11 @@ TEMPLATE = lib
 
 include(./jni_customization.pri)
 include(./../../common.pri)
+
+
+!isEqual(CPPDEVTK_HAVE_JNI, "true") {
+    error("This subproject require JNI!!!")
+}
 
 
 # Build marker.

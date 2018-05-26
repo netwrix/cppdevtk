@@ -23,6 +23,7 @@ include(./../../common.pri)
 
 #CONFIG *= ordered
 
+
 SUBDIRS += config \
     base \
     util \
@@ -30,4 +31,8 @@ SUBDIRS += config \
 
 isEqual(CPPDEVTK_HAVE_JNI, "true") {
     SUBDIRS += jni
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+    SUBDIRS += QtSolutions
 }

@@ -9,6 +9,7 @@ lupdate-qt5 -recursive -locations none -no-ui-lines -no-obsolete -source-languag
 lrelease-qt5 ./../src/base/base.pro
 lrelease-qt5 ./../src/gui/gui.pro
 lrelease-qt5 ./../src/util/util.pro
+lrelease-qt5 ./../src/QtCopyDialog/QtCopyDialog.pro
 
 lrelease-qt5 ./../test/test_base/test_base.pro
 lrelease-qt5 ./../test/test_caps_lock_widget/test_caps_lock_widget.pro

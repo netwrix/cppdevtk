@@ -18,6 +18,7 @@
 
 
 #include "widget.hpp"
+#include <cppdevtk/gui/application.hpp>
 #include <cppdevtk/gui/message_box.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
@@ -89,19 +90,19 @@ void Widget::closeEvent(QCloseEvent* pCloseEvent) {
 
 void Widget::OnRethrowRadioButtonToggled(bool checked) {
 	if (checked) {
-		Q_EMIT NotifyThrowChanged(gui::SingleApplication::ntaRethrow);
+		Q_EMIT NotifyThrowChanged(gui::Application::ntaRethrow);
 	}
 }
 
 void Widget::OnQuitRadioButtonToggled(bool checked) {
 	if (checked) {
-		Q_EMIT NotifyThrowChanged(gui::SingleApplication::ntaQuit);
+		Q_EMIT NotifyThrowChanged(gui::Application::ntaQuit);
 	}
 }
 
 void Widget::OnReturnFalseRadioButtonToggled(bool checked) {
 	if (checked) {
-		Q_EMIT NotifyThrowChanged(gui::SingleApplication::ntaAbsorb);
+		Q_EMIT NotifyThrowChanged(gui::Application::ntaAbsorb);
 	}
 }
 

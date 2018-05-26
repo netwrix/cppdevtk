@@ -15,7 +15,6 @@
 #****************************************************************************************************************************
 
 
-QT *= gui core
 greaterThan(QT_MAJOR_VERSION, 4) {
 	QT *= widgets
 	linux*:!android {
@@ -25,9 +24,11 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 		QT *= gui-private
 	}
 }
+QT *= gui
 contains(QT_CONFIG, dbus) {
 	QT *= dbus
 }
+QT *= core
 
 
 TEMPLATE = lib
@@ -66,11 +67,21 @@ unix {
 # TARGET + INSTALLS
 
 cppdevtk_enable_target_suffix_qt_major_version {
+	CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET}_qt$${QT_MAJOR_VERSION})}
 	CPPDEVTK_UTIL_TARGET = $${qtLibraryTarget($${CPPDEVTK_UTIL_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_QTSOL_QTSERVICE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSERVICE_TARGET}_qt$${QT_MAJOR_VERSION})}
 	CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET}_qt$${QT_MAJOR_VERSION})}
 }
 else {
+	CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET})}
+	CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET})}
 	CPPDEVTK_UTIL_TARGET = $${qtLibraryTarget($${CPPDEVTK_UTIL_TARGET})}
+	CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET})}
+	CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET})}
+	CPPDEVTK_QTSOL_QTSERVICE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSERVICE_TARGET})}
 	CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET})}
 }
 
@@ -80,39 +91,25 @@ INSTALLS += target
 
 # LIBS + PRE_TARGETDEPS
 !debug_and_release|build_pass {
-	LIBS += -l$${CPPDEVTK_UTIL_TARGET} -l$${CPPDEVTK_BASE_TARGET}
-	!static_and_shared|build_pass {
-		unix {
-			cppdevtk_enable_android_destdir_workaround {
-				PRE_TARGETDEPS += $${OUT_PWD}/../util/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
-				PRE_TARGETDEPS += $${OUT_PWD}/../base/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
-			}
-			else {
-				PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
-				PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
-			}
-		}
-		else {
-			win32 {
-				PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
-				PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
-			}
-			else {
-				error("Unsupported platform!!!")
-			}
-		}
+	isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+		LIBS += -l$${CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET} -l$${CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET}
 	}
+	LIBS += -l$${CPPDEVTK_UTIL_TARGET}
+	isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+		LIBS += -l$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET} -l$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET} -l$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}
+	}
+	LIBS += -l$${CPPDEVTK_BASE_TARGET}
 	
 	unix {
 		linux* {
 			!android {
-				LIBS *= -lXext -lXss
+				LIBS *= -lXss -lX11
 			}
 		}
 		else {
 			macx {
 				LIBS += -framework Security -framework ApplicationServices -framework AppKit -framework IOKit
-				LIBS += -framework Foundation -framework Carbon -framework CoreFoundation
+				LIBS += -framework Carbon -framework Foundation -framework CoreFoundation
 			}
 			else {
 				ios {
@@ -130,6 +127,56 @@ INSTALLS += target
 		}
 		else {
 			error("Unsupported platform!!!")
+		}
+	}
+	
+	
+	!static_and_shared|build_pass {
+		unix {
+			cppdevtk_enable_android_destdir_workaround {
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtCopyDialog/lib$${CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtSingleApplication/lib$${CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${OUT_PWD}/../util/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtSingleCoreApplication/lib$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtLockedFile/lib$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtService/lib$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${OUT_PWD}/../base/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+			else {
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+		}
+		else {
+			win32 {
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTCOPYDIALOG_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTSINGLEAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_UTIL_TARGET}.$${CPPDEVTK_LIB_EXT}
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+			else {
+				error("Unsupported platform!!!")
+			}
 		}
 	}
 }
@@ -178,9 +225,6 @@ FORMS += \
 	language_widget.ui \
 	login_widget.ui	\
 	password_widget.ui	\
-	qt_copy_dialog.ui \
-	qt_other_dialog.ui \
-	qt_overwrite_dialog.ui \
 	timed_computer_management_widget.ui
 
 
@@ -200,10 +244,6 @@ SOURCES += \
 	message_box.cpp \
 	password_widget.cpp \
 	progress_dialog.cpp \
-	qt_copy_dialog.cpp \
-	qt_file_copier.cpp \
-	qt_single_application.cpp \
-	single_application.cpp \
 	timed_computer_management_widget.cpp \
 	widget_base.cpp
 
@@ -270,6 +310,13 @@ else {
 	}
 }
 
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	SOURCES +=	\
+		single_application.cpp	\
+		copy_dialog.cpp
+}
+
+
 HEADERS += \
 	../../include/cppdevtk/gui/application.hpp \
 	../../include/cppdevtk/gui/application_base.hpp \
@@ -292,11 +339,7 @@ HEADERS += \
 	../../include/cppdevtk/gui/message_box.hpp \
 	../../include/cppdevtk/gui/password_widget.hpp \
 	../../include/cppdevtk/gui/progress_dialog.hpp \
-	../../include/cppdevtk/gui/qt_copy_dialog.hpp \
-	../../include/cppdevtk/gui/qt_file_copier.hpp \
-	../../include/cppdevtk/gui/qt_single_application.hpp \
 	../../include/cppdevtk/gui/set_stylesheet_from_file.hpp \
-	../../include/cppdevtk/gui/single_application.hpp \
 	../../include/cppdevtk/gui/timed_computer_management_widget.hpp \
 	../../include/cppdevtk/gui/widget_base.hpp
 
@@ -325,4 +368,10 @@ linux*:!android {
 		logind_session_lnx.hpp	\
 		session_impl_lnx.hpp	\
 		session_manager_impl_lnx.hpp
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	HEADERS +=	\
+		../../include/cppdevtk/gui/single_application.hpp	\
+		../../include/cppdevtk/gui/copy_dialog.hpp
 }

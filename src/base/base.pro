@@ -15,6 +15,7 @@
 #****************************************************************************************************************************
 
 
+greaterThan(QT_MAJOR_VERSION, 4): QT -= widgets
 QT -= gui
 QT *= core
 
@@ -299,9 +300,21 @@ else {
 }
 
 unix {
-	SOURCES += pthread_ext.cpp
+	SOURCES += pthread_ext.cpp	\
+		posix_signals_watcher_unx.cpp
 }
 
+unix {
+	SOURCES += socket_pair_unx.cpp
+}
+else {
+	win32 {
+		SOURCES += socket_pair_win.cpp
+	}
+	else {
+		error("Unsupported platform!!!")
+	}
+}
 
 HEADERS += \
 	../../include/cppdevtk/base/any.hpp	\
@@ -364,6 +377,7 @@ HEADERS += \
 	../../include/cppdevtk/base/safe_free.hpp	\
 	../../include/cppdevtk/base/semaphore.hpp	\
 	../../include/cppdevtk/base/singletons.hpp	\
+	../../include/cppdevtk/base/socket_pair.hpp \
 	../../include/cppdevtk/base/source_code_info.hpp	\
 	../../include/cppdevtk/base/stack_frame.hpp	\
 	../../include/cppdevtk/base/stack_trace.hpp	\
@@ -410,7 +424,8 @@ HEADERS += \
 	../../include/cppdevtk/base/zeroize.hpp
 
 unix {
-	HEADERS += ../../include/cppdevtk/base/execinfo_unx.h
+	HEADERS += ../../include/cppdevtk/base/execinfo_unx.h	\
+		../../include/cppdevtk/base/posix_signals_watcher_unx.hpp
 }
 
 win32 {

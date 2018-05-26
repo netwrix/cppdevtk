@@ -40,6 +40,13 @@
 ****************************************************************************/
 
 
+#include <cppdevtk/util/config.hpp>
+#if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4242)	// C4242: 'identifier' : conversion from 'type1' to 'type2', possible loss of data
+#	pragma warning(disable: 4946)	// C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
+#	pragma warning(disable: 4458)	// C4458: declaration of 'var' hides class member
+#endif
+
 #include <cppdevtk/util/q_zip_reader.hpp>
 #include <cppdevtk/util/q_zip_writer.hpp>
 
@@ -57,13 +64,6 @@
 #include <QtCore/QDebug>
 #include <QtCore/QtDebug>
 #include <QtCore/QDir>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4242)	// C4242: 'identifier' : conversion from 'type1' to 'type2', possible loss of data
-#	pragma warning(disable: 4946)	// C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
-#	pragma warning(disable: 4458)	// C4458: declaration of 'var' hides class member
-#endif
 
 
 #include <zlib.h>

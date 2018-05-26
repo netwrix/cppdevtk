@@ -27,6 +27,7 @@
 
 
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.h>
 
 #include <cstddef>
 
@@ -65,11 +66,13 @@
 }
 
 -(void)OnScreenSaverDidStart:(NSNotification*)pNSNotification {
+	CPPDEVTK_UNUSED(pNSNotification);
 	CPPDEVTK_ASSERT(pScreenSaver_ != NULL);
 	pScreenSaver_->OnScreenSaverDidStart();
 }
 
 -(void)OnScreenSaverDidStop:(NSNotification*)pNSNotification {
+	CPPDEVTK_UNUSED(pNSNotification);
 	CPPDEVTK_ASSERT(pScreenSaver_ != NULL);
 	pScreenSaver_->OnScreenSaverDidStop();
 }

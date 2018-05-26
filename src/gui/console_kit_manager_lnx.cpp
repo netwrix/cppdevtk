@@ -43,12 +43,6 @@ namespace gui {
 namespace detail {
 
 
-SessionManager::IdleTime ConsoleKitManager::GetIdleTime() const {
-	const QString kSystemIdleSinceHint = GetSystemIdleSinceHint();
-	// TODO: implement
-	return 0;
-}
-
 bool ConsoleKitManager::IsConsoleKitServiceRegistered() {
 	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
 	if (!kSystemBus.isConnected()) {
@@ -70,10 +64,6 @@ bool ConsoleKitManager::Stop() {
 		return false;
 	}
 	return true;
-}
-
-QString ConsoleKitManager::GetSystemIdleSinceHint() const {
-	return "";	// TODO: implement
 }
 
 ::std::auto_ptr<Session> ConsoleKitManager::GetSessionForUnixProcess(uint pid) const {

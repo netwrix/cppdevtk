@@ -21,7 +21,7 @@
 #if (!CPPDEVTK_PLATFORM_UNIX)
 #	error "This file is Unix specific!!!"
 #endif
-#include <cppdevtk/util/posix_signals_watcher_unx.hpp>
+#include <cppdevtk/base/posix_signals_watcher_unx.hpp>
 #include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/on_block_exit.hpp>
@@ -46,7 +46,7 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 	}
 	
 	bool commit = false;
-	PosixSignalsWatcher& thePosixSignalsWatcher = PosixSignalsWatcher::GetInstance();
+	base::PosixSignalsWatcher& thePosixSignalsWatcher = base::PosixSignalsWatcher::GetInstance();
 	CPPDEVTK_ASSERT(qApp != NULL);
 	
 	if (value) {

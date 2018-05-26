@@ -84,21 +84,22 @@
 // NOTE: Do not use CPPDEVTK_ASSERT() because it use StackTrace; use Q_ASSERT() instead
 
 
-#include "stack_walker_win_msvc.hpp"
-#if (!CPPDEVTK_COMPILER_MSVC)
-#	error "This file is msvc specific!!!"
-#endif
-#if (!CPPDEVTK_PLATFORM_WINDOWS)
-#	error "This file is Windows specific!!!"
-#endif
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
 #	pragma warning(disable: 4191)	// C4191: 'operator/operation' : unsafe conversion from 'type of expression' to 'type required'
 #	pragma warning(disable: 4062)	// C4062: enumerator 'identifier' in switch of enum 'enumeration' is not handled
 #	pragma warning(disable: 4740)	// C4740: flow in or out of inline asm code suppresses global optimization
 #	pragma warning(disable: 4748)	// C4748: /GS can not protect parameters and local variables from local buffer overrun because optimizations are disabled in function
 #	pragma warning(disable: 4777)	// C4777: '_snprintf_s' : format string '%d' requires an argument of type 'x', but variadic argument y has type 'z'
 #	pragma warning(disable: 4996)	// C4996: 'func' : was declared deprecated
+#endif
+
+#include "stack_walker_win_msvc.hpp"
+#if (!CPPDEVTK_COMPILER_MSVC)
+#	error "This file is msvc specific!!!"
+#endif
+#if (!CPPDEVTK_PLATFORM_WINDOWS)
+#	error "This file is Windows specific!!!"
 #endif
 
 #include <tchar.h>

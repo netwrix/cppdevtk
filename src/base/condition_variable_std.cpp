@@ -17,6 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#	pragma warning(disable: 4702)	// C4702: unreachable code
+#endif
+
 #include <cppdevtk/base/condition_variable.hpp>
 
 
@@ -30,12 +36,6 @@
 #include <system_error>
 #include <mutex>
 #include <chrono>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
-#	pragma warning(disable: 4702)	// C4702: unreachable code
-#endif
 
 
 using ::cppdevtk::base::detail::ThrowLockException;

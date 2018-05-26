@@ -10,28 +10,39 @@
 #
 
 
-# suse_version, sle_version, is_opensuse, leap_version (deprecated):
+# suse_version, sle_version, is_opensuse (note macros escaped in comments):
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto#Detect_a_distribution_flavor_for_special_code
 # - Tumbleweed: suse_version 1550
-# - Leap 42.3: suse_version 1315, sle_version 120300, leap_version 420300
+#	%%if 0%%{?suse_version} >= 1550
+# - Leap 15: suse_version 1500, sle_version 150000
+#	%%if 0%%{?sle_version} == 150000 && 0%%{?is_opensuse}
+# - Leap 42.3: suse_version 1315, sle_version 120300
+#	%%if 0%%{?sle_version} == 120300 && 0%%{?is_opensuse}
 # - Leap 42.2: suse_version 1315, sle_version 120200
+#	%%if 0%%{?sle_version} == 120200 && 0%%{?is_opensuse}
+# - SLE15: sle_version 150000
+#	%%if 0%%{?sle_version} == 150000 && !0%%{?is_opensuse}
 # - SLE12 SP3: sle_version 120300
+#	%%if 0%%{?sle_version} == 120300 && !0%%{?is_opensuse}
 # - SLE12 SP2: sle_version 120200
-# Attention: openSUSE 13.2 has suse_version 1320
+#	%%if 0%%{?sle_version} == 120200 && !0%%{?is_opensuse}
+#
+# NOTE: today Leap 15 was released and sle_version is missing; use suse_version 1500. I reported Bug 1094735
+# TODO: check if fixed
 
 
 # TODO: modify as desired
 %define _prefix /opt/cososys
-%define _datadir /usr/share
-%if (0%{?centos} || 0%{?rhel})
-%define _defaultdocdir %{_datadir}/doc
-%endif
-%define _sysconfdir /etc
 %ifarch x86_64 amd64
 %define rpathdir %{_prefix}/lib64
 %else
 %define rpathdir %{_prefix}/lib
 %endif
+%define _datadir /usr/share
+%if (0%{?centos} || 0%{?rhel})
+%define _defaultdocdir %{_datadir}/doc
+%endif
+%define _sysconfdir /etc
 %define debug_build 0
 %define debug_package %{nil}
 
@@ -41,7 +52,7 @@
 %define centos_minor_ver 9
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-%define centos_minor_ver 4
+%define centos_minor_ver 5
 %endif
 %endif
 
@@ -50,6 +61,9 @@
 
 
 # Qt 4 or 5
+%if (0%{?suse_version})
+%define with_qt5 1
+%endif
 %if (0%{?centos} || 0%{?rhel})
 # Qt5 is available on CentOS 7 >= 7.2 (EPEL) and 7.3 (official)
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
@@ -67,9 +81,6 @@
 %define with_qt5 0
 %endif
 %endif
-%endif
-%if (0%{?suse_version})
-%define with_qt5 1
 %endif
 
 
@@ -123,22 +134,50 @@ Requires(postun): /sbin/ldconfig
 CppDevTk C++ base library.
 
 
+%package -n lib%{name}-qtsol-qtservice
+Summary: CppDevTk QtSolutions QtService library
+Group: System/Libraries
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
+
+%description -n lib%{name}-qtsol-qtservice
+CppDevTk QtSolutions QtService library.
+
+
+%package -n lib%{name}-qtsol-qtlockedfile
+Summary: CppDevTk QtSolutions QtLockedFile library
+Group: System/Libraries
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
+
+%description -n lib%{name}-qtsol-qtlockedfile
+CppDevTk QtSolutions QtLockedFile library.
+
+
+%package -n lib%{name}-qtsol-qtsinglecoreapplication
+Summary: CppDevTk QtSolutions QtSingleCoreApplication library
+Group: System/Libraries
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
+
+%description -n lib%{name}-qtsol-qtsinglecoreapplication
+CppDevTk QtSolutions QtSingleCoreApplication library.
+
+
 %package -n lib%{name}-util
 Summary: CppDevTk util library
 Group: System/Libraries
 BuildRequires: zlib-devel
-%if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+%if (0%{?suse_version})
 BuildRequires: libudev-devel
-BuildRequires: ConsoleKit-devel
 %endif
+%if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 BuildRequires: systemd-devel
 %endif
-%endif
-%if (0%{?suse_version})
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 BuildRequires: libudev-devel
-BuildRequires: systemd-devel
+%endif
 %endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -150,11 +189,24 @@ CppDevTk C++ util library.
 %package -n lib%{name}-jni
 Summary: CppDevTk jni library
 Group: System/Libraries
-%if (0%{?centos} || 0%{?rhel})
-BuildRequires: java-devel = 1:1.7.0
-%endif
 %if (0%{?suse_version})
-BuildRequires: java-devel = 1.8.0
+%if 0%{?suse_version} >= 1550
+BuildRequires: java-11-openjdk-devel
+%else
+%if 0%{?suse_version} == 1500
+BuildRequires: java-10-openjdk-devel
+%else
+BuildRequires: java-1_8_0-openjdk-devel
+%endif
+%endif
+%endif
+%if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+BuildRequires: java-1.7.0-openjdk-devel
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+BuildRequires: java7-devel-openjdk
+%endif
 %endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -163,10 +215,37 @@ Requires(postun): /sbin/ldconfig
 CppDevTk C++ jni library.
 
 
+%package -n lib%{name}-qtsol-qtcopydialog
+Summary: CppDevTk QtSolutions QtCopyDialog library
+Group: System/Libraries
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
+
+%description -n lib%{name}-qtsol-qtcopydialog
+CppDevTk QtSolutions QtCopyDialog library.
+
+
+%package -n lib%{name}-qtsol-qtsingleapplication
+Summary: CppDevTk QtSolutions QtSingleApplication library
+Group: System/Libraries
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
+
+%description -n lib%{name}-qtsol-qtsingleapplication
+CppDevTk QtSolutions QtSingleApplication library.
+
+
 %package -n lib%{name}-gui
 Summary: CppDevTk gui library
 Group: System/Libraries
-BuildRequires: libXScrnSaver-devel libX11-devel
+BuildRequires: libXScrnSaver-devel
+BuildRequires: libX11-devel
+%if (0%{?suse_version})
+BuildRequires: xproto-devel
+%endif
+%if (0%{?centos} || 0%{?rhel})
+BuildRequires: xorg-x11-proto-devel
+%endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
 BuildRequires: libqt5-qtx11extras-devel >= 5.6.1
@@ -190,8 +269,13 @@ CppDevTk C++ gui library.
 Summary: CppDevTk libraries
 Group: System/Libraries
 Requires: lib%{name}-base = %{version}
+Requires: lib%{name}-qtsol-qtservice = %{version}
+Requires: lib%{name}-qtsol-qtlockedfile = %{version}
+Requires: lib%{name}-qtsol-qtsinglecoreapplication = %{version}
 Requires: lib%{name}-util = %{version}
 Requires: lib%{name}-jni = %{version}
+Requires: lib%{name}-qtsol-qtcopydialog = %{version}
+Requires: lib%{name}-qtsol-qtsingleapplication = %{version}
 Requires: lib%{name}-gui = %{version}
 
 %description -n lib%{name}
@@ -227,24 +311,59 @@ The %{name}-base-devel package contains libraries and header files for
 developing applications that use lib%{name}-base.
 
 
+%package qtsol-qtservice-devel
+Summary: Development files for lib%{name}-qtsol-qtservice
+Group: Development/Libraries/C and C++
+Requires: lib%{name}-qtsol-qtservice = %{version}
+Requires: %{name}-base-devel = %{version}
+
+%description qtsol-qtservice-devel
+The %{name}-qtsol-qtservice-devel package contains libraries and header files for
+developing applications that use lib%{name}-qtsol-qtservice.
+
+
+%package qtsol-qtlockedfile-devel
+Summary: Development files for lib%{name}-qtsol-qtlockedfile
+Group: Development/Libraries/C and C++
+Requires: lib%{name}-qtsol-qtlockedfile = %{version}
+Requires: %{name}-base-devel = %{version}
+
+%description qtsol-qtlockedfile-devel
+The %{name}-qtsol-qtlockedfile-devel package contains libraries and header files for
+developing applications that use lib%{name}-qtsol-qtlockedfile.
+
+
+%package qtsol-qtsinglecoreapplication-devel
+Summary: Development files for lib%{name}-qtsol-qtsinglecoreapplication
+Group: Development/Libraries/C and C++
+Requires: lib%{name}-qtsol-qtsinglecoreapplication = %{version}
+Requires: %{name}-qtsol-qtlockedfile-devel = %{version}
+Requires: %{name}-base-devel = %{version}
+
+%description qtsol-qtsinglecoreapplication-devel
+The %{name}-qtsol-qtsinglecoreapplication-devel package contains libraries and header files for
+developing applications that use lib%{name}-qtsol-qtsinglecoreapplication.
+
+
 %package util-devel
 Summary: Development files for lib%{name}-util
 Group: Development/Libraries/C and C++
-%if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+%if (0%{?suse_version})
 Requires: libudev-devel
-Requires: ConsoleKit-devel
 %endif
+%if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 Requires: systemd-devel
 %endif
-%endif
-%if (0%{?suse_version})
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 Requires: libudev-devel
-Requires: systemd-devel
+%endif
 %endif
 Requires: zlib-devel
 Requires: lib%{name}-util = %{version}
+Requires: %{name}-qtsol-qtservice-devel = %{version}
+Requires: %{name}-qtsol-qtlockedfile-devel = %{version}
+Requires: %{name}-qtsol-qtsinglecoreapplication-devel = %{version}
 Requires: %{name}-base-devel = %{version}
 
 %description util-devel
@@ -255,11 +374,24 @@ developing applications that use lib%{name}-util.
 %package jni-devel
 Summary: Development files for lib%{name}-jni
 Group: Development/Libraries/C and C++
-%if (0%{?centos} || 0%{?rhel})
-Requires: java-devel >= 1:1.7.0
-%endif
 %if (0%{?suse_version})
-Requires: java-devel >= 1.8.0
+%if 0%{?suse_version} >= 1550
+Requires: java-11-openjdk-devel
+%else
+%if 0%{?suse_version} == 1500
+Requires: java-10-openjdk-devel
+%else
+Requires: java-1_8_0-openjdk-devel
+%endif
+%endif
+%endif
+%if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+Requires: java-1.7.0-openjdk-devel
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+Requires: java7-devel-openjdk
+%endif
 %endif
 Requires: lib%{name}-jni = %{version}
 Requires: %{name}-util-devel = %{version}
@@ -269,10 +401,39 @@ The %{name}-jni-devel package contains libraries and header files for
 developing applications that use lib%{name}-jni.
 
 
+%package qtsol-qtcopydialog-devel
+Summary: Development files for lib%{name}-qtsol-qtcopydialog
+Group: Development/Libraries/C and C++
+Requires: lib%{name}-qtsol-qtcopydialog = %{version}
+Requires: %{name}-util-devel = %{version}
+
+%description qtsol-qtcopydialog-devel
+The %{name}-qtsol-qtcopydialog-devel package contains libraries and header files for
+developing applications that use lib%{name}-qtsol-qtcopydialog.
+
+
+%package qtsol-qtsingleapplication-devel
+Summary: Development files for lib%{name}-qtsol-qtsingleapplication
+Group: Development/Libraries/C and C++
+Requires: lib%{name}-qtsol-qtsingleapplication = %{version}
+Requires: %{name}-util-devel = %{version}
+
+%description qtsol-qtsingleapplication-devel
+The %{name}-qtsol-qtsingleapplication-devel package contains libraries and header files for
+developing applications that use lib%{name}-qtsol-qtsingleapplication.
+
+
 %package gui-devel
 Summary: Development files for lib%{name}-gui
 Group: Development/Libraries/C and C++
-Requires: libXScrnSaver-devel libX11-devel
+Requires: libXScrnSaver-devel
+Requires: libX11-devel
+%if (0%{?suse_version})
+Requires: xproto-devel
+%endif
+%if (0%{?centos} || 0%{?rhel})
+Requires: xorg-x11-proto-devel
+%endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
 Requires: libqt5-qtx11extras-devel >= 5.6.1
@@ -286,6 +447,8 @@ Requires: qt-x11
 %endif
 %endif
 Requires: lib%{name}-gui = %{version}
+Requires: %{name}-qtsol-qtcopydialog-devel = %{version}
+Requires: %{name}-qtsol-qtsingleapplication-devel = %{version}
 Requires: %{name}-util-devel = %{version}
 
 %description gui-devel
@@ -297,8 +460,13 @@ developing applications that use lib%{name}-gui.
 Summary: Development files for lib%{name}
 Group: Development/Libraries/C and C++
 Requires: %{name}-base-devel = %{version}
+Requires: %{name}-qtsol-qtservice-devel = %{version}
+Requires: %{name}-qtsol-qtlockedfile-devel = %{version}
+Requires: %{name}-qtsol-qtsinglecoreapplication-devel = %{version}
 Requires: %{name}-util-devel = %{version}
 Requires: %{name}-jni-devel = %{version}
+Requires: %{name}-qtsol-qtcopydialog-devel = %{version}
+Requires: %{name}-qtsol-qtsingleapplication-devel = %{version}
 Requires: %{name}-gui-devel = %{version}
 
 %description devel
@@ -410,10 +578,10 @@ qmake	\
 	CONFIG*=shared CONFIG-=static CONFIG-=static_and_shared	\
 	CONFIG+=cppdevtk_rpmbuild	\
 	CPPDEVTK_PREFIX=%{buildroot}/%{_prefix}	\
+	CPPDEVTK_RPATHDIR=%{rpathdir}	\
 	CPPDEVTK_DATA_ROOT_DIR=%{buildroot}/%{_datadir}	\
 	CPPDEVTK_SYS_CONF_DIR=%{buildroot}/%{_sysconfdir}	\
 	CPPDEVTK_LOCAL_STATE_DIR=%{buildroot}/%{_localstatedir}	\
-	CPPDEVTK_RPATHDIR=%{rpathdir}	\
 	&& make qmake_all
 	
 #	CPPDEVTK_THIRD_PARTY_PREFIX=%{_prefix}
@@ -498,6 +666,24 @@ exit 0
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
+%files -n lib%{name}-qtsol-qtservice
+%defattr(-,root,root,-)
+%{_libdir}/lib%{name}_qtsol_qtservice.so.*
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files -n lib%{name}-qtsol-qtlockedfile
+%defattr(-,root,root,-)
+%{_libdir}/lib%{name}_qtsol_qtlockedfile.so.*
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files -n lib%{name}-qtsol-qtsinglecoreapplication
+%defattr(-,root,root,-)
+%{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.so.*
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
 %files -n lib%{name}-util
 %defattr(-,root,root,-)
 %{_libdir}/lib%{name}_util.so.*
@@ -507,6 +693,18 @@ exit 0
 %files -n lib%{name}-jni
 %defattr(-,root,root,-)
 %{_libdir}/lib%{name}_jni.so.*
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files -n lib%{name}-qtsol-qtcopydialog
+%defattr(-,root,root,-)
+%{_libdir}/lib%{name}_qtsol_qtcopydialog.so.*
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files -n lib%{name}-qtsol-qtsingleapplication
+%defattr(-,root,root,-)
+%{_libdir}/lib%{name}_qtsol_qtsingleapplication.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
@@ -532,6 +730,30 @@ exit 0
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
+%files qtsol-qtservice-devel
+%defattr(-,root,root,-)
+%{_includedir}/%{name}/QtSolutions/QtService
+%{_libdir}/lib%{name}_qtsol_qtservice.so
+%{_libdir}/lib%{name}_qtsol_qtservice.prl
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files qtsol-qtlockedfile-devel
+%defattr(-,root,root,-)
+%{_includedir}/%{name}/QtSolutions/QtLockedFile
+%{_libdir}/lib%{name}_qtsol_qtlockedfile.so
+%{_libdir}/lib%{name}_qtsol_qtlockedfile.prl
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files qtsol-qtsinglecoreapplication-devel
+%defattr(-,root,root,-)
+%{_includedir}/%{name}/QtSolutions/QtSingleCoreApplication
+%{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.so
+%{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.prl
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
 %files util-devel
 %defattr(-,root,root,-)
 %{_includedir}/%{name}/util
@@ -545,6 +767,22 @@ exit 0
 %{_includedir}/%{name}/jni
 %{_libdir}/lib%{name}_jni.so
 %{_libdir}/lib%{name}_jni.prl
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files qtsol-qtcopydialog-devel
+%defattr(-,root,root,-)
+%{_includedir}/%{name}/QtSolutions/QtCopyDialog
+%{_libdir}/lib%{name}_qtsol_qtcopydialog.so
+%{_libdir}/lib%{name}_qtsol_qtcopydialog.prl
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
+%files qtsol-qtsingleapplication-devel
+%defattr(-,root,root,-)
+%{_includedir}/%{name}/QtSolutions/QtSingleApplication
+%{_libdir}/lib%{name}_qtsol_qtsingleapplication.so
+%{_libdir}/lib%{name}_qtsol_qtsingleapplication.prl
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 

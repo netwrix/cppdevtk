@@ -59,6 +59,9 @@ protected:
 	
 	virtual bool SetupTranslators();
 private:
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+	QTranslator qtsolQtCopyDialogTranslator_;
+#	endif
 	QTranslator guiTranslator_;
 };
 

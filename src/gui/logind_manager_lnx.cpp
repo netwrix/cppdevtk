@@ -48,12 +48,6 @@ namespace gui {
 namespace detail {
 
 
-SessionManager::IdleTime LogindManager::GetIdleTime() const {
-	const qulonglong kIdleSinceHint = GetIdleSinceHint();
-	// TODO: implement
-	return 0;
-}
-
 bool LogindManager::IsLogindServiceRegistered() {
 	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
 	if (!kSystemBus.isConnected()) {
@@ -75,10 +69,6 @@ bool LogindManager::PowerOff(bool interactive) {
 		return false;
 	}
 	return true;
-}
-
-qulonglong LogindManager::GetIdleSinceHint() const {
-	return 0;	// TODO: implement
 }
 
 ::std::auto_ptr<Session> LogindManager::GetSessionByPID(uint pid) const {

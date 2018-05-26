@@ -37,8 +37,10 @@
 #include <memory>
 #elif (CPPDEVTK_PLATFORM_WINDOWS)
 #include "invisible_widget.hpp"
+#include <windows.h>
 #elif (CPPDEVTK_PLATFORM_MACOSX)
 #include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include <Security/AuthSession.h>
 #ifdef QT_MAC_USE_COCOA
 #ifdef __OBJC__
@@ -103,9 +105,20 @@ public Q_SLOTS:
 	/// \remark On Linux when locking session from UI screensaver is used and we receive screensaver signals
 	bool Lock();
 public:
+#	if (CPPDEVTK_PLATFORM_LINUX)
+	typedef qulonglong IdleTime;
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
+	typedef unsigned long long int IdleTime;
+#	elif (CPPDEVTK_PLATFORM_WINDOWS)
+	typedef DWORD IdleTime;
+#	else
+#	error "Unsupported platform!!!"
+#	endif
+	
 	virtual ~Session();
 	
 	QString GetId() const;
+	IdleTime GetIdleTime() const;	///< \return The time, in milliseconds, elapsed since the last input event.
 	
 	bool operator==(const Session& other) const;
 	bool operator!=(const Session& other) const;

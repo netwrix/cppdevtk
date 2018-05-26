@@ -26,15 +26,15 @@ namespace cppdevtk {
 namespace util {
 
 
-SingleCoreApplication::SingleCoreApplication(int& argc, char** argv): QtSingleCoreApplication(GetUniqueId(), argc, argv),
-		CoreApplicationBase() {
+SingleCoreApplication::SingleCoreApplication(int& argc, char** argv):
+		::cppdevtk::qtsol::QtSingleCoreApplication(GetUniqueId(), argc, argv), CoreApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	SetCurrentLanguageInfo(GetDefaultLanguageInfo());
 }
 
-SingleCoreApplication::SingleCoreApplication(int& argc, char** argv, const QString& id): QtSingleCoreApplication(id, argc, argv),
-		CoreApplicationBase() {
+SingleCoreApplication::SingleCoreApplication(int& argc, char** argv, const QString& id):
+		::cppdevtk::qtsol::QtSingleCoreApplication(id, argc, argv), CoreApplicationBase() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(id.isEmpty(), "id");

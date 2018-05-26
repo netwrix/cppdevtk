@@ -22,15 +22,19 @@
 
 
 #include "config.hpp"
+#if (!CPPDEVTK_ENABLE_QT_SOLUTIONS)
+#error "This file require QtSolutions enabled!!!"
+#endif
+
 #include "core_application_base.hpp"
-#include "qt_single_core_application.hpp"
+#include <cppdevtk/QtSolutions/QtSingleCoreApplication/QtSingleCoreApplication>
 
 
 namespace cppdevtk {
 namespace util {
 
 
-class CPPDEVTK_UTIL_API SingleCoreApplication: public QtSingleCoreApplication, public CoreApplicationBase {
+class CPPDEVTK_UTIL_API SingleCoreApplication: public ::cppdevtk::qtsol::QtSingleCoreApplication, public CoreApplicationBase {
 	friend class CoreApplicationBase;
 	
 	Q_OBJECT

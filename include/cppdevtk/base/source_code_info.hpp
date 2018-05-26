@@ -22,13 +22,13 @@
 
 
 #include "config.hpp"
-#include "stringizable.hpp"
-
 
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(push)
 #	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
 #endif
+
+#include "stringizable.hpp"
 
 
 namespace cppdevtk {

@@ -22,15 +22,19 @@
 
 
 #include "config.hpp"
+#if (!CPPDEVTK_ENABLE_QT_SOLUTIONS)
+#error "This file require QtSolutions enabled!!!"
+#endif
+
 #include "application_base.hpp"
-#include "qt_single_application.hpp"
+#include <cppdevtk/QtSolutions/QtSingleApplication/QtSingleApplication>
 
 
 namespace cppdevtk {
 namespace gui {
 
 
-class CPPDEVTK_GUI_API SingleApplication: public QtSingleApplication, public ApplicationBase {
+class CPPDEVTK_GUI_API SingleApplication: public ::cppdevtk::qtsol::QtSingleApplication, public ApplicationBase {
 	friend class ApplicationBase;
 	
 	Q_OBJECT

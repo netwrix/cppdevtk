@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#	pragma warning(disable: 4061)	// C4061: enumerator 'identifier' in switch of enum 'enumeration' is not explicitly handled by a case label
+#endif
+
 #include <cppdevtk/base/locale_to_lang_id_win.hpp>
 #if (!CPPDEVTK_PLATFORM_WINDOWS)
 #	error "This file is Windows specific!!!"
@@ -29,11 +34,6 @@
 #include <QtCore/QtGlobal>
 
 #include <windows.h>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
-#	pragma warning(disable: 4061)	// C4061: enumerator 'identifier' in switch of enum 'enumeration' is not explicitly handled by a case label
-#endif
 
 
 namespace cppdevtk {

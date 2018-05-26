@@ -59,6 +59,7 @@
 #define CPPDEVTK_MATE_SCREENSAVER_INTERFACE "org.mate.ScreenSaver"
 
 // https://github.com/GNOME/gnome-settings-daemon/blob/master/gnome-settings-daemon/org.gnome.ScreenSaver.xml
+// https://people.gnome.org/~mccann/gnome-screensaver/docs/gnome-screensaver.html
 #define CPPDEVTK_GNOME_SCREENSAVER_SERVICE_NAME "org.gnome.ScreenSaver"
 #define CPPDEVTK_GNOME_SCREENSAVER_OBJ_PATH "/org/gnome/ScreenSaver"
 #define CPPDEVTK_GNOME_SCREENSAVER_INTERFACE "org.gnome.ScreenSaver"

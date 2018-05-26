@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
 #include <cppdevtk/base/thread.hpp>
 #include <cppdevtk/base/time_utils.hpp>
 #include <cppdevtk/base/dbc.hpp>
@@ -42,11 +47,6 @@
 #endif
 
 #include <exception>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
-#endif
 
 
 #endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)

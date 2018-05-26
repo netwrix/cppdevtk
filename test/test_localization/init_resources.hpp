@@ -24,6 +24,9 @@
 #include "config.hpp"
 #include <cppdevtk/base/init_resources.hpp>
 #include <cppdevtk/util/init_resources.hpp>
+#if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+#include <cppdevtk/QtSolutions/QtCopyDialog/init_resources.hpp>
+#endif
 #include <cppdevtk/gui/init_resources.hpp>
 
 #include <QtCore/QDir>
@@ -68,6 +71,9 @@ namespace test_localization {
 inline void InitResources() {
 	CppDevTkBaseInitResources();
 	CppDevTkUtilInitResources();
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+	CppDevTkQtSolutionsQtCopyDialogInitResources();
+#	endif
 	CppDevTkGuiInitResources();
 	
 	CppDevTkTestLocalizationInitResources();

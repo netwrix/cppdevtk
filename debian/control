@@ -2,7 +2,8 @@ Source: cppdevtk
 Priority: optional
 Maintainer: Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 Build-Depends: debhelper (>=9),
-	zlib1g-dev, libudev-dev, libsystemd-dev, libdbus-1-dev, libboost-all-dev, libxss-dev, libgl1-mesa-dev, default-jdk, qt-latest (>=5.9.4)
+	zlib1g-dev, libudev-dev, libboost-all-dev, libxss-dev, libx11-dev, x11proto-core-dev, default-jdk,
+	qtbase5-dev (>=5.9.5), libqt5x11extras5-dev (>=5.9.5)
 Standards-Version: 3.9.6
 Section: libs
 Homepage: https://github.com/cososys/cppdevtk
@@ -16,6 +17,30 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: CppDevTk base library
  CppDevTk C++ base library.
+
+
+Package: libcppdevtk-qtsol-qtservice
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk QtSolutions QtService library
+ CppDevTk QtSolutions QtService library.
+
+
+Package: libcppdevtk-qtsol-qtlockedfile
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk QtSolutions QtLockedFile library
+ CppDevTk QtSolutions QtLockedFile library.
+
+
+Package: libcppdevtk-qtsol-qtsinglecoreapplication
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk QtSolutions QtSingleCoreApplication library
+ CppDevTk QtSolutions QtSingleCoreApplication library.
 
 
 Package: libcppdevtk-util
@@ -34,6 +59,22 @@ Description: CppDevTk jni library
  CppDevTk C++ jni library.
 
 
+Package: libcppdevtk-qtsol-qtcopydialog
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk QtSolutions QtCopyDialog library
+ CppDevTk QtSolutions QtCopyDialog library.
+
+
+Package: libcppdevtk-qtsol-qtsingleapplication
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: CppDevTk QtSolutions QtSingleApplication library
+ CppDevTk QtSolutions QtSingleApplication library.
+
+
 Package: libcppdevtk-gui
 Section: libs
 Architecture: any
@@ -45,7 +86,11 @@ Description: CppDevTk gui library
 Package: libcppdevtk
 Section: libs
 Architecture: any
-Depends: libcppdevtk-gui (= ${binary:Version}), libcppdevtk-jni (= ${binary:Version}), libcppdevtk-util (= ${binary:Version}), libcppdevtk-base (= ${binary:Version}), ${misc:Depends}
+Depends: libcppdevtk-gui (= ${binary:Version}), libcppdevtk-qtsol-qtsingleapplication (= ${binary:Version}),
+	libcppdevtk-qtsol-qtcopydialog (= ${binary:Version}), libcppdevtk-jni (= ${binary:Version}),
+	libcppdevtk-util (= ${binary:Version}), libcppdevtk-qtsol-qtservice (= ${binary:Version}),
+	libcppdevtk-qtsol-qtlockedfile (= ${binary:Version}), libcppdevtk-qtsol-qtsinglecoreapplication (= ${binary:Version}), 
+	libcppdevtk-base (= ${binary:Version}), ${misc:Depends}
 Description: CppDevTk libraries
  Convenience package to install all CppDevTk C++ libraries.
 
@@ -53,17 +98,43 @@ Description: CppDevTk libraries
 Package: cppdevtk-base-dev
 Section: libdevel
 Architecture: any
-Depends: libcppdevtk-base (= ${binary:Version}), ${misc:Depends},
-	libboost-all-dev, qt-latest (>=5.9.4)
+Depends: libcppdevtk-base (= ${binary:Version}),
+	libboost-all-dev, qtbase5-dev (>=5.9.5), ${misc:Depends}
 Description: Development files for libcppdevtk-base
  The cppdevtk-base-dev package contains libraries and header files for developing applications that use libcppdevtk-base.
+
+
+Package: cppdevtk-qtsol-qtservice-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-qtsol-qtservice (= ${binary:Version}), ${misc:Depends}
+Description: Development files for libcppdevtk-qtsol-qtservice
+ The cppdevtk-qtsol-qtservice-dev package contains libraries and header files for developing applications that use libcppdevtk-qtsol-qtservice.
+
+
+Package: cppdevtk-qtsol-qtlockedfile-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-qtsol-qtlockedfile (= ${binary:Version}), ${misc:Depends}
+Description: Development files for libcppdevtk-qtsol-qtlockedfile
+ The cppdevtk-qtsol-qtlockedfile-dev package contains libraries and header files for developing applications that use libcppdevtk-qtsol-qtlockedfile.
+
+
+Package: cppdevtk-qtsol-qtsinglecoreapplication-dev
+Section: libdevel
+Architecture: any
+Depends: cppdevtk-qtsol-qtlockedfile-dev (= ${binary:Version}), libcppdevtk-qtsol-qtsinglecoreapplication (= ${binary:Version}), ${misc:Depends}
+Description: Development files for libcppdevtk-qtsol-qtsinglecoreapplication
+ The cppdevtk-qtsol-qtsinglecoreapplication-dev package contains libraries and header files for developing applications that use libcppdevtk-qtsol-qtsinglecoreapplication.
 
 
 Package: cppdevtk-util-dev
 Section: libdevel
 Architecture: any
-Depends: libcppdevtk-util (= ${binary:Version}), ${misc:Depends},
-	zlib1g-dev, libudev-dev, libsystemd-dev, libdbus-1-dev, cppdevtk-base-dev (= ${binary:Version})
+Depends: libcppdevtk-util (= ${binary:Version}),
+	cppdevtk-qtsol-qtservice-dev (= ${binary:Version}), cppdevtk-qtsol-qtlockedfile-dev (= ${binary:Version}),
+	cppdevtk-qtsol-qtsinglecoreapplication-dev (= ${binary:Version}), cppdevtk-base-dev (= ${binary:Version}),
+	zlib1g-dev, libudev-dev, ${misc:Depends}
 Description: Development files for libcppdevtk-util
  The cppdevtk-util-dev package contains libraries and header files for developing applications that use libcppdevtk-util.
 
@@ -71,17 +142,36 @@ Description: Development files for libcppdevtk-util
 Package: cppdevtk-jni-dev
 Section: libdevel
 Architecture: any
-Depends: libcppdevtk-jni (= ${binary:Version}), ${misc:Depends},
-	default-jdk, cppdevtk-util-dev (= ${binary:Version})
+Depends: libcppdevtk-jni (= ${binary:Version}),
+	default-jdk, cppdevtk-util-dev (= ${binary:Version}), ${misc:Depends}
 Description: Development files for libcppdevtk-jni
  The cppdevtk-jni-dev package contains libraries and header files for developing applications that use libcppdevtk-jni.
+
+
+Package: cppdevtk-qtsol-qtcopydialog-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-qtsol-qtcopydialog (= ${binary:Version}),
+	cppdevtk-util-dev (= ${binary:Version}), ${misc:Depends}
+Description: Development files for libcppdevtk-qtsol-qtcopydialog
+ The cppdevtk-qtsol-qtcopydialog-dev package contains libraries and header files for developing applications that use libcppdevtk-qtsol-qtcopydialog.
+
+
+Package: cppdevtk-qtsol-qtsingleapplication-dev
+Section: libdevel
+Architecture: any
+Depends: libcppdevtk-qtsol-qtsingleapplication (= ${binary:Version}),
+	cppdevtk-util-dev (= ${binary:Version}), ${misc:Depends}
+Description: Development files for libcppdevtk-qtsol-qtsingleapplication
+ The cppdevtk-qtsol-qtsingleapplication-dev package contains libraries and header files for developing applications that use libcppdevtk-qtsol-qtsingleapplication.
 
 
 Package: cppdevtk-gui-dev
 Section: libdevel
 Architecture: any
-Depends: libcppdevtk-gui (= ${binary:Version}), ${misc:Depends},
-	libxss-dev, libgl1-mesa-dev, cppdevtk-util-dev (= ${binary:Version})
+Depends: libcppdevtk-gui (= ${binary:Version}),
+	cppdevtk-qtsol-qtsingleapplication-dev (= ${binary:Version}), cppdevtk-qtsol-qtcopydialog-dev (= ${binary:Version}),
+	cppdevtk-util-dev (= ${binary:Version}), libqt5x11extras5-dev (>=5.9.5), libxss-dev, libx11-dev, x11proto-core-dev, ${misc:Depends}
 Description: Development files for libcppdevtk-gui
  The cppdevtk-gui-dev package contains libraries and header files for developing applications that use libcppdevtk-gui.
 
@@ -89,7 +179,11 @@ Description: Development files for libcppdevtk-gui
 Package: cppdevtk-dev
 Section: libdevel
 Architecture: any
-Depends: cppdevtk-gui-dev (= ${binary:Version}), cppdevtk-jni-dev (= ${binary:Version}), cppdevtk-util-dev (= ${binary:Version}), cppdevtk-base-dev (= ${binary:Version}), ${misc:Depends}
+Depends: cppdevtk-gui-dev (= ${binary:Version}), cppdevtk-qtsol-qtsingleapplication-dev (= ${binary:Version}),
+	cppdevtk-qtsol-qtcopydialog-dev (= ${binary:Version}), cppdevtk-jni-dev (= ${binary:Version}),
+	cppdevtk-util-dev (= ${binary:Version}), cppdevtk-qtsol-qtsinglecoreapplication-dev (= ${binary:Version}),
+	cppdevtk-qtsol-qtlockedfile-dev (= ${binary:Version}), cppdevtk-qtsol-qtservice-dev (= ${binary:Version}),
+	cppdevtk-base-dev (= ${binary:Version}), ${misc:Depends}
 Description: Development files for libcppdevtk
  Convenience package to install all libcppdevtk-devel packages.
 
@@ -121,6 +215,7 @@ Description: Test applications for libcppdevtk-gui
 Package: cppdevtk-test
 Section: utils
 Architecture: any
-Depends: cppdevtk-test-gui (= ${binary:Version}), cppdevtk-test-util (= ${binary:Version}), cppdevtk-test-base (= ${binary:Version}), ${misc:Depends}
+Depends: cppdevtk-test-gui (= ${binary:Version}), cppdevtk-test-util (= ${binary:Version}),
+	cppdevtk-test-base (= ${binary:Version}), ${misc:Depends}
 Description: Test applications for libcppdevtk
  Convenience package to install all cppdevtk-test packages.

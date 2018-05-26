@@ -1,0 +1,127 @@
+cppdevtk (1.1.0-0ubuntu1.4) xenial; urgency=medium
+
+  * to fill
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Thu, 15 Mar 2018 14:19:46 +0300
+
+
+cppdevtk (1.0.9-0ubuntu1.4) xenial; urgency=medium
+
+  * added localization test/sample app
+  * localization support review
+  * translations
+  * verify connect in qt solutions integration
+  * updated KSqueezedTextLabel to KF5
+  * improved DiskSpaceWidget layout
+  * added icon pixmap to MessageBox
+  * updated qt-solutions
+  * CoreApplicationBase::GetSupportedLanguageInfos() use app qm info
+  * updated Qt to 5.9.4 on Ubuntu
+  * updated boost to 1_66_0
+  * fixed meta type issues in qt solutions integration
+  * partial fix for KSqueezedTextLabel rich text
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Wed, 14 Mar 2018 14:19:46 +0300
+
+
+cppdevtk (1.0.8-0ubuntu1.4) xenial; urgency=medium
+
+  * added GetMountPoints()
+  * filesystem functions quick review
+  * android and ios icons
+  * added GetMountPointsFromPath() missing implementation
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Tue, 30 Jan 2018 14:19:46 +0300
+
+
+cppdevtk (1.0.7-0ubuntu1.4) xenial; urgency=medium
+
+  * qt 4 and qt 5: fixed support for qt static builds, static qico plugin, translations
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Thu, 18 Jan 2018 14:19:46 +0300
+
+
+cppdevtk (1.0.6-0ubuntu1.4) xenial; urgency=medium
+
+  * added CallTraits
+  * added Factory
+  * fixed Optional test
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Sun, 7 Jan 2018 14:19:46 +0300
+
+
+cppdevtk (1.0.5-0ubuntu1.4) xenial; urgency=medium
+
+  * added Any
+  * added future errc
+  * added Optional
+  * this_thread Yield(), SleepFor() and SleepUntil() available even if !CPPDEVTK_HAVE_THREAD_STORAGE
+  * removed unnecessary exceptions
+  * exception classes in separate files
+  * exception propagation: added parameter to terminate or return null on failure
+  * improved TypeInfo
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Fri, 15 Dec 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.4-0ubuntu1.4) xenial; urgency=medium
+
+  * added CPPDEVTK_NOEXCEPT
+  * added exception propagation
+  * added thread (not available on iOS < 9.0 and Mac OS X < 10.7 because __thread is not supported)
+  * added interruption support to condition variable
+  * added interruption support to semaphore
+  * Kubuntu: updated Qt to 5.9.2
+  * moved EnableIf and IfThenElse as Conditional in type_traits.hpp
+  * added more std exception classes equivalents
+  * treat warning "not all control paths return a value" as error
+  * uniform error reporting/handling in synchronization primitives
+  * added time utils
+  * removed sleep.hpp (replaced by this_thread sleep API)
+  * enabled console test apps on Android and iOS
+  * fixed internal pthread_mutex_timedlock(): absTime instead of relTime
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 27 Nov 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.3-0ubuntu1.4) xenial; urgency=medium
+
+  * added generic locking algorithms
+  * added condition variable
+  * added semaphore
+  * android: added GetFilesDirPath()
+  * mutex review/cleanup
+  * increased iOS minimum version from 6.0 to 8.0
+  * internal support XCode 8 & 9
+  * Mac + Win: relaxed IsValidPath()
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Tue, 17 Oct 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.2-0ubuntu1.4) xenial; urgency=medium
+
+  * made public on GitHub: https://github.com/cososys/cppdevtk
+  * packaging cleanup
+  * JNI review
+  * enabled JNI on Win32
+  * mutex impl .NET workaround: use QMutex even if std mutex available; maybe pImpl in the future
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 31 Jul 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.1-0ubuntu1.4) xenial; urgency=medium
+
+  * Debian based packaging
+  * require C++11 enabled for clang and gcc >= 4.3.0
+  * Made ThrowOutOfMemoryErrorOrAbort() public
+  * mutex impl: use std mutex if available
+  * fixed check Qt allowed version
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 3 Jul 2017 14:19:46 +0300
+
+
+cppdevtk (1.0.0-0ubuntu1.4) xenial; urgency=medium
+
+  * Initial release
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 22 May 2017 14:19:46 +0300

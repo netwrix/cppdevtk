@@ -17,9 +17,20 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/util/config.hpp>
+
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#if (CPPDEVTK_COMPILER_GCC)
+#if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 2, 0))
+// deleting object of polymorphic class type cppdevtk::util::LanguageInfo which has non-virtual destructor
+// might cause undefined behaviour [-Wdelete-non-virtual-dtor]
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+#endif
+#endif
+
 #include <cppdevtk/util/core_application_base.hpp>
 #include <cppdevtk/util/core_application.hpp>
-#include <cppdevtk/util/single_core_application.hpp>
 #include <cppdevtk/util/filesystem_utils.hpp>
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/stdexcept.hpp>

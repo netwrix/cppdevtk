@@ -22,6 +22,12 @@
 
 
 #include "config.hpp"
+
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(push)
+#	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
+#endif
+
 #if (CPPDEVTK_PLATFORM_WINDOWS)
 #include <windows.h>
 #undef Yield
@@ -49,12 +55,6 @@
 #include <cstddef>
 #include <ostream>
 #include CPPDEVTK_TR1_HEADER(memory)
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(push)
-#	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
-#endif
 
 
 // Please see CPPDEVTK_CHECK_INTERRUPT_REL_TIME performance impact table in cppdevtk/config/platform.hpp

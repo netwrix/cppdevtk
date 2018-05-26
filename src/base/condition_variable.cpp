@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
 #include <cppdevtk/base/condition_variable.hpp>
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/logger.hpp>
@@ -27,11 +32,6 @@
 #include "thread_local_data_ptr.hpp"
 
 #include <cstddef>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
-#endif
 
 
 namespace cppdevtk {

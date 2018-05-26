@@ -23,18 +23,40 @@ include(./../common.pri)
 
 #CONFIG *= ordered
 
-SUBDIRS += base \
-    util \
-    gui
+
+SUBDIRS += base	\
+	util	\
+	gui
 
 isEqual(CPPDEVTK_HAVE_JNI, "true") {
-    SUBDIRS += jni
+	SUBDIRS += jni
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	SUBDIRS +=	\
+		QtCopyDialog	\
+		QtLockedFile	\
+		QtService	\
+		QtSingleApplication	\
+		QtSingleCoreApplication
 }
 
 
-util.depends = base
-gui.depends = util base
-
 isEqual(CPPDEVTK_HAVE_JNI, "true") {
 	jni.depends = util base
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	QtService.depends = base
+	QtLockedFile.depends = base
+	QtSingleCoreApplication.depends = QtLockedFile base
+	QtSingleApplication.depends = QtSingleCoreApplication QtLockedFile util base
+	QtCopyDialog.depends = util base
+	
+	util.depends = QtSingleCoreApplication QtLockedFile QtService base
+	gui.depends = QtCopyDialog QtSingleApplication QtSingleCoreApplication QtLockedFile QtService util base
+}
+else {
+	util.depends = base
+	gui.depends = util base
 }

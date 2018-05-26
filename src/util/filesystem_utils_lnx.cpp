@@ -17,6 +17,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/util/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && !CPPDEVTK_PLATFORM_ANDROID)
+#	if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 2, 4))
+#		pragma GCC diagnostic ignored "-Wunused-function"
+#	endif
+#endif
+
 #include <cppdevtk/util/filesystem_utils.hpp>
 #if (!CPPDEVTK_PLATFORM_LINUX)
 #	error "This file is Linux specific!!!"
@@ -52,13 +59,6 @@
 #include <cstring>
 #include <memory>
 #include <new>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && !CPPDEVTK_PLATFORM_ANDROID)
-#	if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 2, 4))
-#		pragma GCC diagnostic ignored "-Wunused-function"
-#	endif
-#endif
 
 
 using ::cppdevtk::base::Exception;

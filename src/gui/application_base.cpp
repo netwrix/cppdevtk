@@ -19,7 +19,9 @@
 
 #include <cppdevtk/gui/application_base.hpp>
 #include <cppdevtk/gui/application.hpp>
+#if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 #include <cppdevtk/gui/single_application.hpp>
+#endif
 #include <cppdevtk/gui/message_box.hpp>
 #include <cppdevtk/gui/set_stylesheet_from_file.hpp>
 #include <cppdevtk/util/filesystem_utils.hpp>
@@ -53,7 +55,11 @@ namespace cppdevtk {
 namespace gui {
 
 
-ApplicationBase::ApplicationBase(): CoreApplicationBase(), guiTranslator_() {
+ApplicationBase::ApplicationBase(): CoreApplicationBase(),
+#		if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+		qtsolQtCopyDialogTranslator_(),
+#		endif
+		guiTranslator_() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	QApplication::translate("language_native_name", "English");	// to generate translation
@@ -67,12 +73,14 @@ QWidget* ApplicationBase::GetDefaultWindow() const {
 	QWidget* pDefaultWindow = NULL;
 	
 	pDefaultWindow = QApplication::activeWindow();
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 	if (pDefaultWindow == NULL) {
 		const SingleApplication* pSingleApplication = dynamic_cast<const SingleApplication*>(this);
 		if (pSingleApplication != NULL) {
 			pDefaultWindow = pSingleApplication->activationWindow();
 		}
 	}
+#	endif
 	
 	if (pDefaultWindow == NULL) {
 		const QWidgetList kTopLevelWidgetList = QApplication::topLevelWidgets();
@@ -213,6 +221,11 @@ bool ApplicationBase::SetupTranslators() {
 	if (!guiTranslator_.isEmpty()) {
 		QApplication::removeTranslator(&guiTranslator_);
 	}
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+	if (!qtsolQtCopyDialogTranslator_.isEmpty()) {
+		QApplication::removeTranslator(&qtsolQtCopyDialogTranslator_);
+	}
+#	endif
 	
 	bool retCode = CoreApplicationBase::SetupTranslators();
 	
@@ -221,6 +234,16 @@ bool ApplicationBase::SetupTranslators() {
 		return retCode;
 	}
 	
+#	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+	if (qtsolQtCopyDialogTranslator_.load((QString("tr_") + kCurrentLanguageInfoName),
+			":/cppdevtk/QtSolutions/QtCopyDialog/res/tr")) {
+		QApplication::installTranslator(&qtsolQtCopyDialogTranslator_);
+	}
+	else {
+		CPPDEVTK_LOG_ERROR("failed to load qtsolQtCopyDialogTranslator_");
+		retCode = false;
+	}
+#	endif
 	if (guiTranslator_.load((QString("tr_") + kCurrentLanguageInfoName), ":/cppdevtk/gui/res/tr")) {
 		QApplication::installTranslator(&guiTranslator_);
 	}

@@ -15,9 +15,6 @@
 #****************************************************************************************************************************
 
 
-include(./linux_distro.pri)
-
-
 CPPDEVTK_PACKAGE_NAME = cppdevtk
 
 
@@ -32,6 +29,10 @@ CONFIG += cppdevtk_with_zlib
 win32 {
 	CONFIG += targetxp
 }
+
+
+# TODO: keep in sync with CPPDEVTK_ENABLE_QT_SOLUTIONS in config/features.hpp
+CPPDEVTK_ENABLE_QTSOLUTIONS = true
 
 
 # target OS version

@@ -22,17 +22,17 @@
 
 
 #include "config.hpp"
-#include <cppdevtk/base/stringizable.hpp>
-
-#include <QtCore/QLocale>
-#include <QtCore/QString>
-#include <QtCore/QMetaType>
-
 
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(push)
 #	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
 #endif
+
+#include <cppdevtk/base/stringizable.hpp>
+
+#include <QtCore/QLocale>
+#include <QtCore/QString>
+#include <QtCore/QMetaType>
 
 
 namespace cppdevtk {
@@ -45,6 +45,12 @@ public:
 	LanguageInfo(const QString& name, const QString& nativeName);
 	LanguageInfo(QLocale::Language language, QLocale::Country country, const QString& nativeName);
 	LanguageInfo(const QLocale& locale, const QString& nativeName);
+	
+#	if (CPPDEVTK_COMPILER_CLANG)
+	// Latest XCode 9.3.1 Clang triggers lots of [-Wdelete-non-virtual-dtor] that are painful to get rid of...
+	// So we provide virtual dtor (also class could have been marked CPPDEVTK_FINAL)
+	virtual ~LanguageInfo() {}
+#	endif
 	
 	QString GetName() const;	///< QLocale::name()
 	QString GetNativeName() const;

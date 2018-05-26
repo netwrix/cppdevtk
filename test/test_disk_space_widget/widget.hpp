@@ -24,7 +24,6 @@
 #include "config.hpp"
 #include "ui_widget.h"
 #include <cppdevtk/gui/widget_base.hpp>
-#include <cppdevtk/gui/single_application.hpp>
 
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))

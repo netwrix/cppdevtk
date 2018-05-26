@@ -85,6 +85,7 @@ HEADERS += \
 	safe_free.hpp	\
 	semaphore.hpp	\
 	singletons.hpp	\
+	socket_pair.hpp \
 	source_code_info.hpp	\
 	stack_frame.hpp	\
 	stack_trace.hpp	\
@@ -131,7 +132,8 @@ HEADERS += \
 	zeroize.hpp
 
 unix {
-	HEADERS += execinfo_unx.h
+	HEADERS += execinfo_unx.h	\
+		posix_signals_watcher_unx.hpp
 }
 
 win32 {

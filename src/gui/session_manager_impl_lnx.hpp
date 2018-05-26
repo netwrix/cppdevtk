@@ -45,8 +45,7 @@ public:
 	virtual bool Logout();
 	virtual bool Shutdown();
 	
-	virtual SessionManager::IdleTime GetIdleTime() const = 0;
-	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetThisProcessSession() const = 0;
+	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetCurrentProcessSession() const = 0;
 	
 	QDBusError GetLastError() const;
 protected:
@@ -61,8 +60,10 @@ private:
 	static bool LxqtSmLogout();
 	
 	static bool KdeSmShutdown();
+	static bool GnomeSmRequestShutdown();
 	static bool GnomeSmShutdown();
 	static bool XfceSmShutdown();
+	static bool LxdeSmRequestShutdown();
 	static bool LxdeSmShutdown();
 	static bool LxqtSmShutdown();
 	

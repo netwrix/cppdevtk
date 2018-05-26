@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
+#	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
+#endif
+
 #include <cppdevtk/base/cloneable.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
@@ -29,11 +34,6 @@
 #include <exception>
 #include <stdexcept>
 #include <cstdlib>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
-#	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
-#endif
 
 
 #if (!CPPDEVTK_CLONEABLE_DISABLE_TERMINATE)

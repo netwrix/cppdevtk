@@ -45,9 +45,7 @@ class LogindManager: public SessionManager::Impl {
 	friend class ::cppdevtk::gui::SessionManager;
 public:
 	virtual bool Shutdown();
-	
-	virtual SessionManager::IdleTime GetIdleTime() const;
-	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetThisProcessSession() const;
+	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetCurrentProcessSession() const;
 	
 	
 	static bool IsLogindServiceRegistered();
@@ -55,7 +53,8 @@ private:
 	LogindManager();
 	
 	bool PowerOff(bool interactive);
-	qulonglong GetIdleSinceHint() const;	// CLOCK_REALTIME
+	// Fails on latest Gnome (Ubuntu 18.04, openSUSE Tumbleweed) with org.freedesktop.login1.NoSessionForPID
+	// TODO: report bug
 	::std::auto_ptr<Session> GetSessionByPID(uint pid) const;	///< \note Returned pointer is not NULL
 };
 
@@ -72,7 +71,7 @@ inline bool LogindManager::Shutdown() {
 	return true;
 }
 
-inline ::std::auto_ptr< ::cppdevtk::gui::Session> LogindManager::GetThisProcessSession() const {
+inline ::std::auto_ptr< ::cppdevtk::gui::Session> LogindManager::GetCurrentProcessSession() const {
 	return GetSessionByPID(::cppdevtk::base::GetCurrentProcessId());
 }
 

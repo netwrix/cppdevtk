@@ -47,9 +47,7 @@ class CPPDEVTK_UTIL_API ConsoleKitManager: public SessionManager::Impl {
 	friend class ::cppdevtk::gui::SessionManager;
 public:
 	virtual bool Shutdown();
-	
-	virtual SessionManager::IdleTime GetIdleTime() const;
-	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetThisProcessSession() const;
+	virtual ::std::auto_ptr< ::cppdevtk::gui::Session> GetCurrentProcessSession() const;
 	
 	
 	static bool IsConsoleKitServiceRegistered();
@@ -58,7 +56,6 @@ private:
 	
 	bool Stop();
 	
-	QString GetSystemIdleSinceHint() const;
 	::std::auto_ptr<Session> GetSessionForUnixProcess(uint pid) const;	///< \note Returned pointer is not NULL
 };
 
@@ -75,7 +72,7 @@ inline bool ConsoleKitManager::Shutdown() {
 	return true;
 }
 
-inline ::std::auto_ptr< ::cppdevtk::gui::Session> ConsoleKitManager::GetThisProcessSession() const {
+inline ::std::auto_ptr< ::cppdevtk::gui::Session> ConsoleKitManager::GetCurrentProcessSession() const {
 	return GetSessionForUnixProcess(::cppdevtk::base::GetCurrentProcessId());
 }
 

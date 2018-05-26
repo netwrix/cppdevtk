@@ -22,6 +22,12 @@
 
 
 #include "config.hpp"
+
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(push)
+#	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
+#endif
+
 #include "bad_cast_exception.hpp"
 #include "stringizable.hpp"
 
@@ -29,12 +35,6 @@
 #include <cstddef>
 #include <algorithm>	// swap(), C++98
 #include <utility>	// swap(), C++11
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(push)
-#	pragma warning(disable: 4265)	// C4265: 'class' : class has virtual functions, but destructor is not virtual
-#endif
 
 
 namespace cppdevtk {

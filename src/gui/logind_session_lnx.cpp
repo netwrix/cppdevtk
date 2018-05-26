@@ -19,12 +19,14 @@
 
 #include "logind_session_lnx.hpp"
 #include <cppdevtk/util/dbus_exception.hpp>
+#include <cppdevtk/util/dbus_utils.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 
+#include <QtCore/QDateTime>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusError>
@@ -108,6 +110,36 @@ bool LogindSession::Unlock() {
 		return false;
 	}
 	return true;
+}
+
+bool LogindSession::GetIdleHint() const {
+	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
+	if (!kSystemBus.isConnected()) {
+		throw CPPDEVTK_DBUS_EXCEPTION("systemBus is not connected", kSystemBus.lastError());
+	}
+	
+	return util::GetDBusBooleanProperty(CPPDEVTK_LOGIND_SERVICE_NAME, QDBusObjectPath(DBusInterfaceRef().path()),
+		CPPDEVTK_LOGIND_SESSION_INTERFACE, kSystemBus, "IdleHint");
+}
+
+Session::IdleTime LogindSession::GetIdleSinceHint() const {
+	const qulonglong kIdleSinceHintUs = DoGetIdleSinceHint();
+#	if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+	const QDateTime kIdleSinceHint = QDateTime::fromMSecsSinceEpoch(kIdleSinceHintUs / 1000);
+#	else
+	const QDateTime kIdleSinceHint = QDateTime::fromTime_t(kIdleSinceHintUs / 1000000000);
+#	endif
+	CPPDEVTK_ASSERT(kIdleSinceHint.isValid());
+	
+	const QDateTime kcurrentDateTime = QDateTime::currentDateTime();
+	CPPDEVTK_ASSERT(kcurrentDateTime.isValid());
+	
+#	if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+	const qint64 kIdleTime = kIdleSinceHint.msecsTo(kcurrentDateTime);
+#	else
+	const qint64 kIdleTime = kIdleSinceHint.secsTo(kcurrentDateTime) * 1000;
+#	endif
+	return (kIdleTime >= 0) ? kIdleTime : 0;
 }
 
 bool LogindSession::IsLogindServiceRegistered() {
@@ -198,6 +230,16 @@ LogindSession::LogindSession(const QDBusObjectPath& logindSessionPath):
 	}
 	
 	commit = true;
+}
+
+qulonglong LogindSession::DoGetIdleSinceHint() const {
+	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
+	if (!kSystemBus.isConnected()) {
+		throw CPPDEVTK_DBUS_EXCEPTION("systemBus is not connected", kSystemBus.lastError());
+	}
+	
+	return util::GetDBusUInt64Property(CPPDEVTK_LOGIND_SERVICE_NAME, QDBusObjectPath(DBusInterfaceRef().path()),
+		CPPDEVTK_LOGIND_SESSION_INTERFACE, kSystemBus, "IdleSinceHint");
 }
 
 

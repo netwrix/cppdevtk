@@ -17,6 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#	pragma warning(disable: 4996)	// C4996: 'func' : this function or variable may be unsafe (_sys_nerr)
+#	pragma warning(disable: 4456)	// C4456: declaration of 'var' hides previous local declaration (kErrNo)
+#endif
+
 #include <cppdevtk/base/error_category.hpp>
 #if (!CPPDEVTK_PLATFORM_WINDOWS)
 #	error "This file is Windows specific!!!"
@@ -31,12 +37,6 @@
 
 #include <windows.h>
 #include <tchar.h>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
-#	pragma warning(disable: 4996)	// C4996: 'func' : this function or variable may be unsafe (_sys_nerr)
-#	pragma warning(disable: 4456)	// C4456: declaration of 'var' hides previous local declaration (kErrNo)
-#endif
 
 
 namespace cppdevtk {

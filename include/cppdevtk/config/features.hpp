@@ -268,6 +268,8 @@
 /// In case zlib is missing (on Windows); affects QZipReader and QZipWriter
 #define CPPDEVTK_WITH_ZLIB (CPPDEVTK_PLATFORM_UNIX || 1)
 
+// TODO: keep in sync with CPPDEVTK_ENABLE_QTSOLUTIONS in common_customization.pri
+#define CPPDEVTK_ENABLE_QT_SOLUTIONS 1
 
 /// @}	// config_features_compile_time
 

@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/util/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_PLATFORM_IOS)
+#	pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 #include <cppdevtk/util/filesystem_utils.hpp>
 #if (!CPPDEVTK_PLATFORM_MACOSX)
 #	error "This file is Mac OS X specific!!!"
@@ -57,11 +62,6 @@
 #include <cstddef>
 #include <cstring>
 #include <vector>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_PLATFORM_IOS)
-#	pragma GCC diagnostic ignored "-Wunused-function"
-#endif
 
 
 #ifndef kUSBSerialNumberString

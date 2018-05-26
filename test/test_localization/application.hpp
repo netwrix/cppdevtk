@@ -22,8 +22,11 @@
 
 
 #include "config.hpp"
+#if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 #include <cppdevtk/gui/single_application.hpp>
-
+#else
+#include <cppdevtk/gui/application.hpp>
+#endif
 #include <QtCore/QTranslator>
 
 
@@ -31,7 +34,13 @@ namespace cppdevtk {
 namespace test_localization {
 
 
-class Application: public ::cppdevtk::gui::SingleApplication {
+class Application: public
+#		if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
+		::cppdevtk::gui::SingleApplication
+#		else
+		::cppdevtk::gui::Application
+#		endif
+		{
 	Q_OBJECT
 public:
 	Application(int& argc, char** argv);

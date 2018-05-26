@@ -15,11 +15,15 @@
 #****************************************************************************************************************************
 
 
+greaterThan(QT_MAJOR_VERSION, 4): QT -= widgets
 QT -= gui
-QT *= core network
+unix {
+	QT *= network
+}
 contains(QT_CONFIG, dbus) {
 	QT *= dbus
 }
+QT *= core
 
 
 TEMPLATE = lib
@@ -58,9 +62,15 @@ unix {
 # TARGET + INSTALLS
 
 cppdevtk_enable_target_suffix_qt_major_version {
+	CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_QTSOL_QTSERVICE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSERVICE_TARGET}_qt$${QT_MAJOR_VERSION})}
 	CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET}_qt$${QT_MAJOR_VERSION})}
 }
 else {
+	CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET})}
+	CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET})}
+	CPPDEVTK_QTSOL_QTSERVICE_TARGET = $${qtLibraryTarget($${CPPDEVTK_QTSOL_QTSERVICE_TARGET})}
 	CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET})}
 }
 
@@ -70,38 +80,13 @@ INSTALLS += target
 
 # LIBS + PRE_TARGETDEPS
 !debug_and_release|build_pass {
-	LIBS += -l$${CPPDEVTK_BASE_TARGET}
-	!static_and_shared|build_pass {
-		unix {
-			cppdevtk_enable_android_destdir_workaround {
-				PRE_TARGETDEPS += $${OUT_PWD}/../base/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
-			}
-			else {
-				PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
-			}
-		}
-		else {
-			win32 {
-				PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
-			}
-			else {
-				error("Unsupported platform!!!")
-			}
-		}
+	isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+		LIBS += -l$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET} -l$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET} -l$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}
 	}
+	LIBS += -l$${CPPDEVTK_BASE_TARGET}
 	
 	unix {
-		cppdevtk_with_zlib {
-			# -lz also on Mac OS X debug (not z_debug)
-			#LIBS *= -l$${qtLibraryTarget(z)}
-			LIBS *= -lz
-		}
-		
 		linux* {
-			cppdevtk_have_logind {
-				#LIBS *= -lsystemd
-			}
-			
 			#LIBS *= -ludev
 			LIBS *= -ldl
 		}
@@ -118,6 +103,12 @@ INSTALLS += target
 					error("Unsupported Unix platform!!!")
 				}
 			}
+		}
+		
+		cppdevtk_with_zlib {
+			# -lz also on Mac OS X debug (not z_debug)
+			#LIBS *= -l$${qtLibraryTarget(z)}
+			LIBS *= -lz
 		}
 	}
 	else {
@@ -137,6 +128,41 @@ INSTALLS += target
 		}
 		else {
 			error("Unsupported platform!!!")
+		}
+	}
+	
+	
+	!static_and_shared|build_pass {
+		unix {
+			cppdevtk_enable_android_destdir_workaround {
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtSingleCoreApplication/lib$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtLockedFile/lib$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${OUT_PWD}/../QtService/lib$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${OUT_PWD}/../base/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+			else {
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${DESTDIR}/lib$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+		}
+		else {
+			win32 {
+				isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTSINGLECOREAPPLICATION_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTLOCKEDFILE_TARGET}.$${CPPDEVTK_LIB_EXT}
+					PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_QTSOL_QTSERVICE_TARGET}.$${CPPDEVTK_LIB_EXT}
+				}
+				PRE_TARGETDEPS += $${DESTDIR}/$${CPPDEVTK_BASE_TARGET}.$${CPPDEVTK_LIB_EXT}
+			}
+			else {
+				error("Unsupported platform!!!")
+			}
 		}
 	}
 }
@@ -203,11 +229,6 @@ SOURCES += \
 	no_such_file_or_directory_exception.cpp	\
 	password_requirements.cpp \
 	q_zip.cpp \
-	qt_local_peer.cpp \
-	qt_locked_file.cpp \
-	qt_service.cpp \
-	qt_single_core_application.cpp \
-	single_core_application.cpp \
 	tinyxml2.cpp
 
 unix {
@@ -217,12 +238,6 @@ unix {
 		dynamic_loader_unx.cpp	\
 		filesystem_utils_unx.cpp	\
 		get_user_name_unx.cpp	\
-		qt_locked_file_unx.cpp \
-		qt_service_unx.cpp \
-		qt_unix_server_socket_unx.cpp \
-		qt_unix_socket_unx.cpp	\
-		socket_pair_unx.cpp	\
-		posix_signals_watcher_unx.cpp	\
 		core_application_base_unx.cpp
 	
 	linux* {
@@ -232,9 +247,6 @@ unix {
 		}
 	}
 	else {
-		macx {
-			SOURCES += 
-		}
 		macx|ios {
 			SOURCES += filesystem_utils_mac.cpp
 		}
@@ -251,9 +263,6 @@ else {
 			dynamic_loader_win.cpp	\
 			filesystem_utils_win.cpp	\
 			get_user_name_win.cpp	\
-			qt_locked_file_win.cpp \
-			qt_service_win.cpp	\
-			socket_pair_win.cpp	\
 			core_application_base_win.cpp
 	}
 	else {
@@ -265,6 +274,10 @@ contains(QT_CONFIG, dbus) {
 	SOURCES += \
 		dbus_utils.cpp	\
 		dbus_exception.cpp
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	SOURCES += single_core_application.cpp
 }
 
 
@@ -292,17 +305,10 @@ HEADERS += \
 	../../include/cppdevtk/util/password_requirements.hpp \
 	../../include/cppdevtk/util/q_zip_reader.hpp \
 	../../include/cppdevtk/util/q_zip_writer.hpp \
-	../../include/cppdevtk/util/qt_local_peer.hpp \
-	../../include/cppdevtk/util/qt_locked_file.hpp \
-	../../include/cppdevtk/util/qt_service.hpp \
-	../../include/cppdevtk/util/qt_single_core_application.hpp \
-	../../include/cppdevtk/util/single_core_application.hpp \
-	../../include/cppdevtk/util/socket_pair.hpp \
 	../../include/cppdevtk/util/tinyxml2.h
 
 unix {
-	HEADERS += ../../include/cppdevtk/util/filesystem_utils_unx.hpp	\
-		../../include/cppdevtk/util/posix_signals_watcher_unx.hpp
+	HEADERS += ../../include/cppdevtk/util/filesystem_utils_unx.hpp
 	
 	linux* {
 		HEADERS += ../../include/cppdevtk/util/filesystem_utils_lnx.hpp
@@ -328,20 +334,12 @@ else {
 	}
 }
 
-HEADERS += qt_service_p.hpp
-
-unix {
-	HEADERS += \
-		qt_unix_server_socket_unx.hpp \
-		qt_unix_socket_unx.hpp
-}
-
-!android:!ios {
-	HEADERS += 
-}
-
 contains(QT_CONFIG, dbus) {
 	HEADERS += \
 		../../include/cppdevtk/util/dbus_utils.hpp	\
 		../../include/cppdevtk/util/dbus_exception.hpp
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	HEADERS += ../../include/cppdevtk/util/single_core_application.hpp
 }

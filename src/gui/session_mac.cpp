@@ -33,6 +33,8 @@
 #include <cstddef>
 #include <stdexcept>
 
+#include <ApplicationServices/ApplicationServices.h>
+
 
 namespace cppdevtk {
 namespace gui {
@@ -95,6 +97,15 @@ bool Session::Lock() try {
 catch (const ::std::runtime_error& exc) {
 	CPPDEVTK_LOG_ERROR("Lock() failed; exc: " << base::Exception::GetDetailedInfo(exc));
 	return false;
+}
+
+Session::IdleTime Session::GetIdleTime() const {
+	// TODO: Test on Mac OS X 10.4 Tiger
+	// According to some articles CGEventSourceSecondsSinceLastEventType() does not work on 10.4.
+	// If it does not work try:
+	// - kIOHIDIdleTimeKey: http://www.danandcheryl.com/2010/06/how-to-check-the-system-idle-time-using-cocoa
+	// - kEventLoopIdleTimerStarted + kEventLoopIdleTimerIdling
+	return CGEventSourceSecondsSinceLastEventType(kCGEventSourceStateCombinedSessionState, kCGAnyInputEventType) * 1000;
 }
 
 SecuritySessionId Session::GetCallerSecuritySessionId() {

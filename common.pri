@@ -562,10 +562,6 @@ unix {
 				QMAKE_CXXFLAGS *= -mmacosx-version-min=$${CPPDEVTK_MACOSX_DEPLOYMENT_TARGET}
 				QMAKE_LFLAGS *= -mmacosx-version-min=$${CPPDEVTK_MACOSX_DEPLOYMENT_TARGET}
 				#QMAKE_MAC_SDK=/Developer/SDKs/MacOSX$${CPPDEVTK_MACOSX_DEPLOYMENT_TARGET}u.sdk
-				
-				#greaterThan(CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED, 1040) {
-				#	QMAKE_SONAME_PREFIX *= @rpath
-				#}
 		}
 		else {
 			ios {
@@ -749,11 +745,29 @@ else {
 lessThan(QT_MAJOR_VERSION, 4)|greaterThan(QT_MAJOR_VERSION, 5) {
 	error("Qt 4 and Qt 5 are supported!!!")
 }
-isEqual(QT_MAJOR_VERSION, "4"):lessThan(QT_VERSION, 0x040602) {
-	error("The oldest Qt 4 supported is 4.6.2!!!")
+isEqual(QT_MAJOR_VERSION, "4") {
+	lessThan(QT_MINOR_VERSION, 6) {
+		error("The oldest Qt 4 supported is 4.6!!!")
+	}
+	else {
+		isEqual(QT_MINOR_VERSION, "6") {
+			lessThan(QT_PATCH_VERSION, 2) {
+				error("The oldest Qt 4 supported is 4.6.2!!!")
+			}
+		}
+	}
 }
-isEqual(QT_MAJOR_VERSION, "5"):lessThan(QT_VERSION, 0x050601) {
-	error("The oldest Qt 5 supported is 5.6.1!!!")
+isEqual(QT_MAJOR_VERSION, "5") {
+	lessThan(QT_MINOR_VERSION, 6) {
+		error("The oldest Qt 5 supported is 5.6!!!")
+	}
+	else {
+		isEqual(QT_MINOR_VERSION, "6") {
+			lessThan(QT_PATCH_VERSION, 1) {
+				error("The oldest Qt 5 supported is 5.6.1!!!")
+			}
+		}
+	}
 }
 
 android|ios {
@@ -801,16 +815,7 @@ greaterThan(QT_MAJOR_VERSION, 4): DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0
 }
 
 unix {
-	!android:!ios {
-		!static_and_shared|build_pass {
-			CONFIG(shared, static|shared) {
-				!contains(QMAKE_RPATHDIR, $$[QT_INSTALL_LIBS]) {
-					#QMAKE_RPATHDIR = $$[QT_INSTALL_LIBS]/:$${QMAKE_RPATHDIR}
-				}
-			}
-		}
-	}
-	else {
+	android|ios {
 		lessThan(QT_MAJOR_VERSION, 5) {
 			error("Android and iOS require Qt >= 5")
 		}
@@ -891,19 +896,6 @@ cppdevtk_have_third_party {
 	!contains(LIBS, "-L$${CPPDEVTK_THIRD_PARTY_LIB_DIR}") {
 		LIBS = -L$${CPPDEVTK_THIRD_PARTY_LIB_DIR} $${LIBS}
 	}
-	unix {
-		!android:!ios {
-			!static_and_shared|build_pass {
-				CONFIG(shared, static|shared) {
-					!contains(QMAKE_RPATHDIR, $${CPPDEVTK_THIRD_PARTY_LIB_DIR}) {
-						linux* {
-							QMAKE_RPATHDIR = $${CPPDEVTK_THIRD_PARTY_LIB_DIR}/:$${QMAKE_RPATHDIR}
-						}
-					}
-				}
-			}
-		}
-	}
 }
 
 
@@ -914,8 +906,17 @@ cppdevtk_have_third_party {
 cppdevtk_enable_android_destdir_workaround {
 	!debug_and_release|build_pass {
 		# TODO: keep updated
-		LIBS *= -L$${OUT_PWD}/../../src/gui -L$${OUT_PWD}/../../src/jni -L$${OUT_PWD}/../../src/util -L$${OUT_PWD}/../../src/base
-		LIBS *= -L$${OUT_PWD}/../gui -L$${OUT_PWD}/../jni -L$${OUT_PWD}/../util -L$${OUT_PWD}/../base
+		LIBS *= -L$${OUT_PWD}/../../src/gui
+		LIBS *= -L$${OUT_PWD}/../../src/QtCopyDialog -L$${OUT_PWD}/../../src/QtSingleApplication
+		LIBS *= -L$${OUT_PWD}/../../src/util
+		LIBS *= -L$${OUT_PWD}/../../src/QtSingleCoreApplication -L$${OUT_PWD}/../../src/QtLockedFile -L$${OUT_PWD}/../../src/QtService
+		LIBS *= -L$${OUT_PWD}/../../src/base
+		
+		LIBS *= -L$${OUT_PWD}/../gui
+		LIBS *= -L$${OUT_PWD}/../QtCopyDialog -L$${OUT_PWD}/../QtSingleApplication
+		LIBS *= -L$${OUT_PWD}/../util
+		LIBS *= -L$${OUT_PWD}/../QtSingleCoreApplication -L$${OUT_PWD}/../QtLockedFile -L$${OUT_PWD}/../QtService
+		LIBS *= -L$${OUT_PWD}/../base
 	}
 }
 else {
@@ -1104,26 +1105,43 @@ isEmpty(CPPDEVTK_PREFIX) {
 	error("CPPDEVTK_PREFIX is empty")
 }
 
-CPPDEVTK_INCLUDE_DIR = $${CPPDEVTK_PREFIX}/include/cppdevtk
-if(linux*:!android)|macx {
-	isEqual(QT_ARCH, "x86_64") {
-		CPPDEVTK_LIB_DIR = $${CPPDEVTK_PREFIX}/lib64
+isEmpty(CPPDEVTK_INCLUDE_DIR) {
+	CPPDEVTK_INCLUDE_DIR = $${CPPDEVTK_PREFIX}/include/cppdevtk
+}
+
+isEmpty(CPPDEVTK_LIB_DIR) {
+	if(linux*:!android)|macx {
+		isEqual(QT_ARCH, "x86_64") {
+			CPPDEVTK_LIB_DIR = $${CPPDEVTK_PREFIX}/lib64
+		}
+		else {
+			CPPDEVTK_LIB_DIR = $${CPPDEVTK_PREFIX}/lib
+		}
 	}
 	else {
 		CPPDEVTK_LIB_DIR = $${CPPDEVTK_PREFIX}/lib
 	}
 }
-else {
-	CPPDEVTK_LIB_DIR = $${CPPDEVTK_PREFIX}/lib
+
+isEmpty(CPPDEVTK_BIN_DIR) {
+	CPPDEVTK_BIN_DIR = $${CPPDEVTK_PREFIX}/bin
 }
-CPPDEVTK_BIN_DIR = $${CPPDEVTK_PREFIX}/bin
-CPPDEVTK_SBIN_DIR = $${CPPDEVTK_PREFIX}/sbin
+
+isEmpty(CPPDEVTK_SBIN_DIR) {
+	CPPDEVTK_SBIN_DIR = $${CPPDEVTK_PREFIX}/sbin
+}
 
 isEmpty(CPPDEVTK_DATA_ROOT_DIR) {
 	CPPDEVTK_DATA_ROOT_DIR = $${CPPDEVTK_PREFIX}/share
 }
-CPPDEVTK_DATA_DIR = $${CPPDEVTK_DATA_ROOT_DIR}
-CPPDEVTK_DOC_DIR = $${CPPDEVTK_DATA_ROOT_DIR}/doc/$${CPPDEVTK_PACKAGE_NAME}-devel
+
+isEmpty(CPPDEVTK_DATA_DIR) {
+	CPPDEVTK_DATA_DIR = $${CPPDEVTK_DATA_ROOT_DIR}
+}
+
+isEmpty(CPPDEVTK_DOC_DIR) {
+	CPPDEVTK_DOC_DIR = $${CPPDEVTK_DATA_ROOT_DIR}/doc/$${CPPDEVTK_PACKAGE_NAME}-devel
+}
 
 isEmpty(CPPDEVTK_SYS_CONF_DIR) {
 	CPPDEVTK_SYS_CONF_DIR = $${CPPDEVTK_PREFIX}/etc
@@ -1131,43 +1149,6 @@ isEmpty(CPPDEVTK_SYS_CONF_DIR) {
 
 isEmpty(CPPDEVTK_LOCAL_STATE_DIR) {
 	CPPDEVTK_LOCAL_STATE_DIR = $${CPPDEVTK_PREFIX}/var
-}
-
-!static_and_shared|build_pass {
-	CONFIG(shared, static|shared) {
-		!isEmpty(CPPDEVTK_RPATHDIR) {
-			!contains(QMAKE_RPATHDIR, $${CPPDEVTK_RPATHDIR}) {
-				linux* {
-					QMAKE_RPATHDIR = $${CPPDEVTK_RPATHDIR}/:$${QMAKE_RPATHDIR}
-				}
-				macx {
-					QMAKE_RPATHDIR = $${CPPDEVTK_RPATHDIR}/
-				}
-			}
-			macx {
-				!contains(QMAKE_RPATHDIR, $${CPPDEVTK_RPATHDIR}/plugins) {
-					#QMAKE_RPATHDIR = $${CPPDEVTK_RPATHDIR}/plugins/:$${QMAKE_RPATHDIR}
-				}
-				QMAKE_SONAME_PREFIX = $${CPPDEVTK_RPATHDIR}
-			}
-		}
-		else {
-			!contains(QMAKE_RPATHDIR, $${CPPDEVTK_LIB_DIR}) {
-				linux {
-					QMAKE_RPATHDIR = $${CPPDEVTK_LIB_DIR}/:$${QMAKE_RPATHDIR}
-				}
-				macx {
-					QMAKE_RPATHDIR = $${CPPDEVTK_LIB_DIR}/
-				}
-			}
-			macx {
-				!contains(QMAKE_RPATHDIR, $${CPPDEVTK_LIB_DIR}/plugins) {
-					#QMAKE_RPATHDIR = $${CPPDEVTK_LIB_DIR}/plugins/:$${QMAKE_RPATHDIR}
-				}
-				QMAKE_SONAME_PREFIX = $${CPPDEVTK_LIB_DIR}
-			}
-		}
-	}
 }
 
 
@@ -1204,10 +1185,23 @@ DEPENDPATH *= $${PWD}/include/cppdevtk/util
 DEPENDPATH *= $${PWD}/include/cppdevtk/jni
 DEPENDPATH *= $${PWD}/include/cppdevtk/gui
 
+DEPENDPATH *= $${PWD}/include/cppdevtk/QtSolutions
+DEPENDPATH *= $${PWD}/include/cppdevtk/QtSolutions/QtCopyDialog
+DEPENDPATH *= $${PWD}/include/cppdevtk/QtSolutions/QtLockedFile
+DEPENDPATH *= $${PWD}/include/cppdevtk/QtSolutions/QtService
+DEPENDPATH *= $${PWD}/include/cppdevtk/QtSolutions/QtSingleApplication
+DEPENDPATH *= $${PWD}/include/cppdevtk/QtSolutions/QtSingleCoreApplication
+
 DEPENDPATH *= $${PWD}/src/cppdevtk/base
 DEPENDPATH *= $${PWD}/src/cppdevtk/util
 DEPENDPATH *= $${PWD}/src/cppdevtk/jni
 DEPENDPATH *= $${PWD}/src/cppdevtk/gui
+
+DEPENDPATH *= $${PWD}/src/QtCopyDialog
+DEPENDPATH *= $${PWD}/src/QtLockedFile
+DEPENDPATH *= $${PWD}/src/QtService
+DEPENDPATH *= $${PWD}/src/QtSingleApplication
+DEPENDPATH *= $${PWD}/src/QtSingleCoreApplication
 
 DEPENDPATH *= $${PWD}/test/test_base
 DEPENDPATH *= $${PWD}/test/test_caps_lock_widget
@@ -1316,13 +1310,7 @@ CPPDEVTK_HAVE_JNI = false
 						CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/i386/server
 					}
 					LIBS *= -L$${CPPDEVTK_JAVA_LIB_DIR}
-					!static_and_shared|build_pass {
-						CONFIG(shared, static|shared) {
-							!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-								QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
-							}
-						}
-					}
+					LIBS *= -L$${CPPDEVTK_JAVA_HOME}/lib/server
 				}
 			}
 			else {
@@ -1344,13 +1332,6 @@ CPPDEVTK_HAVE_JNI = false
 						
 						CPPDEVTK_JAVA_LIB_DIR = $${CPPDEVTK_JAVA_HOME}/jre/lib/server
 						LIBS = -L$${CPPDEVTK_JAVA_LIB_DIR} $${LIBS}
-						!static_and_shared|build_pass {
-							CONFIG(shared, static|shared) {
-								!contains(QMAKE_RPATHDIR, $${CPPDEVTK_JAVA_LIB_DIR}) {
-									#QMAKE_RPATHDIR = $${QMAKE_RPATHDIR}:$${CPPDEVTK_JAVA_LIB_DIR}/
-								}
-							}
-						}
 					}
 				}
 				else {
@@ -1379,6 +1360,84 @@ CPPDEVTK_HAVE_JNI = false
 			}
 			else {
 				error("Unsupported platform!!!")
+			}
+		}
+	}
+}
+
+
+#****************************************************************************************************************************
+# QMAKE_RPATHDIR
+
+unix {
+	!android:!ios {
+		!static_and_shared|build_pass {
+			CONFIG(shared, static|shared) {
+				macx {
+					#QMAKE_RPATHDIR *= @executable_path/../Frameworks
+					QMAKE_RPATHDIR *= @loader_path/../Frameworks
+				}
+				
+				!isEmpty(CPPDEVTK_RPATHDIR) {
+					!isEqual(CPPDEVTK_RPATHDIR, "/usr/lib64"):!isEqual(CPPDEVTK_RPATHDIR, "/usr/local/lib64") {
+						!isEqual(CPPDEVTK_RPATHDIR, "/usr/lib"):!isEqual(CPPDEVTK_RPATHDIR, "/usr/local/lib") {
+							QMAKE_RPATHDIR *= $${CPPDEVTK_RPATHDIR}
+						}
+					}
+				}
+				else {
+					!isEqual(CPPDEVTK_LIB_DIR, "/usr/lib64"):!isEqual(CPPDEVTK_LIB_DIR, "/usr/local/lib64") {
+						!isEqual(CPPDEVTK_LIB_DIR, "/usr/lib"):!isEqual(CPPDEVTK_LIB_DIR, "/usr/local/lib") {
+							QMAKE_RPATHDIR *= $${CPPDEVTK_LIB_DIR}
+						}
+					}
+				}
+				
+				!isEqual(CPPDEVTK_THIRD_PARTY_LIB_DIR, "/usr/lib64"):!isEqual(CPPDEVTK_THIRD_PARTY_LIB_DIR, "/usr/local/lib64") {
+					!isEqual(CPPDEVTK_THIRD_PARTY_LIB_DIR, "/usr/lib"):!isEqual(CPPDEVTK_THIRD_PARTY_LIB_DIR, "/usr/local/lib") {
+						QMAKE_RPATHDIR *= $${CPPDEVTK_THIRD_PARTY_LIB_DIR}
+					}
+				}
+				
+				CPPDEVTK_QT_INSTALL_LIBS = $$[QT_INSTALL_LIBS]
+				!isEqual(CPPDEVTK_QT_INSTALL_LIBS, "/usr/lib64"):!isEqual(CPPDEVTK_QT_INSTALL_LIBS, "/usr/local/lib64") {
+					!isEqual(CPPDEVTK_QT_INSTALL_LIBS, "/usr/lib"):!isEqual(CPPDEVTK_QT_INSTALL_LIBS, "/usr/local/lib") {
+						QMAKE_RPATHDIR *= $$[QT_INSTALL_LIBS]
+					}
+				}
+				
+				#macx {
+				#	QMAKE_RPATHDIR *= $${CPPDEVTK_LIB_DIR}/plugins
+				#}
+				#CPPDEVTK_QT_INSTALL_PLUGINS = $$[QT_INSTALL_PLUGINS]
+				#!isEqual(CPPDEVTK_QT_INSTALL_PLUGINS, "/usr/lib64"):!isEqual(CPPDEVTK_QT_INSTALL_PLUGINS, "/usr/local/lib64") {
+				#	!isEqual(CPPDEVTK_QT_INSTALL_PLUGINS, "/usr/lib"):!isEqual(CPPDEVTK_QT_INSTALL_PLUGINS, "/usr/local/lib") {
+				#		QMAKE_RPATHDIR *= $$[QT_INSTALL_PLUGINS]
+				#	}
+				#}
+				
+				!isEmpty(CPPDEVTK_JAVA_LIB_DIR) {
+					!isEqual(CPPDEVTK_JAVA_LIB_DIR, "/usr/lib64"):!isEqual(CPPDEVTK_JAVA_LIB_DIR, "/usr/local/lib64") {
+						!isEqual(CPPDEVTK_JAVA_LIB_DIR, "/usr/lib"):!isEqual(CPPDEVTK_JAVA_LIB_DIR, "/usr/local/lib") {
+							QMAKE_RPATHDIR *= $${CPPDEVTK_JAVA_LIB_DIR}
+						}
+					}
+				}
+				
+				macx {
+					!contains(QT_CONFIG, rpath) {
+						error("Please build Qt with rpath!!!")
+					}
+					
+					# @rpath was introduced in 10.5
+					greaterThan(CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED, 1040) {
+						QMAKE_SONAME_PREFIX = @rpath
+						CONFIG -= absolute_library_soname
+					}
+					else {
+						CONFIG *= absolute_library_soname
+					}
+				}
 			}
 		}
 	}

@@ -17,11 +17,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/gui/login_widget.hpp>
-
+#include <cppdevtk/gui/config.hpp>
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
 #endif
+
+#include <cppdevtk/gui/login_widget.hpp>
 
 #include "ui_login_widget.h"
 #include <cppdevtk/base/cassert.hpp>

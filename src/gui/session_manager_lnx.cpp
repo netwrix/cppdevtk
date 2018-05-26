@@ -46,12 +46,8 @@ bool SessionManager::Shutdown() {
 	return pImpl_->Shutdown();
 }
 
-SessionManager::IdleTime SessionManager::GetIdleTime() const {
-	return pImpl_->GetIdleTime();
-}
-
-::std::auto_ptr< ::cppdevtk::gui::Session> SessionManager::GetThisProcessSession() const {
-	return pImpl_->GetThisProcessSession();
+::std::auto_ptr< ::cppdevtk::gui::Session> SessionManager::GetCurrentProcessSession() const {
+	return pImpl_->GetCurrentProcessSession();
 }
 
 bool SessionManager::IsSessionManagerServiceRegistered() {

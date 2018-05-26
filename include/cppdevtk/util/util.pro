@@ -46,17 +46,10 @@ HEADERS += \
 	password_requirements.hpp \
 	q_zip_reader.hpp \
 	q_zip_writer.hpp \
-	qt_local_peer.hpp \
-	qt_locked_file.hpp \
-	qt_service.hpp \
-	qt_single_core_application.hpp \
-	single_core_application.hpp \
-	socket_pair.hpp \
 	tinyxml2.h
 
 unix {
-	HEADERS += filesystem_utils_unx.hpp	\
-		posix_signals_watcher_unx.hpp
+	HEADERS += filesystem_utils_unx.hpp
 	
 	linux* {
 		HEADERS += filesystem_utils_lnx.hpp
@@ -87,9 +80,13 @@ else {
 }
 
 contains(QT_CONFIG, dbus) {
-	HEADERS += \
+	HEADERS +=	\
 		dbus_utils.hpp	\
 		dbus_exception.hpp
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	HEADERS += single_core_application.hpp
 }
 
 

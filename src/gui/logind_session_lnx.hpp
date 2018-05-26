@@ -60,10 +60,14 @@ public:
 	virtual ~LogindSession();
 	
 	virtual bool Activate();
+	// On Ubuntu 14.04 fails with org.freedesktop.DBus.Error.AccessDenied
+	// TODO: report bug
 	virtual bool Lock();
 	virtual bool Unlock();
 	
 	virtual QString GetId() const;
+	virtual bool GetIdleHint() const;
+	virtual Session::IdleTime GetIdleSinceHint() const;
 	virtual QString GetType() const;
 	virtual uint GetUser() const;
 	virtual QString GetRemoteHost() const;
@@ -84,6 +88,7 @@ private:
 	
 	explicit LogindSession(const QDBusObjectPath& logindSessionPath);
 	
+	qulonglong DoGetIdleSinceHint() const;
 	
 	mutable QDBusInterface logindSessionPropertiesInterface_;
 };

@@ -17,6 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
+#	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
+#endif
+
 #include <cppdevtk/base/throwable.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
@@ -28,11 +33,6 @@
 
 #include <exception>
 #include <stdexcept>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
-#	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
-#endif
 
 
 #if (!CPPDEVTK_THROWABLE_DISABLE_TERMINATE)

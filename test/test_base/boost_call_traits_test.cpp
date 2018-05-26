@@ -14,6 +14,20 @@
 
 // NOTE: taken from boost 1.65.1 and adapted for cppdevtk
 
+#include <cppdevtk/base/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+
+#if (CPPDEVTK_COMPILER_MSVC)
+#pragma warning(disable:4181) // : warning C4181: qualifier applied to reference type; ignored
+#endif
+
+#if (CPPDEVTK_COMPILER_CLANG)
+// 'const' qualifier on reference type 'r_type' (aka 'int &') has no effect [-Wignored-qualifiers]
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#endif
+
+#endif
+
 #include "boost_call_traits_test.hpp"
 #include "boost_test_optional/optional_test_common.hpp"
 #include <cppdevtk/base/call_traits.hpp>
@@ -22,11 +36,6 @@
 #include <iomanip>
 #include <algorithm>
 #include <typeinfo>
-
-
-#if (CPPDEVTK_COMPILER_MSVC)
-#pragma warning(disable:4181) // : warning C4181: qualifier applied to reference type; ignored
-#endif
 
 
 // a way prevent warnings for unused variables

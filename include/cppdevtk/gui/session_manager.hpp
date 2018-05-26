@@ -70,22 +70,11 @@ class CPPDEVTK_GUI_API SessionManager: public QObject, public ::cppdevtk::base::
 #	endif
 	
 	Q_OBJECT
-public:
-#	if (CPPDEVTK_PLATFORM_LINUX)
-	typedef unsigned long IdleTime;
-#	elif (CPPDEVTK_PLATFORM_MACOSX)
-	typedef CFTimeInterval IdleTime;
-#	elif (CPPDEVTK_PLATFORM_WINDOWS)
-	typedef DWORD IdleTime;
-#	else
-#	error "Unsupported platform!!!"
-#	endif
 public Q_SLOTS:
 	bool Logout();
 	bool Shutdown();
 public:
-	IdleTime GetIdleTime() const;	///< \return The time, in milliseconds, elapsed since the last input event.
-	::std::auto_ptr< ::cppdevtk::gui::Session> GetThisProcessSession() const;
+	::std::auto_ptr< ::cppdevtk::gui::Session> GetCurrentProcessSession() const;
 	
 #	if (CPPDEVTK_PLATFORM_LINUX)
 	static bool IsSessionManagerServiceRegistered();

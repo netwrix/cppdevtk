@@ -20,6 +20,11 @@
 // NOTE: On Windows the only screensaver notification is SC_SCREENSAVE that works only for top-level active window so we use timer...
 
 
+#include <cppdevtk/gui/config.hpp>
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
+
 #include <cppdevtk/gui/screensaver.hpp>
 #if (!CPPDEVTK_PLATFORM_WINDOWS)
 #	error "This file is Windows specific!!!"
@@ -44,11 +49,6 @@
 #endif
 
 #include <cstddef>
-
-
-#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
-#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
-#endif
 
 
 static BOOL CALLBACK StopScreenSaverWndProc(HWND hwnd, LPARAM lParam);

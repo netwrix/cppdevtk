@@ -38,7 +38,6 @@ namespace gui {
 
 using base::ErrorCode;
 using base::GetLastSystemErrorCode;
-using base::Zeroize;
 
 
 bool SessionManager::Logout() {
@@ -61,20 +60,7 @@ bool SessionManager::Shutdown() {
 	return true;
 }
 
-SessionManager::IdleTime SessionManager::GetIdleTime() const {
-	LASTINPUTINFO lastInputInfo;
-	Zeroize(&lastInputInfo, sizeof lastInputInfo);
-	lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
-	if (!GetLastInputInfo(&lastInputInfo)) {
-		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "GetLastInputInfo() failed");
-	}
-	
-	const DWORD kTickCount = GetTickCount();
-	
-	return (kTickCount - lastInputInfo.dwTime);
-}
-
-::std::auto_ptr< ::cppdevtk::gui::Session> SessionManager::GetThisProcessSession() const {
+::std::auto_ptr< ::cppdevtk::gui::Session> SessionManager::GetCurrentProcessSession() const {
 	return ::std::auto_ptr<Session>(new Session());
 }
 
@@ -100,7 +86,7 @@ void SessionManager::EnableShutdownPrivilege() {
 	CPPDEVTK_ON_BLOCK_EXIT_END
 	
 	TOKEN_PRIVILEGES tokenPrivileges;
-	Zeroize(&tokenPrivileges, sizeof(tokenPrivileges));
+	base::Zeroize(&tokenPrivileges, sizeof(tokenPrivileges));
 	if (!LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tokenPrivileges.Privileges[0].Luid)) {
 		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(),
 				"LookupPrivilegeValue() failed for SE_SHUTDOWN_NAME");

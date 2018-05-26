@@ -53,6 +53,9 @@ public Q_SLOTS:
 	virtual bool Unlock() = 0;
 public:
 	virtual QString GetId() const = 0;
+	Session::IdleTime GetIdleTime() const;
+	virtual bool GetIdleHint() const = 0;
+	virtual Session::IdleTime GetIdleSinceHint() const = 0;
 	virtual QString GetType() const = 0;
 	virtual uint GetUser() const = 0;
 	virtual QString GetRemoteHost() const = 0;
@@ -69,6 +72,18 @@ public Q_SLOTS:
 	void OnActiveChanged(bool isActive);
 private:
 	Q_DISABLE_COPY(Impl);
+	
+	
+	// DBus documentation says that below functions return seconds but they return ms (mostly)...
+	// FreedesktopScreenSaverGetSessionIdleTime() on XUbuntu and LUbuntu 18.04 return seconds
+	// and on XFCE and LXDE on openSUSE Tumbleweed return ms...
+	static bool CinnamonScreenSaverGetSessionIdleTime(uint& msIdleTime);
+	static bool MateScreenSaverGetSessionIdleTime(uint& msIdleTime);
+	static bool GnomeMutterIdleMonitorGetIdletime(qulonglong& msIdleTime);
+	static bool GnomeScreenSaverGetSessionIdleTime(uint& msIdleTime);
+	static bool FreedesktopScreenSaverGetSessionIdleTime(uint& msIdleTime);
+	
+	static unsigned long XScreenSaverInfoGetIdle();	// ms
 	
 	
 	mutable QDBusInterface dbusInterface_;

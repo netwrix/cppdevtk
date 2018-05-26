@@ -27,6 +27,7 @@
 
 
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.h>
 
 #include <QtCore/QObject>
 
@@ -71,11 +72,13 @@
 }
 
 -(void)OnSessionDidBecomeActive:(NSNotification*)pNSNotification {
+	CPPDEVTK_UNUSED(pNSNotification);
 	CPPDEVTK_ASSERT(pSession_ != NULL);
 	Q_EMIT pSession_->Activated();
 }
 
 -(void)OnSessionDidResignActive:(NSNotification*)pNSNotification {
+	CPPDEVTK_UNUSED(pNSNotification);
 	CPPDEVTK_ASSERT(pSession_ != NULL);
 	Q_EMIT pSession_->Deactivated();
 }
