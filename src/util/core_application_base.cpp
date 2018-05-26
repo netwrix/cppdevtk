@@ -22,9 +22,11 @@
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
 #if (CPPDEVTK_COMPILER_GCC)
 #if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 2, 0))
+#if (CPPDEVTK_GNUC_VERSION_NUM >= CPPDEVTK_GNUC_VERSION_NUM_FROM_COMPONENTS(4, 7, 0))
 // deleting object of polymorphic class type cppdevtk::util::LanguageInfo which has non-virtual destructor
 // might cause undefined behaviour [-Wdelete-non-virtual-dtor]
 #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
 #endif
 #endif
 #endif
