@@ -27,9 +27,9 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/dbc.hpp>
-#include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include "thread_local_data_ptr.hpp"
+#include "thread_data.hpp"
 
 #include <cstddef>
 

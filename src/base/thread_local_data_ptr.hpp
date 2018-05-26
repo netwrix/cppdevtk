@@ -22,7 +22,7 @@
 
 
 #include <cppdevtk/base/config.hpp>
-#include <cppdevtk/base/thread_data.hpp>
+#include "thread_data.hpp"
 
 
 namespace cppdevtk {

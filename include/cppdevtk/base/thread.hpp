@@ -42,7 +42,6 @@
 
 
 #include "thread_data_types.hpp"
-//#include "thread_data.hpp"
 #include "non_copyable.hpp"
 #include "stringizable.hpp"
 #include "exception.hpp"

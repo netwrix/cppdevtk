@@ -34,9 +34,9 @@
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
-#include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include "thread_local_data_ptr.hpp"
+#include "thread_data.hpp"
 
 #if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
 #include <sys/sysinfo.h>

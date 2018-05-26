@@ -17,24 +17,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#if (!(defined(CPPDEVTK_DETAIL_BUILD) || defined(CPPDEVTK_BASE_THREAD_HPP_INCLUDED_)))
-#	error "Do not include directly (non-std file); please include <cppdevtk/base/thread.hpp> instead!!!"
-#endif
-
-
 #ifndef CPPDEVTK_BASE_THREAD_DATA_HPP_INCLUDED_
 #define CPPDEVTK_BASE_THREAD_DATA_HPP_INCLUDED_
 
 
-#include "config.hpp"
-#include "thread_data_types.hpp"
-#include "non_copyable.hpp"
-#include "mutex.hpp"
-#include "condition_variable.hpp"
-#include "exception.hpp"
-#include "thread_exception.hpp"
-#include "lock_exception.hpp"
-#include "deadlock_exception.hpp"
+#include <cppdevtk/base/config.hpp>
+#include <cppdevtk/base/thread_data_types.hpp>
+#include <cppdevtk/base/non_copyable.hpp>
+#include <cppdevtk/base/mutex.hpp>
+#include <cppdevtk/base/condition_variable.hpp>
+#include <cppdevtk/base/exception.hpp>
+#include <cppdevtk/base/thread_exception.hpp>
+#include <cppdevtk/base/lock_exception.hpp>
+#include <cppdevtk/base/deadlock_exception.hpp>
 
 #include <cstddef>
 #include CPPDEVTK_TR1_HEADER(memory)
@@ -45,9 +40,9 @@ namespace base {
 namespace detail {
 
 
-class /* CPPDEVTK_BASE_API */ ThreadData: public CPPDEVTK_TR1_NS::enable_shared_from_this<ThreadData>, private NonCopyable {
+class ThreadData: public CPPDEVTK_TR1_NS::enable_shared_from_this<ThreadData>, private NonCopyable {
 public:
-	class /* CPPDEVTK_BASE_API */ StartInfo: private NonCopyable {
+	class StartInfo: private NonCopyable {
 	public:
 		StartInfo();
 		
@@ -61,7 +56,7 @@ public:
 	};
 	
 	
-	class /* CPPDEVTK_BASE_API */ JoinedOrDetachedInfo: private NonCopyable {
+	class JoinedOrDetachedInfo: private NonCopyable {
 	public:
 		explicit JoinedOrDetachedInfo(bool detached);
 		
@@ -80,7 +75,7 @@ public:
 	
 	
 #	if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
-	class /* CPPDEVTK_BASE_API */ InterruptionInfo: private NonCopyable {
+	class InterruptionInfo: private NonCopyable {
 	public:
 		InterruptionInfo();
 		
@@ -171,7 +166,7 @@ namespace detail {
 #if (!CPPDEVTK_DETAIL_DISABLE_GET_THREAD_LOCAL_DATA_PTR)
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 // Returned pointer is non-NULL only during execution of thread main function and must not be freed!
-/* CPPDEVTK_BASE_API */ const ::cppdevtk::base::detail::ThreadData* GetThreadLocalDataPtr();
+const ::cppdevtk::base::detail::ThreadData* GetThreadLocalDataPtr();
 #endif
 #endif
 

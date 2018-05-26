@@ -30,7 +30,6 @@
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
-#include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/deadlock_exception.hpp>
 #include <cppdevtk/base/mutex.hpp>
@@ -41,6 +40,7 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include "thread_local_data_ptr.hpp"
+#include "thread_data.hpp"
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
 #include <QtCore/QTextStream>

@@ -396,7 +396,6 @@ HEADERS += \
 	../../include/cppdevtk/base/tchar.hpp	\
 	../../include/cppdevtk/base/tfstream.hpp	\
 	../../include/cppdevtk/base/thread_data_types.hpp	\
-	../../include/cppdevtk/base/thread_data.hpp	\
 	../../include/cppdevtk/base/thread_exception.hpp	\
 	../../include/cppdevtk/base/thread_shared_obj_locking_ptr.hpp	\
 	../../include/cppdevtk/base/thread.hpp	\
@@ -466,4 +465,5 @@ win32:*msvc* {
 
 HEADERS += time_utils.h	\
 	throw_lock_exception.hpp	\
-	thread_local_data_ptr.hpp
+	thread_local_data_ptr.hpp	\
+	thread_data.hpp

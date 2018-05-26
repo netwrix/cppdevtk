@@ -104,7 +104,6 @@ HEADERS += \
 	tchar.hpp	\
 	tfstream.hpp	\
 	thread_data_types.hpp	\
-	thread_data.hpp	\
 	thread_exception.hpp	\
 	thread_shared_obj_locking_ptr.hpp	\
 	thread.hpp	\

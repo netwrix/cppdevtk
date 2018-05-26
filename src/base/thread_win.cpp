@@ -33,11 +33,11 @@
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
-#include <cppdevtk/base/thread_data.hpp>
 #include <cppdevtk/base/thread_exception.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include "thread_local_data_ptr.hpp"
+#include "thread_data.hpp"
 
 #include <process.h>
 #if (_WIN32_WINNT >= _WIN32_WINNT_WIN8)
