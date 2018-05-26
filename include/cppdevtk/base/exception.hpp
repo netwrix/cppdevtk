@@ -22,6 +22,7 @@
 
 
 #include "config.hpp"
+#include "exception_propagation.hpp"
 #include "throwable.hpp"
 #include "cloneable.hpp"
 #include "stringizable.hpp"
@@ -31,14 +32,6 @@
 #include "unused.hpp"
 #include "tstring.hpp"
 
-#include <QtCore/QtGlobal>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#include <QtCore/QException>
-#include <QtCore/QUnhandledException>
-#else
-#include <QtCore/QtCore>
-#endif
-
 #include <exception>
 #include <typeinfo>
 #include <algorithm>	// swap(), C++98
@@ -46,15 +39,6 @@
 #include <new>
 #include <cstddef>
 #include CPPDEVTK_TR1_HEADER(memory)
-
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#	define CPPDEVTK_QT_EXCEPTION QException
-#	define CPPDEVTK_QT_UNHANDLED_EXCEPTION QUnhandledException
-#else
-#	define CPPDEVTK_QT_EXCEPTION QtConcurrent::Exception
-#	define CPPDEVTK_QT_UNHANDLED_EXCEPTION QtConcurrent::UnhandledException
-#endif
 
 
 namespace cppdevtk {
