@@ -18,14 +18,10 @@
 #	%%if 0%%{?sle_version} == 150000 && 0%%{?is_opensuse}
 # - Leap 42.3: suse_version 1315, sle_version 120300
 #	%%if 0%%{?sle_version} == 120300 && 0%%{?is_opensuse}
-# - Leap 42.2: suse_version 1315, sle_version 120200
-#	%%if 0%%{?sle_version} == 120200 && 0%%{?is_opensuse}
 # - SLE15: sle_version 150000
 #	%%if 0%%{?sle_version} == 150000 && !0%%{?is_opensuse}
 # - SLE12 SP3: sle_version 120300
 #	%%if 0%%{?sle_version} == 120300 && !0%%{?is_opensuse}
-# - SLE12 SP2: sle_version 120200
-#	%%if 0%%{?sle_version} == 120200 && !0%%{?is_opensuse}
 #
 # NOTE: today Leap 15 was released and sle_version is missing; use suse_version 1500. I reported Bug 1094735
 # TODO: check if fixed
@@ -104,17 +100,49 @@ Source: %{name}-%{version}.tar.bz2
 BuildRequires: libstdc++-devel glibc-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
+%if 0%{?suse_version} >= 1550
+BuildRequires: libqt5-qtbase-devel >= 5.10.0
+%endif
+%if 0%{?suse_version} == 1500
+BuildRequires: libqt5-qtbase-devel >= 5.9.4
+%endif
+%if 0%{?sle_version} == 120300
+BuildRequires: libqt5-qtbase-devel >= 5.6.2
+%endif
+%if 0%{?sle_version} == 120200
 BuildRequires: libqt5-qtbase-devel >= 5.6.1
 %endif
+%endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+BuildRequires: qt5-qtbase-devel >= 5.9.2
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 BuildRequires: qt5-qtbase-devel >= 5.6.1
+%endif
 %endif
 %else
 %if (0%{?suse_version})
-BuildRequires: libqt4-devel >= 4.6.2
+%if 0%{?suse_version} >= 1550
+BuildRequires: libqt4-devel >= 4.8.7
+%endif
+%if 0%{?suse_version} == 1500
+BuildRequires: libqt4-devel >= 4.8.7
+%endif
+%if 0%{?sle_version} == 120300
+BuildRequires: libqt4-devel >= 4.8.6
+%endif
+%if 0%{?sle_version} == 120200
+BuildRequires: libqt4-devel >= 4.8.6
+%endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+BuildRequires: qt-devel >= 4.8.7
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 BuildRequires: qt-devel >= 4.6.2
+%endif
 %endif
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-build
@@ -126,7 +154,28 @@ CppDevTk is a collection of libraries for C++ development.
 %package -n lib%{name}-base
 Summary: CppDevTk base library
 Group: System/Libraries
-BuildRequires: boost-devel >= 1.38.0
+%if (0%{?suse_version})
+%if 0%{?suse_version} >= 1550
+BuildRequires: boost-devel >= 1.66.0
+%endif
+%if 0%{?suse_version} == 1500
+BuildRequires: boost-devel >= 1.66.0
+%endif
+%if 0%{?sle_version} == 120300
+BuildRequires: boost-devel >= 1.54.0
+%endif
+%if 0%{?sle_version} == 120200
+BuildRequires: boost-devel >= 1.54.0
+%endif
+%endif
+%if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+BuildRequires: boost-devel >= 1.53.0
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+BuildRequires: boost-devel >= 1.41.0
+%endif
+%endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -248,14 +297,35 @@ BuildRequires: xorg-x11-proto-devel
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
+%if 0%{?suse_version} >= 1550
+BuildRequires: libqt5-qtx11extras-devel >= 5.10.0
+%endif
+%if 0%{?suse_version} == 1500
+BuildRequires: libqt5-qtx11extras-devel >= 5.9.4
+%endif
+%if 0%{?sle_version} == 120300
+BuildRequires: libqt5-qtx11extras-devel >= 5.6.2
+%endif
+%if 0%{?sle_version} == 120200
 BuildRequires: libqt5-qtx11extras-devel >= 5.6.1
 %endif
+%endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+BuildRequires: qt5-qtx11extras-devel >= 5.9.2
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 BuildRequires: qt5-qtx11extras-devel >= 5.6.1
+%endif
 %endif
 %else
 %if (0%{?centos} || 0%{?rhel})
-BuildRequires: qt-x11
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+BuildRequires: qt-x11 >= 4.8.7
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+BuildRequires: qt-x11 >= 4.6.2
+%endif
 %endif
 %endif
 Requires(post): /sbin/ldconfig
@@ -288,20 +358,73 @@ Convenience package to install all CppDevTk C++ libraries.
 Summary: Development files for lib%{name}-base
 Group: Development/Libraries/C and C++
 Requires: libstdc++-devel glibc-devel
-Requires: boost-devel >= 1.38.0
-%if (%{with_qt5})
 %if (0%{?suse_version})
-Requires: libqt5-qtbase-devel >= 5.6.1
+%if 0%{?suse_version} >= 1550
+Requires: boost-devel >= 1.66.0
+%endif
+%if 0%{?suse_version} == 1500
+Requires: boost-devel >= 1.66.0
+%endif
+%if 0%{?sle_version} == 120300
+Requires: boost-devel >= 1.54.0
+%endif
+%if 0%{?sle_version} == 120200
+Requires: boost-devel >= 1.54.0
+%endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+Requires: boost-devel >= 1.53.0
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+Requires: boost-devel >= 1.41.0
+%endif
+%endif
+%if (%{with_qt5})
+%if (0%{?suse_version})
+%if 0%{?suse_version} >= 1550
+Requires: libqt5-qtbase-devel >= 5.10.0
+%endif
+%if 0%{?suse_version} == 1500
+Requires: libqt5-qtbase-devel >= 5.9.4
+%endif
+%if 0%{?sle_version} == 120300
+Requires: libqt5-qtbase-devel >= 5.6.2
+%endif
+%if 0%{?sle_version} == 120200
+Requires: libqt5-qtbase-devel >= 5.6.1
+%endif
+%endif
+%if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+Requires: qt5-qtbase-devel >= 5.9.2
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 Requires: qt5-qtbase-devel >= 5.6.1
+%endif
 %endif
 %else
 %if (0%{?suse_version})
-Requires: libqt4-devel >= 4.6.2
+%if 0%{?suse_version} >= 1550
+Requires: libqt4-devel >= 4.8.7
+%endif
+%if 0%{?suse_version} == 1500
+Requires: libqt4-devel >= 4.8.7
+%endif
+%if 0%{?sle_version} == 120300
+Requires: libqt4-devel >= 4.8.6
+%endif
+%if 0%{?sle_version} == 120200
+Requires: libqt4-devel >= 4.8.6
+%endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+Requires: qt-devel >= 4.8.7
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 Requires: qt-devel >= 4.6.2
+%endif
 %endif
 %endif
 Requires: lib%{name}-base = %{version}
@@ -436,14 +559,35 @@ Requires: xorg-x11-proto-devel
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
+%if 0%{?suse_version} >= 1550
+Requires: libqt5-qtx11extras-devel >= 5.10.0
+%endif
+%if 0%{?suse_version} == 1500
+Requires: libqt5-qtx11extras-devel >= 5.9.4
+%endif
+%if 0%{?sle_version} == 120300
+Requires: libqt5-qtx11extras-devel >= 5.6.2
+%endif
+%if 0%{?sle_version} == 120200
 Requires: libqt5-qtx11extras-devel >= 5.6.1
 %endif
+%endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+Requires: qt5-qtx11extras-devel >= 5.9.2
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
 Requires: qt5-qtx11extras-devel >= 5.6.1
+%endif
 %endif
 %else
 %if (0%{?centos} || 0%{?rhel})
-Requires: qt-x11
+%if (0%{?centos} == 7 || 0%{?rhel} == 7)
+Requires: qt-x11 >= 4.8.7
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+Requires: qt-x11 >= 4.6.2
+%endif
 %endif
 %endif
 Requires: lib%{name}-gui = %{version}
@@ -543,7 +687,7 @@ Convenience package to install all %{name}-test packages.
 
 %if (0%{?suse_version})
 %if (%{suse_version} < 1315)
-echo "openSUSE < 13.2 and SLED < 12SP2 are not supported!!!"
+echo "openSUSE < Leap 42.3 and SLED < 12SP3 are not supported!!!"
 exit 1
 %endif
 %else

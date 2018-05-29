@@ -29,6 +29,7 @@
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
+#include <cppdevtk/util/filesystem_utils.hpp>
 
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -118,6 +119,24 @@ QString StorageDeviceNotifier::GetStorageDeviceName(StorageDeviceId storageDevic
 		storageDeviceId >>= 1;
 	}
 	throw CPPDEVTK_EMPTY_ARGUMENT_EXCEPTION("storageDeviceId");
+}
+
+StorageDeviceNotifier::StorageDeviceId StorageDeviceNotifier::GetStorageDeviceId(const QString& storageDeviceName) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT((storageDeviceName.length() == 3), "storageDeviceName.length() != 3");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(storageDeviceName.endsWith('/'), "!storageDeviceName.endsWith('/')");
+	CPPDEVTK_DBC_CHECK_ARGUMENT((storageDeviceName[1] == ':'), "storageDeviceName[1] != ':'");
+	CPPDEVTK_DBC_CHECK_ARGUMENT(storageDeviceName[0].isLetter(), "!storageDeviceName[0].isLetter()");
+	
+	const char kDriveLetter = storageDeviceName[0].toUpper().toLatin1();
+	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG((('A' <= kDriveLetter) && (kDriveLetter <= 'Z')),
+			"storageDeviceName has invalid drive letter");
+	
+	StorageDeviceId storageDeviceId = 1;
+	for (char driveLetter = 'A'; driveLetter < kDriveLetter; ++driveLetter) {
+		storageDeviceId <<= 1;
+	}
+	
+	return storageDeviceId;
 }
 
 StorageDeviceNotifier::StorageDeviceNotifier(): QObject(), ::cppdevtk::base::MeyersSingleton<StorageDeviceNotifier>(),

@@ -195,7 +195,15 @@ void Widget::OnStorageDeviceMounted(::cppdevtk::gui::StorageDeviceNotifier::Stor
 	const QString kStorageDeviceName = StorageDeviceNotifier::GetStorageDeviceName(storageDeviceId);
 	msg += QString("; storageDeviceName: ") + kStorageDeviceName;
 #	if (CPPDEVTK_PLATFORM_UNIX)
-	msg += QString("; storageDeviceMountPoints: ") + util::GetMountPointsFromDeviceName(kStorageDeviceName).join(" ");
+	const QStringList kStorageDeviceMountPoints = util::GetMountPointsFromDeviceName(kStorageDeviceName);
+	CPPDEVTK_ASSERT(!kStorageDeviceMountPoints.isEmpty());
+	msg += QString("; storageDeviceMountPoints: ") + kStorageDeviceMountPoints.join(" ");
+	
+	CPPDEVTK_ASSERT(StorageDeviceNotifier::GetStorageDeviceId(
+			util::GetDeviceNameFromMountPoint(kStorageDeviceMountPoints[0])) == storageDeviceId);
+#	endif
+#	if (CPPDEVTK_PLATFORM_WINDOWS)
+	CPPDEVTK_ASSERT(StorageDeviceNotifier::GetStorageDeviceId(kStorageDeviceName) == storageDeviceId);
 #	endif
 	pPlainTextEditOutput_->appendPlainText(msg);
 }

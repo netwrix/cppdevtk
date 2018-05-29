@@ -46,6 +46,7 @@ public:
 	
 	static bool IsUDisks2ServiceRegistered();
 	static QString GetStorageDeviceName(const QDBusObjectPath& dbusStorageDevicePath);
+	static QDBusObjectPath GetStorageDeviceId(const QString& storageDeviceName);
 private Q_SLOTS:
 	void OnInterfacesAdded(const QDBusObjectPath& dbusObjectPath, const QVariantMap& addedInterfacesAndProperties);
 	void OnInterfacesRemoved(const QDBusObjectPath& dbusObjectPath, const QStringList& removedInterfaces);

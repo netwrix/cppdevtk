@@ -24,12 +24,15 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 
 #include <QtDBus/QDBusArgument>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusError>
 
 #include <memory>
+
+#include <paths.h>
 
 
 // https://hal.freedesktop.org/releases/udisks-1.0.5.tar.gz
@@ -167,6 +170,20 @@ QString UDisks1DeviceNotifier::GetStorageDeviceName(const QDBusObjectPath& dbusS
 	return UDisks1FilesystemBlockDevice::GetDeviceFile(dbusStorageDevicePath);
 }
 
+QDBusObjectPath UDisks1DeviceNotifier::GetStorageDeviceId(const QString& storageDeviceName) {
+	CPPDEVTK_ASSERT(storageDeviceName.startsWith(_PATH_DEV));
+	
+	const QList<QDBusObjectPath> kFilesystemBlockDevicePaths = GetUDisks1FilesystemBlockDevicePaths();
+	for (QList<QDBusObjectPath>::ConstIterator kIter = kFilesystemBlockDevicePaths.constBegin();
+			kIter != kFilesystemBlockDevicePaths.constEnd(); ++kIter) {
+		if (UDisks1FilesystemBlockDevice::GetDeviceFile(*kIter) == storageDeviceName) {
+			return *kIter;
+		}
+	}
+	
+	throw CPPDEVTK_RUNTIME_EXCEPTION(QString("no FilesystemBlockDevice for storageDeviceName: %1").arg(storageDeviceName));
+}
+
 void UDisks1DeviceNotifier::OnDeviceAdded(const QDBusObjectPath& dbusObjectPath) {
 	CPPDEVTK_ASSERT(dbusObjectPath.path().startsWith(CPPDEVTK_UDISKS1_DEVICES_PATH));
 	
@@ -219,7 +236,7 @@ void UDisks1DeviceNotifier::OnDeviceRemoved(const QDBusObjectPath& dbusObjectPat
 	}
 }
 
-QList<QDBusObjectPath> UDisks1DeviceNotifier::GetUDisks1FilesystemBlockDevicePaths() const {
+QList<QDBusObjectPath> UDisks1DeviceNotifier::GetUDisks1FilesystemBlockDevicePaths() {
 	QList<QDBusObjectPath> udisks1FilesystemBlockDevicePaths;
 	
 	const QList<QDBusObjectPath> kDevices = EnumerateDevices();
@@ -234,7 +251,7 @@ QList<QDBusObjectPath> UDisks1DeviceNotifier::GetUDisks1FilesystemBlockDevicePat
 	return udisks1FilesystemBlockDevicePaths;
 }
 
-QList<QDBusObjectPath> UDisks1DeviceNotifier::EnumerateDevices() const {
+QList<QDBusObjectPath> UDisks1DeviceNotifier::EnumerateDevices() {
 	const QDBusConnection kSystemBus = QDBusConnection::systemBus();
 	if (!kSystemBus.isConnected()) {
 		throw CPPDEVTK_DBUS_EXCEPTION("failed to connect to system bus", kSystemBus.lastError());

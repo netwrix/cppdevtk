@@ -12,7 +12,7 @@ Version 1.1.0.1:
 	- removed ComputerManager (replaced by SessionManager)
 	- removed GetUserIdleTime() (replaced by Session::GetIdleTime())
 	- added support for Ubuntu 18.04
-	- added support for openSUSE Leap 15 (Leap 42.2 no longer supported)
+	- added support for openSUSE Leap 15 (Leap 42.2 no longer supported; EOL since 26 Jan 2018)
 - Improvements:
 	- do not conflict with boost signals
 	- zlib dependency is optional (affects QZipReader and QZipWriter)

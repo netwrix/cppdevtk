@@ -100,6 +100,12 @@ public:
 	/// - Mac OS X: BSD name; ex: disk2
 	/// \return Empty string if no error and no device name found.
 	static QString GetStorageDeviceName(StorageDeviceId storageDeviceId);
+	
+	/// Storage device name has the form:
+	/// - Linux: device name (includes _PATH_DEV (/dev/)); ex: /dev/sr1
+	/// - Windows: logical drive string (uppercase, ends with /); ex: D:/
+	/// - Mac OS X: BSD name; ex: disk2
+	static StorageDeviceId GetStorageDeviceId(const QString& storageDeviceName);
 private:
 #	if (CPPDEVTK_PLATFORM_LINUX)
 #	if (__GNUC__ < 5)

@@ -44,14 +44,16 @@ public:
 	
 	static bool IsUDisks1ServiceRegistered();
 	static QString GetStorageDeviceName(const QDBusObjectPath& dbusStorageDevicePath);
+	static QDBusObjectPath GetStorageDeviceId(const QString& storageDeviceName);
 private Q_SLOTS:
 	void OnDeviceAdded(const QDBusObjectPath& dbusObjectPath);
 	void OnDeviceRemoved(const QDBusObjectPath& dbusObjectPath);
 private:
 	Q_DISABLE_COPY(UDisks1DeviceNotifier);
 	
-	QList<QDBusObjectPath> GetUDisks1FilesystemBlockDevicePaths() const;
-	QList<QDBusObjectPath> EnumerateDevices() const;
+	
+	static QList<QDBusObjectPath> GetUDisks1FilesystemBlockDevicePaths();
+	static QList<QDBusObjectPath> EnumerateDevices();
 	
 	
 	QList<UDisks1FilesystemBlockDevice*> udisks1FilesystemBlockDevices_;

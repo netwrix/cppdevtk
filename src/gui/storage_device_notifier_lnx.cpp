@@ -39,6 +39,8 @@
 #include <cstddef>
 #include <new>
 
+#include <paths.h>
+
 
 namespace cppdevtk {
 namespace gui {
@@ -60,12 +62,31 @@ bool StorageDeviceNotifier::IsStorageDeviceNotifierServiceRegistered() {
 }
 
 QString StorageDeviceNotifier::GetStorageDeviceName(StorageDeviceId storageDeviceId) {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(storageDeviceId.path().isEmpty(), "storageDeviceId");
+	
 	if (UDisks2DeviceNotifier::IsUDisks2ServiceRegistered()) {
 		return UDisks2DeviceNotifier::GetStorageDeviceName(storageDeviceId);
 	}
 	else {
 		if (UDisks1DeviceNotifier::IsUDisks1ServiceRegistered()) {
 			return UDisks1DeviceNotifier::GetStorageDeviceName(storageDeviceId);
+		}
+		else {
+			throw CPPDEVTK_DBUS_EXCEPTION("None of UDisks2/UDisks1 services is registered",
+					QDBusError(QDBusError::ServiceUnknown, "StorageDeviceNotifier ServiceUnknown"));
+		}
+	}
+}
+
+StorageDeviceNotifier::StorageDeviceId StorageDeviceNotifier::GetStorageDeviceId(const QString& storageDeviceName) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT(storageDeviceName.startsWith(_PATH_DEV), "storageDeviceName must start with _PATH_DEV");
+	
+	if (UDisks2DeviceNotifier::IsUDisks2ServiceRegistered()) {
+		return UDisks2DeviceNotifier::GetStorageDeviceId(storageDeviceName);
+	}
+	else {
+		if (UDisks1DeviceNotifier::IsUDisks1ServiceRegistered()) {
+			return UDisks1DeviceNotifier::GetStorageDeviceId(storageDeviceName);
 		}
 		else {
 			throw CPPDEVTK_DBUS_EXCEPTION("None of UDisks2/UDisks1 services is registered",

@@ -29,6 +29,7 @@
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
+#include <cppdevtk/util/filesystem_utils.hpp>
 
 #include <QtCore/QtGlobal>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -51,6 +52,64 @@ void StorageDeviceNotifier::Uninit() {
 		DisposeEventHandlerUPP(eventHandlerUPP_);
 		eventHandlerUPP_ = NULL;
 	}
+}
+
+QString StorageDeviceNotifier::GetStorageDeviceName(StorageDeviceId storageDeviceId) {
+	GetVolParmsInfoBuffer getVolParmsInfoBuffer;
+#	if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+	const OSStatus kOSStatus = FSGetVolumeParms(storageDeviceId, &getVolParmsInfoBuffer, sizeof(getVolParmsInfoBuffer));
+	if (kOSStatus != noErr) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("FSGetVolumeParms() failed for storageDeviceId %1; kOSStatus: %2").arg(
+				QString::number(storageDeviceId), QString::number(kOSStatus)));
+	}
+#	else
+	HParamBlockRec hParamBlockRec;
+	hParamBlockRec.ioParam.ioNamePtr = NULL;
+	hParamBlockRec.ioParam.ioVRefNum = storageDeviceId;
+	hParamBlockRec.ioParam.ioBuffer = (Ptr)&getVolParmsInfoBuffer;
+	hParamBlockRec.ioParam.ioReqCount = sizeof(getVolParmsInfoBuffer);
+	const OSErr kOSErr = PBHGetVolParmsSync(&hParamBlockRec);
+	if (kOSErr != noErr) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("PBHGetVolParmsSync() failed for storageDeviceId %1; kOSErr: %2").arg(
+				QString::number(storageDeviceId), QString::number(kOSErr)));
+	}
+	//CPPDEVTK_LOG_DEBUG("out infoSize: " << hParamBlockRec.ioParam.ioActCount);
+#	endif
+	if (getVolParmsInfoBuffer.vMVersion < 4) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION("GetVolParmsInfoBuffer does not have vMDeviceID");
+	}
+	if (getVolParmsInfoBuffer.vMDeviceID == NULL) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(
+				QString("BSD Name not available for storageDeviceId (FSVolumeRefNum): %1").arg(storageDeviceId));
+	}
+	return QString::fromUtf8((const char*)getVolParmsInfoBuffer.vMDeviceID);
+}
+
+StorageDeviceNotifier::StorageDeviceId StorageDeviceNotifier::GetStorageDeviceId(const QString& storageDeviceName) {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(storageDeviceName.isEmpty(), "storageDeviceName");
+	
+	const QStringList kMountPoints = util::GetMountPointsFromDeviceName(storageDeviceName);
+	if (kMountPoints.isEmpty()) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("Failed to get mount points for storageDeviceName: %1").arg(
+				storageDeviceName));
+	}
+	
+	const QString kMountPoint = kMountPoints[0];
+	FSRef fsRef;
+	const OSStatus kOsStatus = FSPathMakeRef((const UInt8*)((const char*)kMountPoint.toUtf8()), &fsRef, NULL);
+	if (kOsStatus != noErr) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("FSPathMakeRef() failed for kMountPoint %1; kOsStatus: %2").arg(
+				kMountPoint, QString::number(kOsStatus)));
+	}
+	
+	FSCatalogInfo fsCatalogInfo;
+	const OSErr kOsErr = FSGetCatalogInfo(&fsRef, kFSCatInfoVolume, &fsCatalogInfo, NULL, NULL, NULL);
+	if (kOsErr != noErr) {
+		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("FSGetCatalogInfo() failed for kMountPoint %1; kOsErr: %2").arg(
+				kMountPoint, QString::number(kOsErr)));
+	}
+	
+	return fsCatalogInfo.volume;
 }
 
 StorageDeviceNotifier::StorageDeviceNotifier(): QObject(), ::cppdevtk::base::MeyersSingleton<StorageDeviceNotifier>(),
@@ -108,37 +167,6 @@ OSStatus StorageDeviceNotifier::VolumeEventsHandler(EventHandlerCallRef nextHand
 	}
 	
 	return noErr;
-}
-
-QString StorageDeviceNotifier::GetStorageDeviceName(StorageDeviceId storageDeviceId) {
-	GetVolParmsInfoBuffer getVolParmsInfoBuffer;
-#	if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
-	const OSStatus kOSStatus = FSGetVolumeParms(storageDeviceId, &getVolParmsInfoBuffer, sizeof(getVolParmsInfoBuffer));
-	if (kOSStatus != noErr) {
-		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("FSGetVolumeParms() failed for storageDeviceId %1; kOSStatus: %2").arg(
-				QString::number(storageDeviceId), QString::number(kOSStatus)));
-	}
-#	else
-	HParamBlockRec hParamBlockRec;
-	hParamBlockRec.ioParam.ioNamePtr = NULL;
-	hParamBlockRec.ioParam.ioVRefNum = storageDeviceId;
-	hParamBlockRec.ioParam.ioBuffer = (Ptr)&getVolParmsInfoBuffer;
-	hParamBlockRec.ioParam.ioReqCount = sizeof(getVolParmsInfoBuffer);
-	const OSErr kOSErr = PBHGetVolParmsSync(&hParamBlockRec);
-	if (kOSErr != noErr) {
-		throw CPPDEVTK_RUNTIME_EXCEPTION(QString("PBHGetVolParmsSync() failed for storageDeviceId %1; kOSErr: %2").arg(
-				QString::number(storageDeviceId), QString::number(kOSErr)));
-	}
-	//CPPDEVTK_LOG_DEBUG("out infoSize: " << hParamBlockRec.ioParam.ioActCount);
-#	endif
-	if (getVolParmsInfoBuffer.vMVersion < 4) {
-		throw CPPDEVTK_RUNTIME_EXCEPTION("GetVolParmsInfoBuffer does not have vMDeviceID");
-	}
-	if (getVolParmsInfoBuffer.vMDeviceID == NULL) {
-		throw CPPDEVTK_RUNTIME_EXCEPTION(
-				QString("BSD Name not available for storageDeviceId (FSVolumeRefNum): %1").arg(storageDeviceId));
-	}
-	return QString::fromUtf8((const char*)getVolParmsInfoBuffer.vMDeviceID);
 }
 
 

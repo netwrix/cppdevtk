@@ -1,6 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "cppdevtk_qtsingleapplication_res_win.hpp"
+#include "cppdevtk_qtcopydialog_res_win.hpp"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 1 TEXTINCLUDE 
 BEGIN
-    "cppdevtk_qtsingleapplication_res_win.hpp\0"
+    "cppdevtk_qtcopydialog_res_win.hpp\0"
 END
 
 2 TEXTINCLUDE 
@@ -65,7 +65,7 @@ BEGIN
     "#\tifdef _WIN32\r\n"
     "\t\tLANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US\r\n"
     "#\t\tpragma code_page(1252)\r\n"
-    "#\t\tinclude ""cppdevtk_qtsingleapplication.rc2""\t// non-Microsoft Visual C++ edited resources\r\n"
+    "#\t\tinclude ""cppdevtk_qtcopydialog.rc2""\t// non-Microsoft Visual C++ edited resources\r\n"
     "#\tendif\t// _WIN32\r\n"
     "#endif\r\n\0"
 END
@@ -86,7 +86,7 @@ END
 #	ifdef _WIN32
 		LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #		pragma code_page(1252)
-#		include "cppdevtk_qtsingleapplication.rc2"	// non-Microsoft Visual C++ edited resources
+#		include "cppdevtk_qtcopydialog.rc2"	// non-Microsoft Visual C++ edited resources
 #	endif	// _WIN32
 #endif
 

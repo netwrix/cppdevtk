@@ -25,6 +25,7 @@
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 
 #include <QtDBus/QDBusArgument>
 #include <QtDBus/QDBusInterface>
@@ -33,6 +34,8 @@
 
 #include <new>
 #include <memory>
+
+#include <paths.h>
 
 
 // http://storaged.org/doc/udisks2-api/latest/ref-dbus.html
@@ -196,6 +199,20 @@ QString UDisks2DeviceNotifier::GetStorageDeviceName(const QDBusObjectPath& dbusS
 			QString("dbusStorageDevicePath: '%1' is not a UDisks2 block device path").arg(dbusStorageDevicePath.path()));
 	
 	return UDisks2FilesystemBlockDevice::GetDevice(dbusStorageDevicePath);
+}
+
+QDBusObjectPath UDisks2DeviceNotifier::GetStorageDeviceId(const QString& storageDeviceName) {
+	CPPDEVTK_ASSERT(storageDeviceName.startsWith(_PATH_DEV));
+	
+	const QList<QDBusObjectPath> kFilesystemBlockDevicePaths = GetUDisks2FilesystemBlockDevicePaths();
+	for (QList<QDBusObjectPath>::ConstIterator kIter = kFilesystemBlockDevicePaths.constBegin();
+			kIter != kFilesystemBlockDevicePaths.constEnd(); ++kIter) {
+		if (UDisks2FilesystemBlockDevice::GetDevice(*kIter) == storageDeviceName) {
+			return *kIter;
+		}
+	}
+	
+	throw CPPDEVTK_RUNTIME_EXCEPTION(QString("no FilesystemBlockDevice for storageDeviceName: %1").arg(storageDeviceName));
 }
 
 void UDisks2DeviceNotifier::OnInterfacesAdded(const QDBusObjectPath& dbusObjectPath,
