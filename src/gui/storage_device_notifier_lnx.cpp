@@ -95,6 +95,10 @@ StorageDeviceNotifier::StorageDeviceId StorageDeviceNotifier::GetStorageDeviceId
 	}
 }
 
+bool StorageDeviceNotifier::IsEqual(StorageDeviceId sdId1, StorageDeviceId sdId2) {
+	return sdId1.path() == sdId2.path();
+}
+
 StorageDeviceNotifier::StorageDeviceNotifier(): QObject(), ::cppdevtk::base::MeyersSingleton<StorageDeviceNotifier>(),
 		pImpl_() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG((qApp != NULL), "qApp is NULL; please create app first");

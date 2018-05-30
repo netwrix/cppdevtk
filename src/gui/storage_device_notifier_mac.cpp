@@ -112,6 +112,19 @@ StorageDeviceNotifier::StorageDeviceId StorageDeviceNotifier::GetStorageDeviceId
 	return fsCatalogInfo.volume;
 }
 
+bool StorageDeviceNotifier::IsEqual(StorageDeviceId sdId1, StorageDeviceId sdId2) {
+	const OSErr kOSErr = FSCompareFSRefs(sdId1, sdId2);
+	switch (kOSErr) {
+		case noErr:
+			return true;
+		case diffVolErr:
+		case errFSRefsDifferent:
+			return false;
+		default:
+			throw CPPDEVTK_RUNTIME_EXCEPTION(QString("FSCompareFSRefs() failed; kOsErr: %1").arg(kOsErr));
+	}
+}
+
 StorageDeviceNotifier::StorageDeviceNotifier(): QObject(), ::cppdevtk::base::MeyersSingleton<StorageDeviceNotifier>(),
 		eventHandlerUPP_(NULL) {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG((qApp != NULL), "qApp is NULL; please create app first");

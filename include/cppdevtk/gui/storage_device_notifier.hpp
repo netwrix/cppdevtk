@@ -106,6 +106,8 @@ public:
 	/// - Windows: logical drive string (uppercase, ends with /); ex: D:/
 	/// - Mac OS X: BSD name; ex: disk2
 	static StorageDeviceId GetStorageDeviceId(const QString& storageDeviceName);
+	
+	static bool IsEqual(StorageDeviceId sdId1, StorageDeviceId sdId2);
 private:
 #	if (CPPDEVTK_PLATFORM_LINUX)
 #	if (__GNUC__ < 5)

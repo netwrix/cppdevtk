@@ -124,7 +124,7 @@ INSTALLS += target
 				}
 			}
 			
-			LIBS *= -lws2_32 -luser32 -ladvapi32
+			LIBS *= -ladvapi32 -luser32
 		}
 		else {
 			error("Unsupported platform!!!")

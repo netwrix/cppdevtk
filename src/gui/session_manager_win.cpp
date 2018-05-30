@@ -17,11 +17,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/gui/session_manager.hpp>
+#include <cppdevtk/gui/config.hpp>
 #if (!CPPDEVTK_PLATFORM_WINDOWS)
 #	error "This file is Windows specific!!!"
 #endif
+#if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
+#	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
+#endif
 
+#include <cppdevtk/gui/session_manager.hpp>
 #include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/zeroize.hpp>

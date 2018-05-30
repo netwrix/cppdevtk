@@ -60,10 +60,13 @@ INSTALLS += target
 
 # LIBS + PRE_TARGETDEPS
 !debug_and_release|build_pass {
-	win32:*msvc* {
-		# version.lib and advapi32.lib are needed by third party StackWalker
-		# TODO: remove if StackWalker will be replaced
-		LIBS *= -lversion -ladvapi32
+	win32 {
+		LIBS *= -lws2_32
+		*msvc* {
+			# version.lib and advapi32.lib are needed by third party StackWalker
+			# TODO: remove if StackWalker will be replaced
+			LIBS *= -lversion -ladvapi32
+		}
 	}
 }
 
