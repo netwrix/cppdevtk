@@ -174,10 +174,10 @@
 #		if (defined(__GNUC__))
 #			if (defined(__clang__))
 				// NOTE: can not be less than 10.7
-#				define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1070	// MAC_OS_X_VERSION_10_7
+#				define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 101100	// MAC_OS_X_VERSION_10_11
 #			else
 				// NOTE: can not be less than 10.4
-#				define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1040	// MAC_OS_X_VERSION_10_4
+#				define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1050	// MAC_OS_X_VERSION_10_5
 #			endif
 #		else
 #			error "Unsupported compiler for Mac OS X platform!!!"
@@ -197,10 +197,10 @@
 #	endif
 #elif (defined(_WIN32))
 #	if ((_MSC_VER >= 1700) && !defined(_USING_V110_SDK71_))
-#		define CPPDEVTK_WIN32_WINNT 0x0600	// _WIN32_WINNT_VISTA
-#		define CPPDEVTK_NTDDI_VERSION 0x06000400	// NTDDI_VISTASP4
+#		define CPPDEVTK_WIN32_WINNT 0x0601	// _WIN32_WINNT_WIN7
+#		define CPPDEVTK_NTDDI_VERSION 0x06010000	// NTDDI_WIN7
 #		define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
-#		define CPPDEVTK_WIN32_IE 0x0700	// _WIN32_IE_WIN6, _WIN32_IE_IE70
+#		define CPPDEVTK_WIN32_IE 0x0800	// _WIN32_IE_WIN7, _WIN32_IE_IE80
 #	else
 		// NOTE: can not be less than XP SP3
 #		define CPPDEVTK_WIN32_WINNT 0x0501	// _WIN32_WINNT_WINXP

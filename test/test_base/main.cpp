@@ -129,7 +129,7 @@ public:
 	DerivedFromStdRuntimeError(const ::std::string& msg): runtime_error(msg) {}
 };
 
-class DerivedFromQtException: public CPPDEVTK_QT_EXCEPTION {
+class DerivedFromQtException: public QtException {
 public:
 	virtual DerivedFromQtException* clone() const {
 		return new DerivedFromQtException(*this);

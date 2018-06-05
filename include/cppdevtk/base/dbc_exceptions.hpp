@@ -64,7 +64,7 @@ public:
 	::std::auto_ptr<NullPointerException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual NullPointerException* clone() const;
 #	endif
@@ -121,7 +121,7 @@ public:
 	::std::auto_ptr<InvalidStateException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual InvalidStateException* clone() const;
 #	endif
@@ -172,7 +172,7 @@ public:
 	::std::auto_ptr<EmptyArgumentException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual EmptyArgumentException* clone() const;
 #	endif
@@ -224,7 +224,7 @@ public:
 	::std::auto_ptr<NullArgumentException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual NullArgumentException* clone() const;
 #	endif
@@ -270,7 +270,7 @@ inline ::std::auto_ptr<NullPointerException> NullPointerException::Clone() const
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* NullPointerException::clone() const {
+inline QtException* NullPointerException::clone() const {
 #else
 inline NullPointerException* NullPointerException::clone() const {
 #endif
@@ -329,7 +329,7 @@ inline ::std::auto_ptr<InvalidStateException> InvalidStateException::Clone() con
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* InvalidStateException::clone() const {
+inline QtException* InvalidStateException::clone() const {
 #else
 inline InvalidStateException* InvalidStateException::clone() const {
 #endif
@@ -386,7 +386,7 @@ inline ::std::auto_ptr<EmptyArgumentException> EmptyArgumentException::Clone() c
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* EmptyArgumentException::clone() const {
+inline QtException* EmptyArgumentException::clone() const {
 #else
 inline EmptyArgumentException* EmptyArgumentException::clone() const {
 #endif
@@ -443,7 +443,7 @@ inline ::std::auto_ptr<NullArgumentException> NullArgumentException::Clone() con
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* NullArgumentException::clone() const {
+inline QtException* NullArgumentException::clone() const {
 #else
 inline NullArgumentException* NullArgumentException::clone() const {
 #endif

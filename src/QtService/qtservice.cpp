@@ -679,11 +679,11 @@ QtServiceBase::QtServiceBase(int argc, char **argv, const QString &name)
 
     QString nm(name);
     if (nm.length() > 255) {
-	CPPDEVTK_LOG_WARN("'name' is longer than 255 characters.");
+	qWarning("QtService: 'name' is longer than 255 characters.");
 	nm.truncate(255);
     }
     if (nm.contains('\\')) {
-	CPPDEVTK_LOG_WARN("'name' contains backslashes '\\'.");
+	qWarning("QtService: 'name' contains backslashes '\\'.");
 	nm.replace((QChar)'\\', (QChar)'\0');
     }
 

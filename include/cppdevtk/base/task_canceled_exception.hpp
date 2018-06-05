@@ -46,7 +46,7 @@ public:
 	::std::auto_ptr<TaskCanceledException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual TaskCanceledException* clone() const;
 #	endif
@@ -84,7 +84,7 @@ inline ::std::auto_ptr<TaskCanceledException> TaskCanceledException::Clone() con
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* TaskCanceledException::clone() const {
+inline QtException* TaskCanceledException::clone() const {
 #else
 inline TaskCanceledException* TaskCanceledException::clone() const {
 #endif

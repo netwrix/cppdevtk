@@ -59,10 +59,10 @@
 #if (_WIN32_WINNT_MAXVER < CPPDEVTK_DETAIL_WIN32_WINNT_WINXP)
 #	error "Old SDK: Windows < XP is not supported!!!"
 #endif
-#if (CPPDEVTK_WIN32_WINNT < CPPDEVTK_DETAIL_WIN32_WINNT_VISTA)
+#if (CPPDEVTK_WIN32_WINNT == CPPDEVTK_DETAIL_WIN32_WINNT_WINXP)
 #	if (_WIN32_WINNT_MAXVER > CPPDEVTK_DETAIL_WIN32_WINNT_WIN7)	// SDK > 7.1 A
 #		ifndef _USING_V110_SDK71_
-#			error "Please select *_xp platform toolset (Win < Vista and SDK > 7.1 A)!!!"
+#			error "Please select *_xp platform toolset (Win XP and SDK > 7.1 A)!!!"
 #		endif
 #	endif
 #endif

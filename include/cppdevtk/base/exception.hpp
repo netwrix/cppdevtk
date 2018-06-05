@@ -90,7 +90,7 @@ namespace base {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa C++ 03, 18.6.1 Class exception
 class CPPDEVTK_BASE_API Exception: public Throwable, public Cloneable,
-		public QStringizable, public CPPDEVTK_QT_EXCEPTION {
+		public QStringizable, public QtException {
 public:
 	typedef CPPDEVTK_TR1_NS::shared_ptr<const StackTrace> StackTracePtrType;
 	typedef CPPDEVTK_TR1_NS::shared_ptr<const Exception> CausePtrType;
@@ -112,7 +112,7 @@ public:
 	virtual QString ToString() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual Exception* clone() const;
 #	endif
@@ -171,7 +171,7 @@ CPPDEVTK_BASE_API void swap(Exception& x, Exception& y) CPPDEVTK_NOEXCEPT;
 // Inline functions
 
 inline Exception::Exception(const Exception& other) CPPDEVTK_NOEXCEPT: Throwable(other), Cloneable(other), QStringizable(other),
-		CPPDEVTK_QT_EXCEPTION(other), pStdWhatMsg_(other.pStdWhatMsg_), pStackTrace_(other.pStackTrace_),
+		QtException(other), pStdWhatMsg_(other.pStdWhatMsg_), pStackTrace_(other.pStackTrace_),
 		throwPoint_(other.throwPoint_), pCause_(other.pCause_) {}
 
 inline Exception::~Exception() CPPDEVTK_NOEXCEPT {}
@@ -188,7 +188,7 @@ inline ::std::auto_ptr<Exception> Exception::Clone() const {
 
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* Exception::clone() const {
+inline QtException* Exception::clone() const {
 #else
 inline Exception* Exception::clone() const {
 #endif
@@ -220,7 +220,7 @@ inline void Exception::Swap(Exception& other) CPPDEVTK_NOEXCEPT {
 	
 	
 	if (this != &other) {
-		swap(static_cast<CPPDEVTK_QT_EXCEPTION&>(*this), static_cast<CPPDEVTK_QT_EXCEPTION&>(other));
+		swap(static_cast<QtException&>(*this), static_cast<QtException&>(other));
 		SwapOwnData(other);
 	}
 }

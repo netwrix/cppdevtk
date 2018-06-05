@@ -52,7 +52,7 @@ public:
 	::std::auto_ptr<DBusException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual DBusException* clone() const;
 #	endif
@@ -95,7 +95,7 @@ inline ::std::auto_ptr<DBusException> DBusException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* DBusException::clone() const {
+inline QtException* DBusException::clone() const {
 #else
 inline DBusException* DBusException::clone() const {
 #endif

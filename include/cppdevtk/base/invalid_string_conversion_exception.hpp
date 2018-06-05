@@ -57,7 +57,7 @@ public:
 	::std::auto_ptr<InvalidStringConversionException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual InvalidStringConversionException* clone() const;
 #	endif
@@ -105,7 +105,7 @@ inline ::std::auto_ptr<InvalidStringConversionException> InvalidStringConversion
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* InvalidStringConversionException::clone() const {
+inline QtException* InvalidStringConversionException::clone() const {
 #else
 inline InvalidStringConversionException* InvalidStringConversionException::clone() const {
 #endif

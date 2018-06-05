@@ -60,7 +60,7 @@ public:
 	::std::auto_ptr<JniException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual JniException* clone() const;
 #	endif
@@ -103,7 +103,7 @@ public:
 	::std::auto_ptr<OutOfMemoryError> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual OutOfMemoryError* clone() const;
 #	endif
@@ -146,7 +146,7 @@ public:
 	::std::auto_ptr<NoClassDefFoundError> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual NoClassDefFoundError* clone() const;
 #	endif
@@ -189,7 +189,7 @@ public:
 	::std::auto_ptr<NoSuchMethodError> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual NoSuchMethodError* clone() const;
 #	endif
@@ -232,7 +232,7 @@ public:
 	::std::auto_ptr<NoSuchFieldError> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual NoSuchFieldError* clone() const;
 #	endif
@@ -273,7 +273,7 @@ inline ::std::auto_ptr<JniException> JniException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* JniException::clone() const {
+inline QtException* JniException::clone() const {
 #else
 inline JniException* JniException::clone() const {
 #endif
@@ -321,7 +321,7 @@ inline ::std::auto_ptr<OutOfMemoryError> OutOfMemoryError::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* OutOfMemoryError::clone() const {
+inline QtException* OutOfMemoryError::clone() const {
 #else
 inline OutOfMemoryError* OutOfMemoryError::clone() const {
 #endif
@@ -369,7 +369,7 @@ inline ::std::auto_ptr<NoClassDefFoundError> NoClassDefFoundError::Clone() const
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* NoClassDefFoundError::clone() const {
+inline QtException* NoClassDefFoundError::clone() const {
 #else
 inline NoClassDefFoundError* NoClassDefFoundError::clone() const {
 #endif
@@ -417,7 +417,7 @@ inline ::std::auto_ptr<NoSuchMethodError> NoSuchMethodError::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* NoSuchMethodError::clone() const {
+inline QtException* NoSuchMethodError::clone() const {
 #else
 inline NoSuchMethodError* NoSuchMethodError::clone() const {
 #endif
@@ -465,7 +465,7 @@ inline ::std::auto_ptr<NoSuchFieldError> NoSuchFieldError::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* NoSuchFieldError::clone() const {
+inline QtException* NoSuchFieldError::clone() const {
 #else
 inline NoSuchFieldError* NoSuchFieldError::clone() const {
 #endif

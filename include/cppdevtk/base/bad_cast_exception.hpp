@@ -60,7 +60,7 @@ public:
 	::std::auto_ptr<BadCastException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual BadCastException* clone() const;
 #	endif
@@ -100,7 +100,7 @@ inline ::std::auto_ptr<BadCastException> BadCastException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* BadCastException::clone() const {
+inline QtException* BadCastException::clone() const {
 #else
 inline BadCastException* BadCastException::clone() const {
 #endif

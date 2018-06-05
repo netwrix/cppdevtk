@@ -272,11 +272,11 @@ void StartAndRunCancelableTask<TResult>::run() {
 	try {
 		result = StartAndRunCancelableTaskBase<TResult>::pCancelableTask_->Run(pCancelable);
 	}
-	catch (const CPPDEVTK_QT_EXCEPTION& exc) {
+	catch (const QtException& exc) {
 		QFutureInterface<TResult>::reportException(exc);
 	}
 	catch (...) {
-		QFutureInterface<TResult>::reportException(CPPDEVTK_QT_UNHANDLED_EXCEPTION());
+		QFutureInterface<TResult>::reportException(QtUnhandledException());
 	}
 	
 	QFutureInterface<TResult>::reportResult(result);

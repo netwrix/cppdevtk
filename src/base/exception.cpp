@@ -29,7 +29,7 @@ namespace base {
 
 
 Exception::Exception(const SourceCodeInfo& throwPoint) /* CPPDEVTK_NOEXCEPT */: Throwable(), Cloneable(),
-		QStringizable(), CPPDEVTK_QT_EXCEPTION(), pStdWhatMsg_(new ::std::string()), pStackTrace_(new StackTrace(
+		QStringizable(), QtException(), pStdWhatMsg_(new ::std::string()), pStackTrace_(new StackTrace(
 #		if (!defined(NDEBUG) || CPPDEVTK_EXCEPTION_ENABLE_STACK_TRACE_IN_RELEASE)
 		true
 #		else
@@ -49,7 +49,7 @@ Exception::Exception(const SourceCodeInfo& throwPoint) /* CPPDEVTK_NOEXCEPT */: 
 }
 
 Exception::Exception(const SourceCodeInfo& throwPoint, const Exception& cause) /* CPPDEVTK_NOEXCEPT */:
-		Throwable(), Cloneable(), QStringizable(), CPPDEVTK_QT_EXCEPTION(), pStdWhatMsg_(new ::std::string()),
+		Throwable(), Cloneable(), QStringizable(), QtException(), pStdWhatMsg_(new ::std::string()),
 		pStackTrace_(new StackTrace(
 #		if (!defined(NDEBUG) || CPPDEVTK_EXCEPTION_ENABLE_STACK_TRACE_IN_RELEASE)
 		true

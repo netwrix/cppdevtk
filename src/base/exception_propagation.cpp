@@ -50,7 +50,7 @@ ExceptionPtr ThrowableCurrentException() {
 	catch (const Exception& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.Clone().release()));
 	}
-	catch (const CPPDEVTK_QT_EXCEPTION& exc) {
+	catch (const QtException& exc) {
 		exceptionPtr = ExceptionPtr(ExceptionPtr::ImplPtrType(exc.clone()));
 	}
 	

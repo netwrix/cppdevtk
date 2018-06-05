@@ -130,7 +130,7 @@ public:
 	::std::auto_ptr<SystemException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual SystemException* clone() const;
 #	endif
@@ -225,7 +225,7 @@ inline ::std::auto_ptr<SystemException> SystemException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* SystemException::clone() const {
+inline QtException* SystemException::clone() const {
 #else
 inline SystemException* SystemException::clone() const {
 #endif

@@ -76,7 +76,7 @@ public:
 	::std::auto_ptr<ThreadException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual ThreadException* clone() const;
 #	endif
@@ -141,7 +141,7 @@ public:
 	::std::auto_ptr<ThreadInterruptedException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual ThreadInterruptedException* clone() const;
 #	endif
@@ -195,7 +195,7 @@ inline ::std::auto_ptr<ThreadException> ThreadException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* ThreadException::clone() const {
+inline QtException* ThreadException::clone() const {
 #else
 inline ThreadException* ThreadException::clone() const {
 #endif
@@ -265,7 +265,7 @@ inline ::std::auto_ptr<ThreadInterruptedException> ThreadInterruptedException::C
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* ThreadInterruptedException::clone() const {
+inline QtException* ThreadInterruptedException::clone() const {
 #else
 inline ThreadInterruptedException* ThreadInterruptedException::clone() const {
 #endif

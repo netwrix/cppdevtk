@@ -62,11 +62,11 @@
 
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#	define CPPDEVTK_QT_EXCEPTION QException
-#	define CPPDEVTK_QT_UNHANDLED_EXCEPTION QUnhandledException
+typedef QException QtException;
+typedef QUnhandledException QtUnhandledException;
 #else
-#	define CPPDEVTK_QT_EXCEPTION QtConcurrent::Exception
-#	define CPPDEVTK_QT_UNHANDLED_EXCEPTION QtConcurrent::UnhandledException
+typedef QtConcurrent::Exception QtException;
+typedef QtConcurrent::UnhandledException QtUnhandledException;
 #endif
 
 
@@ -95,7 +95,7 @@ typedef ::std::exception_ptr ExceptionPtr;
 namespace detail {
 
 
-typedef CPPDEVTK_QT_EXCEPTION PolymorphicExceptionBase;
+typedef QtException PolymorphicExceptionBase;
 
 
 template <class TStdException>

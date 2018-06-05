@@ -60,7 +60,7 @@ public:
 	::std::auto_ptr<BadOptionalAccessException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual BadOptionalAccessException* clone() const;
 #	endif
@@ -100,7 +100,7 @@ inline ::std::auto_ptr<BadOptionalAccessException> BadOptionalAccessException::C
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* BadOptionalAccessException::clone() const {
+inline QtException* BadOptionalAccessException::clone() const {
 #else
 inline BadOptionalAccessException* BadOptionalAccessException::clone() const {
 #endif

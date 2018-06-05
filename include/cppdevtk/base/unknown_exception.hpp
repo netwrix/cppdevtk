@@ -55,7 +55,7 @@ public:
 	::std::auto_ptr<UnknownException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual UnknownException* clone() const;
 #	endif
@@ -95,7 +95,7 @@ inline ::std::auto_ptr<UnknownException> UnknownException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* UnknownException::clone() const {
+inline QtException* UnknownException::clone() const {
 #else
 inline UnknownException* UnknownException::clone() const {
 #endif

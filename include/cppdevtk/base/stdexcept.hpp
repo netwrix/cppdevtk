@@ -67,7 +67,7 @@ public:
 	::std::auto_ptr<LogicException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual LogicException* clone() const;
 #	endif
@@ -124,7 +124,7 @@ public:
 	::std::auto_ptr<DomainException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual DomainException* clone() const;
 #	endif
@@ -176,7 +176,7 @@ public:
 	::std::auto_ptr<InvalidArgumentException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual InvalidArgumentException* clone() const;
 #	endif
@@ -228,7 +228,7 @@ public:
 	::std::auto_ptr<LengthException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual LengthException* clone() const;
 #	endif
@@ -280,7 +280,7 @@ public:
 	::std::auto_ptr<OutOfRangeException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual OutOfRangeException* clone() const;
 #	endif
@@ -335,7 +335,7 @@ public:
 	::std::auto_ptr<RuntimeException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual RuntimeException* clone() const;
 #	endif
@@ -392,7 +392,7 @@ public:
 	::std::auto_ptr<RangeException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual RangeException* clone() const;
 #	endif
@@ -444,7 +444,7 @@ public:
 	::std::auto_ptr<OverflowException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual OverflowException* clone() const;
 #	endif
@@ -496,7 +496,7 @@ public:
 	::std::auto_ptr<UnderflowException> Clone() const;
 	
 #	if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-	virtual CPPDEVTK_QT_EXCEPTION* clone() const;
+	virtual QtException* clone() const;
 #	else
 	virtual UnderflowException* clone() const;
 #	endif
@@ -549,7 +549,7 @@ inline ::std::auto_ptr<LogicException> LogicException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* LogicException::clone() const {
+inline QtException* LogicException::clone() const {
 #else
 inline LogicException* LogicException::clone() const {
 #endif
@@ -606,7 +606,7 @@ inline ::std::auto_ptr<DomainException> DomainException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* DomainException::clone() const {
+inline QtException* DomainException::clone() const {
 #else
 inline DomainException* DomainException::clone() const {
 #endif
@@ -657,7 +657,7 @@ inline ::std::auto_ptr<InvalidArgumentException> InvalidArgumentException::Clone
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* InvalidArgumentException::clone() const {
+inline QtException* InvalidArgumentException::clone() const {
 #else
 inline InvalidArgumentException* InvalidArgumentException::clone() const {
 #endif
@@ -708,7 +708,7 @@ inline ::std::auto_ptr<LengthException> LengthException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* LengthException::clone() const {
+inline QtException* LengthException::clone() const {
 #else
 inline LengthException* LengthException::clone() const {
 #endif
@@ -759,7 +759,7 @@ inline ::std::auto_ptr<OutOfRangeException> OutOfRangeException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* OutOfRangeException::clone() const {
+inline QtException* OutOfRangeException::clone() const {
 #else
 inline OutOfRangeException* OutOfRangeException::clone() const {
 #endif
@@ -818,7 +818,7 @@ inline ::std::auto_ptr<RuntimeException> RuntimeException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* RuntimeException::clone() const {
+inline QtException* RuntimeException::clone() const {
 #else
 inline RuntimeException* RuntimeException::clone() const {
 #endif
@@ -875,7 +875,7 @@ inline ::std::auto_ptr<RangeException> RangeException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* RangeException::clone() const {
+inline QtException* RangeException::clone() const {
 #else
 inline RangeException* RangeException::clone() const {
 #endif
@@ -926,7 +926,7 @@ inline ::std::auto_ptr<OverflowException> OverflowException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* OverflowException::clone() const {
+inline QtException* OverflowException::clone() const {
 #else
 inline OverflowException* OverflowException::clone() const {
 #endif
@@ -977,7 +977,7 @@ inline ::std::auto_ptr<UnderflowException> UnderflowException::Clone() const {
 }
 
 #if (CPPDEVTK_COMPILER_HAVE_MVI_CRT_BUG)
-inline CPPDEVTK_QT_EXCEPTION* UnderflowException::clone() const {
+inline QtException* UnderflowException::clone() const {
 #else
 inline UnderflowException* UnderflowException::clone() const {
 #endif
