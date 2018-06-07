@@ -60,7 +60,7 @@ namespace test_service {
 HttpService::HttpService(int argc, char** argv): ::cppdevtk::util::Service< ::cppdevtk::util::CoreApplication>(argc, argv,
 		"CppDevTk Test Service"), pDaemon_(NULL) {
 	setServiceDescription("A dummy HTTP service implemented with CppDevTk");
-	setServiceFlags(ServiceFlags(CanBeSuspended) & ServiceFlags(NeedsStopOnShutdown));
+	setServiceFlags(ServiceFlags(CanBeSuspended) | ServiceFlags(NeedsStopOnShutdown));
 }
 
 void HttpService::start() {

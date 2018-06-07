@@ -30,6 +30,8 @@ namespace util {
 void ServiceBase::StopAndQuit() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!(serviceFlags() & CannotBeStopped), "service must be stopable");
 	
+	LogInfo("Stop and quit");
+	
 	stop();
 	QCoreApplication::quit();
 }
