@@ -949,13 +949,15 @@ exit 0
 
 %files test-base
 %defattr(-,root,root,-)
-%{_bindir}/%{name}_test_config
 %{_bindir}/%{name}_test_base
+%{_bindir}/%{name}_test_config
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files test-util
 %defattr(-,root,root,-)
+%{_bindir}/%{name}_test_service
+%{_bindir}/%{name}_test_term_sig
 %{_bindir}/%{name}_test_util
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
@@ -965,10 +967,10 @@ exit 0
 %{_bindir}/%{name}_test_caps_lock_widget
 %{_bindir}/%{name}_test_disk_space_widget
 %{_bindir}/%{name}_test_invisible_widget
-%{_bindir}/%{name}_test_slot_throw
 %{_bindir}/%{name}_test_localization
-%{_bindir}/%{name}_test_term_sig
 %{_bindir}/%{name}_test_pc_man
+%{_bindir}/%{name}_test_service_controller
+%{_bindir}/%{name}_test_slot_throw
 %{_datadir}/applications/*.desktop
 %{_datadir}/pixmaps
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
