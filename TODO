@@ -12,7 +12,6 @@ Low priority:
 Replace third party StackWalker; maybe our implementation will use CaptureStackBackTrace() (RtlCaptureStackBackTrace()) instead of StackWalk64()
 
 - Our own ON_BLOCK_EXIT (currently using boost only for this; headers only, but huge dependency anyway)
-- QtService SIGINT, SIGTERM, SIGHUP
 
 
 Android not ported (search for "TODO: Android port"):

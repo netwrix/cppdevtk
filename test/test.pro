@@ -17,19 +17,32 @@
 
 TEMPLATE = subdirs
 
+
+include(./../common.pri)
+
+
 #CONFIG *= ordered
 
+
 SUBDIRS +=	\
-	test_config	\
 	test_base	\
-	test_util	\
-	test_slot_throw	\
-	test_invisible_widget	\
 	test_caps_lock_widget	\
+	test_config	\
 	test_disk_space_widget	\
+	test_invisible_widget	\
 	test_localization	\
-	test_term_sig
+	test_slot_throw	\
+	test_term_sig	\
+	test_util
 	
 !android:!ios {
 	SUBDIRS += test_pc_man
+}
+
+isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
+	SUBDIRS +=	\
+		test_service	\
+		test_service_controller
+	
+	test_service_controller.depends = test_service
 }

@@ -86,7 +86,11 @@ contains(QT_CONFIG, dbus) {
 }
 
 isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
-	HEADERS += single_core_application.hpp
+	HEADERS +=	\
+		single_core_application.hpp	\
+		service.hpp	\
+		service_base.hpp	\
+		service_controller.hpp
 }
 
 

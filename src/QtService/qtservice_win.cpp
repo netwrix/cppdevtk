@@ -49,6 +49,8 @@
 #	error "This file is Windows specific!!!"
 #endif
 
+#include <cppdevtk/base/cassert.hpp>
+
 #include "qtservice_p.h"
 
 #include <QtCore/QCoreApplication>
@@ -410,6 +412,27 @@ bool QtServiceController::resume()
     return result;
 }
 
+bool QtServiceController::reloadConfig() {
+	Q_D(QtServiceController);
+    bool result = false;
+    if (!winServiceInit())
+        return result;
+
+    SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
+    if (hSCM) {
+        SC_HANDLE hService = pOpenService(hSCM, (wchar_t *)d->serviceName.utf16(),
+                             SERVICE_PAUSE_CONTINUE);
+        if (hService) {
+            SERVICE_STATUS status;
+            if (pControlService(hService, SERVICE_CONTROL_PARAMCHANGE, &status))
+                result = true;
+            pCloseServiceHandle(hService);
+        }
+        pCloseServiceHandle(hSCM);
+    }
+    return result;
+}
+
 bool QtServiceController::sendCommand(int code)
 {
    Q_D(QtServiceController);
@@ -452,8 +475,11 @@ void QtServiceBase::logMessage(const QString &message, MessageType type,
     case Error: dbgMsg += "Error] " ; break;
     case Warning: dbgMsg += "Warning] "; break;
     case Success: dbgMsg += "Success] "; break;
-    case Information: //fall through
-    default: dbgMsg += "Information] "; break;
+    case Information: dbgMsg += "Information] "; break;
+    default:
+		CPPDEVTK_ASSERT(0 && "invalid MessageType");
+		dbgMsg += "Invalid] ";
+		break;
     }
 #  if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     qtServiceLogDebug((QtMsgType)-1, QMessageLogContext(), QLatin1String(dbgMsg) + message);
@@ -470,7 +496,11 @@ void QtServiceBase::logMessage(const QString &message, MessageType type,
     case Error: wType = EVENTLOG_ERROR_TYPE; break;
     case Warning: wType = EVENTLOG_WARNING_TYPE; break;
     case Information: wType = EVENTLOG_INFORMATION_TYPE; break;
-    default: wType = EVENTLOG_SUCCESS; break;
+    case Success: wType = EVENTLOG_SUCCESS; break;
+    default:
+		CPPDEVTK_ASSERT(0 && "invalid MessageType");
+		wType = EVENTLOG_SUCCESS;
+		break;
     }
     HANDLE h = pRegisterEventSource(0, (wchar_t *)d->controller.serviceName().utf16());
     if (h) {
@@ -607,6 +637,9 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
     case SERVICE_CONTROL_CONTINUE:
         QtServiceBase::instance()->resume();
         break;
+	case SERVICE_CONTROL_PARAMCHANGE:
+		QtServiceBase::instance()->reloadConfig();
+		break;
     default:
 	if (code >= 128 && code <= 255)
 	    QtServiceBase::instance()->processCommand(code - 128);
@@ -651,7 +684,12 @@ void WINAPI QtServiceSysPrivate::handler( DWORD code )
         instance->condition.wait(&instance->mutex);
         instance->setStatus(SERVICE_RUNNING);
         break;
-
+	case SERVICE_CONTROL_PARAMCHANGE:
+		instance->setStatus(SERVICE_CONTINUE_PENDING);
+		QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + code)));
+		instance->condition.wait(&instance->mutex);
+		instance->setStatus(SERVICE_RUNNING);
+		break;
     case SERVICE_CONTROL_INTERROGATE: // 4
         break;
 

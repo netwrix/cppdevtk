@@ -21,7 +21,13 @@
 #define CPPDEVTK_TEST_PC_MAN_CONFIG_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/config.hpp>
+#include <cppdevtk/gui/config.hpp>
+
+#if (!(CPPDEVTK_HAVE_POWER_NOTIFIER && CPPDEVTK_HAVE_SCREENSAVER && CPPDEVTK_HAVE_SESSION && CPPDEVTK_HAVE_SESSION_MANAGER	\
+		&& CPPDEVTK_HAVE_STORAGE_DEVICE_NOTIFIER))
+#	error "This file requires PowerNotifier, ScreenSaver, Session, SessionManager and StorageDeviceNotifier!!!"
+#endif
+
 #include "info.hpp"
 
 

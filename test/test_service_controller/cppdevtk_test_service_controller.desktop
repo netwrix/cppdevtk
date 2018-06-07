@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Test Service Controller
+GenericName=CppDevTk test application
+Comment=CppDevTk Test Service Controller
+Exec=/opt/cososys/bin/cppdevtk_test_service_controller
+Icon=cppdevtk
+Categories=Utility;
+Terminal=false

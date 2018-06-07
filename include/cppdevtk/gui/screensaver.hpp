@@ -22,11 +22,8 @@
 
 
 #include "config.hpp"
-#if (CPPDEVTK_PLATFORM_ANDROID)
-#	error "This file is not for Android!!!"
-#endif
-#if (CPPDEVTK_PLATFORM_IOS)
-#	error "This file is not for iOS!!!"
+#if (!CPPDEVTK_HAVE_SCREENSAVER)
+#	error "ScreenSaver is not available!!!"
 #endif
 
 #include <cppdevtk/base/singletons.hpp>

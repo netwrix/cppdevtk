@@ -21,7 +21,7 @@
 #define CPPDEVTK_TEST_SLOT_THROW_CONFIG_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/config.hpp>
+#include <cppdevtk/gui/config.hpp>
 #include "info.hpp"
 
 

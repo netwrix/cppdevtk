@@ -21,7 +21,7 @@
 #define CPPDEVTK_TEST_CAPS_LOCK_WIDGET_CONFIG_HPP_INCLUDED_
 
 
-#include <cppdevtk/config/config.hpp>
+#include <cppdevtk/gui/config.hpp>
 #include "info.hpp"
 
 

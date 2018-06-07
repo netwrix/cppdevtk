@@ -113,16 +113,7 @@ StorageDeviceNotifier::StorageDeviceId StorageDeviceNotifier::GetStorageDeviceId
 }
 
 bool StorageDeviceNotifier::IsEqual(StorageDeviceId sdId1, StorageDeviceId sdId2) {
-	const OSErr kOSErr = FSCompareFSRefs(sdId1, sdId2);
-	switch (kOSErr) {
-		case noErr:
-			return true;
-		case diffVolErr:
-		case errFSRefsDifferent:
-			return false;
-		default:
-			throw CPPDEVTK_RUNTIME_EXCEPTION(QString("FSCompareFSRefs() failed; kOsErr: %1").arg(kOsErr));
-	}
+	return sdId1 == sdId2;
 }
 
 StorageDeviceNotifier::StorageDeviceNotifier(): QObject(), ::cppdevtk::base::MeyersSingleton<StorageDeviceNotifier>(),

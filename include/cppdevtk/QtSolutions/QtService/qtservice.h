@@ -46,6 +46,7 @@
 #include "config.hpp"
 #include <cppdevtk/base/unused.hpp>
 
+#include <QtCore/QObject>
 #include <QtCore/QCoreApplication>
 
 
@@ -88,6 +89,7 @@ public:
     bool stop();
     bool pause();
     bool resume();
+	bool reloadConfig();
     bool sendCommand(int code);
 
 private:
@@ -98,8 +100,10 @@ private:
 class QtServiceBasePrivate;
 
 
-class CPPDEVTK_QTSERVICE_EXPORT QtServiceBase
+class CPPDEVTK_QTSERVICE_EXPORT QtServiceBase: public QObject
 {
+	Q_OBJECT
+	
     Q_DECLARE_PRIVATE(QtServiceBase)
 public:
 
@@ -150,7 +154,8 @@ protected:
     virtual void createApplication(int &argc, char **argv) = 0;
 
     virtual int executeApplication() = 0;
-
+protected Q_SLOTS:
+	virtual void reloadConfig();	///< SIGHUP; default implementation does nothing.
 private:
 
     friend class QtServiceSysPrivate;

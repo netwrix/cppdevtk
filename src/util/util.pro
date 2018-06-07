@@ -277,7 +277,11 @@ contains(QT_CONFIG, dbus) {
 }
 
 isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
-	SOURCES += single_core_application.cpp
+	SOURCES +=	\
+		single_core_application.cpp	\
+		service.cpp	\
+		service_base.cpp	\
+		service_controller.cpp
 }
 
 
@@ -341,5 +345,9 @@ contains(QT_CONFIG, dbus) {
 }
 
 isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
-	HEADERS += ../../include/cppdevtk/util/single_core_application.hpp
+	HEADERS +=	\
+		../../include/cppdevtk/util/single_core_application.hpp	\
+		../../include/cppdevtk/util/service.hpp	\
+		../../include/cppdevtk/util/service_base.hpp	\
+		../../include/cppdevtk/util/service_controller.hpp
 }

@@ -45,6 +45,8 @@
 
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/verify.h>
+#include <cppdevtk/base/cassert.hpp>
+
 #include "qtservice_p.h"
 #include "qtunixsocket.h"
 #include "qtunixserversocket.h"
@@ -254,6 +256,10 @@ bool QtServiceController::resume()
     return sendCmd(serviceName(), QLatin1String("resume"));
 }
 
+bool QtServiceController::reloadConfig() {
+	return sendCmd(serviceName(), QLatin1String("reloadConfig"));
+}
+
 bool QtServiceController::sendCommand(int code)
 {
     return sendCmd(serviceName(), QString(QLatin1String("num:") + QString::number(code)));
@@ -363,6 +369,11 @@ void QtServiceSysPrivate::slotReady()
                 QtServiceBase::instance()->resume();
                 retValue = true;
             }
+		} else if (cmd == QLatin1String("reloadConfig")) {
+			if (serviceFlags & QtServiceBase::CanBeSuspended) {
+				QtServiceBase::instance()->reloadConfig();
+				retValue = true;
+			}
         } else if (cmd == QLatin1String("alive")) {
             retValue = true;
         } else if (cmd.length() > 4 && cmd.left(4) == QLatin1String("num:")) {
@@ -484,8 +495,16 @@ void QtServiceBase::logMessage(const QString &message, QtServiceBase::MessageTyp
         case QtServiceBase::Warning:
             st = LOG_WARNING;
 	    break;
+        case QtServiceBase::Information:
+            st = LOG_INFO;
+	    break;
+        case QtServiceBase::Success:
+            st = LOG_INFO;
+	    break;
         default:
-	    st = LOG_INFO;
+			CPPDEVTK_ASSERT(0 && "invalid MessageType");
+			st = LOG_INFO;
+		break;
     }
     if (!d_ptr->sysd->ident) {
         QString tmp = encodeName(serviceName(), true);

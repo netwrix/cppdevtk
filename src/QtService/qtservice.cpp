@@ -43,6 +43,8 @@
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/logger.hpp>
+#include <cppdevtk/base/dbc.hpp>
+
 #include "qtservice_p.h"
 
 #include <QtCore/QtGlobal>
@@ -238,6 +240,8 @@ void qtServiceLogDebug(QtMsgType type, const char* msg)
 QtServiceController::QtServiceController(const QString &name)
  : d_ptr(new QtServiceControllerPrivate())
 {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(name.isEmpty(), "name");
+	
     Q_D(QtServiceController);
     d->q_ptr = this;
     d->serviceName = name;
@@ -663,8 +667,10 @@ int QtServiceBasePrivate::run(bool asService, const QStringList &argList)
 
     \sa exec(), start(), QtServiceController::install()
 */
-QtServiceBase::QtServiceBase(int argc, char **argv, const QString &name)
+QtServiceBase::QtServiceBase(int argc, char **argv, const QString &name): QObject()
 {
+	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(name.isEmpty(), "name");
+	
 #if defined(QTSERVICE_DEBUG)
 #  if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     qInstallMessageHandler(qtServiceLogDebug);
@@ -686,7 +692,8 @@ QtServiceBase::QtServiceBase(int argc, char **argv, const QString &name)
 	qWarning("QtService: 'name' contains backslashes '\\'.");
 	nm.replace((QChar)'\\', (QChar)'\0');
     }
-
+    CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(!nm.isEmpty(), "after processing name is empty");
+    
     d_ptr = new QtServiceBasePrivate(nm);
     d_ptr->q_ptr = this;
 
@@ -855,6 +862,9 @@ int QtServiceBase::exec()
         } else if (a == QLatin1String("-r") || a == QLatin1String("-resume")) {
             d_ptr->controller.resume();
             return 0;
+		} else if (a == QLatin1String("-l") || a == QLatin1String("-reloadConfig")) {
+            d_ptr->controller.reloadConfig();
+            return 0;
         } else if (a == QLatin1String("-c") || a == QLatin1String("-command")) {
             int code = 0;
             if (d_ptr->args.size() > 2)
@@ -862,13 +872,14 @@ int QtServiceBase::exec()
             d_ptr->controller.sendCommand(code);
             return 0;
         } else  if (a == QLatin1String("-h") || a == QLatin1String("-help")) {
-            printf("\n%s -[i|u|e|t|p|r|c|v|h]\n"
+            printf("\n%s -[i|u|e|t|p|r|l|c|v|h]\n"
                    "\t-i(nstall) [account] [password]\t: Install the service, optionally using given account and password\n"
                    "\t-u(ninstall)\t: Uninstall the service.\n"
                    "\t-e(xec)\t\t: Run as a regular application. Useful for debugging.\n"
                    "\t-t(erminate)\t: Stop the service.\n"
                    "\t-p(ause)\t: Pause the service.\n"
                    "\t-r(esume)\t: Resume a paused service.\n"
+                   "\t-(re)l(oadConfig)\t: Reload config.\n"
                    "\t-c(ommand) num\t: Send command code num to the service.\n"
                    "\t-v(ersion)\t: Print version and status information.\n"
                    "\t-h(elp)   \t: Show this help\n"
@@ -975,6 +986,8 @@ void QtServiceBase::pause()
 void QtServiceBase::resume()
 {
 }
+
+void QtServiceBase::reloadConfig() {}
 
 /*!
     Reimplement this function to process the user command \a code.

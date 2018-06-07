@@ -22,14 +22,15 @@
 
 
 #include "config.hpp"
-#if (CPPDEVTK_PLATFORM_ANDROID)
-#	error "This file is not for Android!!!"
-#endif
-#if (CPPDEVTK_PLATFORM_IOS)
-#	error "This file is not for iOS!!!"
+#if (!CPPDEVTK_HAVE_SESSION_MANAGER)
+#	error "SessionManager is not available!!!"
 #endif
 
+#if (!CPPDEVTK_HAVE_SESSION)
+#	error "SessionManager require Session!!!"
+#endif
 #include "session.hpp"
+
 #include <cppdevtk/base/singletons.hpp>
 
 #include <QtCore/QObject>
