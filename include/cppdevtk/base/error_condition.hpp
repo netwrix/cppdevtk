@@ -157,7 +157,7 @@ template <typename T>
 struct IsErrorConditionEnum: public CPPDEVTK_TR1_NS::false_type {};
 
 template <>
-struct IsErrorConditionEnum<errc::errc_t>: public CPPDEVTK_TR1_NS::true_type {};
+struct CPPDEVTK_BASE_API IsErrorConditionEnum<errc::errc_t>: public CPPDEVTK_TR1_NS::true_type {};
 
 
 class ErrorCategory;

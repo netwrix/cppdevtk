@@ -72,7 +72,7 @@ inline void ServiceBase::LogInfo(const QString& message, const QByteArray& data)
 }
 
 inline ServiceBase* ServiceBase::Instance() {
-	return static_cast<ServiceBase*>(::cppdevtk::qtsol::QtServiceBase::instance());
+	return static_cast<ServiceBase*>(instance());
 }
 
 

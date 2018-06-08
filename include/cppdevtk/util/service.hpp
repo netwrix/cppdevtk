@@ -59,15 +59,8 @@ private:
 	Q_DISABLE_COPY(Service)
 	
 	
-    TApplication* pApplication;
+    TApplication* pApplication_;
 };
-
-
-
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-CPPDEVTK_UTIL_TMPL_EXPL_INST template class CPPDEVTK_UTIL_API Service<CoreApplication>;
-#endif
 
 
 
@@ -77,11 +70,11 @@ CPPDEVTK_UTIL_TMPL_EXPL_INST template class CPPDEVTK_UTIL_API Service<CoreApplic
 
 template <class TApplication>
 inline Service<TApplication>::Service(int argc, char** argv, const QString& name): ServiceBase(argc, argv, name),
-		pApplication(NULL) {}
+		pApplication_(NULL) {}
 
 template <class TApplication>
 inline TApplication* Service<TApplication>::application() const {
-	return pApplication;
+	return pApplication_;
 }
 
 template <class TApplication>
@@ -89,7 +82,7 @@ void Service<TApplication>::createApplication(int& argc, char** argv) {
 	CPPDEVTK_STATIC_ASSERT_W_MSG((CPPDEVTK_TR1_NS::is_base_of<CoreApplication, TApplication>::value),
 			"CoreApplication must be a base class of TApplication");
 	
-	pApplication = new TApplication(argc, argv);
+	pApplication_ = new TApplication(argc, argv);
 	
 #	if (CPPDEVTK_PLATFORM_UNIX)
 	
@@ -116,6 +109,16 @@ template <class TApplication>
 inline int Service<TApplication>::executeApplication() {
 	return TApplication::exec();
 }
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation.
+
+#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+CPPDEVTK_UTIL_TMPL_EXPL_INST template class CPPDEVTK_UTIL_API Service<CoreApplication>;
+#endif
 
 
 }	// namespace util

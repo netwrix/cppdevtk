@@ -104,37 +104,6 @@ protected:
 };
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<Mutex, ObjectLevelLocking>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<ErrorCheckingMutex, ObjectLevelLocking>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<RecursiveMutex, ClassLevelLocking>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<Mutex, ObjectLevelLocking>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<ErrorCheckingMutex, ObjectLevelLocking>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<RecursiveMutex, ClassLevelLocking>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<TimedMutex, ObjectLevelLocking>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<ErrorCheckingTimedMutex, ObjectLevelLocking>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<RecursiveTimedMutex, ClassLevelLocking>;
-
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<NullMutex, ObjectLevelLocking>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<NullRecursiveMutex, ClassLevelLocking>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<NullMutex, ObjectLevelLocking>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<NullRecursiveMutex, ClassLevelLocking>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<NullTimedMutex, ObjectLevelLocking>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<NullRecursiveTimedMutex, ClassLevelLocking>;
-
-#endif
 
 
 typedef BasicLockable<Mutex, ObjectLevelLocking> ObjectLevelBasicLockable;
@@ -259,48 +228,6 @@ typedef ObjectLevelTimedLockableUniqueLock DefaultObjectLevelTimedLockableUnique
 #endif
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelBasicLockable>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelBasicLockable>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelBasicLockable>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelLockable>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelLockable>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelLockable>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelTimedLockable>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelTimedLockable>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelTimedLockable>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullObjectLevelBasicLockable>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClassLevelBasicLockable>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullObjectLevelLockable>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClassLevelLockable>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullObjectLevelTimedLockable>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClassLevelTimedLockable>;
-
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ObjectLevelTimedLockable>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingObjectLevelTimedLockable>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ClassLevelTimedLockable>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullObjectLevelTimedLockable>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullClassLevelTimedLockable>;
-
-#endif
-
-
 /// @}	// lockable
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -379,6 +306,82 @@ inline TimedLockable<TMutex, TLockingLevel>::TimedLockable(): LockingLevelType()
 
 template <class TMutex, template <class> class TLockingLevel>
 inline TimedLockable<TMutex, TLockingLevel>::~TimedLockable() {}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation.
+
+#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<Mutex, ObjectLevelLocking>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<ErrorCheckingMutex, ObjectLevelLocking>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<RecursiveMutex, ClassLevelLocking>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<Mutex, ObjectLevelLocking>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<ErrorCheckingMutex, ObjectLevelLocking>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<RecursiveMutex, ClassLevelLocking>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<TimedMutex, ObjectLevelLocking>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<ErrorCheckingTimedMutex, ObjectLevelLocking>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<RecursiveTimedMutex, ClassLevelLocking>;
+
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<NullMutex, ObjectLevelLocking>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<NullRecursiveMutex, ClassLevelLocking>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<NullMutex, ObjectLevelLocking>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API Lockable<NullRecursiveMutex, ClassLevelLocking>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<NullTimedMutex, ObjectLevelLocking>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API TimedLockable<NullRecursiveTimedMutex, ClassLevelLocking>;
+
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelBasicLockable>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelBasicLockable>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelBasicLockable>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelLockable>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelLockable>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelLockable>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ObjectLevelTimedLockable>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingObjectLevelTimedLockable>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ClassLevelTimedLockable>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullObjectLevelBasicLockable>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClassLevelBasicLockable>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullObjectLevelLockable>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClassLevelLockable>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullObjectLevelTimedLockable>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<NullClassLevelTimedLockable>;
+
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ObjectLevelTimedLockable>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingObjectLevelTimedLockable>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ClassLevelTimedLockable>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullObjectLevelTimedLockable>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullClassLevelTimedLockable>;
+
+#endif
 
 
 }	// namespace base

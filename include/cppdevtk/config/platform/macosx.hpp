@@ -46,6 +46,7 @@
 //#	error "TARGET_OS_EMBEDDED is not supported!!!"
 #endif
 
+#undef CPPDEVTK_PLATFORM_IOS
 #if (TARGET_OS_IPHONE || TARGET_OS_SIMULATOR)
 #	define CPPDEVTK_PLATFORM_IOS 1
 #else

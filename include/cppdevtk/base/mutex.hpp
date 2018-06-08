@@ -329,23 +329,6 @@ typedef TimedMutex DefaultTimedMutex;
 #endif
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<Mutex>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingMutex>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<RecursiveMutex>;
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<TimedMutex>;
-#if (CPPDEVTK_HAVE_PTHREADS)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingTimedMutex>;
-#endif
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<RecursiveTimedMutex>;
-
-#endif
-
-
 typedef LockGuard<Mutex> NonRecursiveLockGuard;
 #if (CPPDEVTK_HAVE_PTHREADS)
 typedef LockGuard<ErrorCheckingMutex> ErrorCheckingLockGuard;
@@ -445,6 +428,28 @@ inline bool NullRecursiveTimedMutex::TryLockUntil(::std::time_t absTime) {
 }
 
 inline void NullRecursiveTimedMutex::Unlock() {}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation.
+
+#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<Mutex>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<ErrorCheckingMutex>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<RecursiveMutex>;
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<TimedMutex>;
+#if (CPPDEVTK_HAVE_PTHREADS)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingTimedMutex>;
+#endif
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<RecursiveTimedMutex>;
+
+#endif
 
 
 }	// namespace base

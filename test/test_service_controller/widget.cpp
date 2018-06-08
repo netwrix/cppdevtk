@@ -36,7 +36,7 @@ namespace test_service_controller {
 using ::cppdevtk::util::ServiceController;
 
 
-Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget(), serviceController_("CppDevTk Test Service") {
+Widget::Widget(QWidget* pParent): QWidget(pParent), WidgetBase(), Ui::Widget(), serviceController_("CppDevTk HTTP Test Service") {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	setupUi(this);

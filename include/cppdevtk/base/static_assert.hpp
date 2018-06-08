@@ -81,7 +81,7 @@ template <bool>
 struct StaticAssertFailed;
 
 template <>
-struct StaticAssertFailed<true> {};
+struct CPPDEVTK_BASE_API StaticAssertFailed<true> {};
 
 
 }	// namespace detail

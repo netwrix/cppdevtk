@@ -151,6 +151,7 @@ SOURCES += \
 	source_code_info.cpp \
 	stack_frame.cpp \
 	stack_trace.cpp \
+	static_assert.cpp \
 	stdexcept.cpp \
 	stl_explicit_instantiation.cpp	\
 	string_conv.cpp \

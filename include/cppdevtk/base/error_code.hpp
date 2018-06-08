@@ -78,7 +78,7 @@ template <typename T>
 struct IsErrorCodeEnum: public CPPDEVTK_TR1_NS::false_type {};
 
 template <>
-struct IsErrorCodeEnum<sys_err::sys_err_t>: public CPPDEVTK_TR1_NS::true_type {};
+struct CPPDEVTK_BASE_API IsErrorCodeEnum<sys_err::sys_err_t>: public CPPDEVTK_TR1_NS::true_type {};
 
 
 class ErrorCategory;
@@ -179,7 +179,8 @@ CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, const ErrorCode& erro
 /*
 // 19.5.5 Hash support
 template <class T> struct hash;
-template <> struct hash<error_code>;
+template <>
+struct CPPDEVTK_BASE_API hash<error_code>;
 */
 
 

@@ -35,6 +35,23 @@
 #endif	// CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL
 
 
+namespace cppdevtk {
+namespace base {
+
+
+/// \attention Use kStdStringNPos instead of ::std::string::npos (MSVC >= 2010 issue when exporting std::string and using npos)
+static const ::std::string::size_type kStdStringNPos = (::std::string::size_type)-1;
+
+
+}	// namespace base
+}	// namespace cppdevtk
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation.
+
 #if (CPPDEVTK_ENABLE_TFSTREAM_EXPL_INST)
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::basic_filebuf<char, ::std::char_traits<char> >;
@@ -118,18 +135,6 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::basic_strin
 		::std::allocator<wchar_t> >;
 
 #endif
-
-
-namespace cppdevtk {
-namespace base {
-
-
-/// \attention Use kStdStringNPos instead of ::std::string::npos (MSVC >= 2010 issue when exporting std::string and using npos)
-static const ::std::string::size_type kStdStringNPos = (::std::string::size_type)-1;
-
-
-}	// namespace base
-}	// namespace cppdevtk
 
 
 #endif	// CPPDEVTK_BASE_STL_EXPLICIT_INSTANTIATION_HPP_INCLUDED_

@@ -67,7 +67,7 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Full (explicit) specialization for \c QChar.
 template <>
-class BasicStringizable<QChar> {
+class CPPDEVTK_BASE_API BasicStringizable<QChar> {
 public:
 	typedef QString StringType;
 	
@@ -79,15 +79,6 @@ protected:
 	/* virtual */ ~BasicStringizable();	///< \remark Not virtual.
 	BasicStringizable& operator=(const BasicStringizable&);
 };
-
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<char>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<wchar_t>;
-#if (!CPPDEVTK_COMPILER_MSVC || (_MSC_VER > 1500))	// msvc 2008: C2950: 'type' : cannot explicitly instantiate an explicit specialization
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<QChar>;
-#endif
-#endif
 
 
 typedef BasicStringizable<char> Stringizable;
@@ -140,6 +131,17 @@ inline ::std::basic_ostream<TChar>& operator<<(::std::basic_ostream<TChar>& os, 
 inline CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, const QStringizable& stringizable) {
 	return os << stringizable.ToString();
 }
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation.
+
+#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<char>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<wchar_t>;
+#endif
 
 
 }	// namespace base

@@ -17,17 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/base/stringizable.hpp>
+#include <cppdevtk/base/static_assert.hpp>
 
 
 namespace cppdevtk {
 namespace base {
-
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-template class CPPDEVTK_BASE_API BasicStringizable<char>;
-template class CPPDEVTK_BASE_API BasicStringizable<wchar_t>;
-#endif
 
 
 }	// namespace base

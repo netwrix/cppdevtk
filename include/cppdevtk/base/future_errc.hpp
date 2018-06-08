@@ -52,7 +52,7 @@ CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(future_errc_t futureErrC) CP
 
 
 template <>
-struct IsErrorCodeEnum<future_errc::future_errc_t>: public CPPDEVTK_TR1_NS::true_type {};
+struct CPPDEVTK_BASE_API IsErrorCodeEnum<future_errc::future_errc_t>: public CPPDEVTK_TR1_NS::true_type {};
 
 CPPDEVTK_BASE_API const ErrorCategory& GetFutureCategory() CPPDEVTK_NOEXCEPT;
 

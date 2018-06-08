@@ -29,6 +29,36 @@
 /// \ingroup config
 /// @{
 
+
+/// \defgroup config_platform_features Platform Features
+/// Define to 1 if feature is available, 0 otherwise.
+/// - CPPDEVTK_HAVE_PTHREADS
+/// - CPPDEVTK_HAVE_POSIX_UNNAMED_SEMAPHORE
+/// - CPPDEVTK_HAVE_UNISTD_H
+/// - CPPDEVTK_HAVE_SIGACTION
+/// \attention Must be implemented by each \ref config_platform_supported_platforms.
+/// @{
+
+// CPPDEVTK_CHECK_INTERRUPT_REL_TIME performance impact (CPPDEVTK_CHECK_INTERRUPT_REL_TIME in ms, runtime in sec)
+// Please see test app; parent thread waits 2.5s then ask child thread to interrupt:
+// 1. Sleep
+// CPPDEVTK_CHECK_INTERRUPT_REL_TIME	|	1		|	5		|	10		|	25		|	50		|	100		|
+// Linux								|	02.752	|	02.556	|	02.536	|	02.511	|	02.555	|	02.604	|
+// Windows								|	39.027	|	07.809	|	03.919	|	03.122	|	03.184	|	02.841	|
+// Mac (in VM)							|	03.620	|	03.205	|	03.131	|	02.964	|	02.760	|	02.715	|
+// 2. Condition variable
+// CPPDEVTK_CHECK_INTERRUPT_REL_TIME	|	1		|	5		|	10		|	25		|	50		|	100		|
+// Linux								|	02.756	|	02.552	|	02.527	|	02.514	|	02.506	|	02.503	|
+// Windows								|	38.996	|	07.808	|	03.917	|	03.121	|	03.121	|	02.730	|
+// Mac (in VM)							|	03.608	|	03.189	|	03.146	|	02.911	|	02.736	|	02.649	|
+
+/// Thread interruption check, in milliseconds [1 - 999]. Modify as desired in platform specific files.
+#define CPPDEVTK_CHECK_INTERRUPT_REL_TIME 1
+#undef CPPDEVTK_CHECK_INTERRUPT_REL_TIME
+
+/// @}	// config_platform_features
+
+
 /// \defgroup config_platform_supported_platforms Supported Platforms
 /// \sa https://sourceforge.net/p/predef/wiki/OperatingSystems
 /// @{
@@ -135,10 +165,10 @@
 /// // iOS specific code
 /// #endif
 /// \endcode
-#define CPPDEVTK_PLATFORM_IOS 1
-#undef CPPDEVTK_PLATFORM_IOS
+#define CPPDEVTK_PLATFORM_IOS 0
+//#undef CPPDEVTK_PLATFORM_IOS
 
-/// @}	// config_platform_supported_platforms_android
+/// @}	// config_platform_supported_platforms_ios
 
 
 /// \defgroup config_platform_supported_platforms_windows Windows
@@ -158,13 +188,6 @@
 #else
 #	define CPPDEVTK_PLATFORM_WINDOWS 0
 #endif
-
-
-#define CPPDEVTK_PLATFORM_DESKTOP	\
-		(CPPDEVTK_PLATFORM_WINDOWS || (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)	\
-		|| (CPPDEVTK_PLATFORM_MACOSX && !CPPDEVTK_PLATFORM_IOS))
-
-#define CPPDEVTK_PLATFORM_MOBILE (CPPDEVTK_PLATFORM_ANDROID || CPPDEVTK_PLATFORM_IOS)
 
 
 /// @}	// config_platform_supported_platforms_windows
@@ -199,41 +222,6 @@
 /// #endif
 /// \endcode
 
-/// @}	// config_platform_supported_platforms
-
-
-/// \defgroup config_platform_features Platform Features
-/// Define to 1 if feature is available, 0 otherwise.
-/// - CPPDEVTK_HAVE_PTHREADS
-/// - CPPDEVTK_HAVE_POSIX_UNNAMED_SEMAPHORE
-/// - CPPDEVTK_HAVE_UNISTD_H
-/// - CPPDEVTK_HAVE_SIGACTION
-/// \attention Must be implemented by each \ref config_platform_supported_platforms.
-
-
-/// @}	// config_platform
-
-
-/// \cond
-
-
-// CPPDEVTK_CHECK_INTERRUPT_REL_TIME performance impact (CPPDEVTK_CHECK_INTERRUPT_REL_TIME in ms, runtime in sec)
-// Please see test app; parent thread waits 2.5s then ask child thread to interrupt:
-// 1. Sleep
-// CPPDEVTK_CHECK_INTERRUPT_REL_TIME	|	1		|	5		|	10		|	25		|	50		|	100		|
-// Linux								|	02.752	|	02.556	|	02.536	|	02.511	|	02.555	|	02.604	|
-// Windows								|	39.027	|	07.809	|	03.919	|	03.122	|	03.184	|	02.841	|
-// Mac (in VM)							|	03.620	|	03.205	|	03.131	|	02.964	|	02.760	|	02.715	|
-// 2. Condition variable
-// CPPDEVTK_CHECK_INTERRUPT_REL_TIME	|	1		|	5		|	10		|	25		|	50		|	100		|
-// Linux								|	02.756	|	02.552	|	02.527	|	02.514	|	02.506	|	02.503	|
-// Windows								|	38.996	|	07.808	|	03.917	|	03.121	|	03.121	|	02.730	|
-// Mac (in VM)							|	03.608	|	03.189	|	03.146	|	02.911	|	02.736	|	02.649	|
-
-/// Thread interruption check, in milliseconds [1 - 999]. Modify as desired in platform specific files.
-#define CPPDEVTK_CHECK_INTERRUPT_REL_TIME 1
-#undef CPPDEVTK_CHECK_INTERRUPT_REL_TIME
-
 
 #if (CPPDEVTK_PLATFORM_UNIX)
 #	include "platform/unix.hpp"
@@ -249,6 +237,22 @@
 #else
 #	error "Unsupported platform!!!"
 #endif
+
+
+#define CPPDEVTK_PLATFORM_DESKTOP	\
+		(CPPDEVTK_PLATFORM_WINDOWS || (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)	\
+		|| (CPPDEVTK_PLATFORM_MACOSX && !CPPDEVTK_PLATFORM_IOS))
+
+#define CPPDEVTK_PLATFORM_MOBILE (CPPDEVTK_PLATFORM_ANDROID || CPPDEVTK_PLATFORM_IOS)
+
+
+/// @}	// config_platform_supported_platforms
+
+
+/// @}	// config_platform
+
+
+/// \cond
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

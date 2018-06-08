@@ -25,22 +25,6 @@ namespace base {
 namespace concurrent {
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-
-template class CPPDEVTK_BASE_API CancelableTask<void>;
-
-namespace detail {
-
-template class CPPDEVTK_BASE_API StartAndRunCancelableTaskBase<void>;
-#if (!CPPDEVTK_COMPILER_MSVC || (_MSC_VER > 1500))	// msvc 2008: C2950: 'type' : cannot explicitly instantiate an explicit specialization
-template class CPPDEVTK_BASE_API StartAndRunCancelableTask<void>;
-#endif
-
-}
-
-#endif
-
-
 namespace detail {
 
 
@@ -68,6 +52,21 @@ void StartAndRunCancelableTask<void>::run() {
 
 
 }	// namespace detail
+
+
+#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+
+template class CPPDEVTK_BASE_API CancelableTask<void>;
+
+namespace detail {
+
+template class CPPDEVTK_BASE_API StartAndRunCancelableTaskBase<void>;
+
+}
+
+#endif
+
+
 }	// namespace concurrent
 }	// namespace base
 }	// namespace cppdevtk
