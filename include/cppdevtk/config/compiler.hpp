@@ -282,6 +282,9 @@
 #ifndef CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL
 #	error "Please define CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL properly for current compiler!!!"
 #endif
+#if (!CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL)
+#	error "CppDevTk requires that compiler supports template implicit instantiation declaration!!!"
+#endif
 #ifndef CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS
 #	error "Please define CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS properly for current compiler!!!"
 #endif

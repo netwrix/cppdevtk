@@ -311,9 +311,9 @@ inline TimedLockable<TMutex, TLockingLevel>::~TimedLockable() {}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation.
+// Templates explicit instantiation declaration.
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+#ifndef CPPDEVTK_BASE_LOCKABLES_CPP
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicLockable<Mutex, ObjectLevelLocking>;
 #if (CPPDEVTK_HAVE_PTHREADS)
@@ -381,7 +381,7 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ClassLe
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullObjectLevelTimedLockable>;
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<NullClassLevelTimedLockable>;
 
-#endif
+#endif	// CPPDEVTK_BASE_LOCKABLES_CPP
 
 
 }	// namespace base

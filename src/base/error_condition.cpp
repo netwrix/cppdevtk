@@ -55,6 +55,7 @@ CPPDEVTK_BASE_API ErrorCondition MakeErrorCondition(errc_t errCond) CPPDEVTK_NOE
 
 }	// namespace errc
 
+
 CPPDEVTK_BASE_API ErrorCondition MakeGenericErrorCondition(int value) CPPDEVTK_NOEXCEPT {
 	return ErrorCondition(value, GetGenericCategory());
 }

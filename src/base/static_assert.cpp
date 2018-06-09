@@ -20,9 +20,17 @@
 #include <cppdevtk/base/static_assert.hpp>
 
 
+//#if (!CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
+
+
 namespace cppdevtk {
 namespace base {
+namespace detail {
 
 
+}	// namespace detail
 }	// namespace base
 }	// namespace cppdevtk
+
+
+//#endif	// (!CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)

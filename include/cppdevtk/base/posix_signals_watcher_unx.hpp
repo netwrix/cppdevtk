@@ -50,6 +50,16 @@ namespace base {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation declaration.
+
+class PosixSignalsWatcher;
+#ifndef CPPDEVTK_BASE_POSIX_SIGNALS_WATCHER_UNX_CPP
+CPPDEVTK_BASE_TMPL_EXPL_INST
+#endif
+template class CPPDEVTK_BASE_API MeyersSingleton<PosixSignalsWatcher>;
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \sa <a href="http://doc.qt.io/qt-5/unix-signals.html">Calling Qt Functions From Unix Signal Handlers</a>
 /// \attention A signal argument can not be SIGNULL, SIGKILL or SIGSTOP
 class CPPDEVTK_BASE_API PosixSignalsWatcher: public QObject, public MeyersSingleton<PosixSignalsWatcher> {

@@ -18,6 +18,8 @@ Version 1.1.0.1:
 	- zlib dependency is optional (affects QZipReader and QZipWriter)
 	- CoreApplicationBase::SetInfo(): added componentName
 	- GCC/Clang visibility
+	- template explicit instantiation review
+	- template full specialization review
 	- separated QtSolutions libraries
 	- Mac OS X: QMAKE_SONAME_PREFIX = @rpath and QMAKE_RPATHDIR *= @loader_path/../Frameworks
 	- updated Qt to 5.9.5 on Ubuntu 14.04 and 16.04

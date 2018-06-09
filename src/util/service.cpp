@@ -17,6 +17,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define CPPDEVTK_UTIL_SERVICE_CPP
+
+
 #include <cppdevtk/util/service.hpp>
 
 
@@ -24,9 +27,7 @@ namespace cppdevtk {
 namespace util {
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
 template class CPPDEVTK_UTIL_API Service<CoreApplication>;
-#endif
 
 
 }	// namespace util

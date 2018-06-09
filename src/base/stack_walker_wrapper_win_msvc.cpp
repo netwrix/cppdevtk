@@ -142,7 +142,7 @@ void StackWalkerWrapper::OnOutput(LPCSTR buffer) {
 	SuppressUnusedWarning(buffer);
 }
 
-StackWalkerWrapper::StackWalkerWrapper(): Singleton<StackWalkerWrapper>(), ObjectLevelBasicLockable(),
+StackWalkerWrapper::StackWalkerWrapper(): ::cppdevtk::base::Singleton<StackWalkerWrapper>(), ObjectLevelBasicLockable(),
 		StackWalker(RetrieveSymbol | RetrieveModuleInfo | SymBuildPath
 #		if (CPPDEVTK_STACK_TRACE_ENABLE_MS_SYM_SRV)
 		| SymUseSymSrv

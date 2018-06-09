@@ -433,9 +433,9 @@ inline void NullRecursiveTimedMutex::Unlock() {}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation.
+// Templates explicit instantiation declaration.
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+#ifndef CPPDEVTK_BASE_MUTEX_CPP
 
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API LockGuard<Mutex>;
 #if (CPPDEVTK_HAVE_PTHREADS)
@@ -449,7 +449,7 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<ErrorCh
 #endif
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API UniqueLock<RecursiveTimedMutex>;
 
-#endif
+#endif	// CPPDEVTK_BASE_MUTEX_CPP
 
 
 }	// namespace base

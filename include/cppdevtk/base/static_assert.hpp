@@ -65,7 +65,7 @@
 /// \endcond
 
 
-#if (!CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
+//#if (!CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
 
 
 namespace cppdevtk {
@@ -89,7 +89,7 @@ struct CPPDEVTK_BASE_API StaticAssertFailed<true> {};
 }	// namespace cppdevtk
 
 
-#endif	// (!CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
+//#endif	// (!CPPDEVTK_HAVE_CPP11_STATIC_ASSERT)
 
 
 #endif	// CPPDEVTK_BASE_STATIC_ASSERT_HPP_INCLUDED_

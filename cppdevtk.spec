@@ -100,17 +100,14 @@ Source: %{name}-%{version}.tar.bz2
 BuildRequires: libstdc++-devel glibc-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
-BuildRequires: libqt5-qtbase-devel >= 5.10.0
+%if (%{?suse_version} >= 1550)
+BuildRequires: libqt5-qtbase-devel >= 5.11.0
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 BuildRequires: libqt5-qtbase-devel >= 5.9.4
 %endif
-%if 0%{?sle_version} == 120300
+%if (0%{?sle_version} == 120300)
 BuildRequires: libqt5-qtbase-devel >= 5.6.2
-%endif
-%if 0%{?sle_version} == 120200
-BuildRequires: libqt5-qtbase-devel >= 5.6.1
 %endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
@@ -123,16 +120,13 @@ BuildRequires: qt5-qtbase-devel >= 5.6.1
 %endif
 %else
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
+%if (%{?suse_version} >= 1550)
 BuildRequires: libqt4-devel >= 4.8.7
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 BuildRequires: libqt4-devel >= 4.8.7
 %endif
-%if 0%{?sle_version} == 120300
-BuildRequires: libqt4-devel >= 4.8.6
-%endif
-%if 0%{?sle_version} == 120200
+%if (0%{?sle_version} == 120300)
 BuildRequires: libqt4-devel >= 4.8.6
 %endif
 %endif
@@ -155,16 +149,13 @@ CppDevTk is a collection of libraries for C++ development.
 Summary: CppDevTk base library
 Group: System/Libraries
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
+%if (%{?suse_version} >= 1550)
 BuildRequires: boost-devel >= 1.66.0
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 BuildRequires: boost-devel >= 1.66.0
 %endif
-%if 0%{?sle_version} == 120300
-BuildRequires: boost-devel >= 1.54.0
-%endif
-%if 0%{?sle_version} == 120200
+%if (0%{?sle_version} == 120300)
 BuildRequires: boost-devel >= 1.54.0
 %endif
 %endif
@@ -239,10 +230,10 @@ CppDevTk C++ util library.
 Summary: CppDevTk jni library
 Group: System/Libraries
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
+%if (%{?suse_version} >= 1550)
 BuildRequires: java-11-openjdk-devel
 %else
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 BuildRequires: java-10-openjdk-devel
 %else
 BuildRequires: java-1_8_0-openjdk-devel
@@ -297,17 +288,14 @@ BuildRequires: xorg-x11-proto-devel
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
-BuildRequires: libqt5-qtx11extras-devel >= 5.10.0
+%if (%{?suse_version} >= 1550)
+BuildRequires: libqt5-qtx11extras-devel >= 5.11.0
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 BuildRequires: libqt5-qtx11extras-devel >= 5.9.4
 %endif
-%if 0%{?sle_version} == 120300
+%if (0%{?sle_version} == 120300)
 BuildRequires: libqt5-qtx11extras-devel >= 5.6.2
-%endif
-%if 0%{?sle_version} == 120200
-BuildRequires: libqt5-qtx11extras-devel >= 5.6.1
 %endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
@@ -359,16 +347,13 @@ Summary: Development files for lib%{name}-base
 Group: Development/Libraries/C and C++
 Requires: libstdc++-devel glibc-devel
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
+%if (%{?suse_version} >= 1550)
 Requires: boost-devel >= 1.66.0
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 Requires: boost-devel >= 1.66.0
 %endif
-%if 0%{?sle_version} == 120300
-Requires: boost-devel >= 1.54.0
-%endif
-%if 0%{?sle_version} == 120200
+%if (0%{?sle_version} == 120300)
 Requires: boost-devel >= 1.54.0
 %endif
 %endif
@@ -382,17 +367,14 @@ Requires: boost-devel >= 1.41.0
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
-Requires: libqt5-qtbase-devel >= 5.10.0
+%if (%{?suse_version} >= 1550)
+Requires: libqt5-qtbase-devel >= 5.11.0
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 Requires: libqt5-qtbase-devel >= 5.9.4
 %endif
-%if 0%{?sle_version} == 120300
+%if (0%{?sle_version} == 120300)
 Requires: libqt5-qtbase-devel >= 5.6.2
-%endif
-%if 0%{?sle_version} == 120200
-Requires: libqt5-qtbase-devel >= 5.6.1
 %endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
@@ -405,16 +387,13 @@ Requires: qt5-qtbase-devel >= 5.6.1
 %endif
 %else
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
+%if (%{?suse_version} >= 1550)
 Requires: libqt4-devel >= 4.8.7
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 Requires: libqt4-devel >= 4.8.7
 %endif
-%if 0%{?sle_version} == 120300
-Requires: libqt4-devel >= 4.8.6
-%endif
-%if 0%{?sle_version} == 120200
+%if (0%{?sle_version} == 120300)
 Requires: libqt4-devel >= 4.8.6
 %endif
 %endif
@@ -498,10 +477,10 @@ developing applications that use lib%{name}-util.
 Summary: Development files for lib%{name}-jni
 Group: Development/Libraries/C and C++
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
+%if (%{?suse_version} >= 1550)
 Requires: java-11-openjdk-devel
 %else
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 Requires: java-10-openjdk-devel
 %else
 Requires: java-1_8_0-openjdk-devel
@@ -559,17 +538,14 @@ Requires: xorg-x11-proto-devel
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if 0%{?suse_version} >= 1550
-Requires: libqt5-qtx11extras-devel >= 5.10.0
+%if (%{?suse_version} >= 1550)
+Requires: libqt5-qtx11extras-devel >= 5.11.0
 %endif
-%if 0%{?suse_version} == 1500
+%if (%{?suse_version} == 1500)
 Requires: libqt5-qtx11extras-devel >= 5.9.4
 %endif
-%if 0%{?sle_version} == 120300
+%if (0%{?sle_version} == 120300)
 Requires: libqt5-qtx11extras-devel >= 5.6.2
-%endif
-%if 0%{?sle_version} == 120200
-Requires: libqt5-qtx11extras-devel >= 5.6.1
 %endif
 %endif
 %if (0%{?centos} || 0%{?rhel})

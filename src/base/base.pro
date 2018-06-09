@@ -108,6 +108,7 @@ win32 {
 
 SOURCES += \
 	any.cpp	\
+	architecture_types.cpp	\
 	assert.cpp \
 	bad_any_cast_exception.cpp	\
 	bad_cast_exception.cpp	\

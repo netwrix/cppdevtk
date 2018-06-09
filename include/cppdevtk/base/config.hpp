@@ -38,18 +38,16 @@
 
 
 /// \sa <a href="https://support.microsoft.com/en-us/kb/168958">How to export STL from DLL</a>
-#if (CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL)
-#	if (CPPDEVTK_PLATFORM_UNIX)
-#		define CPPDEVTK_BASE_TMPL_EXPL_INST extern
-#	elif (CPPDEVTK_PLATFORM_WINDOWS)
-#		ifdef CPPDEVTK_DETAIL_BASE_BUILD
-#			define CPPDEVTK_BASE_TMPL_EXPL_INST
-#		else
-#			define CPPDEVTK_BASE_TMPL_EXPL_INST extern
-#		endif
+#if (CPPDEVTK_PLATFORM_UNIX)
+#	define CPPDEVTK_BASE_TMPL_EXPL_INST extern
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#	ifdef CPPDEVTK_DETAIL_BASE_BUILD
+#		define CPPDEVTK_BASE_TMPL_EXPL_INST
 #	else
-#		error "Unsupported platform!!!"
+#		define CPPDEVTK_BASE_TMPL_EXPL_INST extern
 #	endif
+#else
+#	error "Unsupported platform!!!"
 #endif
 
 

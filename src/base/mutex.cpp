@@ -17,14 +17,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define CPPDEVTK_BASE_MUTEX_CPP
+
+
 #include <cppdevtk/base/mutex.hpp>
 
 
 namespace cppdevtk {
 namespace base {
 
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
 
 template class CPPDEVTK_BASE_API LockGuard<Mutex>;
 #if (CPPDEVTK_HAVE_PTHREADS)
@@ -37,8 +38,6 @@ template class CPPDEVTK_BASE_API UniqueLock<TimedMutex>;
 template class CPPDEVTK_BASE_API UniqueLock<ErrorCheckingTimedMutex>;
 #endif
 template class CPPDEVTK_BASE_API UniqueLock<RecursiveTimedMutex>;
-
-#endif
 
 
 }	// namespace base

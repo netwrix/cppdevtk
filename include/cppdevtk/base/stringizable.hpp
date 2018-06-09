@@ -136,11 +136,13 @@ inline CPPDEVTK_BASE_API QTextStream& operator<<(QTextStream& os, const QStringi
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation.
+// Templates explicit instantiation declaration.
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+#ifndef CPPDEVTK_BASE_STRINGIZABLE_CPP
+
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<char>;
 CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API BasicStringizable<wchar_t>;
+
 #endif
 
 

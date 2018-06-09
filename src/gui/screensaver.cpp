@@ -17,38 +17,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_GUI_CONFIG_HPP_INCLUDED_
-#define CPPDEVTK_GUI_CONFIG_HPP_INCLUDED_
+#define CPPDEVTK_GUI_SCREENSAVER_CPP
 
 
-#include <cppdevtk/util/config.hpp>
-#include "info.hpp"
+#include <cppdevtk/gui/screensaver.hpp>
 
 
-/// \sa <a href="https://msdn.microsoft.com/en-us/library/3y1sfaz2%28v=vs.90%29.aspx">dllexport, dllimport</a>
-#ifdef CPPDEVTK_SHARED
-#	ifdef CPPDEVTK_DETAIL_GUI_BUILD
-#		define CPPDEVTK_GUI_API CPPDEVTK_EXPORT_API
-#	else
-#		define CPPDEVTK_GUI_API CPPDEVTK_IMPORT_API
-#	endif
-#else
-#	define CPPDEVTK_GUI_API
-#endif
+namespace cppdevtk {
+namespace base {
 
 
-/// \sa <a href="https://support.microsoft.com/en-us/kb/168958">How to export STL from DLL</a>
-#if (CPPDEVTK_PLATFORM_UNIX)
-#	define CPPDEVTK_GUI_TMPL_EXPL_INST extern
-#elif (CPPDEVTK_PLATFORM_WINDOWS)
-#	ifdef CPPDEVTK_DETAIL_GUI_BUILD
-#		define CPPDEVTK_GUI_TMPL_EXPL_INST
-#	else
-#		define CPPDEVTK_GUI_TMPL_EXPL_INST extern
-#	endif
-#else
-#	error "Unsupported platform!!!"
-#endif
+}	// namespace base
 
 
-#endif	// CPPDEVTK_GUI_CONFIG_HPP_INCLUDED_
+namespace gui {
+
+
+}	// namespace gui
+}	// namespace cppdevtk

@@ -32,6 +32,8 @@
 #include "architecture_types.hpp"
 #include "string_utils.hpp"
 
+#include <vector>
+
 
 namespace cppdevtk {
 namespace base {
@@ -134,6 +136,24 @@ inline QString StackFrame::ToString() const {
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation declaration.
+
+#ifndef CPPDEVTK_BASE_STACK_FRAME_CPP
+
+namespace std {
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API allocator< ::cppdevtk::base::StackFrame>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API vector< ::cppdevtk::base::StackFrame,
+		allocator< ::cppdevtk::base::StackFrame> >;
+
+}
+
+#endif
 
 
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)

@@ -23,8 +23,6 @@
 namespace cppdevtk {
 namespace base {
 namespace concurrent {
-
-
 namespace detail {
 
 
@@ -52,21 +50,6 @@ void StartAndRunCancelableTask<void>::run() {
 
 
 }	// namespace detail
-
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-
-template class CPPDEVTK_BASE_API CancelableTask<void>;
-
-namespace detail {
-
-template class CPPDEVTK_BASE_API StartAndRunCancelableTaskBase<void>;
-
-}
-
-#endif
-
-
 }	// namespace concurrent
 }	// namespace base
 }	// namespace cppdevtk

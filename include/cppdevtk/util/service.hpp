@@ -114,10 +114,12 @@ inline int Service<TApplication>::executeApplication() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation.
+// Templates explicit instantiation declaration.
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
+#ifndef CPPDEVTK_UTIL_SERVICE_CPP
+
 CPPDEVTK_UTIL_TMPL_EXPL_INST template class CPPDEVTK_UTIL_API Service<CoreApplication>;
+
 #endif
 
 

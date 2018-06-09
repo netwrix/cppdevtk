@@ -25,6 +25,7 @@
 #include <cppdevtk/base/info_tr.hpp>
 #include <cppdevtk/gui/application.hpp>
 
+#include <QtGui/QIcon>
 #include <QtCore/QUrl>
 #include <QtGui/QDesktopServices>
 

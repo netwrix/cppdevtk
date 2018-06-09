@@ -141,6 +141,21 @@ public:
 };
 
 
+template <>
+class CPPDEVTK_BASE_API StartAndRunCancelableTask<void>: public StartAndRunCancelableTaskBase<void> {
+public:
+	StartAndRunCancelableTask(
+			::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask, int priority);
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	StartAndRunCancelableTask(
+			::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask,
+			QThreadPool& threadPool, int priority);
+#	endif
+	
+	virtual void run();
+};
+
+
 }	// namespace detail
 
 
@@ -269,51 +284,6 @@ void StartAndRunCancelableTask<TResult>::run() {
 }
 
 
-}	// namespace detail
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation.
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API CancelableTask<void>;
-
-namespace detail {
-
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API StartAndRunCancelableTaskBase<void>;
-
-}
-
-#endif
-
-
-
-
-// needs to be after explicit instantiation or will give error on Linux/gcc with visibility hidden
-
-namespace detail {
-
-
-template <>
-class CPPDEVTK_BASE_API StartAndRunCancelableTask<void>: public StartAndRunCancelableTaskBase<void> {
-public:
-	StartAndRunCancelableTask(
-			::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask, int priority);
-#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	StartAndRunCancelableTask(
-			::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask,
-			QThreadPool& threadPool, int priority);
-#	endif
-	
-	virtual void run();
-};
-
-
-
-
 inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
 		::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask, int priority):
 		StartAndRunCancelableTaskBase<void>(pCancelableTask, priority) {}
@@ -329,8 +299,6 @@ inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
 
 
 }	// namespace detail
-
-
 }	// namespace concurrent
 }	// namespace base
 }	// namespace cppdevtk

@@ -17,6 +17,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define CPPDEVTK_BASE_POSIX_SIGNALS_WATCHER_UNX_CPP
+
+
 #include <cppdevtk/base/posix_signals_watcher_unx.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/verify.h>

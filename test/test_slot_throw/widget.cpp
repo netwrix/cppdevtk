@@ -26,6 +26,7 @@
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/info_tr.hpp>
 
+#include <QtGui/QIcon>
 #include <QtGui/QCloseEvent>
 
 

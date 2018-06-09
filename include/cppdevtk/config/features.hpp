@@ -271,6 +271,9 @@
 // TODO: keep in sync with CPPDEVTK_ENABLE_QTSOLUTIONS in common_customization.pri
 #define CPPDEVTK_ENABLE_QT_SOLUTIONS 1
 
+// TODO: modify as desired; be warned: it may be expl inst by other libs (common type)
+#define CPPDEVTK_ENABLE_BYTE_VECTOR_EXPL_INST 0
+
 /// @}	// config_features_compile_time
 
 

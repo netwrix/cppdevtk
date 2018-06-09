@@ -24,6 +24,10 @@
 #include "config.hpp"
 #include "architecture_types.h"
 
+#if (CPPDEVTK_ENABLE_BYTE_VECTOR_EXPL_INST)
+#include <vector>
+#endif
+
 
 namespace cppdevtk {
 namespace base {
@@ -39,6 +43,24 @@ using ::dword_t;
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation declaration.
+
+#ifndef CPPDEVTK_BASE_ARCHITECTURE_TYPES_CPP
+#if (CPPDEVTK_ENABLE_BYTE_VECTOR_EXPL_INST)
+
+namespace std {
+
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API allocator< ::cppdevtk::base::byte>;
+CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API vector< ::cppdevtk::base::byte,
+		allocator< ::cppdevtk::base::byte> >;
+
+}
+
+#endif
+#endif
 
 
 #endif	// CPPDEVTK_BASE_ARCHITECTURE_TYPES_HPP_INCLUDED_

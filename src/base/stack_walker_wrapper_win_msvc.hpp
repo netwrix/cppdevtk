@@ -52,7 +52,8 @@ namespace detail {
 // And this is really time-consuming.
 // Also it is not allowed to access the StackWalk functions from different threads (the dbghelp.dll is not thread-safe!).
 // Therefore it makes no sense to create more than one instance...
-class StackWalkerWrapper: public Singleton<StackWalkerWrapper>, public ObjectLevelBasicLockable, protected StackWalker {
+class StackWalkerWrapper: public ::cppdevtk::base::Singleton<StackWalkerWrapper>,
+		public ObjectLevelBasicLockable, protected StackWalker {
 	friend class ::cppdevtk::base::Singleton<StackWalkerWrapper>;
 public:
 	bool CaptureCallStack();
@@ -103,6 +104,8 @@ inline StackWalkerWrapper::~StackWalkerWrapper() {}
 
 
 }	// namespace detail
+
+
 }	// namespace base
 }	// namespace cppdevtk
 

@@ -30,12 +30,6 @@
 #include <algorithm>
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-template class CPPDEVTK_BASE_API ::std::allocator< ::cppdevtk::base::StackFrame>;
-template class CPPDEVTK_BASE_API ::std::vector< ::cppdevtk::base::StackFrame>;
-#endif
-
-
 namespace cppdevtk {
 namespace base {
 

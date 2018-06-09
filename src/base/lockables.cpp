@@ -17,14 +17,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define CPPDEVTK_BASE_LOCKABLES_CPP
+
+
 #include <cppdevtk/base/lockables.hpp>
 
 
 namespace cppdevtk {
 namespace base {
 
-
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
 
 template class CPPDEVTK_BASE_API BasicLockable<Mutex, ObjectLevelLocking>;
 #if (CPPDEVTK_HAVE_PTHREADS)
@@ -90,8 +91,6 @@ template class CPPDEVTK_BASE_API UniqueLock<ClassLevelTimedLockable>;
 
 template class CPPDEVTK_BASE_API UniqueLock<NullObjectLevelTimedLockable>;
 template class CPPDEVTK_BASE_API UniqueLock<NullClassLevelTimedLockable>;
-
-#endif
 
 
 }	// namespace base

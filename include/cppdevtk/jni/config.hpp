@@ -40,6 +40,7 @@
 #endif
 
 
+/// \sa <a href="https://msdn.microsoft.com/en-us/library/3y1sfaz2%28v=vs.90%29.aspx">dllexport, dllimport</a>
 #ifdef CPPDEVTK_SHARED
 #	ifdef CPPDEVTK_DETAIL_JNI_BUILD
 #		define CPPDEVTK_JNI_API CPPDEVTK_EXPORT_API
@@ -51,18 +52,17 @@
 #endif
 
 
-#if (CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL)
-#	if (CPPDEVTK_PLATFORM_UNIX)
-#		define CPPDEVTK_JNI_TMPL_EXPL_INST extern
-#	elif (CPPDEVTK_PLATFORM_WINDOWS)
-#		ifdef CPPDEVTK_DETAIL_JNI_BUILD
-#			define CPPDEVTK_JNI_TMPL_EXPL_INST
-#		else
-#			define CPPDEVTK_JNI_TMPL_EXPL_INST extern
-#		endif
+/// \sa <a href="https://support.microsoft.com/en-us/kb/168958">How to export STL from DLL</a>
+#if (CPPDEVTK_PLATFORM_UNIX)
+#	define CPPDEVTK_JNI_TMPL_EXPL_INST extern
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
+#	ifdef CPPDEVTK_DETAIL_JNI_BUILD
+#		define CPPDEVTK_JNI_TMPL_EXPL_INST
 #	else
-#		error "Unsupported platform!!!"
+#		define CPPDEVTK_JNI_TMPL_EXPL_INST extern
 #	endif
+#else
+#	error "Unsupported platform!!!"
 #endif
 
 

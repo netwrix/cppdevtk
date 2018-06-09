@@ -45,6 +45,27 @@
 
 
 namespace cppdevtk {
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Templates explicit instantiation declaration.
+
+namespace gui {
+
+class StorageDeviceNotifier;
+
+}
+
+namespace base {
+
+#ifndef CPPDEVTK_GUI_STORAGE_DEVICE_NOTIFIER_CPP
+CPPDEVTK_GUI_TMPL_EXPL_INST
+#endif
+template class CPPDEVTK_GUI_API MeyersSingleton< ::cppdevtk::gui::StorageDeviceNotifier>;
+
+}	// namespace base
+
+
 namespace gui {
 #if (CPPDEVTK_PLATFORM_LINUX)
 namespace detail {

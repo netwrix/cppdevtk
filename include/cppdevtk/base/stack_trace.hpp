@@ -37,12 +37,6 @@
 #include <utility>	// swap(), C++11
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::allocator< ::cppdevtk::base::StackFrame>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::vector< ::cppdevtk::base::StackFrame>;
-#endif
-
-
 namespace cppdevtk {
 namespace base {
 

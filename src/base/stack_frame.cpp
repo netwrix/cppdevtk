@@ -20,6 +20,9 @@
 // NOTE: Do not use CPPDEVTK_ASSERT() because it use StackTrace; use Q_ASSERT() instead
 
 
+#define CPPDEVTK_BASE_STACK_FRAME_CPP
+
+
 #include <cppdevtk/base/stack_frame.hpp>
 #include <cppdevtk/base/dbc.hpp>
 
@@ -53,3 +56,11 @@ void StackFrame::SetFunctionName(const char* functionName) {
 
 }	// namespace base
 }	// namespace cppdevtk
+
+
+namespace std {
+
+template class CPPDEVTK_BASE_API allocator< ::cppdevtk::base::StackFrame>;
+template class CPPDEVTK_BASE_API vector< ::cppdevtk::base::StackFrame, allocator< ::cppdevtk::base::StackFrame> >;
+
+}

@@ -29,17 +29,6 @@
 #include <QtCore/QString>
 
 
-#if (CPPDEVTK_ENABLE_TMPL_EXPL_INST)
-#define CPPDEVTK_ENABLE_DYNAMIC_BYTE_ARRAY_EXPL_INST 0	// TODO: modify as desired; be warned: it may be expl inst by other libs (common type)
-#endif
-
-#if (CPPDEVTK_ENABLE_DYNAMIC_BYTE_ARRAY_EXPL_INST)
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::allocator< ::cppdevtk::base::byte>;
-CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::vector< ::cppdevtk::base::byte,
-		::std::allocator< ::cppdevtk::base::byte> >;
-#endif
-
-
 namespace cppdevtk {
 namespace base {
 

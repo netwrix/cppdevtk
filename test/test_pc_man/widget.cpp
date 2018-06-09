@@ -30,6 +30,7 @@
 #include <cppdevtk/gui/message_box.hpp>
 #include <cppdevtk/util/filesystem_utils.hpp>
 
+#include <QtGui/QIcon>
 #include <QtCore/QString>
 #include <QtGui/QCloseEvent>
 #include <QtCore/QTimer>

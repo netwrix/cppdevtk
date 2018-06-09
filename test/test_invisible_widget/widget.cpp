@@ -23,6 +23,8 @@
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/info_tr.hpp>
 
+#include <QtGui/QIcon>
+
 
 namespace cppdevtk {
 namespace test_invisible_widget {

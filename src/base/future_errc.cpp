@@ -24,8 +24,6 @@
 
 namespace cppdevtk {
 namespace base {
-
-
 namespace detail {
 
 

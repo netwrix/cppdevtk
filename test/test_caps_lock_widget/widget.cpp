@@ -23,6 +23,7 @@
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/info_tr.hpp>
 
+#include <QtGui/QIcon>
 #include <QtGui/QShowEvent>
 #include <QtGui/QHideEvent>
 #include <QtGui/QCloseEvent>

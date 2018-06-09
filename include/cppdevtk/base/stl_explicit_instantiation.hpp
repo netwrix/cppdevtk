@@ -25,14 +25,12 @@
 
 #include <string>
 
-#if (CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL)
 #include <streambuf>
 #include <ios>
 #include <istream>
 #include <ostream>
 #include <fstream>
 #include <sstream>
-#endif	// CPPDEVTK_COMPILER_HAVE_TMPL_EXPL_INST_DECL
 
 
 namespace cppdevtk {
@@ -47,10 +45,10 @@ static const ::std::string::size_type kStdStringNPos = (::std::string::size_type
 }	// namespace cppdevtk
 
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation.
+// Templates explicit instantiation declaration.
+
+#ifndef CPPDEVTK_BASE_STL_EXPLICIT_INSTANTIATION_CPP
 
 #if (CPPDEVTK_ENABLE_TFSTREAM_EXPL_INST)
 
@@ -135,6 +133,8 @@ CPPDEVTK_BASE_TMPL_EXPL_INST template class CPPDEVTK_BASE_API ::std::basic_strin
 		::std::allocator<wchar_t> >;
 
 #endif
+
+#endif	// CPPDEVTK_BASE_STL_EXPLICIT_INSTANTIATION_CPP
 
 
 #endif	// CPPDEVTK_BASE_STL_EXPLICIT_INSTANTIATION_HPP_INCLUDED_

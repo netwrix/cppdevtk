@@ -27,12 +27,6 @@
 #include <cstddef>
 
 
-#if (CPPDEVTK_ENABLE_DYNAMIC_BYTE_ARRAY_EXPL_INST)
-template class CPPDEVTK_BASE_API ::std::allocator< ::cppdevtk::base::byte>;
-template class CPPDEVTK_BASE_API ::std::vector< ::cppdevtk::base::byte, ::std::allocator< ::cppdevtk::base::byte> >;
-#endif
-
-
 namespace cppdevtk {
 namespace base {
 
