@@ -66,7 +66,7 @@ namespace cppdevtk {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation declaration.
+// Templates explicit instantiation.
 
 namespace gui {
 
@@ -76,7 +76,7 @@ class ScreenSaver;
 
 namespace base {
 
-#ifndef CPPDEVTK_GUI_SCREENSAVER_CPP
+#if (!defined(CPPDEVTK_GUI_SCREENSAVER_CPP) || CPPDEVTK_COMPILER_CLANG)
 CPPDEVTK_GUI_TMPL_EXPL_INST
 #endif
 template class CPPDEVTK_GUI_API MeyersSingleton< ::cppdevtk::gui::ScreenSaver>;

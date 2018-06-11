@@ -52,6 +52,7 @@ namespace gui {
 
 using base::GetLastSystemErrorCode;
 using base::ErrorCode;
+using base::SuppressUnusedWarning;
 
 
 Session::WmWtSessionChange::WmWtSessionChange(Session& session): InvisibleWidget(), session_(session), hWnd_(NULL) {}
@@ -117,17 +118,19 @@ void Session::WmWtSessionChange::changeEvent(QEvent* pEvent) {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 bool Session::WmWtSessionChange::nativeEvent(const QByteArray& eventType, void* pVMsg, long* pResult) {
-	base::SuppressUnusedWarning(eventType);
+	CPPDEVTK_ASSERT(eventType == "windows_generic_MSG");
+	SuppressUnusedWarning(eventType);
 	
 	MSG* pMsg = static_cast<MSG*>(pVMsg);
 #else
 bool Session::WmWtSessionChange::winEvent(MSG* pMsg, long* pResult) {
 #endif
 	CPPDEVTK_ASSERT(pMsg != NULL);
-	base::SuppressUnusedWarning(pResult);
+	SuppressUnusedWarning(pResult);
 	
 	// On switch user we get WTS_CONSOLE_DISCONNECT + WTS_SESSION_LOCK
 	// and when switching back we get WTS_CONSOLE_CONNECT + WTS_SESSION_UNLOCK
+	// As documented *pResult is ignored
 	if (pMsg->message == WM_WTSSESSION_CHANGE) {
 		//CPPDEVTK_LOG_TRACE("got WM_WTSSESSION_CHANGE");
 		switch (pMsg->wParam) {

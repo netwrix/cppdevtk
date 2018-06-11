@@ -54,6 +54,9 @@
 static BOOL CALLBACK StopScreenSaverWndProc(HWND hwnd, LPARAM lParam);
 
 
+using ::cppdevtk::base::SuppressUnusedWarning;
+
+
 namespace cppdevtk {
 namespace gui {
 
@@ -145,6 +148,7 @@ bool ScreenSaver::SetActive(bool active) {
 			}
 			catch (const ::std::runtime_error& exc) {
 				CPPDEVTK_LOG_ERROR("IsActive() failed; exc: " << Exception::GetDetailedInfo(exc));
+				SuppressUnusedWarning(exc);
 				return false;
 			}
 			
@@ -187,6 +191,7 @@ void ScreenSaver::Refresh() {
 	}
 	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_ERROR("IsActive() failed; exc: " << Exception::GetDetailedInfo(exc));
+		SuppressUnusedWarning(exc);
 		return;
 	}
 	
@@ -326,7 +331,7 @@ bool ScreenSaver::GetScreenSaveSecure(BOOL& isScreenSaverSecure) {
 
 
 BOOL CALLBACK StopScreenSaverWndProc(HWND hwnd, LPARAM lParam) {
-	::cppdevtk::base::SuppressUnusedWarning(lParam);
+	SuppressUnusedWarning(lParam);
 	
 	if (IsWindowVisible(hwnd)) {
 		const LRESULT kLResult = SendMessage(hwnd, WM_CLOSE, 0, 0);

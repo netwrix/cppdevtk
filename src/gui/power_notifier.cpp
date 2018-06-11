@@ -24,14 +24,17 @@
 
 
 namespace cppdevtk {
-namespace base {
-
-
-}	// namespace base
-
-
 namespace gui {
 
 
 }	// namespace gui
+
+
+namespace base {
+
+#if (CPPDEVTK_COMPILER_CLANG)
+template class CPPDEVTK_GUI_API MeyersSingleton< ::cppdevtk::gui::PowerNotifier>;
+#endif
+
+}	// namespace base
 }	// namespace cppdevtk

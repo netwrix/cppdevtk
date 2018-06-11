@@ -40,19 +40,23 @@ namespace cppdevtk {
 namespace gui {
 
 
+using base::SuppressUnusedWarning;
+
+
 PowerNotifier::WmPowerBroadcastWidget::WmPowerBroadcastWidget(PowerNotifier& powerNotifier):
 		InvisibleWidget(), powerNotifier_(powerNotifier) {}
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 bool PowerNotifier::WmPowerBroadcastWidget::nativeEvent(const QByteArray& eventType, void* pVMsg, long* pResult) {
-	base::SuppressUnusedWarning(eventType);
+	CPPDEVTK_ASSERT(eventType == "windows_generic_MSG");
+	SuppressUnusedWarning(eventType);
 	
 	MSG* pMsg = static_cast<MSG*>(pVMsg);
 #else
 bool PowerNotifier::WmPowerBroadcastWidget::winEvent(MSG* pMsg, long* pResult) {
 #endif
 	CPPDEVTK_ASSERT(pMsg != NULL);
-	base::SuppressUnusedWarning(pResult);
+	SuppressUnusedWarning(pResult);
 	
 	if (pMsg->message == WM_POWERBROADCAST) {
 		//CPPDEVTK_LOG_TRACE("got WM_POWERBROADCAST");

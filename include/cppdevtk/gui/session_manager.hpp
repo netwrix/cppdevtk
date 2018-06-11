@@ -51,7 +51,7 @@ namespace cppdevtk {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation declaration.
+// Templates explicit instantiation.
 
 namespace gui {
 
@@ -61,7 +61,7 @@ class SessionManager;
 
 namespace base {
 
-#ifndef CPPDEVTK_GUI_SESSION_MANAGER_CPP
+#if (!defined(CPPDEVTK_GUI_SESSION_MANAGER_CPP) || CPPDEVTK_COMPILER_CLANG)
 CPPDEVTK_GUI_TMPL_EXPL_INST
 #endif
 template class CPPDEVTK_GUI_API MeyersSingleton< ::cppdevtk::gui::SessionManager>;

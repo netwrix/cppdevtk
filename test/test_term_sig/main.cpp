@@ -28,6 +28,7 @@
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 #include <QtCore/QString>
 
@@ -62,6 +63,7 @@ int main(int argc, char* argv[]) try {
 		}
 		catch (const exception& exc) {
 			CPPDEVTK_LOG_ERROR("failed to SetQuitOnTerminationSignals(false); exc: " << Exception::GetDetailedInfo(exc));
+			::cppdevtk::base::SuppressUnusedWarning(exc);
 		}
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END

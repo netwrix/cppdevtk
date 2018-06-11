@@ -446,5 +446,10 @@ QString PosixSignalsWatcher::GetPosixSignalName(int sig) {
 }
 
 
+#if (CPPDEVTK_COMPILER_CLANG)
+template class CPPDEVTK_BASE_API MeyersSingleton<PosixSignalsWatcher>;
+#endif
+
+
 }	// namespace base
 }	// namespace cppdevtk

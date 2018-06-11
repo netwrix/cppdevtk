@@ -50,6 +50,7 @@
 #endif
 
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 #include "qtservice_p.h"
 
@@ -75,6 +76,8 @@
 #if defined(QTSERVICE_DEBUG)
 #include <QtCore/QDebug>
 #endif
+
+#include <cstddef>
 
 
 typedef SERVICE_STATUS_HANDLE(WINAPI*PRegisterServiceCtrlHandler)(const wchar_t*,LPHANDLER_FUNCTION);
@@ -797,11 +800,17 @@ public:
     bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 };
 
-bool QtServiceAppEventFilter::nativeEventFilter(const QByteArray &, void *message, long *result)
+bool QtServiceAppEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
+	CPPDEVTK_ASSERT((eventType == "windows_generic_MSG") || (eventType == "windows_dispatcher_MSG"));
+	::cppdevtk::base::SuppressUnusedWarning(eventType);
+	
+	CPPDEVTK_ASSERT(message != NULL);
     MSG *winMessage = (MSG*)message;
     if (winMessage->message == WM_ENDSESSION && (winMessage->lParam & ENDSESSION_LOGOFF)) {
-        *result = TRUE;
+		if (result != NULL) {
+			*result = TRUE;
+		}
         return true;
     }
     return false;

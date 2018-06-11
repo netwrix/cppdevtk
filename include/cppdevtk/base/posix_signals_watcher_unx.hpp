@@ -50,10 +50,10 @@ namespace base {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Templates explicit instantiation declaration.
+// Templates explicit instantiation.
 
 class PosixSignalsWatcher;
-#ifndef CPPDEVTK_BASE_POSIX_SIGNALS_WATCHER_UNX_CPP
+#if (!defined(CPPDEVTK_BASE_POSIX_SIGNALS_WATCHER_UNX_CPP) || CPPDEVTK_COMPILER_CLANG)
 CPPDEVTK_BASE_TMPL_EXPL_INST
 #endif
 template class CPPDEVTK_BASE_API MeyersSingleton<PosixSignalsWatcher>;
