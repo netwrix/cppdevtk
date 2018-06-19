@@ -122,6 +122,15 @@
 /// #endif
 /// \endcode
 
+// Clang may pretend to be GCC or MSVC
+#if (CPPDEVTK_COMPILER_CLANG)
+#	undef CPPDEVTK_COMPILER_GCC
+#	define CPPDEVTK_COMPILER_GCC 0
+
+#	undef CPPDEVTK_COMPILER_MSVC
+#	define CPPDEVTK_COMPILER_MSVC 0
+#endif
+
 // Safety check.
 #ifndef RC_INVOKED
 #	if (!(CPPDEVTK_COMPILER_GCC || CPPDEVTK_COMPILER_CLANG || CPPDEVTK_COMPILER_MSVC))
@@ -235,6 +244,12 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Safety checks.
+
+#ifdef __cplusplus
+#	if ((__cplusplus >= 201703L) || (CPPDEVTK_COMPILER_MSVC && (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L))))
+#		error "C++ >= 17 is not supported because CppDevTk uses auto_ptr that is removed in C++17!!! TODO: C++ >= 17 port! (unique/shared ptr)"
+#	endif
+#endif
 
 #ifndef CPPDEVTK_COMPILER_MESSAGE
 #	error "Please implement CPPDEVTK_COMPILER_MESSAGE for current compiler!!!"

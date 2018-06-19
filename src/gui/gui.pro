@@ -243,13 +243,17 @@ SOURCES += \
 	login_widget.cpp \
 	message_box.cpp \
 	password_widget.cpp \
-	power_notifier.cpp	\
 	progress_dialog.cpp \
-	screensaver.cpp	\
-	session_manager.cpp	\
-	storage_device_notifier.cpp	\
 	timed_computer_management_widget.cpp \
 	widget_base.cpp
+
+!android:!ios {
+	SOURCES += \
+		power_notifier.cpp	\
+		screensaver.cpp	\
+		session_manager.cpp	\
+		storage_device_notifier.cpp
+}
 
 unix {
 	linux* {

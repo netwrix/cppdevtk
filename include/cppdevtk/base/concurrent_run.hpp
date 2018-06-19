@@ -35,7 +35,6 @@
 #include "config.hpp"
 #include "cancelable.hpp"
 #include "non_copyable.hpp"
-#include "mutex.hpp"
 
 #include <QtCore/QFutureInterface>
 #include <QtCore/QRunnable>
