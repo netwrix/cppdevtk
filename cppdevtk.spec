@@ -23,8 +23,7 @@
 # - SLE12 SP3: sle_version 120300
 #	%%if 0%%{?sle_version} == 120300 && !0%%{?is_opensuse}
 #
-# NOTE: today Leap 15 was released and sle_version is missing; use suse_version 1500. I reported Bug 1094735
-# TODO: check if fixed
+# NOTE: Leap 15: sle_version is missing; use suse_version 1500. Check when Bug #1094735 is fixed
 
 
 # TODO: modify as desired
@@ -958,9 +957,31 @@ exit 0
 
 
 %changelog
-* Thu Mar 15 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Sun Jun 24 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.1.0.1
-- to fill
+- added PosixSignalsWatcher (Unix)
+- CoreApplicationBase: added support for termination signals (Unix + Windows)
+- added GetCurrentProcessId()
+- added ScreenSaver (desktops only)
+- added DeviceNotifier (desktops only)
+- added PowerNotifier (desktops only)
+- added SessionManager + Session (desktops only)
+- added ServiceBase/Service/ServiceController supporting termination signals and reload config
+- added support for Ubuntu 18.04
+- added support for openSUSE Leap 15 (Leap 42.2 no longer supported; EOL since 26 Jan 2018)
+- removed ComputerManager (replaced by SessionManager)
+- removed GetUserIdleTime() (replaced by Session::GetIdleTime())
+- do not conflict with boost signals
+- zlib dependency is optional (affects QZipReader and QZipWriter)
+- CoreApplicationBase::SetInfo(): added componentName
+- GCC/Clang visibility
+- template explicit instantiation review
+- separated QtSolutions libraries
+- Mac OS X: QMAKE_SONAME_PREFIX = @rpath and QMAKE_RPATHDIR *= @loader_path/../Frameworks
+- updated Qt to 5.9.5 on Ubuntu 14.04 and 16.04
+- updated CentOS 7 to 7.5
+- tested with GCC 8 and Qt 5.11 on openSUSE Tumbleweed
+- fixed enabling GCC/Clang C++11 and extensions
 * Wed Mar 14 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.9.1
 - added localization test/sample app

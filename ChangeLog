@@ -1,5 +1,5 @@
 Version 1.1.0.1:
-- Release date:
+- Release date: 24 Jun 2018
 - New features:
 	- added PosixSignalsWatcher (Unix)
 	- CoreApplicationBase: added support for termination signals (Unix + Windows)
