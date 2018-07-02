@@ -229,6 +229,30 @@
 /// \cond
 
 
+// auto_ptr was removed in C++17; enable it until fixing
+// TODO: replace auto_ptr with unique/shared ptr in C++17
+#ifdef __cplusplus
+#if (CPPDEVTK_COMPILER_GCC)
+	// Nothing to do; gcc keeps auto_ptr for backwards compatibility
+	// https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#status.iso.2017
+#elif (CPPDEVTK_COMPILER_CLANG)
+	// https://libcxx.llvm.org/docs/UsingLibcxx.html#c-17-specific-configuration-macros
+#	if (__cplusplus >= 201703L)
+#		ifndef _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
+#			define _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
+#		endif
+#	endif
+#elif (CPPDEVTK_COMPILER_MSVC)
+#	if ((__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L)))
+#		undef _HAS_AUTO_PTR_ETC
+#		define _HAS_AUTO_PTR_ETC 1
+#	endif
+#else
+#	error "Unsupported compiler!!!"
+#endif
+#endif	// __cplusplus
+
+
 #ifndef RC_INVOKED	// for RC4011: identifier truncated to 'identifier'...
 
 #if (CPPDEVTK_COMPILER_GCC)
@@ -244,12 +268,6 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Safety checks.
-
-#ifdef __cplusplus
-#	if ((__cplusplus >= 201703L) || (CPPDEVTK_COMPILER_MSVC && (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L))))
-#		error "C++ >= 17 is not supported because CppDevTk uses auto_ptr that is removed in C++17!!! TODO: C++ >= 17 port! (unique/shared ptr)"
-#	endif
-#endif
 
 #ifndef CPPDEVTK_COMPILER_MESSAGE
 #	error "Please implement CPPDEVTK_COMPILER_MESSAGE for current compiler!!!"

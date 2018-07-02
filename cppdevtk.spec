@@ -957,7 +957,7 @@ exit 0
 
 
 %changelog
-* Sun Jun 24 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Mon Jul 2 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.1.0.1
 - added PosixSignalsWatcher (Unix)
 - CoreApplicationBase: added support for termination signals (Unix + Windows)
@@ -978,9 +978,10 @@ exit 0
 - template explicit instantiation review
 - separated QtSolutions libraries
 - Mac OS X: QMAKE_SONAME_PREFIX = @rpath and QMAKE_RPATHDIR *= @loader_path/../Frameworks
-- updated Qt to 5.9.5 on Ubuntu 14.04 and 16.04
+- updated Qt to 5.9.6 on Ubuntu 16.04 and 14.04
 - updated CentOS 7 to 7.5
 - tested with GCC 8 and Qt 5.11 on openSUSE Tumbleweed
+- updated internal boost to 1.67.0
 - fixed enabling GCC/Clang C++11 and extensions
 * Wed Mar 14 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.0.9.1

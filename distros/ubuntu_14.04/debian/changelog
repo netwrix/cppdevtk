@@ -19,12 +19,13 @@ cppdevtk (1.1.0-0ubuntu1.5) trusty; urgency=medium
   * template explicit instantiation review
   * separated QtSolutions libraries
   * Mac OS X: QMAKE_SONAME_PREFIX = @rpath and QMAKE_RPATHDIR *= @loader_path/../Frameworks
-  * updated Qt to 5.9.5 on Ubuntu 14.04 and 16.04
+  * updated Qt to 5.9.6 on Ubuntu 16.04 and 14.04
   * updated CentOS 7 to 7.5
   * tested with GCC 8 and Qt 5.11 on openSUSE Tumbleweed
+  * updated internal boost to 1.67.0
   * fixed enabling GCC/Clang C++11 and extensions
 
- -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Sun, 24 Jun 2018 14:19:46 +0300
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Mon, 2 Jul 2018 14:19:46 +0300
 
 
 cppdevtk (1.0.9-0ubuntu1.5) trusty; urgency=medium

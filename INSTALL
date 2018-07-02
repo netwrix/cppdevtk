@@ -11,8 +11,8 @@
 
 - Ubuntu Qt 5:
 Use ppa:beineri (https://launchpad.net/~beineri)
-16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt595-xenial
-14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt595-trusty
+16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt596-xenial
+14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt596-trusty
 12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt563
 > sudo apt-get update
 > sudo apt-get install qt-latest qtcreator-latest

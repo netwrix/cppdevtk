@@ -11,5 +11,5 @@ usr/share/applications/cppdevtk_test_invisible_widget.desktop
 usr/share/applications/cppdevtk_test_localization.desktop
 usr/share/applications/cppdevtk_test_pc_man.desktop
 usr/share/applications/cppdevtk_test_service_controller.desktop
-usr/share/applications/cppdevtk_test_slot_throw.desktop.desktop
+usr/share/applications/cppdevtk_test_slot_throw.desktop
 usr/share/pixmaps/cppdevtk.png
