@@ -44,7 +44,7 @@
 # CentOS minor version
 %if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 6 || 0%{?rhel} == 6)
-%define centos_minor_ver 9
+%define centos_minor_ver 10
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 %define centos_minor_ver 5
@@ -980,6 +980,7 @@ exit 0
 - Mac OS X: QMAKE_SONAME_PREFIX = @rpath and QMAKE_RPATHDIR *= @loader_path/../Frameworks
 - updated Qt to 5.9.6 on Ubuntu 16.04 and 14.04
 - updated CentOS 7 to 7.5
+- updated CentOS 6 to 6.10
 - tested with GCC 8 and Qt 5.11 on openSUSE Tumbleweed
 - updated internal boost to 1.67.0
 - fixed enabling GCC/Clang C++11 and extensions
