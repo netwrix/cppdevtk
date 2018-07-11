@@ -340,6 +340,9 @@ using ::cppdevtk::base::SuppressUnusedWarning;
 using ::std::exception;
 
 
+#if (CPPDEVTK_PLATFORM_ANDROID)
+__attribute__((visibility("default")))
+#endif
 int main(int argc, char* argv[]) try {
 	using ::cppdevtk::util::CoreApplication;
 	

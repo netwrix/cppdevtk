@@ -50,6 +50,9 @@ using ::std::exception;
 using namespace ::cppdevtk::util;
 
 
+#if (CPPDEVTK_PLATFORM_ANDROID)
+__attribute__((visibility("default")))
+#endif
 int main(int argc, char* argv[]) try {
 	::cppdevtk::test_service::InitResources();
 	

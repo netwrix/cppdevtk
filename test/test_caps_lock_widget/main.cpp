@@ -53,6 +53,9 @@ using ::cppdevtk::base::Exception;
 using ::std::exception;
 
 
+#if (CPPDEVTK_PLATFORM_ANDROID)
+__attribute__((visibility("default")))
+#endif
 int main(int argc, char* argv[]) try {
 	::cppdevtk::test_caps_lock_widget::InitResources();
 	
