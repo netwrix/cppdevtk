@@ -48,7 +48,7 @@
 // TODO: keep updated
 #define CPPDEVTK_VERSION_MAJOR 1	///< \attention May have maximum 2 digits.
 #define CPPDEVTK_VERSION_MINOR 1	///< \attention May have maximum 2 digits.
-#define CPPDEVTK_VERSION_PATCH 0	///< \attention May have maximum 2 digits.
+#define CPPDEVTK_VERSION_PATCH 1	///< \attention May have maximum 2 digits.
 #ifdef _WIN32
 #define CPPDEVTK_VERSION_BUILD 1
 #endif

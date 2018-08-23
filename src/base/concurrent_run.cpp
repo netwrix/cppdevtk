@@ -27,25 +27,35 @@ namespace detail {
 
 
 void StartAndRunCancelableTask<void>::run() {
-	if (QFutureInterface<void>::isCanceled()) {
-		QFutureInterface<void>::reportFinished();
+	if (this->isCanceled()) {
+		this->ReportTaskCanceledException(CPPDEVTK_TASK_CANCELED_EXCEPTION("task was canceled when started running"));
+		this->reportFinished();
 		
 		return;
 	}
 	
-	::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType::CancelableType> pCancelable(
-			new StartAndRunCancelableTaskBase<void>::CancelableTaskType::CancelableType(*this));
 	try {
-		StartAndRunCancelableTaskBase<void>::pCancelableTask_->Run(pCancelable);
+		this->pCancelableTask_->Run(::std::auto_ptr<FutureInterfaceCancelable>(new FutureInterfaceCancelable(*this)));
+	}
+	catch (const TaskCanceledException& exc) {
+		//CPPDEVTK_LOG_INFO("TaskCanceledException: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_ASSERT(this->isCanceled());
+		this->ReportTaskCanceledException(exc);
 	}
 	catch (const QtException& exc) {
-		QFutureInterface<void>::reportException(exc);
+		//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
+		this->reportException(exc);
+	}
+	catch (const ::std::exception& exc) {
+		CPPDEVTK_LOG_ERROR("task failed; ::std::exception: " << Exception::GetDetailedInfo(exc));
+		this->reportException(QtUnhandledException());
 	}
 	catch (...) {
-		QFutureInterface<void>::reportException(QtUnhandledException());
+		CPPDEVTK_LOG_ERROR("task failed; unknown exception");
+		this->reportException(QtUnhandledException());
 	}
 	
-	QFutureInterface<void>::reportFinished();
+	this->reportFinished();
 }
 
 

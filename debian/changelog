@@ -1,3 +1,10 @@
+cppdevtk (1.1.1-0ubuntu1) bionic; urgency=medium
+
+  * TODO
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Thu, 23 Aug 2018 14:19:46 +0300
+
+
 cppdevtk (1.1.0-0ubuntu1) bionic; urgency=medium
 
   * added PosixSignalsWatcher (Unix)

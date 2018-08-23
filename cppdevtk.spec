@@ -83,7 +83,7 @@
 
 
 Name: cppdevtk
-Version: 1.1.0
+Version: 1.1.1
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -957,6 +957,9 @@ exit 0
 
 
 %changelog
+* Thu Aug 23 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.1.1.1
+- TODO
 * Mon Jul 2 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.1.0.1
 - added PosixSignalsWatcher (Unix)

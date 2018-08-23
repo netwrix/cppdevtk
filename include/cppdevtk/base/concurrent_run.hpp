@@ -35,6 +35,9 @@
 #include "config.hpp"
 #include "cancelable.hpp"
 #include "non_copyable.hpp"
+#include "logger.hpp"
+#include "task_canceled_exception.hpp"
+#include "cassert.hpp"
 
 #include <QtCore/QFutureInterface>
 #include <QtCore/QRunnable>
@@ -52,11 +55,19 @@
 #include <memory>
 
 
+// NOTE: Qt bug #6799 and #54831
+
+// DISCLAIMER: the "this->" used in implementation are not because I like Python but this is the simplest way to avoid error:
+// "there are no arguments to 'x' that depend on a template parameter, so a declaration of 'x' must be available"
+// Other solutions require more typing...
+
+
 namespace cppdevtk {
 namespace base {
 namespace concurrent {
 
 
+/// This is more an adapter so it can be used in some existing projects
 class CPPDEVTK_BASE_API FutureInterfaceCancelable: public Cancelable {
 public:
 	explicit FutureInterfaceCancelable(QFutureInterfaceBase& futureInterfaceBase);
@@ -73,12 +84,9 @@ private:
 template <typename TResult>
 class CancelableTask {
 public:
-	typedef FutureInterfaceCancelable CancelableType;
-	
-	
 	virtual ~CancelableTask();
 	
-	virtual TResult Run(::std::auto_ptr<CancelableType> pCancelable) = 0;
+	virtual TResult Run(::std::auto_ptr<FutureInterfaceCancelable> pCancelable) = 0;
 };
 
 
@@ -109,10 +117,14 @@ public:
 	QFuture<TResult> Start();
 protected:
 	StartAndRunCancelableTaskBase(::std::auto_ptr<CancelableTaskType> pCancelableTask, int priority);
+	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	StartAndRunCancelableTaskBase(::std::auto_ptr<CancelableTaskType> pCancelableTask, QThreadPool& threadPool, int priority);
 #	endif
+	
 	virtual ~StartAndRunCancelableTaskBase();
+	
+	void ReportTaskCanceledException(const TaskCanceledException& exc);
 	
 	
 	::std::auto_ptr<CancelableTaskType> pCancelableTask_;
@@ -128,11 +140,11 @@ template <typename TResult>
 class StartAndRunCancelableTask: public StartAndRunCancelableTaskBase<TResult> {
 public:
 	StartAndRunCancelableTask(
-			::std::auto_ptr<typename StartAndRunCancelableTaskBase<TResult>::CancelableTaskType> pCancelableTask,
-			int priority);
+			::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask, int priority);
+	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	StartAndRunCancelableTask(
-			::std::auto_ptr<typename StartAndRunCancelableTaskBase<TResult>::CancelableTaskType> pCancelableTask,
+			::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask,
 			QThreadPool& threadPool, int priority);
 #	endif
 	
@@ -144,10 +156,11 @@ template <>
 class CPPDEVTK_BASE_API StartAndRunCancelableTask<void>: public StartAndRunCancelableTaskBase<void> {
 public:
 	StartAndRunCancelableTask(
-			::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask, int priority);
+			::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority);
+	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	StartAndRunCancelableTask(
-			::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask,
+			::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
 			QThreadPool& threadPool, int priority);
 #	endif
 	
@@ -182,6 +195,7 @@ inline CancelableTask<TResult>::~CancelableTask() {}
 template <typename TResult>
 inline QFuture<TResult> CancelableTaskExecutor::Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask,
 		int priority) {
+	// no memory leak because StartAndRunCancelableTask::QRunnable::autoDelete() so it will be deleted by QThreadPool
 	return (new ::cppdevtk::base::concurrent::detail::StartAndRunCancelableTask<TResult>(pCancelableTask, priority))->Start();
 }
 
@@ -190,6 +204,7 @@ inline QFuture<TResult> CancelableTaskExecutor::Execute(::std::auto_ptr<Cancelab
 template <typename TResult>
 inline QFuture<TResult> CancelableTaskExecutor::Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask,
 		QThreadPool& threadPool, int priority) {
+	// no memory leak because StartAndRunCancelableTask::QRunnable::autoDelete() so it will be deleted by QThreadPool
 	return (new ::cppdevtk::base::concurrent::detail::StartAndRunCancelableTask<TResult>(pCancelableTask, threadPool,
 			priority))->Start();
 }
@@ -202,13 +217,17 @@ namespace detail {
 
 template <typename TResult>
 inline QFuture<TResult> StartAndRunCancelableTaskBase<TResult>::Start() {
+	this->reportStarted();
+	
+	QFuture<TResult> retValue = this->future();
+	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	threadPool_.start(this, kPriority_);
 #	else
 	QThreadPool::globalInstance()->start(this, kPriority_);
 #	endif
-	QFutureInterface<TResult>::reportStarted();
-	return QFutureInterface<TResult>::future();
+	
+	return retValue;
 }
 
 template <typename TResult>
@@ -220,9 +239,9 @@ inline StartAndRunCancelableTaskBase<TResult>::StartAndRunCancelableTaskBase(
 #		endif
 		kPriority_(priority) {
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	QFutureInterface<TResult>::setThreadPool(&threadPool_);
+	this->setThreadPool(&threadPool_);
 #	endif
-	QFutureInterface<TResult>::setRunnable(this);
+	this->setRunnable(this);
 }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -232,8 +251,8 @@ inline StartAndRunCancelableTaskBase<TResult>::StartAndRunCancelableTaskBase(
 		::std::auto_ptr<CancelableTaskType> pCancelableTask, QThreadPool& threadPool, int priority):
 		QFutureInterface<TResult>(), QRunnable(), NonCopyable(), pCancelableTask_(pCancelableTask), threadPool_(threadPool),
 		kPriority_(priority) {
-	QFutureInterface<TResult>::setThreadPool(&threadPool_);
-	QFutureInterface<TResult>::setRunnable(this);
+	this->setThreadPool(&threadPool_);
+	this->setRunnable(this);
 }
 
 #endif
@@ -241,17 +260,23 @@ inline StartAndRunCancelableTaskBase<TResult>::StartAndRunCancelableTaskBase(
 template <typename TResult>
 inline StartAndRunCancelableTaskBase<TResult>::~StartAndRunCancelableTaskBase() {}
 
+template <typename TResult>
+inline void StartAndRunCancelableTaskBase<TResult>::ReportTaskCanceledException(const TaskCanceledException& exc) {
+	QMutexLocker locker(this->mutex());
+	this->exceptionStore().setException(exc);
+}
+
 
 template <typename TResult>
 inline StartAndRunCancelableTask<TResult>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTaskBase<TResult>::CancelableTaskType> pCancelableTask, int priority):
+		::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask, int priority):
 		StartAndRunCancelableTaskBase<TResult>(pCancelableTask, priority) {}
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 template <typename TResult>
 inline StartAndRunCancelableTask<TResult>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTaskBase<TResult>::CancelableTaskType> pCancelableTask,
+		::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask,
 		QThreadPool& threadPool, int priority): StartAndRunCancelableTaskBase<TResult>(pCancelableTask, threadPool,
 		priority) {}
 
@@ -259,38 +284,56 @@ inline StartAndRunCancelableTask<TResult>::StartAndRunCancelableTask(
 
 template <typename TResult>
 void StartAndRunCancelableTask<TResult>::run() {
-	if (QFutureInterface<TResult>::isCanceled()) {
-		QFutureInterface<TResult>::reportFinished();
+	if (this->isCanceled()) {
+		this->ReportTaskCanceledException(CPPDEVTK_TASK_CANCELED_EXCEPTION("task was canceled when started running"));
+		this->reportFinished();
 		
 		return;
 	}
 	
-	::std::auto_ptr<typename StartAndRunCancelableTaskBase<TResult>::CancelableTaskType::CancelableType> pCancelable(
-			new typename StartAndRunCancelableTaskBase<TResult>::CancelableTaskType::CancelableType(*this));
 	TResult result;
 	try {
-		result = StartAndRunCancelableTaskBase<TResult>::pCancelableTask_->Run(pCancelable);
+		result = this->pCancelableTask_->Run(::std::auto_ptr<FutureInterfaceCancelable>(new FutureInterfaceCancelable(*this)));
+	}
+	catch (const TaskCanceledException& exc) {
+		//CPPDEVTK_LOG_INFO("TaskCanceledException: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_ASSERT(this->isCanceled());
+		this->ReportTaskCanceledException(exc);
+		this->reportFinished();
+		return;
 	}
 	catch (const QtException& exc) {
-		QFutureInterface<TResult>::reportException(exc);
+		//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
+		this->reportException(exc);
+		this->reportFinished();
+		return;
+	}
+	catch (const ::std::exception& exc) {
+		CPPDEVTK_LOG_ERROR("task failed; ::std::exception: " << Exception::GetDetailedInfo(exc));
+		this->reportException(QtUnhandledException());
+		this->reportFinished();
+		return;
 	}
 	catch (...) {
-		QFutureInterface<TResult>::reportException(QtUnhandledException());
+		CPPDEVTK_LOG_ERROR("task failed; unknown exception");
+		this->reportException(QtUnhandledException());
+		this->reportFinished();
+		return;
 	}
 	
-	QFutureInterface<TResult>::reportResult(result);
-	QFutureInterface<TResult>::reportFinished();
+	this->reportResult(result);
+	this->reportFinished();
 }
 
 
 inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
-		::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask, int priority):
+		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority):
 		StartAndRunCancelableTaskBase<void>(pCancelableTask, priority) {}
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
-		::std::auto_ptr<StartAndRunCancelableTaskBase<void>::CancelableTaskType> pCancelableTask,
+		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
 		QThreadPool& threadPool, int priority): StartAndRunCancelableTaskBase<void>(pCancelableTask, threadPool,
 		priority) {}
 

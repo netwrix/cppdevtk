@@ -9,6 +9,7 @@
 - Ubuntu:
 > sudo apt-get install build-essential ubuntu-dev-tools debhelper dpkg-sig apt-file
 
+
 - Ubuntu Qt 5:
 Use ppa:beineri (https://launchpad.net/~beineri)
 16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt596-xenial
