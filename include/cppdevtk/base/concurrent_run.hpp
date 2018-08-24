@@ -25,6 +25,7 @@
 /// - Our \c CancelableTaskExecutor supports cancelable future and priorities.
 /// \note If we'll have time we'll implement our own thread pool.
 /// \sa \c QThreadPool and \c QtConcurrent::run()
+/// \attention Make sure that fix for Qt bug #6799 is applied!
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -55,7 +56,7 @@
 #include <memory>
 
 
-// NOTE: Qt bug #6799 and #54831
+// NOTE: Qt #54831
 
 // DISCLAIMER: the "this->" used in implementation are not because I like Python but this is the simplest way to avoid error:
 // "there are no arguments to 'x' that depend on a template parameter, so a declaration of 'x' must be available"
@@ -81,6 +82,7 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Abstract base class for cancelable tasks. Users should provide concrete implementations.
+/// \attention Make sure that fix for Qt bug #6799 is applied!
 template <typename TResult>
 class CancelableTask {
 public:
@@ -92,6 +94,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Execute cancelable task in a separate thread.
+/// \attention Make sure that fix for Qt bug #6799 is applied!
 class CPPDEVTK_BASE_API CancelableTaskExecutor {
 public:
 	template <typename TResult>

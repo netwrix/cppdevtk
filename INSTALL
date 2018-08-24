@@ -5,6 +5,8 @@
 - Android SDK r25.2.3 needed on Windows (maybe it works with r24.x >= r24.4, r25.x): SDK Build-tools must be 25.x and Android 4.2.2 (API level 17)
 - Android NDK r10e needed on Windows
 
+- Qt: make sure that fix for Qt bug #6799 is applied!
+
 
 - Ubuntu:
 > sudo apt-get install build-essential ubuntu-dev-tools debhelper dpkg-sig apt-file

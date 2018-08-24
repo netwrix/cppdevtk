@@ -4,6 +4,7 @@ Version 1.1.1.1:
 - Improvements:
 	- executor review; better cancellation support.
 - Fixed bugs:
+	- build with fix for Qt bug #6799
 
 
 Version 1.1.0.1:
