@@ -438,30 +438,26 @@ inline const TValue& Optional<TValue>::GetValueOr(const TValue& defaultValue) co
 	return HasValue() ? operator*() : defaultValue;
 }
 
-// NOTE: do not inline (uses dbc macro)
 template <typename TValue>
-TValue* Optional<TValue>::operator->() {
+CPPDEVTK_NO_INLINE TValue* Optional<TValue>::operator->() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(HasValue());
 	return pValue_;
 }
 
-// NOTE: do not inline (uses dbc macro)
 template <typename TValue>
-const TValue* Optional<TValue>::operator->() const {
+CPPDEVTK_NO_INLINE const TValue* Optional<TValue>::operator->() const {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(HasValue());
 	return pValue_;
 }
 
-// NOTE: do not inline (uses dbc macro)
 template <typename TValue>
-TValue& Optional<TValue>::operator*() {
+CPPDEVTK_NO_INLINE TValue& Optional<TValue>::operator*() {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(HasValue());
 	return *operator->();
 }
 
-// NOTE: do not inline (uses dbc macro)
 template <typename TValue>
-const TValue& Optional<TValue>::operator*() const {
+CPPDEVTK_NO_INLINE const TValue& Optional<TValue>::operator*() const {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(HasValue());
 	return *operator->();
 }

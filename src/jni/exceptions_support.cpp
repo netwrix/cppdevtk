@@ -236,7 +236,7 @@ CPPDEVTK_JNI_API void ThrowCppExceptionFromJavaPendingException(JNIEnv* pJniEnv,
 	
 	// Derived from java/lang/Exception
 	if (detail::IsBaseOf(pJniEnv, "java/util/concurrent/CancellationException", jThrowableClass)) {
-		throw CPPDEVTK_TASK_CANCELED_EXCEPTION(qThrowableMsg);
+		throw CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/io/FileNotFoundException", jThrowableClass)) {
 		throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(qThrowableMsg);

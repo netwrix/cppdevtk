@@ -27,35 +27,32 @@ namespace detail {
 
 
 void StartAndRunCancelableTask<void>::run() {
-	if (this->isCanceled()) {
-		this->ReportTaskCanceledException(CPPDEVTK_TASK_CANCELED_EXCEPTION("task was canceled when started running"));
-		this->reportFinished();
-		
-		return;
+	if (isCanceled()) {
+		ReportCanceled(CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA("task was canceled when started running"));
+	}
+	else {
+		try {
+			pCancelableTask_->Run(::std::auto_ptr<FutureInterfaceCancelable>(new FutureInterfaceCancelable(*this)));
+		}
+		catch (const TaskCanceledException& exc) {
+			//CPPDEVTK_LOG_INFO("TaskCanceledException: " << Exception::GetDetailedInfo(exc));
+			ReportCanceled(exc);
+		}
+		catch (const QtException& exc) {
+			//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
+			ReportException(exc);
+		}
+		catch (const ::std::exception& exc) {
+			CPPDEVTK_LOG_ERROR("task failed; unhandled ::std::exception: " << Exception::GetDetailedInfo(exc));
+			ReportUnhandledException();
+		}
+		catch (...) {
+			CPPDEVTK_LOG_ERROR("task failed; unhandled unknown exception");
+			ReportUnhandledException();
+		}
 	}
 	
-	try {
-		this->pCancelableTask_->Run(::std::auto_ptr<FutureInterfaceCancelable>(new FutureInterfaceCancelable(*this)));
-	}
-	catch (const TaskCanceledException& exc) {
-		//CPPDEVTK_LOG_INFO("TaskCanceledException: " << Exception::GetDetailedInfo(exc));
-		CPPDEVTK_ASSERT(this->isCanceled());
-		this->ReportTaskCanceledException(exc);
-	}
-	catch (const QtException& exc) {
-		//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
-		this->reportException(exc);
-	}
-	catch (const ::std::exception& exc) {
-		CPPDEVTK_LOG_ERROR("task failed; ::std::exception: " << Exception::GetDetailedInfo(exc));
-		this->reportException(QtUnhandledException());
-	}
-	catch (...) {
-		CPPDEVTK_LOG_ERROR("task failed; unknown exception");
-		this->reportException(QtUnhandledException());
-	}
-	
-	this->reportFinished();
+	ReportFinished();
 }
 
 

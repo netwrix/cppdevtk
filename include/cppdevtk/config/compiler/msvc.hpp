@@ -79,6 +79,9 @@
 #endif
 #define CPPDEVTK_OVERRIDE override
 
+#define CPPDEVTK_NO_INLINE __declspec(noinline)
+#define CPPDEVTK_FORCE_INLINE __forceinline
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CRT secure C++ overloads; please see:

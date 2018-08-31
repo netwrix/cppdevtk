@@ -97,6 +97,9 @@
 #define CPPDEVTK_OVERRIDE
 #endif
 
+#define CPPDEVTK_NO_INLINE __attribute__((noinline))
+#define CPPDEVTK_FORCE_INLINE inline __attribute__((always_inline))
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compiler Features.

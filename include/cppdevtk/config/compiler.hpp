@@ -185,6 +185,17 @@
 #define CPPDEVTK_THREAD
 #undef CPPDEVTK_THREAD
 
+/// \brief Instruct compiler to not inline function.
+/// \attention Must be implemented by each \ref config_compiler_supported_compilers.
+#define CPPDEVTK_NO_INLINE
+#undef CPPDEVTK_NO_INLINE
+
+/// \brief Instruct compiler to inline function.
+/// \attention Must be implemented by each \ref config_compiler_supported_compilers.
+#define CPPDEVTK_FORCE_INLINE
+#undef CPPDEVTK_FORCE_INLINE
+
+
 /// \brief C++11 final and override or C++03 compiler extensions.
 /// \attention Must be implemented by each \ref config_compiler_supported_compilers.
 #define CPPDEVTK_FINAL
@@ -292,6 +303,13 @@
 #endif
 #ifndef CPPDEVTK_OVERRIDE
 #	error "Please define CPPDEVTK_OVERRIDE for current compiler!!!"
+#endif
+
+#ifndef CPPDEVTK_NO_INLINE
+#	error "Please define CPPDEVTK_NO_INLINE for current compiler!!!"
+#endif
+#ifndef CPPDEVTK_FORCE_INLINE
+#	error "Please define CPPDEVTK_FORCE_INLINE for current compiler!!!"
 #endif
 
 #ifndef CPPDEVTK_HAVE_STDINT_H

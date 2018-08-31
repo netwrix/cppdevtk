@@ -2,9 +2,14 @@ Version 1.1.1.1:
 - Release date:
 - New features:
 - Improvements:
-	- executor review; better cancellation support.
+	- executor: improved cancellation
+	- updated Ubuntu 18.04 to 18.04.1
+	- updated Ubuntu 16.04 to 16.04.5
+	- openSUSE Leap 15 bug #1094735 was fixed; removed workaround
+	- added CPPDEVTK_NO_INLINE and CPPDEVTK_FORCE_INLINE
 - Fixed bugs:
-	- build with fix for Qt bug #6799
+	- executor: workaround for Qt bug #6799
+	- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831
 
 
 Version 1.1.0.1:

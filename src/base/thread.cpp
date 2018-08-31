@@ -533,7 +533,7 @@ RestoreInterruptionGuard::~RestoreInterruptionGuard() {
 
 #if (CPPDEVTK_HAVE_THREAD_STORAGE)
 
-// NOTE: do not inline: nativeId_ and are not exported!
+// NOTE: do not inline: nativeId_ is not exported!
 
 Thread::Id::Id() CPPDEVTK_NOEXCEPT: nativeId_(0) {}
 

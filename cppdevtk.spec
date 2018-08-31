@@ -22,8 +22,6 @@
 #	%%if 0%%{?sle_version} == 150000 && !0%%{?is_opensuse}
 # - SLE12 SP3: sle_version 120300
 #	%%if 0%%{?sle_version} == 120300 && !0%%{?is_opensuse}
-#
-# NOTE: Leap 15: sle_version is missing; use suse_version 1500. Check when Bug #1094735 is fixed
 
 
 # TODO: modify as desired
@@ -102,7 +100,7 @@ BuildRequires: libstdc++-devel glibc-devel
 %if (%{?suse_version} >= 1550)
 BuildRequires: libqt5-qtbase-devel >= 5.11.0
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 BuildRequires: libqt5-qtbase-devel >= 5.9.4
 %endif
 %if (0%{?sle_version} == 120300)
@@ -122,7 +120,7 @@ BuildRequires: qt5-qtbase-devel >= 5.6.1
 %if (%{?suse_version} >= 1550)
 BuildRequires: libqt4-devel >= 4.8.7
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 BuildRequires: libqt4-devel >= 4.8.7
 %endif
 %if (0%{?sle_version} == 120300)
@@ -151,7 +149,7 @@ Group: System/Libraries
 %if (%{?suse_version} >= 1550)
 BuildRequires: boost-devel >= 1.66.0
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 BuildRequires: boost-devel >= 1.66.0
 %endif
 %if (0%{?sle_version} == 120300)
@@ -232,7 +230,7 @@ Group: System/Libraries
 %if (%{?suse_version} >= 1550)
 BuildRequires: java-11-openjdk-devel
 %else
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 BuildRequires: java-10-openjdk-devel
 %else
 BuildRequires: java-1_8_0-openjdk-devel
@@ -280,7 +278,11 @@ Group: System/Libraries
 BuildRequires: libXScrnSaver-devel
 BuildRequires: libX11-devel
 %if (0%{?suse_version})
+%if (%{?suse_version} >= 1550)
+BuildRequires: xorgproto-devel
+%else
 BuildRequires: xproto-devel
+%endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
 BuildRequires: xorg-x11-proto-devel
@@ -290,7 +292,7 @@ BuildRequires: xorg-x11-proto-devel
 %if (%{?suse_version} >= 1550)
 BuildRequires: libqt5-qtx11extras-devel >= 5.11.0
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 BuildRequires: libqt5-qtx11extras-devel >= 5.9.4
 %endif
 %if (0%{?sle_version} == 120300)
@@ -349,7 +351,7 @@ Requires: libstdc++-devel glibc-devel
 %if (%{?suse_version} >= 1550)
 Requires: boost-devel >= 1.66.0
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 Requires: boost-devel >= 1.66.0
 %endif
 %if (0%{?sle_version} == 120300)
@@ -369,7 +371,7 @@ Requires: boost-devel >= 1.41.0
 %if (%{?suse_version} >= 1550)
 Requires: libqt5-qtbase-devel >= 5.11.0
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 Requires: libqt5-qtbase-devel >= 5.9.4
 %endif
 %if (0%{?sle_version} == 120300)
@@ -389,7 +391,7 @@ Requires: qt5-qtbase-devel >= 5.6.1
 %if (%{?suse_version} >= 1550)
 Requires: libqt4-devel >= 4.8.7
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 Requires: libqt4-devel >= 4.8.7
 %endif
 %if (0%{?sle_version} == 120300)
@@ -479,7 +481,7 @@ Group: Development/Libraries/C and C++
 %if (%{?suse_version} >= 1550)
 Requires: java-11-openjdk-devel
 %else
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 Requires: java-10-openjdk-devel
 %else
 Requires: java-1_8_0-openjdk-devel
@@ -530,7 +532,11 @@ Group: Development/Libraries/C and C++
 Requires: libXScrnSaver-devel
 Requires: libX11-devel
 %if (0%{?suse_version})
+%if (%{?suse_version} >= 1550)
+Requires: xorgproto-devel
+%else
 Requires: xproto-devel
+%endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
 Requires: xorg-x11-proto-devel
@@ -540,7 +546,7 @@ Requires: xorg-x11-proto-devel
 %if (%{?suse_version} >= 1550)
 Requires: libqt5-qtx11extras-devel >= 5.11.0
 %endif
-%if (%{?suse_version} == 1500)
+%if (0%{?sle_version} == 150000)
 Requires: libqt5-qtx11extras-devel >= 5.9.4
 %endif
 %if (0%{?sle_version} == 120300)
@@ -661,6 +667,10 @@ Convenience package to install all %{name}-test packages.
 %build
 
 %if (0%{?suse_version})
+%if (!0%{?is_opensuse})
+echo "SLED is not supported; only openSUSE!!!"
+exit 1
+%endif
 %if (%{suse_version} < 1315)
 echo "openSUSE < Leap 42.3 and SLED < 12SP3 are not supported!!!"
 exit 1

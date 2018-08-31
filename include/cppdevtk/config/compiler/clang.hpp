@@ -78,6 +78,17 @@
 #define CPPDEVTK_FINAL final
 #define CPPDEVTK_OVERRIDE override
 
+#if (__has_attribute(noinline))
+#	define CPPDEVTK_NO_INLINE __attribute__((noinline))
+#else
+#	define CPPDEVTK_NO_INLINE
+#endif
+#if (__has_attribute(always_inline))
+#	define CPPDEVTK_FORCE_INLINE inline __attribute__((always_inline))
+#else
+#	define CPPDEVTK_FORCE_INLINE inline
+#endif
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compiler Features.

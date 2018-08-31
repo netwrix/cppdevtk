@@ -121,7 +121,7 @@ inline bool Factory<TAbstractProduct, TConcreteProductIdentifier, multithreading
 }
 
 template <class TAbstractProduct, typename TConcreteProductIdentifier, bool multithreadingSupport>
-/* inline */ bool Factory<TAbstractProduct, TConcreteProductIdentifier, multithreadingSupport>::
+CPPDEVTK_NO_INLINE bool Factory<TAbstractProduct, TConcreteProductIdentifier, multithreadingSupport>::
 		RegisterConcreteProduct(const TConcreteProductIdentifier& concreteProductIdentifier,
 		const ConcreteProductCreatorType& concreteProductCreator) {
 	CPPDEVTK_DBC_CHECK_ARGUMENT(concreteProductCreator, "concreteProductCreator must have a target");
@@ -137,7 +137,7 @@ inline bool Factory<TAbstractProduct, TConcreteProductIdentifier, multithreading
 }
 
 template <class TAbstractProduct, typename TConcreteProductIdentifier, bool multithreadingSupport>
-/* inline */ CPPDEVTK_TR1_NS::shared_ptr<TAbstractProduct>
+CPPDEVTK_NO_INLINE CPPDEVTK_TR1_NS::shared_ptr<TAbstractProduct>
 		Factory<TAbstractProduct, TConcreteProductIdentifier, multithreadingSupport>::
 		CreateConcreteProduct(const TConcreteProductIdentifier& concreteProductIdentifier) const {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(IsConcreteProductRegistered(concreteProductIdentifier));
@@ -152,7 +152,7 @@ template <class TAbstractProduct, typename TConcreteProductIdentifier, bool mult
 
 template <class TAbstractProduct, typename TConcreteProductIdentifier, bool multithreadingSupport>
 template <typename TDeleter>
-/* inline */ CPPDEVTK_TR1_NS::shared_ptr<TAbstractProduct>
+CPPDEVTK_NO_INLINE CPPDEVTK_TR1_NS::shared_ptr<TAbstractProduct>
 		Factory<TAbstractProduct, TConcreteProductIdentifier, multithreadingSupport>::
 		CreateConcreteProduct(const TConcreteProductIdentifier& concreteProductIdentifier, TDeleter deleter) const {
 	CPPDEVTK_DBC_CHECK_PRECONDITION(IsConcreteProductRegistered(concreteProductIdentifier));

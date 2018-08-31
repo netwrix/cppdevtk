@@ -448,7 +448,7 @@ inline CPPDEVTK_BASE_API void swap(Thread& x, Thread& y) CPPDEVTK_NOEXCEPT {
 }
 
 template <typename TChar>
-/* inline */ ::std::basic_ostream<TChar>& operator<<(::std::basic_ostream<TChar>& os, Thread::Id threadId) {
+CPPDEVTK_NO_INLINE ::std::basic_ostream<TChar>& operator<<(::std::basic_ostream<TChar>& os, Thread::Id threadId) {
 	return os << threadId.nativeId_;
 }
 

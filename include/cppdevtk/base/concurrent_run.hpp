@@ -25,7 +25,6 @@
 /// - Our \c CancelableTaskExecutor supports cancelable future and priorities.
 /// \note If we'll have time we'll implement our own thread pool.
 /// \sa \c QThreadPool and \c QtConcurrent::run()
-/// \attention Make sure that fix for Qt bug #6799 is applied!
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -40,11 +39,13 @@
 #include "task_canceled_exception.hpp"
 #include "cassert.hpp"
 
+#include <QtCore/QFutureInterfaceBase>
 #include <QtCore/QFutureInterface>
-#include <QtCore/QRunnable>
 #include <QtCore/QFuture>
+#include <QtCore/QRunnable>
 #include <QtCore/QThreadPool>
 #include <QtCore/QtGlobal>
+#include <QtCore/QMutexLocker>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QException>
 #include <QtCore/QUnhandledException>
@@ -56,11 +57,12 @@
 #include <memory>
 
 
-// NOTE: Qt #54831
-
-// DISCLAIMER: the "this->" used in implementation are not because I like Python but this is the simplest way to avoid error:
+// DISCLAIMER: the "this->" used in implementation are not because I'm a Python fan, but this is the simplest way to avoid error:
 // "there are no arguments to 'x' that depend on a template parameter, so a declaration of 'x' must be available"
 // Other solutions require more typing...
+
+
+#define CPPDEVTK_EXECUTOR_TEST 1
 
 
 namespace cppdevtk {
@@ -68,7 +70,8 @@ namespace base {
 namespace concurrent {
 
 
-/// This is more an adapter so it can be used in some existing projects
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \note This is more an adapter so it can be used in some existing projects
 class CPPDEVTK_BASE_API FutureInterfaceCancelable: public Cancelable {
 public:
 	explicit FutureInterfaceCancelable(QFutureInterfaceBase& futureInterfaceBase);
@@ -82,7 +85,6 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Abstract base class for cancelable tasks. Users should provide concrete implementations.
-/// \attention Make sure that fix for Qt bug #6799 is applied!
 template <typename TResult>
 class CancelableTask {
 public:
@@ -94,7 +96,9 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Execute cancelable task in a separate thread.
-/// \attention Make sure that fix for Qt bug #6799 is applied!
+/// \attention
+/// - returned future cannot be paused/resumed/queried for progress
+/// - if Qt < 5.6.2 then may be affected by Qt bug #54831
 class CPPDEVTK_BASE_API CancelableTaskExecutor {
 public:
 	template <typename TResult>
@@ -127,11 +131,15 @@ protected:
 	
 	virtual ~StartAndRunCancelableTaskBase();
 	
-	void ReportTaskCanceledException(const TaskCanceledException& exc);
+	void ReportStarted();
+	void ReportCanceled(const TaskCanceledException& exc);
+	void ReportException(const QtException& exc);
+	void ReportUnhandledException();
+	void ReportFinished();
 	
 	
 	::std::auto_ptr<CancelableTaskType> pCancelableTask_;
-private:
+private:	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	QThreadPool& threadPool_;
 #	endif
@@ -152,6 +160,12 @@ public:
 #	endif
 	
 	virtual void run();	// QRunnable::run()
+protected:
+	void ReportResult(const TResult& result);
+	
+#	if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
+	QtPrivate::ResultStore<TResult>& ResultStore();
+#	endif
 };
 
 
@@ -220,7 +234,7 @@ namespace detail {
 
 template <typename TResult>
 inline QFuture<TResult> StartAndRunCancelableTaskBase<TResult>::Start() {
-	this->reportStarted();
+	ReportStarted();
 	
 	QFuture<TResult> retValue = this->future();
 	
@@ -264,9 +278,81 @@ template <typename TResult>
 inline StartAndRunCancelableTaskBase<TResult>::~StartAndRunCancelableTaskBase() {}
 
 template <typename TResult>
-inline void StartAndRunCancelableTaskBase<TResult>::ReportTaskCanceledException(const TaskCanceledException& exc) {
+#if (CPPDEVTK_EXECUTOR_TEST)
+CPPDEVTK_NO_INLINE
+#else
+inline
+#endif
+void StartAndRunCancelableTaskBase<TResult>::ReportStarted() {
+#	if (CPPDEVTK_EXECUTOR_TEST)
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Started));
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Running));
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Canceled));
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Finished));
+	CPPDEVTK_ASSERT(!this->exceptionStore().hasException());
+#	endif
+	
+	this->reportStarted();
+}
+
+template <typename TResult>
+#if (CPPDEVTK_EXECUTOR_TEST)
+CPPDEVTK_NO_INLINE
+#else
+inline
+#endif
+void StartAndRunCancelableTaskBase<TResult>::ReportCanceled(const TaskCanceledException& exc) {
 	QMutexLocker locker(this->mutex());
+	
+#	if (CPPDEVTK_EXECUTOR_TEST)
+	CPPDEVTK_ASSERT(this->queryState(QFutureInterfaceBase::Canceled));
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Finished));
+	CPPDEVTK_ASSERT(!this->exceptionStore().hasException());
+#	endif
+	
 	this->exceptionStore().setException(exc);
+}
+
+template <typename TResult>
+#if (CPPDEVTK_EXECUTOR_TEST)
+CPPDEVTK_NO_INLINE
+#else
+inline
+#endif
+void StartAndRunCancelableTaskBase<TResult>::ReportException(const QtException& exc) {
+	QMutexLocker locker(this->mutex());
+	
+#	if (CPPDEVTK_EXECUTOR_TEST)
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Finished));
+	CPPDEVTK_ASSERT(!this->exceptionStore().hasException());
+#	endif
+	
+	this->exceptionStore().setException(exc);
+	
+	if (!this->queryState(QFutureInterfaceBase::Canceled)) {
+		// not atomic but there is nothing we can do (QFutureInterfaceBase::d is private)...
+		locker.unlock();
+		this->reportException(exc);
+	}
+}
+
+template <typename TResult>
+inline void StartAndRunCancelableTaskBase<TResult>::ReportUnhandledException() {
+	ReportException(QtUnhandledException());	// QtUnhandledException ctor can not throw
+}
+
+template <typename TResult>
+#if (CPPDEVTK_EXECUTOR_TEST)
+CPPDEVTK_NO_INLINE
+#else
+inline
+#endif
+void StartAndRunCancelableTaskBase<TResult>::ReportFinished() {
+#	if (CPPDEVTK_EXECUTOR_TEST)
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Finished));
+#	endif
+	
+	this->reportFinished();
 }
 
 
@@ -288,46 +374,114 @@ inline StartAndRunCancelableTask<TResult>::StartAndRunCancelableTask(
 template <typename TResult>
 void StartAndRunCancelableTask<TResult>::run() {
 	if (this->isCanceled()) {
-		this->ReportTaskCanceledException(CPPDEVTK_TASK_CANCELED_EXCEPTION("task was canceled when started running"));
-		this->reportFinished();
-		
-		return;
+		this->ReportCanceled(CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA("task was canceled when started running"));
+	}
+	else {
+		try {
+			TResult result;
+			
+			try {
+				result = this->pCancelableTask_->Run(::std::auto_ptr<FutureInterfaceCancelable>(new FutureInterfaceCancelable(*this)));
+			}
+			catch (const TaskCanceledException& exc) {
+				//CPPDEVTK_LOG_INFO("TaskCanceledException: " << Exception::GetDetailedInfo(exc));
+				this->ReportCanceled(exc);
+				this->ReportFinished();
+				return;
+			}
+			catch (const QtException& exc) {
+				//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
+				this->ReportException(exc);
+				this->ReportFinished();
+				return;
+			}
+			catch (const ::std::exception& exc) {
+				CPPDEVTK_LOG_ERROR("task failed; unhandled ::std::exception: " << Exception::GetDetailedInfo(exc));
+				this->ReportUnhandledException();
+				this->ReportFinished();
+				return;
+			}
+			catch (...) {
+				CPPDEVTK_LOG_ERROR("task failed; unhandled unknown exception");
+				this->ReportUnhandledException();
+				this->ReportFinished();
+				return;
+			}
+			
+			this->ReportResult(result);
+		}
+		catch (const QtException& exc) {
+			//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
+			this->ReportException(exc);
+			this->ReportFinished();
+			return;
+		}
+		catch (const ::std::exception& exc) {
+			CPPDEVTK_LOG_ERROR("task failed; unhandled ::std::exception: " << Exception::GetDetailedInfo(exc));
+			this->ReportUnhandledException();
+			this->ReportFinished();
+			return;
+		}
+		catch (...) {
+			CPPDEVTK_LOG_ERROR("task failed; unhandled unknown exception");
+			this->ReportUnhandledException();
+			this->ReportFinished();
+			return;
+		}
 	}
 	
-	TResult result;
-	try {
-		result = this->pCancelableTask_->Run(::std::auto_ptr<FutureInterfaceCancelable>(new FutureInterfaceCancelable(*this)));
-	}
-	catch (const TaskCanceledException& exc) {
-		//CPPDEVTK_LOG_INFO("TaskCanceledException: " << Exception::GetDetailedInfo(exc));
-		CPPDEVTK_ASSERT(this->isCanceled());
-		this->ReportTaskCanceledException(exc);
-		this->reportFinished();
-		return;
-	}
-	catch (const QtException& exc) {
-		//CPPDEVTK_LOG_ERROR("task failed; QtException: " << Exception::GetDetailedInfo(exc));
-		this->reportException(exc);
-		this->reportFinished();
-		return;
-	}
-	catch (const ::std::exception& exc) {
-		CPPDEVTK_LOG_ERROR("task failed; ::std::exception: " << Exception::GetDetailedInfo(exc));
-		this->reportException(QtUnhandledException());
-		this->reportFinished();
-		return;
-	}
-	catch (...) {
-		CPPDEVTK_LOG_ERROR("task failed; unknown exception");
-		this->reportException(QtUnhandledException());
-		this->reportFinished();
-		return;
-	}
-	
-	this->reportResult(result);
-	this->reportFinished();
+	this->ReportFinished();
 }
 
+template <typename TResult>
+#if (CPPDEVTK_EXECUTOR_TEST)
+CPPDEVTK_NO_INLINE
+#else
+inline
+#endif
+void StartAndRunCancelableTask<TResult>::ReportResult(const TResult& result) {
+	QMutexLocker locker(this->mutex());
+	
+#	if (CPPDEVTK_EXECUTOR_TEST)
+	CPPDEVTK_ASSERT(!this->queryState(QFutureInterfaceBase::Finished));
+	CPPDEVTK_ASSERT(!this->exceptionStore().hasException());
+#	endif
+	
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
+	QtPrivate::ResultStoreBase& store = this->resultStoreBase();
+#	else
+	QtPrivate::ResultStore<TResult>& store = this->ResultStore();
+#	endif
+	
+	if (store.filterMode()) {
+		const int resultCountBefore = store.count();
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
+		store.addResult<TResult>(0, &result);
+#		else
+		store.addResult(0, &result);
+#		endif
+		// Fix for Qt bug #6799
+		//this->reportResultsReady(resultCountBefore, resultCountBefore + store.count());
+		this->reportResultsReady(resultCountBefore, (resultCountBefore + 1));
+	}
+	else {
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
+		const int insertIndex = store.addResult<TResult>(0, &result);
+#		else
+		const int insertIndex = store.addResult(0, &result);
+#		endif
+		this->reportResultsReady(insertIndex, (insertIndex + 1));
+	}
+}
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
+
+template <typename TResult>
+inline QtPrivate::ResultStore<TResult>& StartAndRunCancelableTask<TResult>::ResultStore() {
+	return static_cast<QtPrivate::ResultStore<TResult>&>(this->resultStoreBase());
+}
+
+#endif
 
 inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
 		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority):

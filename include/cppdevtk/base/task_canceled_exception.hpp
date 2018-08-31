@@ -30,15 +30,23 @@ namespace base {
 namespace concurrent {
 
 
-#define CPPDEVTK_TASK_CANCELED_EXCEPTION(whatArg)	\
+#define CPPDEVTK_TASK_CANCELED_EXCEPTION()	\
+	::cppdevtk::base::concurrent::TaskCanceledException(CPPDEVTK_SOURCE_CODE_INFO())
+
+#define CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA(whatArg)	\
 	::cppdevtk::base::concurrent::TaskCanceledException(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
-#define CPPDEVTK_MAKE_TASK_CANCELED_EXCEPTION(excName, whatArg)	\
+
+#define CPPDEVTK_MAKE_TASK_CANCELED_EXCEPTION(excName)	\
+	::cppdevtk::base::concurrent::TaskCanceledException excName(CPPDEVTK_SOURCE_CODE_INFO())
+
+#define CPPDEVTK_MAKE_TASK_CANCELED_EXCEPTION_W_WA(excName, whatArg)	\
 	::cppdevtk::base::concurrent::TaskCanceledException excName(CPPDEVTK_SOURCE_CODE_INFO(), (whatArg))
 
 
 class CPPDEVTK_BASE_API TaskCanceledException: public SystemException {
 public:
+	explicit TaskCanceledException(const SourceCodeInfo& throwPoint);
 	TaskCanceledException(const SourceCodeInfo& throwPoint, const QString& whatArg);
 	
 	virtual ~TaskCanceledException() CPPDEVTK_NOEXCEPT;
@@ -72,6 +80,10 @@ CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y) 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
+
+inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwPoint):
+		Exception(throwPoint), RuntimeException(throwPoint, "task canceled"), SystemException(throwPoint,
+		MakeErrorCode(base::errc::operation_canceled), "") {}
 
 inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwPoint, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint,

@@ -133,9 +133,8 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions / template definitions.
 
-// NOTE: Do not inline!
 template <typename T>
-T& MeyersSingleton<T>::GetInstance() {
+CPPDEVTK_NO_INLINE T& MeyersSingleton<T>::GetInstance() {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 #	if (CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(suppress: 4640)	// C4640: 'instance' : construction of local static object is not thread-safe
@@ -222,9 +221,8 @@ inline PhoenixSingleton<T>::~PhoenixSingleton() {
 	destroyed_ = true;
 }
 
-// NOTE: Do not inline!
 template <typename T>
-void PhoenixSingleton<T>::Create() {
+CPPDEVTK_NO_INLINE void PhoenixSingleton<T>::Create() {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 #	if (CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(suppress: 4640)	// C4640: 'instance' : construction of local static object is not thread-safe
@@ -283,9 +281,8 @@ inline ThreadSafePhoenixSingleton<T>::~ThreadSafePhoenixSingleton() {
 	destroyed_ = true;
 }
 
-// NOTE: Do not inline!
 template <typename T>
-void ThreadSafePhoenixSingleton<T>::Create() {
+CPPDEVTK_NO_INLINE void ThreadSafePhoenixSingleton<T>::Create() {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 #	if (CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(suppress: 4640)	// C4640: 'instance' : construction of local static object is not thread-safe
@@ -311,9 +308,8 @@ inline void ThreadSafePhoenixSingleton<T>::Destroy() {
 	pInstance_->~T();
 }
 
-// NOTE: Do not inline!
 template <typename T>
-DefaultMutex& ThreadSafePhoenixSingleton<T>::GetMutexRef() {
+CPPDEVTK_NO_INLINE DefaultMutex& ThreadSafePhoenixSingleton<T>::GetMutexRef() {
 #	if (!CPPDEVTK_COMPILER_HAVE_LOCAL_STATIC_VAR_INIT_TS)
 	return mtx_;
 #	else
