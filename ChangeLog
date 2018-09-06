@@ -7,6 +7,9 @@ Version 1.1.1.1:
 	- updated Ubuntu 16.04 to 16.04.5
 	- openSUSE Leap 15 bug #1094735 was fixed; removed workaround
 	- added CPPDEVTK_NO_INLINE and CPPDEVTK_FORCE_INLINE
+	- updated Windows JDK to 8u181
+	- updated JNI_VERSION: 1.8/1.6 on Linux (depending on distro default), 1.8 on Windows,
+	1.8 on Mac >= 10.7, 1.6 on Mac < 10.7 and 1.6 on Android
 - Fixed bugs:
 	- executor: workaround for Qt bug #6799
 	- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831

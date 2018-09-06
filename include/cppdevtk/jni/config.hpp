@@ -27,16 +27,45 @@
 #include <jni.h>
 
 
-#if (CPPDEVTK_PLATFORM_MACOSX && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7))
+#if (CPPDEVTK_PLATFORM_UNIX)
+#	if (CPPDEVTK_PLATFORM_LINUX)
+#		if (CPPDEVTK_PLATFORM_ANDROID)
+#			ifndef JNI_VERSION_1_6
+#				error "JNI >= 1.6 required"
+#			endif
+#			define CPPDEVTK_JNI_VERSION JNI_VERSION_1_6
+#		else
+#			ifndef JNI_VERSION_1_6
+#				error "JNI >= 1.6 required"
+#			endif
+#			ifdef JNI_VERSION_1_8
+#				define CPPDEVTK_JNI_VERSION JNI_VERSION_1_8
+#			else
+#				define CPPDEVTK_JNI_VERSION JNI_VERSION_1_6
+#			endif
+#		endif
+#	elif (CPPDEVTK_PLATFORM_MACOSX)
+#		if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7)
+#			ifndef JNI_VERSION_1_8
+#				error "JNI >= 1.8 required"
+#			endif
+#			define CPPDEVTK_JNI_VERSION JNI_VERSION_1_8
+#		else
+#			ifndef JNI_VERSION_1_6
+#				error "JNI >= 1.6 required"
+#			endif
+#			define CPPDEVTK_JNI_VERSION JNI_VERSION_1_6
+#		endif
+#	else
+#		error "Unsupported Unix platform!!!"
+#	endif
+#elif (CPPDEVTK_PLATFORM_WINDOWS)
 #	ifndef JNI_VERSION_1_8
 #		error "JNI >= 1.8 required"
 #	endif
 #	define CPPDEVTK_JNI_VERSION JNI_VERSION_1_8
 #else
-#	ifndef JNI_VERSION_1_6
-#		error "JNI >= 1.6 required"
-#	endif
-#	define CPPDEVTK_JNI_VERSION JNI_VERSION_1_6
+#	error "Unsupported platform!!!"
 #endif
 
 
