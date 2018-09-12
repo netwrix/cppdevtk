@@ -62,7 +62,7 @@
 // Other solutions require more typing...
 
 
-#define CPPDEVTK_EXECUTOR_TEST 1
+#define CPPDEVTK_EXECUTOR_TEST 0
 
 
 namespace cppdevtk {
