@@ -39,7 +39,10 @@ CPPDEVTK_ENABLE_QTSOLUTIONS = true
 # TODO: keep in sync with features.hpp
 unix {
 	linux* {
-		# nothing needed
+		android {
+			# ignored by Qt Creator and qmake; must be set as environment variable
+			#ANDROID_NDK_PLATFORM = android-21
+		}
 	}
 	else {
 		macx {

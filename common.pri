@@ -439,10 +439,7 @@ else {
 # Platforms
 unix {
 	linux* {
-		android {
-			# ignored by Qt Creator and qmake; must be set as environment variable
-			#ANDROID_NDK_PLATFORM = android-19
-		}
+		# nothing to do for now...
 	}
 	else {
 		macx {

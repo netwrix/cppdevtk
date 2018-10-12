@@ -168,7 +168,7 @@
 #	if (defined(__linux__) || defined(linux) || defined(__linux))
 #		define CPPDEVTK_KERNEL_VERSION KERNEL_VERSION(2, 6, 32)	// NOTE: can not be less than 2.6.32
 #		if (defined(ANDROID) || defined(__ANDROID__))
-#			define CPPDEVTK_ANDROID_API 19
+#			define CPPDEVTK_ANDROID_API 21
 #		endif
 #	elif (defined(__APPLE__) && defined(__MACH__))
 #		if (defined(__GNUC__))
