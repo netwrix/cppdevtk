@@ -15,8 +15,8 @@
 #****************************************************************************************************************************
 
 
-QT *= gui network core
 greaterThan(QT_MAJOR_VERSION, 4): QT *= widgets
+QT *= gui network core
 
 
 TEMPLATE = app

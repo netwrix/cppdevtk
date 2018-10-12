@@ -526,7 +526,11 @@ CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems) {
 		
 		if (ignoreSpecialFileSystems) {
 			if (mntEntry.mnt_type != NULL) {
-				if ((strcmp(mntEntry.mnt_type, MNTTYPE_IGNORE) == 0) || (strcmp(mntEntry.mnt_type, MNTTYPE_SWAP) == 0)) {
+				if ((strcmp(mntEntry.mnt_type, MNTTYPE_IGNORE) == 0)
+#						if (!CPPDEVTK_PLATFORM_ANDROID)
+						|| (strcmp(mntEntry.mnt_type, MNTTYPE_SWAP) == 0)
+#						endif
+						) {
 					CPPDEVTK_LOG_TRACE("skipping filesystem type: " << mntEntry.mnt_type);
 					continue;
 				}

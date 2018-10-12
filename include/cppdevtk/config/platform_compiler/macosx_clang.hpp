@@ -54,10 +54,11 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Minimum requirement: highest Xcode on Mac OS X 10.7 is 4.6.3:
-// clang: Apple LLVM version 4.2 (clang-425.0.28) (based on LLVM 3.2svn)
-#if (CPPDEVTK_CLANG_VERSION_NUM < CPPDEVTK_CLANG_VERSION_NUM_FROM_COMPONENTS(4, 2, 0))
-#	error "Apple Clang >= 4.2 required!!!"
+// Minimum requirement:
+// Qt 5.6 supports Mac OS X >= 10.8 (10.7 deployment only);
+// Mac OS X 10.8 has min Xcode 5.0 (Apple LLVM version 5.0 (clang-500.2.75) (based on LLVM 3.3svn))
+#if (CPPDEVTK_CLANG_VERSION_NUM < CPPDEVTK_CLANG_VERSION_NUM_FROM_COMPONENTS(5, 0, 0))
+#	error "Apple Clang >= 5 required!!!"
 #endif
 
 

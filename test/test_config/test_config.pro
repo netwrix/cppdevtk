@@ -16,6 +16,9 @@
 
 
 QT -= gui
+unix {
+	QT *= network
+}
 QT *= core
 
 

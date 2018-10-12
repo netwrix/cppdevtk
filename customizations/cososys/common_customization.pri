@@ -27,7 +27,7 @@ CONFIG += cppdevtk_disable_warnings
 # TODO: keep in sync with CPPDEVTK_WITH_ZLIB in config/features.hpp
 CONFIG += cppdevtk_with_zlib
 win32 {
-	CONFIG += targetxp
+	CONFIG += cppdevtk_target_xp
 }
 
 
@@ -60,9 +60,9 @@ unix {
 		}
 		else {
 			ios {
-				CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED = 80000
+				CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED = 100000
 				CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED = $${CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED}
-				CPPDEVTK_IOS_DEPLOYMENT_TARGET = 8.0
+				CPPDEVTK_IOS_DEPLOYMENT_TARGET = 10.0
 			}
 			else {
 				error("Unsupported Unix platform!!!")
@@ -72,31 +72,19 @@ unix {
 }
 else {
 	win32 {
-		CPPDEVTK_MSC_VER = $$find(QMAKE_COMPILER_DEFINES, _MSC_VER=.*)
-		CPPDEVTK_MSC_VER = $$replace(CPPDEVTK_MSC_VER, "_MSC_VER=", "")
-		isEmpty(CPPDEVTK_MSC_VER) {
-			error("Qt must set _MSC_VER in QMAKE_COMPILER_DEFINES")
-		}
-		if(isEqual(CPPDEVTK_MSC_VER, "1700")|greaterThan(CPPDEVTK_MSC_VER, 1700)):!contains(DEFINES, _USING_V110_SDK71_) {
-			!targetxp {
-				CPPDEVTK_WIN32_WINNT = 0x0600
-				CPPDEVTK_NTDDI_VERSION = 0x06000400
-				CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
-				CPPDEVTK_WIN32_IE = 0x0700
-			}
-			else {
-				DEFINES += _USING_V110_SDK71_
-				CPPDEVTK_WIN32_WINNT = 0x0501
-				CPPDEVTK_NTDDI_VERSION = 0x05010300
-				CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
-				CPPDEVTK_WIN32_IE = 0x0603
-			}
-		}
-		else {
+		cppdevtk_target_xp {
+			# Win XP SP3
 			CPPDEVTK_WIN32_WINNT = 0x0501
 			CPPDEVTK_NTDDI_VERSION = 0x05010300
 			CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
 			CPPDEVTK_WIN32_IE = 0x0603
+		}
+		else {
+			# Win Vista SP2
+			CPPDEVTK_WIN32_WINNT = 0x0600
+			CPPDEVTK_NTDDI_VERSION = 0x06000200
+			CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
+			CPPDEVTK_WIN32_IE = 0x0700
 		}
 	}
 	else {

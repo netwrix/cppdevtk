@@ -16,8 +16,7 @@
 
 
 QT -= gui
-QT *= core
-QT *= network
+QT *= network core
 
 
 TEMPLATE = app

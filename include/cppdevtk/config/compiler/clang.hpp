@@ -43,10 +43,10 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Minimum requirement: Clang 3.2
+// Minimum requirement: Clang 3.3
 #ifndef __apple_build_version__	// Apple Clang is handled in macosx_clang.hpp
-#	if (CPPDEVTK_CLANG_VERSION_NUM < CPPDEVTK_CLANG_VERSION_NUM_FROM_COMPONENTS(3, 2, 0))
-#		error "Clang >= 3.2 required!!!"
+#	if (CPPDEVTK_CLANG_VERSION_NUM < CPPDEVTK_CLANG_VERSION_NUM_FROM_COMPONENTS(3, 3, 0))
+#		error "Clang >= 3.3 required!!!"
 #	endif
 #endif
 

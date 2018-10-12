@@ -181,24 +181,12 @@ else {
 }
 
 
-# safety checks
-
-ios {
-	!iphonesimulator:!iphoneos {
-		error("both iphonesimulator and iphoneos missing!!!")
-	}
-}
-
-build_pass {
-	!debug_and_release:!static_and_shared:!iphonesimulator_and_iphoneos {
-		error("build_pass and !debug_and_release:!static_and_shared:!iphonesimulator_and_iphoneos!!!")
-	}
-}
-
-
 #****************************************************************************************************************************
 # Compilers
 # TODO: investigate how "QMAKE_LFLAGS_RELEASE *= -s" affect stack trace
+
+# enable extensions
+CONFIG -= strict_c++
 
 *g++* {
 	# Minimum requirement: GCC 4.0.1
@@ -210,64 +198,16 @@ build_pass {
 	}
 	
 	# enable C++11
-	# C++11 support was introduced in 4.3.0 and >= 6.1.0 (first 6.x.x) use C++14 by default
-	lessThan(QT_GCC_MAJOR_VERSION, 6) {
-		greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
-			!c++11:!c++14:!c++1z {
-				!contains(QMAKE_CXXFLAGS, -std=c++0x):!contains(QMAKE_CXXFLAGS, -std=gnu++0x):!contains(QMAKE_CXXFLAGS, -std=c++11):!contains(QMAKE_CXXFLAGS, -std=gnu++11) {
-					!contains(QMAKE_CXXFLAGS, -std=c++1y):!contains(QMAKE_CXXFLAGS, -std=gnu++1y):!contains(QMAKE_CXXFLAGS, -std=c++14):!contains(QMAKE_CXXFLAGS, -std=gnu++14) {
-						!contains(QMAKE_CXXFLAGS, -std=c++1z):!contains(QMAKE_CXXFLAGS, -std=gnu++1z):!contains(QMAKE_CXXFLAGS, -std=c++17):!contains(QMAKE_CXXFLAGS, -std=gnu++17) {
-							# g++ 4.3 - 4.6 use -std=c++0x or -std=gnu++0x
-							# g++ >= 4.7.0 use -std=c++11 or -std=gnu++11
-							greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 6) {
-								QMAKE_CXXFLAGS += -std=gnu++11
-							}
-							else {
-								QMAKE_CXXFLAGS += -std=gnu++0x
-							}
-						}
-					}
-				}
+	!c++11:!c++14:!c++1z {
+		# C++11 support was introduced in 4.3.0 and >= 6.1.0 (first 6.x.x) use C++14 by default
+		lessThan(QT_GCC_MAJOR_VERSION, 6) {
+			greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
+				# NOTE:
+				# g++ 4.3 - 4.6 use -std=c++0x or -std=gnu++0x
+				# g++ >= 4.7.0 use -std=c++11 or -std=gnu++11
+				CONFIG += c++11
 			}
 		}
-	}
-	
-	# enable extensions
-	contains(QMAKE_CXXFLAGS, -std=c++98) {
-		QMAKE_CXXFLAGS -= -std=c++98
-		QMAKE_CXXFLAGS += -std=gnu++98
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++03) {
-		QMAKE_CXXFLAGS -= -std=c++03
-		QMAKE_CXXFLAGS += -std=gnu++03
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++0x) {
-		QMAKE_CXXFLAGS -= -std=c++0x
-		QMAKE_CXXFLAGS += -std=gnu++0x
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++11) {
-		QMAKE_CXXFLAGS -= -std=c++11
-		QMAKE_CXXFLAGS += -std=gnu++11
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++1y) {
-		QMAKE_CXXFLAGS -= -std=c++1y
-		QMAKE_CXXFLAGS += -std=gnu++1y
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++14) {
-		QMAKE_CXXFLAGS -= -std=c++14
-		QMAKE_CXXFLAGS += -std=gnu++14
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++1z) {
-		QMAKE_CXXFLAGS -= -std=c++1z
-		QMAKE_CXXFLAGS += -std=gnu++1z
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++17) {
-		QMAKE_CXXFLAGS -= -std=c++17
-		QMAKE_CXXFLAGS += -std=gnu++17
-	}
-	contains(QMAKE_CXXFLAGS, -std=c++2a) {
-		QMAKE_CXXFLAGS -= -std=c++2a
-		QMAKE_CXXFLAGS += -std=gnu++2a
 	}
 	
 	# safety checks
@@ -290,17 +230,18 @@ build_pass {
 	QMAKE_CFLAGS_DEBUG *= -O0 -g3
 	QMAKE_CXXFLAGS_DEBUG *= -O0 -g3
 	
-	QMAKE_CFLAGS_RELEASE *= -fno-inline-functions
-	QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions
+	# inline only marked
+	#QMAKE_CFLAGS_RELEASE *= -fno-inline-functions
+	#QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions
 	# fno-inline-small-functions: gcc 4.3.0
 	greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 2) {
-		QMAKE_CFLAGS_RELEASE *= -fno-inline-small-functions
-		QMAKE_CXXFLAGS_RELEASE *= -fno-inline-small-functions
+		#QMAKE_CFLAGS_RELEASE *= -fno-inline-small-functions
+		#QMAKE_CXXFLAGS_RELEASE *= -fno-inline-small-functions
 	}
 	# fno-inline-functions-called-once: gcc 4.0.2
 	greaterThan(QT_GCC_MAJOR_VERSION, 4)|greaterThan(QT_GCC_MINOR_VERSION, 0)|greaterThan(QT_GCC_PATCH_VERSION, 1) {
-		QMAKE_CFLAGS_RELEASE *= -fno-inline-functions-called-once
-		QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions-called-once
+		#QMAKE_CFLAGS_RELEASE *= -fno-inline-functions-called-once
+		#QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions-called-once
 	}
 	
 	# visibility hidden: gcc 4
@@ -321,70 +262,20 @@ build_pass {
 	
 	QMAKE_LFLAGS *= -rdynamic
 	
-	!sensitivityio_enable_debuginfo_in_release {
+	!cppdevtk_enable_debuginfo_in_release {
 		QMAKE_LFLAGS_RELEASE *= -s
 	}
 }
 else {
 	*clang* {
-		# Minimum requirement: Clang 3.2
-		# TODO: investigate why test does not work
-		lessThan(QT_CLANG_MAJOR_VERSION, 3) {
-			#error("Clang >= 3.2 required!!!")
-		}
-		isEqual(QT_CLANG_MAJOR_VERSION, "3"):lessThan(QT_CLANG_MINOR_VERSION, 2) {
-			#error("Clang >= 3.2 required!!!")
+		# Qt 5.6 supports Mac OS X >= 10.8 (10.7 deployment only);
+		# Mac OS X 10.8 has min Xcode 5.0 (Apple LLVM version 5.0 (clang-500.2.75) (based on LLVM 3.3svn))
+		lessThan(QT_APPLE_CLANG_MAJOR_VERSION, 5) {
+			error("Xcode >= 5.0 (Clang >= 3.3) required!!!")
 		}
 		
-		# enable C++11
-		# By default, Clang builds C++ code according to the C++98 standard, with many C++11 features accepted as extensions.
-		# Default XCode generated project enable C++11.
 		!c++11:!c++14:!c++1z {
-			!contains(QMAKE_CXXFLAGS, -std=c++0x):!contains(QMAKE_CXXFLAGS, -std=gnu++0x):!contains(QMAKE_CXXFLAGS, -std=c++11):!contains(QMAKE_CXXFLAGS, -std=gnu++11) {
-				!contains(QMAKE_CXXFLAGS, -std=c++1y):!contains(QMAKE_CXXFLAGS, -std=gnu++1y):!contains(QMAKE_CXXFLAGS, -std=c++14):!contains(QMAKE_CXXFLAGS, -std=gnu++14) {
-					!contains(QMAKE_CXXFLAGS, -std=c++1z):!contains(QMAKE_CXXFLAGS, -std=gnu++1z):!contains(QMAKE_CXXFLAGS, -std=c++17):!contains(QMAKE_CXXFLAGS, -std=gnu++17) {
-						QMAKE_CXXFLAGS += -std=gnu++11
-					}
-				}
-			}
-		}
-		
-		# enable extensions
-		contains(QMAKE_CXXFLAGS, -std=c++98) {
-			QMAKE_CXXFLAGS -= -std=c++98
-			QMAKE_CXXFLAGS += -std=gnu++98
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++03) {
-			QMAKE_CXXFLAGS -= -std=c++03
-			QMAKE_CXXFLAGS += -std=gnu++03
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++0x) {
-			QMAKE_CXXFLAGS -= -std=c++0x
-			QMAKE_CXXFLAGS += -std=gnu++0x
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++11) {
-			QMAKE_CXXFLAGS -= -std=c++11
-			QMAKE_CXXFLAGS += -std=gnu++11
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++1y) {
-			QMAKE_CXXFLAGS -= -std=c++1y
-			QMAKE_CXXFLAGS += -std=gnu++1y
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++14) {
-			QMAKE_CXXFLAGS -= -std=c++14
-			QMAKE_CXXFLAGS += -std=gnu++14
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++1z) {
-			QMAKE_CXXFLAGS -= -std=c++1z
-			QMAKE_CXXFLAGS += -std=gnu++1z
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++17) {
-			QMAKE_CXXFLAGS -= -std=c++17
-			QMAKE_CXXFLAGS += -std=gnu++17
-		}
-		contains(QMAKE_CXXFLAGS, -std=c++2a) {
-			QMAKE_CXXFLAGS -= -std=c++2a
-			QMAKE_CXXFLAGS += -std=gnu++2a
+			CONFIG += c++11
 		}
 		
 		# safety checks
@@ -410,6 +301,7 @@ else {
 		QMAKE_CFLAGS_DEBUG *= -O0 -g3
 		QMAKE_CXXFLAGS_DEBUG *= -O0 -g3
 		
+		# inline only marked
 		#QMAKE_CFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
 		#QMAKE_CXXFLAGS_RELEASE *= -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
 		
@@ -431,7 +323,7 @@ else {
 		QMAKE_LFLAGS *= -stdlib=libc++
 		QMAKE_LFLAGS *= -rdynamic
 		
-		!sensitivityio_enable_debuginfo_in_release {
+		!cppdevtk_enable_debuginfo_in_release {
 			#QMAKE_LFLAGS_RELEASE *= -s
 		}
 	}
@@ -521,8 +413,9 @@ else {
 				}
 			}
 			
-			QMAKE_CFLAGS_RELEASE *= -Ob1
-			QMAKE_CXXFLAGS_RELEASE *= -Ob1
+			# inline only marked
+			#QMAKE_CFLAGS_RELEASE *= -Ob1
+			#QMAKE_CXXFLAGS_RELEASE *= -Ob1
 			
 			QMAKE_CFLAGS_DEBUG *= -Zi
 			QMAKE_CXXFLAGS_DEBUG *= -Zi
@@ -548,7 +441,7 @@ unix {
 	linux* {
 		android {
 			# ignored by Qt Creator and qmake; must be set as environment variable
-			#ANDROID_NDK_PLATFORM = android-17
+			#ANDROID_NDK_PLATFORM = android-19
 		}
 	}
 	else {
@@ -658,14 +551,7 @@ unix {
 			}
 			else {
 				*clang* {
-					# Minimum requirement: highest Xcode on Mac OS X 10.7 is 4.6.3:
-					# clang: Apple LLVM version 4.2 (clang-425.0.28) (based on LLVM 3.2svn)
-					lessThan(QT_APPLE_CLANG_MAJOR_VERSION, 4) {
-						error("Apple Clang >= 4.2 required!!!")
-					}
-					isEqual(QT_APPLE_CLANG_MAJOR_VERSION, "4"):lessThan(QT_APPLE_CLANG_MINOR_VERSION, 2) {
-						error("Apple Clang >= 4.2 required!!!")
-					}
+					# nothing to do for now...
 				}
 				else {
 					error("Unsupported compiler for Mac OS X platform!!!")
@@ -675,15 +561,6 @@ unix {
 		else {
 			ios {
 				*clang* {
-					# Minimum requirement: highest Xcode on Mac OS X 10.7 is 4.6.3:
-					# clang: Apple LLVM version 4.2 (clang-425.0.28) (based on LLVM 3.2svn)
-					lessThan(QT_APPLE_CLANG_MAJOR_VERSION, 4) {
-						error("Apple Clang >= 4.2 required!!!")
-					}
-					isEqual(QT_APPLE_CLANG_MAJOR_VERSION, "4"):lessThan(QT_APPLE_CLANG_MINOR_VERSION, 2) {
-						error("Apple Clang >= 4.2 required!!!")
-					}
-					
 					CONFIG(iphonesimulator, iphonesimulator|iphoneos) {
 						QMAKE_CFLAGS *= -fembed-bitcode-marker
 						QMAKE_CXXFLAGS *= -fembed-bitcode-marker
@@ -706,22 +583,25 @@ unix {
 else {
 	win32 {
 		*msvc* {
-			CPPDEVTK_MSC_VER = $$find(QMAKE_COMPILER_DEFINES, _MSC_VER=.*)
-			CPPDEVTK_MSC_VER = $$replace(CPPDEVTK_MSC_VER, "_MSC_VER=", "")
-			isEmpty(CPPDEVTK_MSC_VER) {
-				error("Qt must set _MSC_VER in QMAKE_COMPILER_DEFINES")
-			}
-			if(isEqual(CPPDEVTK_MSC_VER, "1700")|greaterThan(CPPDEVTK_MSC_VER, 1700)):contains(DEFINES, _USING_V110_SDK71_) {
-				INCLUDEPATH = "C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Include" $${INCLUDEPATH}
-				isEqual(QMAKE_TARGET.arch, "x86_64") {
-					QMAKE_LFLAGS_WINDOWS *= /SUBSYSTEM:WINDOWS,5.02
-					QMAKE_LFLAGS_CONSOLE *= /SUBSYSTEM:CONSOLE,5.02
-					LIBS = -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib/x64" $${LIBS}
+			cppdevtk_target_xp {
+				CPPDEVTK_MSC_VER = $$find(QMAKE_COMPILER_DEFINES, _MSC_VER=.*)
+				CPPDEVTK_MSC_VER = $$replace(CPPDEVTK_MSC_VER, "_MSC_VER=", "")
+				isEmpty(CPPDEVTK_MSC_VER) {
+					error("Qt must set _MSC_VER in QMAKE_COMPILER_DEFINES")
 				}
-				else {
-					QMAKE_LFLAGS_WINDOWS *= /SUBSYSTEM:WINDOWS,5.01
-					QMAKE_LFLAGS_CONSOLE *= /SUBSYSTEM:CONSOLE,5.01
-					LIBS = -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" $${LIBS}
+				isEqual(CPPDEVTK_MSC_VER, "1700")|greaterThan(CPPDEVTK_MSC_VER, 1700) {
+					DEFINES *= _USING_V110_SDK71_
+					INCLUDEPATH = "C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Include" $${INCLUDEPATH}
+					isEqual(QMAKE_TARGET.arch, "x86_64") {
+						QMAKE_LFLAGS_WINDOWS *= /SUBSYSTEM:WINDOWS,5.02
+						QMAKE_LFLAGS_CONSOLE *= /SUBSYSTEM:CONSOLE,5.02
+						LIBS = -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib/x64" $${LIBS}
+					}
+					else {
+						QMAKE_LFLAGS_WINDOWS *= /SUBSYSTEM:WINDOWS,5.01
+						QMAKE_LFLAGS_CONSOLE *= /SUBSYSTEM:CONSOLE,5.01
+						LIBS = -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" $${LIBS}
+					}
 				}
 			}
 		}
@@ -810,14 +690,6 @@ greaterThan(QT_MAJOR_VERSION, 4): DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0
 				TARGET = $${qtLibraryTarget($${TARGET})}
 			}
 			message($${_PRO_FILE_}: TARGET: $${TARGET})
-		}
-	}
-}
-
-unix {
-	android|ios {
-		lessThan(QT_MAJOR_VERSION, 5) {
-			error("Android and iOS require Qt >= 5")
 		}
 	}
 }

@@ -15,8 +15,12 @@
 #****************************************************************************************************************************
 
 
-QT *= gui core
 greaterThan(QT_MAJOR_VERSION, 4): QT *= widgets
+QT *= gui
+unix {
+	QT *= network
+}
+QT *= core
 
 
 TEMPLATE = app
