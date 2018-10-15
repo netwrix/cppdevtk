@@ -54,7 +54,7 @@
 // Evaluate expr, and repeat as long as it returns -1 with errno set to EINTR.
 // Please see The GNU C Library: Interrupted Primitives, TEMP_FAILURE_RETRY(expression)
 // http://www.gnu.org/software/libc/manual/html_node/Interrupted-Primitives.html
-#if (!defined(TEMP_FAILURE_RETRY))
+#ifndef TEMP_FAILURE_RETRY
 #	define TEMP_FAILURE_RETRY(expr)	\
 		(	\
 			__extension__	\

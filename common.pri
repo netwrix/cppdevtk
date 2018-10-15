@@ -210,6 +210,44 @@ CONFIG -= strict_c++
 		}
 	}
 	
+	# enable extensions
+	contains(QMAKE_CXXFLAGS, -std=c++98) {
+		QMAKE_CXXFLAGS -= -std=c++98
+		QMAKE_CXXFLAGS += -std=gnu++98
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++03) {
+		QMAKE_CXXFLAGS -= -std=c++03
+		QMAKE_CXXFLAGS += -std=gnu++03
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++0x) {
+		QMAKE_CXXFLAGS -= -std=c++0x
+		QMAKE_CXXFLAGS += -std=gnu++0x
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++11) {
+		QMAKE_CXXFLAGS -= -std=c++11
+		QMAKE_CXXFLAGS += -std=gnu++11
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++1y) {
+		QMAKE_CXXFLAGS -= -std=c++1y
+		QMAKE_CXXFLAGS += -std=gnu++1y
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++14) {
+		QMAKE_CXXFLAGS -= -std=c++14
+		QMAKE_CXXFLAGS += -std=gnu++14
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++1z) {
+		QMAKE_CXXFLAGS -= -std=c++1z
+		QMAKE_CXXFLAGS += -std=gnu++1z
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++17) {
+		QMAKE_CXXFLAGS -= -std=c++17
+		QMAKE_CXXFLAGS += -std=gnu++17
+	}
+	contains(QMAKE_CXXFLAGS, -std=c++2a) {
+		QMAKE_CXXFLAGS -= -std=c++2a
+		QMAKE_CXXFLAGS += -std=gnu++2a
+	}
+	
 	# safety checks
 	contains(QMAKE_CXXFLAGS, -fno-rtti) {
 		error("RTTI must be enabled")
@@ -276,6 +314,44 @@ else {
 		
 		!c++11:!c++14:!c++1z {
 			CONFIG += c++11
+		}
+		
+		# enable extensions
+		contains(QMAKE_CXXFLAGS, -std=c++98) {
+			QMAKE_CXXFLAGS -= -std=c++98
+			QMAKE_CXXFLAGS += -std=gnu++98
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++03) {
+			QMAKE_CXXFLAGS -= -std=c++03
+			QMAKE_CXXFLAGS += -std=gnu++03
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++0x) {
+			QMAKE_CXXFLAGS -= -std=c++0x
+			QMAKE_CXXFLAGS += -std=gnu++0x
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++11) {
+			QMAKE_CXXFLAGS -= -std=c++11
+			QMAKE_CXXFLAGS += -std=gnu++11
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++1y) {
+			QMAKE_CXXFLAGS -= -std=c++1y
+			QMAKE_CXXFLAGS += -std=gnu++1y
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++14) {
+			QMAKE_CXXFLAGS -= -std=c++14
+			QMAKE_CXXFLAGS += -std=gnu++14
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++1z) {
+			QMAKE_CXXFLAGS -= -std=c++1z
+			QMAKE_CXXFLAGS += -std=gnu++1z
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++17) {
+			QMAKE_CXXFLAGS -= -std=c++17
+			QMAKE_CXXFLAGS += -std=gnu++17
+		}
+		contains(QMAKE_CXXFLAGS, -std=c++2a) {
+			QMAKE_CXXFLAGS -= -std=c++2a
+			QMAKE_CXXFLAGS += -std=gnu++2a
 		}
 		
 		# safety checks
