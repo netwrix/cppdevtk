@@ -164,7 +164,12 @@ protected:
 	void ReportResult(const TResult& result);
 	
 #	if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
-	QtPrivate::ResultStore<TResult>& ResultStore();
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	QtPrivate
+#	else
+	QtConcurrent
+#	endif
+	::ResultStore<TResult>& ResultStore();
 #	endif
 };
 
@@ -450,7 +455,12 @@ void StartAndRunCancelableTask<TResult>::ReportResult(const TResult& result) {
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
 	QtPrivate::ResultStoreBase& store = this->resultStoreBase();
 #	else
-	QtPrivate::ResultStore<TResult>& store = this->ResultStore();
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	QtPrivate
+#	else
+	QtConcurrent
+#	endif
+	::ResultStore<TResult>& store = this->ResultStore();
 #	endif
 	
 	if (store.filterMode()) {
@@ -477,8 +487,20 @@ void StartAndRunCancelableTask<TResult>::ReportResult(const TResult& result) {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
 
 template <typename TResult>
-inline QtPrivate::ResultStore<TResult>& StartAndRunCancelableTask<TResult>::ResultStore() {
-	return static_cast<QtPrivate::ResultStore<TResult>&>(this->resultStoreBase());
+inline
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+QtPrivate
+#else
+QtConcurrent
+#endif
+::ResultStore<TResult>& StartAndRunCancelableTask<TResult>::ResultStore() {
+	return static_cast<
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			QtPrivate
+#			else
+			QtConcurrent
+#			endif
+			::ResultStore<TResult>&>(this->resultStoreBase());
 }
 
 #endif
