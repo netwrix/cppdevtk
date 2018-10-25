@@ -64,11 +64,9 @@ unix {
 # TARGET + INSTALLS
 
 cppdevtk_enable_target_suffix_qt_major_version {
-	CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET}_qt$${QT_MAJOR_VERSION})}
+	CPPDEVTK_BASE_TARGET = $${CPPDEVTK_BASE_TARGET}_qt$${QT_MAJOR_VERSION}
 }
-else {
-	CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET})}
-}
+CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET})}
 
 target.path = $${CPPDEVTK_LIB_DIR}
 INSTALLS += target

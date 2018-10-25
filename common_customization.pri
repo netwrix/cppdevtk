@@ -22,7 +22,7 @@ CPPDEVTK_PACKAGE_NAME = cppdevtk
 CONFIG += cppdevtk_verbose
 CONFIG += cppdevtk_enable_debuginfo_in_release
 #CONFIG += cppdevtk_enable_target_suffix_qt_major_version
-#CONFIG += cppdevtk_enable_app_target_debug_suffix
+CONFIG += cppdevtk_enable_app_target_debug_suffix
 CONFIG += cppdevtk_disable_warnings
 # TODO: keep in sync with CPPDEVTK_WITH_ZLIB in config/features.hpp
 CONFIG += cppdevtk_with_zlib

@@ -735,37 +735,18 @@ QMAKE_PROJECT_DEPTH = 0
 greaterThan(QT_MAJOR_VERSION, 4): DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0
 
 # TARGET
-!isEmpty(TEMPLATE) {
-	isEqual(TEMPLATE, "app") {
-		cppdevtk_enable_app_target_debug_suffix {
-			TEMPLATE += cppdevtkphonylib
-			cppdevtk_enable_target_suffix_qt_major_version {
-				TARGET = $${qtLibraryTarget($${TARGET}_qt$${QT_MAJOR_VERSION})}
-			}
-			else {
-				TARGET = $${qtLibraryTarget($${TARGET})}
-			}
-			TEMPLATE -= cppdevtkphonylib
-		}
-		else {
-			cppdevtk_enable_target_suffix_qt_major_version {
-				TARGET = $${TARGET}_qt$${QT_MAJOR_VERSION}
-			}
-		}
-		message($${_PRO_FILE_}: TARGET: $${TARGET})
-	}
-	else {
-		isEqual(TEMPLATE, "lib") {
-			cppdevtk_enable_target_suffix_qt_major_version {
-				TARGET = $${qtLibraryTarget($${TARGET}_qt$${QT_MAJOR_VERSION})}
-			}
-			else {
-				TARGET = $${qtLibraryTarget($${TARGET})}
-			}
-			message($${_PRO_FILE_}: TARGET: $${TARGET})
-		}
-	}
+cppdevtk_enable_target_suffix_qt_major_version {
+	TARGET = $${TARGET}_qt$${QT_MAJOR_VERSION}
 }
+isEmpty(TEMPLATE) {
+	error("TEMPLATE is empty!!!")
+}
+if(isEqual(TEMPLATE, "app"):cppdevtk_enable_app_target_debug_suffix)|isEqual(TEMPLATE, "lib") {
+	TEMPLATE += cppdevtkphonylib
+	TARGET = $${qtLibraryTarget($${TARGET})}
+	TEMPLATE -= cppdevtkphonylib
+}
+message($${_PRO_FILE_}: TARGET: $${TARGET})
 
 
 #****************************************************************************************************************************
