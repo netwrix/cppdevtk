@@ -167,8 +167,10 @@
 #include <AvailabilityMacros.h>
 
 
-#ifndef MAC_OS_X_VERSION_10_4
-#	error "Mac OS X < 10.4 is unsupported!!!"
+#if (CPPDEVTK_COMPILER_GCC)
+#	ifndef MAC_OS_X_VERSION_10_4
+#		error "Mac OS X < 10.4 is unsupported!!!"
+#	endif
 #endif
 #ifndef MAC_OS_X_VERSION_10_5
 #	define MAC_OS_X_VERSION_10_5 1050
@@ -176,8 +178,14 @@
 #ifndef MAC_OS_X_VERSION_10_6
 #	define MAC_OS_X_VERSION_10_6 1060
 #endif
-#ifndef MAC_OS_X_VERSION_10_7
-#	define MAC_OS_X_VERSION_10_7 1070
+#if (CPPDEVTK_COMPILER_CLANG)
+#	ifndef MAC_OS_X_VERSION_10_7
+#		error "Mac OS X < 10.7 is unsupported!!!"
+#	endif
+#else
+#	ifndef MAC_OS_X_VERSION_10_7
+#		define MAC_OS_X_VERSION_10_7 1070
+#	endif
 #endif
 #ifndef MAC_OS_X_VERSION_10_8
 #	define MAC_OS_X_VERSION_10_8 1080
@@ -221,24 +229,24 @@
 #ifndef MAC_OS_X_VERSION_10_13
 #	define MAC_OS_X_VERSION_10_13 101300
 #endif
+#ifndef MAC_OS_X_VERSION_10_13_1
+#	define MAC_OS_X_VERSION_10_13_1 101301
+#endif
+#ifndef MAC_OS_X_VERSION_10_13_2
+#	define MAC_OS_X_VERSION_10_13_2 101302
+#endif
+#ifndef MAC_OS_X_VERSION_10_13_4
+#	define MAC_OS_X_VERSION_10_13_4 101304
+#endif
+#ifndef MAC_OS_X_VERSION_10_14
+#	define MAC_OS_X_VERSION_10_14 101400
+#endif
 // TODO: keep updated
 
 
 #if (CPPDEVTK_PLATFORM_IOS)
 #	ifndef __IPHONE_8_0
 #		error "iOS < 8.0 is unsupported!!!"
-#	endif
-#	ifndef __IPHONE_6_1
-#		define __IPHONE_6_1 60100
-#	endif
-#	ifndef __IPHONE_7_0
-#		define __IPHONE_7_0 70000
-#	endif
-#	ifndef __IPHONE_7_1
-#		define __IPHONE_7_1 70100
-#	endif
-#	ifndef __IPHONE_8_0
-#		define __IPHONE_8_0 80000
 #	endif
 #	ifndef __IPHONE_8_1
 #		define __IPHONE_8_1 80100
@@ -278,6 +286,21 @@
 #	endif
 #	ifndef __IPHONE_11_0
 #		define __IPHONE_11_0 110000
+#	endif
+#	ifndef __IPHONE_11_1
+#		define __IPHONE_11_1 110100
+#	endif
+#	ifndef __IPHONE_11_2
+#		define __IPHONE_11_2 110200
+#	endif
+#	ifndef __IPHONE_11_3
+#		define __IPHONE_11_3 110300
+#	endif
+#	ifndef __IPHONE_11_4
+#		define __IPHONE_11_4 110400
+#	endif
+#	ifndef __IPHONE_12_0
+#		define __IPHONE_12_0 120000
 #	endif
 	// TODO: keep updated
 #endif
