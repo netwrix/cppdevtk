@@ -32,9 +32,6 @@
 %define rpathdir %{_prefix}/lib
 %endif
 %define _datadir /usr/share
-%if (0%{?centos} || 0%{?rhel})
-%define _defaultdocdir %{_datadir}/doc
-%endif
 %define _sysconfdir /etc
 %define debug_build 0
 %define debug_package %{nil}
@@ -721,14 +718,10 @@ make %{_smp_mflags}
 
 %install
 %make_install
-%if (0%{?suse_version})
+
 %__install -m 755 -d %{buildroot}/%{_defaultdocdir}/%{name}-devel
 %__install -m 644 -t %{buildroot}/%{_defaultdocdir}/%{name}-devel %{_builddir}/%{name}-%{version}/doc/*
-%endif
-%if (0%{?centos} || 0%{?rhel})
-%__install -m 755 -d %{buildroot}/%{_datadir}/doc/%{name}-devel
-%__install -m 644 -t %{buildroot}/%{_datadir}/doc/%{name}-devel %{_builddir}/%{name}-%{version}/doc/*
-%endif
+
 
 
 %clean
