@@ -42,7 +42,7 @@
 %define centos_minor_ver 10
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-%define centos_minor_ver 5
+%define centos_minor_ver 6
 %endif
 %endif
 

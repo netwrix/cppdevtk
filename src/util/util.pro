@@ -282,6 +282,10 @@ isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
 		service_controller.cpp
 }
 
+greaterThan(QT_MAJOR_VERSION, 4) {
+	SOURCES += mime_database.cpp
+}
+
 
 HEADERS += \
 	../../include/cppdevtk/util/config.hpp \
@@ -348,4 +352,8 @@ isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
 		../../include/cppdevtk/util/service.hpp	\
 		../../include/cppdevtk/util/service_base.hpp	\
 		../../include/cppdevtk/util/service_controller.hpp
+}
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+	HEADERS += ../../include/cppdevtk/util/mime_database.hpp
 }

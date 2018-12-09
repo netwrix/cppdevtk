@@ -52,9 +52,15 @@
 
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
-#	define CPPDEVTK_Q_DEBUG qDebug().nospace().noquote
+#	define CPPDEVTK_Q_DEBUG() qDebug().nospace().noquote()
+#	define CPPDEVTK_Q_INFO() qInfo().nospace().noquote()
+#	define CPPDEVTK_Q_WARN() qWarning().nospace().noquote()
+#	define CPPDEVTK_Q_ERROR() qCritical().nospace().noquote()
 #else
-#	define CPPDEVTK_Q_DEBUG qDebug().nospace
+#	define CPPDEVTK_Q_DEBUG() qDebug().nospace()
+#	define CPPDEVTK_Q_INFO() qInfo().nospace()
+#	define CPPDEVTK_Q_WARN() qWarning().nospace()
+#	define CPPDEVTK_Q_ERROR() qCritical().nospace()
 #endif
 
 
@@ -75,21 +81,23 @@
 					switch (logLevel) {	\
 						case ::cppdevtk::base::llTrace:	\
 						case ::cppdevtk::base::llDebug:	\
-						case ::cppdevtk::base::llInfo:	\
 							CPPDEVTK_Q_DEBUG() << logEntry;	\
 							break;	\
+						case ::cppdevtk::base::llInfo:	\
+							CPPDEVTK_Q_INFO() << logEntry;	\
+							break;	\
 						case ::cppdevtk::base::llWarn:	\
-							qWarning() << logEntry;	\
+							CPPDEVTK_Q_WARN() << logEntry;	\
 							break;	\
 						case ::cppdevtk::base::llError:	\
-							qCritical() << logEntry;	\
+							CPPDEVTK_Q_ERROR() << logEntry;	\
 							break;	\
 						case ::cppdevtk::base::llFatal:	\
 							/* qFatal(::cppdevtk::base::Q2A(logEntry).c_str()); */	\
-							qCritical() << logEntry;	\
+							CPPDEVTK_Q_ERROR() << logEntry;	\
 							break;	\
 						default:	\
-							qFatal("invalid log level!!!");	\
+							qFatal("UB: invalid log level enum value!!!");	\
 							break;	\
 					}	\
 				}	\

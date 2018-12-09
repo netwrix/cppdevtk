@@ -1,10 +1,12 @@
 Version 1.1.1.1:
 - Release date:
 - New features:
+	- added MimeDatabase
 - Improvements:
 	- executor: improved cancellation
 	- updated Ubuntu 18.04 to 18.04.1
 	- updated Ubuntu 16.04 to 16.04.5
+	- updated CentOS 7 to 7.6
 	- openSUSE Leap 15 bug #1094735 was fixed; removed workaround
 	- added CPPDEVTK_NO_INLINE and CPPDEVTK_FORCE_INLINE
 	- updated JNI_VERSION: 1.8/1.6 on Linux (depending on distro default), 1.8 on Windows,

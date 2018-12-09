@@ -93,6 +93,10 @@ isEqual(CPPDEVTK_ENABLE_QTSOLUTIONS, "true") {
 		service_controller.hpp
 }
 
+greaterThan(QT_MAJOR_VERSION, 4) {
+	HEADERS += mime_database.hpp
+}
+
 
 headers.files = $${HEADERS}
 headers.path = $${CPPDEVTK_INCLUDE_DIR}/util
