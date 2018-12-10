@@ -124,7 +124,7 @@
 			CPPDEVTK_ASSERT((expr) && "precondition failure")
 		
 #		define CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("precondition failure: " msg))
+			CPPDEVTK_ASSERT((expr) && ("precondition failure: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
@@ -132,7 +132,7 @@
 		CPPDEVTK_ASSERT((expr) && "precondition failure")
 	
 #	define CPPDEVTK_DBC_CHECK_PRECONDITION_W_MSG(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("precondition failure: " msg))
+		CPPDEVTK_ASSERT((expr) && ("precondition failure: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_PRECONDITION(expr)	\
 		((void)0)
@@ -167,7 +167,7 @@
 			CPPDEVTK_ASSERT((expr) && "postcondition failure")
 		
 #		define CPPDEVTK_DBC_CHECK_POSTCONDITION_W_MSG(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("postcondition failure: " msg))
+			CPPDEVTK_ASSERT((expr) && ("postcondition failure: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
@@ -175,7 +175,7 @@
 		CPPDEVTK_ASSERT((expr) && "postcondition failure")
 	
 #	define CPPDEVTK_DBC_CHECK_POSTCONDITION_W_MSG(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("postcondition failure: " msg))
+		CPPDEVTK_ASSERT((expr) && ("postcondition failure: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_POSTCONDITION(expr)	\
 		((void)0)
@@ -210,7 +210,7 @@
 			CPPDEVTK_ASSERT((expr) && "invariant failure")
 		
 #		define CPPDEVTK_DBC_CHECK_INVARIANT_W_MSG(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("invariant failure: " msg))
+			CPPDEVTK_ASSERT((expr) && ("invariant failure: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
@@ -218,7 +218,7 @@
 		CPPDEVTK_ASSERT((expr) && "invariant failure")
 	
 #	define CPPDEVTK_DBC_CHECK_INVARIANT_W_MSG(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("invariant failure: " msg))
+		CPPDEVTK_ASSERT((expr) && ("invariant failure: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_INVARIANT(expr)	\
 		((void)0)
@@ -242,13 +242,13 @@
 #	else
 #		define CPPDEVTK_DBC_CHECK_STATE(expr, expectedState, actualState)	\
 			CPPDEVTK_ASSERT((expr) && ("Invalid state for requested operation:"	\
-			" expectedState: " expectedState "; actualState: " actualState "; requestedOperation: " CPPDEVTK_FUNCTION_LONG_NAME))
+			" expectedState: " expectedState "; actualState: " actualState "; requestedOperation: " /* CPPDEVTK_FUNCTION_LONG_NAME */))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
 #	define CPPDEVTK_DBC_CHECK_STATE(expr, expectedState, actualState)	\
 		CPPDEVTK_ASSERT((expr) && ("Invalid state for requested operation:"	\
-		" expectedState: " expectedState "; actualState: " actualState "; requestedOperation: " CPPDEVTK_FUNCTION_LONG_NAME))
+		" expectedState: " expectedState "; actualState: " actualState "; requestedOperation: " /* CPPDEVTK_FUNCTION_LONG_NAME */))
 #else
 #	define CPPDEVTK_DBC_CHECK_STATE(expr, expectedState, actualState)	\
 		((void)0)
@@ -268,12 +268,12 @@
 			while (0)
 #	else
 #		define CPPDEVTK_DBC_CHECK_ARGUMENT(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("invalid argument: " msg))
+			CPPDEVTK_ASSERT((expr) && ("invalid argument: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
 #	define CPPDEVTK_DBC_CHECK_ARGUMENT(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("invalid argument: " msg))
+		CPPDEVTK_ASSERT((expr) && ("invalid argument: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_ARGUMENT(expr, msg)	\
 		((void)0)
@@ -293,12 +293,12 @@
 			while (0)
 #	else
 #		define CPPDEVTK_DBC_CHECK_DOMAIN(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("domain error: " msg))
+			CPPDEVTK_ASSERT((expr) && ("domain error: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
 #	define CPPDEVTK_DBC_CHECK_DOMAIN(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("domain error: " msg))
+		CPPDEVTK_ASSERT((expr) && ("domain error: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_DOMAIN(expr, msg)	\
 		((void)0)
@@ -318,12 +318,12 @@
 			while (0)
 #	else
 #		define CPPDEVTK_DBC_CHECK_LENGTH(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("length error: " msg))
+			CPPDEVTK_ASSERT((expr) && ("length error: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
 #	define CPPDEVTK_DBC_CHECK_LENGTH(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("length error: " msg))
+		CPPDEVTK_ASSERT((expr) && ("length error: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_LENGTH(expr, msg)	\
 		((void)0)
@@ -343,12 +343,12 @@
 			while (0)
 #	else
 #		define CPPDEVTK_DBC_CHECK_IN_RANGE(expr, msg)	\
-			CPPDEVTK_ASSERT((expr) && ("out of range: " msg))
+			CPPDEVTK_ASSERT((expr) && ("out of range: " #msg))
 #	endif
 #else
 #if (CPPDEVTK_DETAIL_DBC_ASSERT_IF_DISABLED)
 #	define CPPDEVTK_DBC_CHECK_IN_RANGE(expr, msg)	\
-		CPPDEVTK_ASSERT((expr) && ("out of range: " msg))
+		CPPDEVTK_ASSERT((expr) && ("out of range: " #msg))
 #else
 #	define CPPDEVTK_DBC_CHECK_IN_RANGE(expr, msg)	\
 		((void)0)
