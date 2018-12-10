@@ -53,14 +53,17 @@
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
 #	define CPPDEVTK_Q_DEBUG() qDebug().nospace().noquote()
-#	define CPPDEVTK_Q_INFO() qInfo().nospace().noquote()
 #	define CPPDEVTK_Q_WARN() qWarning().nospace().noquote()
 #	define CPPDEVTK_Q_ERROR() qCritical().nospace().noquote()
 #else
 #	define CPPDEVTK_Q_DEBUG() qDebug().nospace()
-#	define CPPDEVTK_Q_INFO() qInfo().nospace()
 #	define CPPDEVTK_Q_WARN() qWarning().nospace()
 #	define CPPDEVTK_Q_ERROR() qCritical().nospace()
+#endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
+#	define CPPDEVTK_Q_INFO() qInfo().nospace().noquote()
+#else
+#	define CPPDEVTK_Q_INFO() CPPDEVTK_Q_DEBUG()
 #endif
 
 
