@@ -24,7 +24,7 @@
 #include "config.hpp"
 #include "type_traits.hpp"
 #include "singletons.hpp"
-#include "locking_levels.hpp"
+#include "lockables.hpp"
 #include "mutex.hpp"
 #include "dbc.hpp"
 #include "cassert.hpp"
@@ -42,11 +42,11 @@ namespace base {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Factory method design pattern.
 /// \sa <a href="https://sourceforge.net/p/loki-lib/code/HEAD/tree/trunk/include/loki/Factory.h#l1012">Loki Factory</a>
-template <class TAbstractProduct, typename TConcreteProductIdentifier = int, bool multithreadingSupport = false>
+template <class TAbstractProduct, typename TConcreteProductIdentifier = int, bool multithreadingSupport = true>
 class Factory: public Conditional<multithreadingSupport,
 		Singleton<Factory<TAbstractProduct, TConcreteProductIdentifier, multithreadingSupport> >,
 		MeyersSingleton<Factory<TAbstractProduct, TConcreteProductIdentifier, multithreadingSupport> > >::Type,
-		public ObjectLevelLocking<typename Conditional<multithreadingSupport, DefaultMutex, NullMutex>::Type> {
+		public Lockable<typename Conditional<multithreadingSupport, DefaultMutex, NullMutex>::Type, ObjectLevelLocking> {
 	// friend was extented in C++11 but for C++98 we need to declare both Singleton and MeyersSingleton as friend
 	//friend typename Conditional<multithreadingSupport, Singleton<Factory>, MeyersSingleton<Factory> >::Type;
 	friend class Singleton<Factory>;

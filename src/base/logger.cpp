@@ -34,7 +34,7 @@ ScopeLogger::ScopeLogger(const QString& scopeName, const SourceCodeInfo& sourceC
 #define CPPDEVTK_ENABLE_LOG 1
 #define CPPDEVTK_DISABLE_ENABLE_LOG 1
 #endif
-	CPPDEVTK_LOG("ENTERING SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace, llTrace);
+	CPPDEVTK_LOG("ENTERING SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace);
 #if (CPPDEVTK_DISABLE_ENABLE_LOG)
 #undef CPPDEVTK_ENABLE_LOG
 #define CPPDEVTK_ENABLE_LOG 0
@@ -48,7 +48,7 @@ ScopeLogger::~ScopeLogger() {
 #define CPPDEVTK_ENABLE_LOG 1
 #define CPPDEVTK_DISABLE_ENABLE_LOG 1
 #endif
-	CPPDEVTK_LOG("LEAVING SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace, llTrace);
+	CPPDEVTK_LOG("LEAVING SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace);
 #if (CPPDEVTK_DISABLE_ENABLE_LOG)
 #undef CPPDEVTK_ENABLE_LOG
 #define CPPDEVTK_ENABLE_LOG 0

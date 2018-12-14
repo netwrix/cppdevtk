@@ -125,7 +125,7 @@ QMimeType MimeDatabase::MimeTypeForFile(const QFileInfo& fileInfo, MatchOrder ma
 
 QMimeType MimeDatabase::MimeTypeForFileNameAndData(const QString& fileName, QIODevice* device,
 		MatchOrder matchOrder) const {
-	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(fileName), "fileName must be valid");
+	CPPDEVTK_DBC_CHECK_ARGUMENT((fileName.isEmpty() || IsValidPath(fileName)), "fileName must be empty or valid");
 	CPPDEVTK_DBC_CHECK_NON_NULL_ARGUMENT(device);
 	
 	QMimeType mimeType = mimeTypeForName("application/octet-stream");
@@ -179,7 +179,7 @@ QMimeType MimeDatabase::MimeTypeForFileNameAndData(const QString& fileName, QIOD
 
 QMimeType MimeDatabase::MimeTypeForFileNameAndData(const QString& fileName, const QByteArray& data,
 			MatchOrder matchOrder) const {
-	CPPDEVTK_DBC_CHECK_ARGUMENT(IsValidPath(fileName), "fileName must be valid");
+	CPPDEVTK_DBC_CHECK_ARGUMENT((fileName.isEmpty() || IsValidPath(fileName)), "fileName must be empty or valid");
 	
 	QMimeType mimeType = mimeTypeForName("application/octet-stream");
 	

@@ -35,17 +35,17 @@
 
 
 #define CPPDEVTK_LOG_TRACE(msg)	\
-	CPPDEVTK_LOG(msg, ::cppdevtk::base::llTrace, CPPDEVTK_LOG_LEVEL)
+	CPPDEVTK_LOG(msg, ::cppdevtk::base::llTrace)
 #define CPPDEVTK_LOG_DEBUG(msg)	\
-	CPPDEVTK_LOG(msg, ::cppdevtk::base::llDebug, CPPDEVTK_LOG_LEVEL)
+	CPPDEVTK_LOG(msg, ::cppdevtk::base::llDebug)
 #define CPPDEVTK_LOG_INFO(msg)	\
-	CPPDEVTK_LOG(msg, ::cppdevtk::base::llInfo, CPPDEVTK_LOG_LEVEL)
+	CPPDEVTK_LOG(msg, ::cppdevtk::base::llInfo)
 #define CPPDEVTK_LOG_WARN(msg)	\
-	CPPDEVTK_LOG(msg, ::cppdevtk::base::llWarn, CPPDEVTK_LOG_LEVEL)
+	CPPDEVTK_LOG(msg, ::cppdevtk::base::llWarn)
 #define CPPDEVTK_LOG_ERROR(msg)	\
-	CPPDEVTK_LOG(msg, ::cppdevtk::base::llError, CPPDEVTK_LOG_LEVEL)
+	CPPDEVTK_LOG(msg, ::cppdevtk::base::llError)
 #define CPPDEVTK_LOG_FATAL(msg)	\
-	CPPDEVTK_LOG(msg, ::cppdevtk::base::llFatal, CPPDEVTK_LOG_LEVEL)
+	CPPDEVTK_LOG(msg, ::cppdevtk::base::llFatal)
 
 #define CPPDEVTK_LOG_TRACE_FUNCTION()	\
 	CPPDEVTK_LOG_TRACE_SCOPE(CPPDEVTK_FUNCTION_LONG_NAME)
@@ -68,9 +68,9 @@
 
 
 #if (CPPDEVTK_ENABLE_LOG)
-#	define CPPDEVTK_LOG(logMsg, logLevel, minLogLevel)	\
+#	define CPPDEVTK_LOG(logMsg, logLevel)	\
 		do {	\
-			if (logLevel >= minLogLevel) {	\
+			if (logLevel >= CPPDEVTK_LOG_LEVEL) {	\
 				const int kErrNo = errno;	\
 				const ::cppdevtk::base::ErrorCode kLastSystemErrorCode = ::cppdevtk::base::GetLastSystemErrorCode();	\
 				try {	\
@@ -115,7 +115,7 @@
 		::cppdevtk::base::detail::ScopeLogger scopeLogger(scopeName,	\
 		CPPDEVTK_SOURCE_CODE_INFO())
 #else	// (CPPDEVTK_ENABLE_LOG)
-#	define CPPDEVTK_LOG(logMsg, logLevel, minLogLevel)	\
+#	define CPPDEVTK_LOG(logMsg, logLevel)	\
 		((void)0)
 	
 #	define CPPDEVTK_LOG_TRACE_SCOPE(scopeName)	\
