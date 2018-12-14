@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2018 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -21,6 +21,7 @@
 #include <cppdevtk/util/filesystem_utils.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/dbc.hpp>
+#include <cppdevtk/base/cassert.hpp>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
@@ -71,6 +72,7 @@ QMimeType MimeDatabase::MimeTypeForFile(const QString& fileName, MatchOrder matc
 			}
 			break;
 		default:
+			CPPDEVTK_ASSERT(0 && "UB: matchOrder is not a valid enum value");
 			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION("UB: matchOrder is not a valid enum value");
 	}
 	
@@ -117,6 +119,7 @@ QMimeType MimeDatabase::MimeTypeForFile(const QFileInfo& fileInfo, MatchOrder ma
 			}
 			break;
 		default:
+			CPPDEVTK_ASSERT(0 && "UB: matchOrder is not a valid enum value");
 			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION("UB: matchOrder is not a valid enum value");
 	}
 	
@@ -171,6 +174,7 @@ QMimeType MimeDatabase::MimeTypeForFileNameAndData(const QString& fileName, QIOD
 			}
 			break;
 		default:
+			CPPDEVTK_ASSERT(0 && "UB: matchOrder is not a valid enum value");
 			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION("UB: matchOrder is not a valid enum value");
 	}
 	
@@ -224,6 +228,7 @@ QMimeType MimeDatabase::MimeTypeForFileNameAndData(const QString& fileName, cons
 			}
 			break;
 		default:
+			CPPDEVTK_ASSERT(0 && "UB: matchOrder is not a valid enum value");
 			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION("UB: matchOrder is not a valid enum value");
 	}
 	

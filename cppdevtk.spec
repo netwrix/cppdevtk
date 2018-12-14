@@ -1,7 +1,7 @@
 #
 # spec file for package cppdevtk
 #
-# Copyright (C) 2015 - 2018 CoSoSys Ltd <info@cososys.com>.
+# Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>.
 #
 # Licensed under the Apache License, Version 2.0.
 # Please see the file COPYING.

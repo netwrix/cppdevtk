@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2018 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -58,6 +58,8 @@ ScopeLogger::~ScopeLogger() {
 
 
 CPPDEVTK_BASE_API QString LogLevelToString(LogLevel logLevel) {
+	CPPDEVTK_DBC_CHECK_IN_RANGE(((llFirst <= logLevel) && (logLevel <= llLast)), "logLevel has invalid enum value (UB)");
+	
 	QString logLevelName;
 	
 	switch (logLevel) {
@@ -80,7 +82,6 @@ CPPDEVTK_BASE_API QString LogLevelToString(LogLevel logLevel) {
 			logLevelName = "FATAL";
 			break;
 		default:
-			CPPDEVTK_DBC_CHECK_IN_RANGE(((llFirst <= logLevel) && (logLevel <= llLast)), "logLevel");
 			logLevelName = "INVALID";
 			break;
 	}

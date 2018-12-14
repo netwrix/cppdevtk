@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2018 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -26,6 +26,7 @@
 #include "source_code_info.hpp"
 #include "cerrno.hpp"
 #include "system_exception.hpp"
+#include "cassert.hpp"
 
 #include <QtCore/QString>
 #include <QtCore/QTextStream>
@@ -100,7 +101,8 @@
 							CPPDEVTK_Q_ERROR() << logEntry;	\
 							break;	\
 						default:	\
-							qFatal("UB: invalid log level enum value!!!");	\
+							/* qFatal("UB: invalid log level enum value!!!"); */	\
+							CPPDEVTK_ASSERT(0 && "UB: invalid log level enum value!!!");	\
 							break;	\
 					}	\
 				}	\

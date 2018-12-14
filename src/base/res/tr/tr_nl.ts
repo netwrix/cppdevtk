@@ -16,7 +16,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copyright (C) 2015 - 2018 CoSoSys Ltd. All rights reserved. info@cososys.com.</source>
+        <source>Copyright (C) 2015 - 2019 CoSoSys Ltd. All rights reserved. info@cososys.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

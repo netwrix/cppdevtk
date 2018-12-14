@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2018 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -210,7 +210,7 @@ void PosixSignalsWatcher::QtSignalHandler(int socket) {
 			break;
 		default:
 			CPPDEVTK_LOG_ERROR("readed from socket " << kReaded << " bytes (expected 1) for Posix signal: " << sig);
-			CPPDEVTK_ASSERT(0 && "we should never get here");
+			CPPDEVTK_ASSERT(0 && "invalid read from socket");
 			break;
 	}
 	
@@ -406,7 +406,7 @@ void PosixSignalsWatcher::PosixSignalHandler(int sig) {
 		case sizeof(kMsg):	// sizeof(kMsg) == 1 so or msg is written, or not (can not be partially written)
 			break;
 		default:
-			CPPDEVTK_ASSERT(0 && "we should never get here");
+			CPPDEVTK_ASSERT(0 && "invalid write to socket");
 			break;
 	}
 }
