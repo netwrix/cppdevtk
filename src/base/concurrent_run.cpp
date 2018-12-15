@@ -18,6 +18,7 @@
 
 
 #include <cppdevtk/base/concurrent_run.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 
 namespace cppdevtk {
@@ -44,6 +45,7 @@ void StartAndRunCancelableTask<void>::run() {
 		}
 		catch (const ::std::exception& exc) {
 			CPPDEVTK_LOG_ERROR("task failed; unhandled ::std::exception: " << Exception::GetDetailedInfo(exc));
+			SuppressUnusedWarning(exc);
 			ReportUnhandledException();
 		}
 		catch (...) {

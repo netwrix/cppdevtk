@@ -40,6 +40,7 @@
 #include <cppdevtk/base/qiostream.hpp>
 #include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/cassert.hpp>
+#include <cppdevtk/base/unused.hpp>
 
 #include <QtCore/QString>
 #include <QtCore/QDir>
@@ -97,6 +98,7 @@ LanguageInfo CoreApplicationBase::GetDefaultLanguageInfo() const {
 		}
 		
 		CPPDEVTK_LOG_INFO("isSystemLocaleSupported: " << isSystemLocaleSupported);
+		base::SuppressUnusedWarning(isSystemLocaleSupported);
 	}
 	
 	return defaultLanguageInfo;
