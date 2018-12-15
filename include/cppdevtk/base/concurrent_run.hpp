@@ -38,6 +38,7 @@
 #include "logger.hpp"
 #include "task_canceled_exception.hpp"
 #include "cassert.hpp"
+#include "unused.hpp"
 
 #include <QtCore/QFutureInterfaceBase>
 #include <QtCore/QFutureInterface>
@@ -402,6 +403,7 @@ void StartAndRunCancelableTask<TResult>::run() {
 			}
 			catch (const ::std::exception& exc) {
 				CPPDEVTK_LOG_ERROR("task failed; unhandled ::std::exception: " << Exception::GetDetailedInfo(exc));
+				::cppdevtk::base::SuppressUnusedWarning(exc);
 				this->ReportUnhandledException();
 				this->ReportFinished();
 				return;
@@ -423,6 +425,7 @@ void StartAndRunCancelableTask<TResult>::run() {
 		}
 		catch (const ::std::exception& exc) {
 			CPPDEVTK_LOG_ERROR("task failed; unhandled ::std::exception: " << Exception::GetDetailedInfo(exc));
+			::cppdevtk::base::SuppressUnusedWarning(exc);
 			this->ReportUnhandledException();
 			this->ReportFinished();
 			return;
