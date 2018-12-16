@@ -19,7 +19,7 @@
 
 #include <cppdevtk/base/config.hpp>
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_CLANG)
-#	pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
+#	pragma clang diagnostic ignored "-Wpotentially-evaluated-expression"
 #endif
 
 #include <cppdevtk/base/throwable.hpp>

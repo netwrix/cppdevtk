@@ -19,7 +19,7 @@
 
 #include <cppdevtk/util/config.hpp>
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_PLATFORM_IOS)
-#	pragma GCC diagnostic ignored "-Wunused-function"
+#	pragma clang diagnostic ignored "-Wunused-function"
 #endif
 
 #include <cppdevtk/util/filesystem_utils.hpp>

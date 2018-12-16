@@ -40,22 +40,6 @@
 /// - The oldest Qt 5 supported is 5.6.1 (Android)
 /// @{
 
-/// \cond
-
-#if (CPPDEVTK_DISABLE_QT_OUTPUT)
-#	ifndef QT_NO_DEBUG_OUTPUT
-#		define QT_NO_DEBUG_OUTPUT
-#	endif
-#	ifndef QT_NO_WARNING_OUTPUT
-#		define QT_NO_WARNING_OUTPUT
-#	endif
-#else
-#	undef QT_NO_DEBUG_OUTPUT
-#	undef QT_NO_WARNING_OUTPUT
-#endif
-
-/// \endcond
-
 #ifdef __cplusplus
 
 #include <QtCore/QtGlobal>

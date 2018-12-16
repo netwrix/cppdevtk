@@ -63,22 +63,6 @@
 #	endif
 #endif
 
-/// \brief Disable Qt output.
-/// \sa \c QT_NO_DEBUG_OUTPUT and \c QT_NO_WARNING_OUTPUT
-#ifndef CPPDEVTK_DISABLE_QT_OUTPUT
-#	ifdef NDEBUG
-#		define CPPDEVTK_DISABLE_QT_OUTPUT 1
-#	else
-#		define CPPDEVTK_DISABLE_QT_OUTPUT 0
-#	endif
-#endif
-
-#if (defined(__APPLE__) && defined(__MACH__))
-	// FIXME: 1 is conflicting with Mac's qDebug; investigate!
-#	undef CPPDEVTK_DISABLE_QT_OUTPUT
-#	define CPPDEVTK_DISABLE_QT_OUTPUT 0
-#endif
-
 
 /// \defgroup config_features_logging Logging
 /// @{
@@ -90,6 +74,13 @@
 #	else
 #		define CPPDEVTK_ENABLE_LOG 1
 #	endif
+#endif
+
+// TODO: remove when logger will not be Qt based
+#if (CPPDEVTK_ENABLE_LOG)
+#	undef QT_NO_DEBUG_OUTPUT
+#	undef QT_NO_INFO_OUTPUT
+#	undef QT_NO_WARNING_OUTPUT
 #endif
 
 /// \brief Log level.

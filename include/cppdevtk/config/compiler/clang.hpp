@@ -240,7 +240,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Third party warnings.
 #if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
-#	pragma GCC diagnostic ignored "-Wdeprecated-declarations"	// from Qt Headers
+#	pragma clang diagnostic ignored "-Wdeprecated-declarations"	// from Qt Headers
 // TODO: put other third-party warnings safe to disable here.
 #endif	// (defined(CPPDEVTK_DETAIL_BUILD) || CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
 
@@ -248,7 +248,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // cppdevtk warnings.
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
-//#	pragma GCC diagnostic ignored "-Wunused-local-typedefs"	// typedef 'CppDevTkStaticAssert_1' locally defined but not used
+//#	pragma clang diagnostic ignored "-Wunused-local-typedefs"	// typedef 'CppDevTkStaticAssert_1' locally defined but not used
 // TODO: put other cppdevtk warnings safe to disable here.
 #endif	// (defined(CPPDEVTK_DETAIL_BUILD) || CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
 

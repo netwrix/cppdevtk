@@ -23,7 +23,7 @@
 
 #if (CPPDEVTK_COMPILER_CLANG)
 // 'const' qualifier on reference type 'r_type' (aka 'int &') has no effect [-Wignored-qualifiers]
-#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#pragma clang diagnostic ignored "-Wignored-qualifiers"
 #endif
 
 #endif

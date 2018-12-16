@@ -35,7 +35,7 @@
 #define CPPDEVTK_CERR ::cppdevtk::base::qcerr
 #else
 #define CPPDEVTK_COUT qDebug()
-#define CPPDEVTK_CERR qInfo()
+#define CPPDEVTK_CERR qCritical()
 #endif
 
 
