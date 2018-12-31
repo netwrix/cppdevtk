@@ -299,10 +299,6 @@ CONFIG -= strict_c++
 	}
 	
 	QMAKE_LFLAGS *= -rdynamic
-	
-	!cppdevtk_enable_debuginfo_in_release {
-		QMAKE_LFLAGS_RELEASE *= -s
-	}
 }
 else {
 	*clang* {
@@ -398,10 +394,6 @@ else {
 		QMAKE_LFLAGS -= -stdlib=libstdc++
 		QMAKE_LFLAGS *= -stdlib=libc++
 		QMAKE_LFLAGS *= -rdynamic
-		
-		!cppdevtk_enable_debuginfo_in_release {
-			#QMAKE_LFLAGS_RELEASE *= -s
-		}
 	}
 	else {
 		*msvc* {
@@ -458,36 +450,6 @@ else {
 			
 			# warning: LNK4221: no public symbols found; archive member will be inaccessible
 			QMAKE_LFLAGS *= /IGNORE:4221
-			
-			cppdevtk_enable_debuginfo_in_release {
-				QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -Ot
-				QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -Ot
-				CONFIG(static, static|shared) {
-					QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -MT
-					QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= -MT
-				}
-				else {
-					QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -MD
-					QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= -MD
-				}
-				QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO *= /DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO
-				
-				QMAKE_CFLAGS_RELEASE = $${QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO}
-				QMAKE_CXXFLAGS_RELEASE = $${QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO}
-				QMAKE_LFLAGS_RELEASE = $${QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO}
-			}
-			else {
-				QMAKE_CFLAGS_RELEASE *= -O2 -Ot
-				QMAKE_CXXFLAGS_RELEASE *= -O2 -Ot
-				CONFIG(static, static|shared) {
-					QMAKE_CFLAGS_RELEASE *= -MT
-					QMAKE_CXXFLAGS_RELEASE *= -MT
-				}
-				else {
-					QMAKE_CFLAGS_RELEASE *= -MD
-					QMAKE_CXXFLAGS_RELEASE *= -MD
-				}
-			}
 			
 			# inline only marked
 			#QMAKE_CFLAGS_RELEASE *= -Ob1

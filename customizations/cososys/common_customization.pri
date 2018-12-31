@@ -95,47 +95,79 @@ else {
 	}
 }
 
-# compiler flags
-*g++* {
-	cppdevtk_enable_debuginfo_in_release {
+cppdevtk_enable_debuginfo_in_release {
+	*clang* {
 		QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -g1
 		QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -g1
-		
-		QMAKE_CFLAGS_RELEASE *= $${QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO}
-		QMAKE_CXXFLAGS_RELEASE *= $${QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO}
+		QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO *= -g1
 	}
 	else {
-		QMAKE_CFLAGS_RELEASE *= -O2 -g0
-		QMAKE_CXXFLAGS_RELEASE *= -O2 -g0
+		*g++* {
+			QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -g1
+			QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -g1
+			QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO *= -g1
+		}
+		else {
+			*msvc* {
+				QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -Z7
+				QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO -= -Zi
+				!static_and_shared|build_pass {
+					CONFIG(shared, static|shared) {
+						QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -MD
+					}
+					else {
+						QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -MT
+					}
+				}
+				QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= $${QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO}
+				QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO *= /INCREMENTAL:NO /OPT:REF /OPT:ICF
+				QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO -= /DEBUG
+			}
+			else {
+				error("Unsupported compiler!!!")
+			}
+		}
 	}
+	
+	CONFIG *= force_debug_info
 }
 else {
 	*clang* {
-		cppdevtk_enable_debuginfo_in_release {
-			QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -g1
-			QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO *= -O2 -g1
-			
-			QMAKE_CFLAGS_RELEASE *= $${QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO}
-			QMAKE_CXXFLAGS_RELEASE *= $${QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO}
-		}
-		else {
-			QMAKE_CFLAGS_RELEASE *= -O2 -g0
-			QMAKE_CXXFLAGS_RELEASE *= -O2 -g0
-		}
+		QMAKE_CFLAGS_RELEASE *= -O2 -g0
+		QMAKE_CXXFLAGS_RELEASE *= -O2 -g0
+		QMAKE_LFLAGS_RELEASE *= -g0
+		#QMAKE_LFLAGS_RELEASE *= -s
 	}
 	else {
-		*msvc* {
-			cppdevtk_enable_debuginfo_in_release {
-				QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO = -Z7
-				QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO = -Z7
-				QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO = /debugtype:cv
-			}
+		*g++* {
+			QMAKE_CFLAGS_RELEASE *= -O2 -g0
+			QMAKE_CXXFLAGS_RELEASE *= -O2 -g0
+			QMAKE_LFLAGS_RELEASE *= -g0
+			QMAKE_LFLAGS_RELEASE *= -s
 		}
 		else {
-			error("Unsupported compiler!!!")
+			*msvc* {
+				QMAKE_CFLAGS_RELEASE *= -O2
+				QMAKE_CFLAGS_RELEASE -= -Zi
+				CONFIG(shared, static|shared) {
+					QMAKE_CFLAGS_RELEASE *= -MD
+				}
+				else {
+					QMAKE_CFLAGS_RELEASE *= -MT
+				}
+				QMAKE_CXXFLAGS_RELEASE *= $${QMAKE_CFLAGS_RELEASE}
+				QMAKE_LFLAGS_RELEASE *= /INCREMENTAL:NO /OPT:REF /OPT:ICF
+				QMAKE_LFLAGS_RELEASE -= /DEBUG
+			}
+			else {
+				error("Unsupported compiler!!!")
+			}
 		}
 	}
+	
+	CONFIG -= force_debug_info
 }
+
 
 # CPPDEVTK_PREFIX
 # Ex:
