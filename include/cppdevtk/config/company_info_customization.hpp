@@ -27,8 +27,7 @@
 
 
 
-/// \defgroup config_info_company_info Company Info
-/// \ingroup config_info
+/// \addtogroup config_info_company_info
 /// @{
 
 #define CPPDEVTK_COMPANY_SHORT_NAME "CoSoSys"

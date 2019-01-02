@@ -26,8 +26,7 @@
 #define CPPDEVTK_CONFIG_PRODUCT_INFO_CUSTOMIZATION_HPP_INCLUDED_
 
 
-/// \defgroup config_info_product_info Product Info
-/// \ingroup config_info
+/// \addtogroup config_info_product_info
 /// @{
 
 

@@ -35,7 +35,8 @@
 #endif
 
 
-/// \ingroup config_info_company_info
+/// \defgroup config_info_company_info Company Info
+/// \ingroup config_info
 /// @{
 
 #define CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED QString(CPPDEVTK_COMPANY_SHORT_NAME).toLower().replace(' ', '_')

@@ -37,7 +37,8 @@
 #endif
 
 
-/// \ingroup config_info_product_info
+/// \defgroup config_info_product_info Product Info
+/// \ingroup config_info
 /// @{
 
 /// \defgroup config_info_product_info_version Version
