@@ -1,10 +1,9 @@
 1. Prerequisites:
 - Qt 5.6.3 msvc2015 and Qt 5.6.1-1 android needed on Windows
-- Qt 5.6.3 macosx and Qt 5.9.2 ios needed on Mac OS X
+- Qt 5.6.3 macosx and Qt 5.9.7 ios needed on Mac OS X
 - JDK 8u144 needed on Windows
 - JDK 8u144 needed on Mac OS X >= 10.7 and Apple provided JDK 6 on Mac < 10.7
-- Android SDK r25.2.3 needed on Windows (maybe it works with r24.x >= r24.4, r25.x): SDK Build-tools must be 25.x and Android 5.0.1 (API level 21)
-- Android NDK r10e needed on Windows
+- Android SDK r25.2.5 + NDK r10e needed on Windows
 
 
 - Ubuntu:
@@ -32,7 +31,7 @@ Use EPEL repo
 JAVA_HOME C:\Program Files\Java\jdk1.8.0_144
 ANDROID_NDK_ROOT C:\android\ndk-r10e
 NDK_ROOT %ANDROID_NDK_ROOT%
-ANDROID_HOME C:\android\sdk_r25.2.3
+ANDROID_HOME C:\android\sdk-r25.2.5
 ANDROID_SDK_ROOT %ANDROID_HOME%
 ANDROID_NDK_PLATFORM android-19
 
