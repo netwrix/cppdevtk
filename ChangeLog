@@ -4,7 +4,7 @@ Version 1.1.1.1:
 	- added MimeDatabase
 - Improvements:
 	- executor: improved cancellation
-	- updated Ubuntu 18.04 to 18.04.1
+	- updated Ubuntu 18.04 to 18.04.2
 	- updated Ubuntu 16.04 to 16.04.5
 	- updated CentOS 7 to 7.6
 	- openSUSE Leap 15 bug #1094735 was fixed; removed workaround
@@ -14,6 +14,7 @@ Version 1.1.1.1:
 	- iOS >= 8 (default 10)
 	- Android >= 2.3 (API level 9) (default 4.4.2 (API level 19))
 	- qmake files cleanup
+	- iOS, Ubuntu 14.04 and Ubuntu 16.04: updated Qt to 5.9.7
 - Fixed bugs:
 	- executor: workaround for Qt bug #6799
 	- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831

@@ -96,19 +96,24 @@ public:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Execute cancelable task in a separate thread.
+/// Execute \c CancelableTask in a \c QThreadPool (global one in Qt 4 and own one in Qt 5)
 /// \attention
 /// - returned future cannot be paused/resumed/queried for progress
 /// - if Qt < 5.6.2 then may be affected by Qt bug #54831
-class CPPDEVTK_BASE_API CancelableTaskExecutor {
+class CPPDEVTK_BASE_API CancelableTaskExecutor: private NonCopyable {
 public:
-	template <typename TResult>
-	static QFuture<TResult> Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask, int priority = 0);
+	const QThreadPool& GetThreadPoolRef() const;
+	QThreadPool& GetThreadPoolRef();
 	
-#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	
 	template <typename TResult>
-	static QFuture<TResult> Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask, QThreadPool& threadPool,
-			int priority = 0);
+	QFuture<TResult> operator()(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask, int priority = 0);
+	
+	template <typename TResult>
+	QFuture<TResult> Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask, int priority = 0);
+private:
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	QThreadPool threadPool_;
 #	endif
 };
 
@@ -124,11 +129,11 @@ public:
 	
 	QFuture<TResult> Start();
 protected:
-	StartAndRunCancelableTaskBase(::std::auto_ptr<CancelableTaskType> pCancelableTask, int priority);
-	
-#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	StartAndRunCancelableTaskBase(::std::auto_ptr<CancelableTaskType> pCancelableTask, QThreadPool& threadPool, int priority);
-#	endif
+	StartAndRunCancelableTaskBase(::std::auto_ptr<CancelableTaskType> pCancelableTask, int priority
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			, QThreadPool& threadPool
+#			endif
+	);
 	
 	virtual ~StartAndRunCancelableTaskBase();
 	
@@ -141,24 +146,22 @@ protected:
 	
 	::std::auto_ptr<CancelableTaskType> pCancelableTask_;
 private:	
+	const int kPriority_;
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	QThreadPool& threadPool_;
 #	endif
-	const int kPriority_;
 };
 
 
 template <typename TResult>
 class StartAndRunCancelableTask: public StartAndRunCancelableTaskBase<TResult> {
-public:
-	StartAndRunCancelableTask(
-			::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask, int priority);
-	
-#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	StartAndRunCancelableTask(
-			::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask,
-			QThreadPool& threadPool, int priority);
-#	endif
+public:	
+	StartAndRunCancelableTask(::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask,
+			int priority
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			, QThreadPool& threadPool
+#			endif
+	);
 	
 	virtual void run();	// QRunnable::run()
 protected:
@@ -178,14 +181,12 @@ protected:
 template <>
 class CPPDEVTK_BASE_API StartAndRunCancelableTask<void>: public StartAndRunCancelableTaskBase<void> {
 public:
-	StartAndRunCancelableTask(
-			::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority);
-	
-#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	StartAndRunCancelableTask(
-			::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
-			QThreadPool& threadPool, int priority);
-#	endif
+	StartAndRunCancelableTask(::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
+			int priority
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			, QThreadPool& threadPool
+#			endif
+	);
 	
 	virtual void run();
 };
@@ -215,24 +216,38 @@ template <typename TResult>
 inline CancelableTask<TResult>::~CancelableTask() {}
 
 
+inline const QThreadPool& CancelableTaskExecutor::GetThreadPoolRef() const {
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	return threadPool_;
+#	else
+	return *QThreadPool::globalInstance();
+#	endif
+}
+
+inline QThreadPool& CancelableTaskExecutor::GetThreadPoolRef() {
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+	return threadPool_;
+#	else
+	return *QThreadPool::globalInstance();
+#	endif
+}
+
+template <typename TResult>
+inline QFuture<TResult> CancelableTaskExecutor::operator()(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask,
+		int priority) {
+	return Execute(pCancelableTask, priority);
+}
+
 template <typename TResult>
 inline QFuture<TResult> CancelableTaskExecutor::Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask,
 		int priority) {
 	// no memory leak because StartAndRunCancelableTask::QRunnable::autoDelete() so it will be deleted by QThreadPool
-	return (new ::cppdevtk::base::concurrent::detail::StartAndRunCancelableTask<TResult>(pCancelableTask, priority))->Start();
+	return (new ::cppdevtk::base::concurrent::detail::StartAndRunCancelableTask<TResult>(pCancelableTask, priority
+#			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+			, threadPool_
+#			endif
+			))->Start();
 }
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-
-template <typename TResult>
-inline QFuture<TResult> CancelableTaskExecutor::Execute(::std::auto_ptr<CancelableTask<TResult> > pCancelableTask,
-		QThreadPool& threadPool, int priority) {
-	// no memory leak because StartAndRunCancelableTask::QRunnable::autoDelete() so it will be deleted by QThreadPool
-	return (new ::cppdevtk::base::concurrent::detail::StartAndRunCancelableTask<TResult>(pCancelableTask, threadPool,
-			priority))->Start();
-}
-
-#endif
 
 
 namespace detail {
@@ -255,30 +270,20 @@ inline QFuture<TResult> StartAndRunCancelableTaskBase<TResult>::Start() {
 
 template <typename TResult>
 inline StartAndRunCancelableTaskBase<TResult>::StartAndRunCancelableTaskBase(
-		::std::auto_ptr<CancelableTaskType> pCancelableTask, int priority): QFutureInterface<TResult>(), QRunnable(),
-		NonCopyable(), pCancelableTask_(pCancelableTask),
+		::std::auto_ptr<CancelableTaskType> pCancelableTask, int priority
 #		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-		threadPool_(*QThreadPool::globalInstance()),
+		, QThreadPool& threadPool
 #		endif
-		kPriority_(priority) {
+		): QFutureInterface<TResult>(), QRunnable(), NonCopyable(), pCancelableTask_(pCancelableTask), kPriority_(priority)
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+		, threadPool_(threadPool)
+#		endif
+		{
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	this->setThreadPool(&threadPool_);
 #	endif
 	this->setRunnable(this);
 }
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-
-template <typename TResult>
-inline StartAndRunCancelableTaskBase<TResult>::StartAndRunCancelableTaskBase(
-		::std::auto_ptr<CancelableTaskType> pCancelableTask, QThreadPool& threadPool, int priority):
-		QFutureInterface<TResult>(), QRunnable(), NonCopyable(), pCancelableTask_(pCancelableTask), threadPool_(threadPool),
-		kPriority_(priority) {
-	this->setThreadPool(&threadPool_);
-	this->setRunnable(this);
-}
-
-#endif
 
 template <typename TResult>
 inline StartAndRunCancelableTaskBase<TResult>::~StartAndRunCancelableTaskBase() {}
@@ -364,18 +369,15 @@ void StartAndRunCancelableTaskBase<TResult>::ReportFinished() {
 
 template <typename TResult>
 inline StartAndRunCancelableTask<TResult>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask, int priority):
-		StartAndRunCancelableTaskBase<TResult>(pCancelableTask, priority) {}
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-
-template <typename TResult>
-inline StartAndRunCancelableTask<TResult>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask,
-		QThreadPool& threadPool, int priority): StartAndRunCancelableTaskBase<TResult>(pCancelableTask, threadPool,
-		priority) {}
-
-#endif
+		::std::auto_ptr<typename StartAndRunCancelableTask<TResult>::CancelableTaskType> pCancelableTask, int priority
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+		, QThreadPool& threadPool
+#		endif
+		): StartAndRunCancelableTaskBase<TResult>(pCancelableTask, priority
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+		, threadPool
+#		endif
+		) {}
 
 template <typename TResult>
 void StartAndRunCancelableTask<TResult>::run() {
@@ -508,18 +510,17 @@ QtConcurrent
 
 #endif
 
-inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority):
-		StartAndRunCancelableTaskBase<void>(pCancelableTask, priority) {}
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
-		QThreadPool& threadPool, int priority): StartAndRunCancelableTaskBase<void>(pCancelableTask, threadPool,
-		priority) {}
-
-#endif
+		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+		, QThreadPool& threadPool
+#		endif
+		): StartAndRunCancelableTaskBase<void>(pCancelableTask, priority
+#		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+		, threadPool
+#		endif
+		) {}
 
 
 }	// namespace detail

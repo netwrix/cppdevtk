@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 Build-Depends: debhelper (>=9),
 	zlib1g-dev, libudev-dev, libboost-all-dev (>=1.54.0), libxss-dev, libx11-dev, x11proto-core-dev, libgl1-mesa-dev, default-jdk,
-	qt59base (>=5.9.6), qt59x11extras (>=5.9.6)
+	qt59base (>=5.9.7), qt59x11extras (>=5.9.7)
 Standards-Version: 3.9.6
 Section: libs
 Homepage: https://github.com/cososys/cppdevtk
@@ -99,7 +99,7 @@ Package: cppdevtk-base-dev
 Section: libdevel
 Architecture: any
 Depends: libcppdevtk-base (= ${binary:Version}),
-	libboost-all-dev (>=1.54.0), qt59base (>=5.9.6), ${misc:Depends}
+	libboost-all-dev (>=1.54.0), qt59base (>=5.9.7), ${misc:Depends}
 Description: Development files for libcppdevtk-base
  The cppdevtk-base-dev package contains libraries and header files for developing applications that use libcppdevtk-base.
 
@@ -171,7 +171,7 @@ Section: libdevel
 Architecture: any
 Depends: libcppdevtk-gui (= ${binary:Version}),
 	cppdevtk-qtsol-qtsingleapplication-dev (= ${binary:Version}), cppdevtk-qtsol-qtcopydialog-dev (= ${binary:Version}),
-	cppdevtk-util-dev (= ${binary:Version}), qt59x11extras (>=5.9.6), libxss-dev, libx11-dev, x11proto-core-dev,
+	cppdevtk-util-dev (= ${binary:Version}), qt59x11extras (>=5.9.7), libxss-dev, libx11-dev, x11proto-core-dev,
 	libgl1-mesa-dev, ${misc:Depends}
 Description: Development files for libcppdevtk-gui
  The cppdevtk-gui-dev package contains libraries and header files for developing applications that use libcppdevtk-gui.
