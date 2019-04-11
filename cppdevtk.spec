@@ -14,7 +14,9 @@
 # https://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto#Detect_a_distribution_flavor_for_special_code
 # - Tumbleweed: suse_version 1550
 #	%%if 0%%{?suse_version} >= 1550
-# - Leap 15: suse_version 1500, sle_version 150000
+# - Leap 15.1: suse_version 1500, sle_version 150100
+#	%%if 0%%{?sle_version} == 150100 && 0%%{?is_opensuse}
+# - Leap 15.0: suse_version 1500, sle_version 150000
 #	%%if 0%%{?sle_version} == 150000 && 0%%{?is_opensuse}
 # - Leap 42.3: suse_version 1315, sle_version 120300
 #	%%if 0%%{?sle_version} == 120300 && 0%%{?is_opensuse}
@@ -95,7 +97,10 @@ BuildRequires: libstdc++-devel glibc-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
-BuildRequires: libqt5-qtbase-devel >= 5.11.0
+BuildRequires: libqt5-qtbase-devel >= 5.12.2
+%endif
+%if (0%{?sle_version} == 150100)
+BuildRequires: libqt5-qtbase-devel >= 5.9.7
 %endif
 %if (0%{?sle_version} == 150000)
 BuildRequires: libqt5-qtbase-devel >= 5.9.4
@@ -115,6 +120,9 @@ BuildRequires: qt5-qtbase-devel >= 5.6.1
 %else
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
+BuildRequires: libqt4-devel >= 4.8.7
+%endif
+%if (0%{?sle_version} == 150100)
 BuildRequires: libqt4-devel >= 4.8.7
 %endif
 %if (0%{?sle_version} == 150000)
@@ -144,6 +152,9 @@ Summary: CppDevTk base library
 Group: System/Libraries
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
+BuildRequires: boost-devel >= 1.69.0
+%endif
+%if (0%{?sle_version} == 150100)
 BuildRequires: boost-devel >= 1.66.0
 %endif
 %if (0%{?sle_version} == 150000)
@@ -225,12 +236,16 @@ Summary: CppDevTk jni library
 Group: System/Libraries
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
+BuildRequires: java-12-openjdk-devel
+%else
+%if (0%{?sle_version} == 150100)
 BuildRequires: java-11-openjdk-devel
 %else
 %if (0%{?sle_version} == 150000)
 BuildRequires: java-10-openjdk-devel
 %else
 BuildRequires: java-1_8_0-openjdk-devel
+%endif
 %endif
 %endif
 %endif
@@ -287,7 +302,10 @@ BuildRequires: xorg-x11-proto-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
-BuildRequires: libqt5-qtx11extras-devel >= 5.11.0
+BuildRequires: libqt5-qtx11extras-devel >= 5.12.2
+%endif
+%if (0%{?sle_version} == 150100)
+BuildRequires: libqt5-qtx11extras-devel >= 5.9.7
 %endif
 %if (0%{?sle_version} == 150000)
 BuildRequires: libqt5-qtx11extras-devel >= 5.9.4
@@ -346,6 +364,9 @@ Group: Development/Libraries/C and C++
 Requires: libstdc++-devel glibc-devel
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
+Requires: boost-devel >= 1.69.0
+%endif
+%if (0%{?sle_version} == 150100)
 Requires: boost-devel >= 1.66.0
 %endif
 %if (0%{?sle_version} == 150000)
@@ -366,7 +387,10 @@ Requires: boost-devel >= 1.41.0
 %if (%{with_qt5})
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
-Requires: libqt5-qtbase-devel >= 5.11.0
+Requires: libqt5-qtbase-devel >= 5.12.2
+%endif
+%if (0%{?sle_version} == 150100)
+Requires: libqt5-qtbase-devel >= 5.9.7
 %endif
 %if (0%{?sle_version} == 150000)
 Requires: libqt5-qtbase-devel >= 5.9.4
@@ -386,6 +410,9 @@ Requires: qt5-qtbase-devel >= 5.6.1
 %else
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
+Requires: libqt4-devel >= 4.8.7
+%endif
+%if (0%{?sle_version} == 150100)
 Requires: libqt4-devel >= 4.8.7
 %endif
 %if (0%{?sle_version} == 150000)
@@ -476,12 +503,16 @@ Summary: Development files for lib%{name}-jni
 Group: Development/Libraries/C and C++
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
+Requires: java-12-openjdk-devel
+%else
+%if (0%{?sle_version} == 150100)
 Requires: java-11-openjdk-devel
 %else
 %if (0%{?sle_version} == 150000)
 Requires: java-10-openjdk-devel
 %else
 Requires: java-1_8_0-openjdk-devel
+%endif
 %endif
 %endif
 %endif
@@ -541,7 +572,10 @@ Requires: xorg-x11-proto-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
 %if (%{?suse_version} >= 1550)
-Requires: libqt5-qtx11extras-devel >= 5.11.0
+Requires: libqt5-qtx11extras-devel >= 5.12.2
+%endif
+%if (0%{?sle_version} == 150100)
+Requires: libqt5-qtx11extras-devel >= 5.9.7
 %endif
 %if (0%{?sle_version} == 150000)
 Requires: libqt5-qtx11extras-devel >= 5.9.4
