@@ -61,7 +61,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPoints(DeviceType deviceType, const QStrin
 
 /// \throw ::cppdevtk::base::RuntimeException
 /// \throw ::cppdevtk::util::FilesystemException
-/// \arg deviceName
+/// \param deviceName
 /// - On Linux has the form /dev/sr1 (includes _PATH_DEV (/dev/))
 /// - On Mac OS X has the form disk2 (BSD name)
 /// \return mount points that end with '/' (empty list if no error and no mount point found)

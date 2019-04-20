@@ -136,10 +136,10 @@ public:
 		Attributes();
 		~Attributes() CPPDEVTK_NOEXCEPT;
 		
-		void SetDetached(bool value);	///< \arg value If \c true then detached, joinable otherwise; default if not set is joinable.
+		void SetDetached(bool value);	///< \param value If \c true then detached, joinable otherwise; default if not set is joinable.
 		bool GetDetached() const;
 		
-		void SetStackSize(::std::size_t value);	///< \arg value stack size in bytes.
+		void SetStackSize(::std::size_t value);	///< \param value stack size in bytes.
 		::std::size_t GetStackSize() const;
 		
 #		if (CPPDEVTK_PLATFORM_UNIX)
@@ -218,14 +218,14 @@ public:
 	/// \remark If child thread exits with exception then \a exceptionPtr is set, otherwise \a retCode is set.
 	bool TryJoin(ExceptionPtr& exceptionPtr, MainFunctionType::result_type& retCode);
 	
-	/// \arg relTime Relative timeout, in milliseconds. If it is <= 0 calls \c TryJoin()
+	/// \param relTime Relative timeout, in milliseconds. If it is <= 0 calls \c TryJoin()
 	/// \attention
 	/// - calls \c ::std::terminate() if fails to propagate child thread exception, if any, in \a exceptionPtr
 	/// - Interruption point (if parent thread is interrupted child thread is not joined).
 	/// \remark If child thread exits with exception then \a exceptionPtr is set, otherwise \a retCode is set.
 	bool TryJoinFor(int relTime, ExceptionPtr& exceptionPtr, MainFunctionType::result_type& retCode);
 	
-	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC. If it is not in the future calls \c TryJoin()
+	/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC. If it is not in the future calls \c TryJoin()
 	/// \attention
 	/// - calls \c ::std::terminate() if fails to propagate child thread exception, if any, in \a exceptionPtr
 	/// - Interruption point (if parent thread is interrupted child thread is not joined).
@@ -332,12 +332,12 @@ CPPDEVTK_BASE_API void Yield() CPPDEVTK_NOEXCEPT;
 ///@{
 
 /// Blocks the calling thread for the relative timeout specified by \a relTime.
-/// \arg relTime In milliseconds.
+/// \param relTime In milliseconds.
 /// \pre \a relTime >= 0
 CPPDEVTK_BASE_API void SleepFor(int relTime);
 
 /// Blocks the calling thread for the absolute timeout specified by \a absTime.
-/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 /// \pre \a absTime is not in the past.
 CPPDEVTK_BASE_API void SleepUntil(::std::time_t absTime);
 

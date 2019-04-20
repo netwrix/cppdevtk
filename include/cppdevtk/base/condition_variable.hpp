@@ -89,21 +89,21 @@ public:
 	void Wait(UniqueLock<Mutex>& uniqueLock, Predicate predicate);	///< \attention Interruption point
 	
 	
-	/// \arg relTime Relative timeout, in milliseconds.
+	/// \param relTime Relative timeout, in milliseconds.
 	/// \attention Interruption point
 	cv_status::cv_status_t WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime);
 	
-	/// \arg relTime Relative timeout, in milliseconds.
+	/// \param relTime Relative timeout, in milliseconds.
 	/// \attention Interruption point
 	template <class Predicate>
 	bool WaitFor(UniqueLock<Mutex>& uniqueLock, int relTime, Predicate predicate);
 	
 	
-	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+	/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// \attention Interruption point
 	cv_status::cv_status_t WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime);
 	
-	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+	/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// \attention Interruption point
 	template <class Predicate>
 	bool WaitUntil(UniqueLock<Mutex>& uniqueLock, ::std::time_t absTime, Predicate predicate);

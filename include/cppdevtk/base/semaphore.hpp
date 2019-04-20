@@ -74,12 +74,12 @@ public:
 	
 	// sem_timedwait() not available on Mac OS X & iOS
 #	if (!((CPPDEVTK_HAVE_POSIX_UNNAMED_SEMAPHORE && !CPPDEVTK_ENABLE_SEMAPHORE_INTERRUPTION) && CPPDEVTK_PLATFORM_MACOSX))
-	/// \arg relTime Relative timeout, in milliseconds. If it is <= 0, calls TryWait()
+	/// \param relTime Relative timeout, in milliseconds. If it is <= 0, calls TryWait()
 	/// \attention Interruption point
 	/// \sa POSIX sem_timedwait()
 	bool WaitFor(int relTime);
 	
-	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC. If it is not in the future, calls TryWait()
+	/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC. If it is not in the future, calls TryWait()
 	/// \attention Interruption point
 	/// \sa POSIX sem_timedwait()
 	bool WaitUntil(::std::time_t absTime);

@@ -165,12 +165,12 @@ public:
 	bool TryLock();
 	
 	/// Attempts to obtain ownership of the mutex within the relative timeout.
-	/// \arg relTime Relative timeout, in milliseconds.
+	/// \param relTime Relative timeout, in milliseconds.
 	/// If it is <= 0, attempts to obtain ownership without blocking (as if by calling TryLock()).
 	bool TryLockFor(int relTime);
 	
 	/// Attempts to obtain ownership of the mutex.
-	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+	/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// If it has already passed, attempts to obtain ownership without blocking (as if by calling TryLock()).
 	bool TryLockUntil(::std::time_t absTime);
 	
@@ -236,12 +236,12 @@ public:
 	bool TryLock() CPPDEVTK_NOEXCEPT;
 	
 	/// Attempts to obtain ownership of the mutex within the relative timeout.
-	/// \arg relTime Relative timeout, in milliseconds.
+	/// \param relTime Relative timeout, in milliseconds.
 	/// If it is <= 0, attempts to obtain ownership without blocking (as if by calling TryLock()).
 	bool TryLockFor(int relTime);
 	
 	/// Attempts to obtain ownership of the mutex.
-	/// \arg absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+	/// \param absTime The number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
 	/// If it has already passed, attempts to obtain ownership without blocking (as if by calling TryLock()).
 	bool TryLockUntil(::std::time_t absTime);
 	

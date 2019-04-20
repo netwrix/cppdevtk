@@ -55,7 +55,7 @@ public:
 			QWidget* pParent = NULL, Qt::WindowFlags windowFlags = 0);
 	virtual ~ProgressDialog();
 	
-	/// \arg cancelButtonText If empty disable cancellation.
+	/// \param cancelButtonText If empty disable cancellation.
 	/// \note Handles cancel button, close (X) button and Esc key. Does not handle Alt+F4 shortcut (TODO)
 	void SetCancelable(const QString& cancelButtonText, bool processEvents = true);
 	

@@ -181,7 +181,7 @@ protected:
 template <>
 class CPPDEVTK_BASE_API StartAndRunCancelableTask<void>: public StartAndRunCancelableTaskBase<void> {
 public:
-	StartAndRunCancelableTask(::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
+	StartAndRunCancelableTask(::std::auto_ptr<StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask,
 			int priority
 #			if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 			, QThreadPool& threadPool
@@ -512,7 +512,7 @@ QtConcurrent
 
 
 inline StartAndRunCancelableTask<void>::StartAndRunCancelableTask(
-		::std::auto_ptr<typename StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority
+		::std::auto_ptr<StartAndRunCancelableTask<void>::CancelableTaskType> pCancelableTask, int priority
 #		if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 		, QThreadPool& threadPool
 #		endif

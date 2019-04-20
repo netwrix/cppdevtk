@@ -188,7 +188,7 @@ CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NOEXCEPT;
 
 #endif	// (CPPDEVTK_HAVE_CPP11_EXCEPTION_PROPAGATION)
 
-/// \arg terminateIfFail If fails then if it is \c true then calls \c ::std::terminate() else returns null exception ptr.
+/// \param terminateIfFail If fails then if it is \c true then calls \c ::std::terminate() else returns null exception ptr.
 /// \attention If \c ::std::make_exception_ptr() is not available then:
 /// - Qt based (including CppDevTk) exceptions work as expected.
 /// - only exceptions that inherit from \c ::std::exception are supported; other exceptions will be reported as unknown exception.
@@ -198,7 +198,7 @@ CPPDEVTK_BASE_API void swap(ExceptionPtr& x, ExceptionPtr& y) CPPDEVTK_NOEXCEPT;
 template <typename TException>
 ExceptionPtr MakeExceptionPtr(TException exc, bool terminateIfFail = true) CPPDEVTK_NOEXCEPT;
 
-/// \arg terminateIfFail If fails then if it is \c true then calls \c ::std::terminate() else returns null exception ptr.
+/// \param terminateIfFail If fails then if it is \c true then calls \c ::std::terminate() else returns null exception ptr.
 /// \attention If \c ::std::current_exception() is not available then:
 /// - Qt based (including CppDevTk) exceptions work as expected.
 /// - only exceptions that inherit from \c ::std::exception are supported; other exceptions will be reported as unknown exception.
