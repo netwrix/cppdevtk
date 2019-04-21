@@ -6,25 +6,17 @@
 - Android SDK r25.2.5 + NDK r10e needed on Windows
 
 
+Qt 5:
+- Ubuntu (14.04, 16.04, ppa:beineri, https://launchpad.net/~beineri):
+	16.04 > sudo add-apt-repository ppa:beineri/opt-qt-5.12.3-xenial
+	14.04 > sudo apt-add-repository ppa:beineri/opt-qt597-trusty
+	> sudo apt-get update
+- CentOS (6, 7, EPEL repo):
+	> yum install epel-release
+
+
 - Ubuntu:
 > sudo apt-get install build-essential ubuntu-dev-tools debhelper dpkg-sig apt-file
-
-
-- Ubuntu Qt 5:
-Use ppa:beineri (https://launchpad.net/~beineri)
-16.04 (xenial): sudo apt-add-repository ppa:beineri/opt-qt597-xenial
-14.04 (trusty): sudo apt-add-repository ppa:beineri/opt-qt597-trusty
-12.04 (precise): sudo apt-add-repository ppa:beineri/opt-qt563
-> sudo apt-get update
-> sudo apt-get install qt-latest qtcreator-latest
-
-18.04 (bionic):
-> sudo apt-get install qtbase5-dev libqt5x11extras5-dev qtcreator
-
-
-- CentOS Qt 5:
-Use EPEL repo
-> yum install epel-release
 
 
 - Windows environment variables for Java and Android:

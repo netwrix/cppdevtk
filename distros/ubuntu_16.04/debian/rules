@@ -30,7 +30,7 @@ export JAVA_HOME=/usr/lib/jvm/default-java
 
 
 override_dh_auto_configure:
-	. /opt/qt59/bin/qt59-env.sh &&	\
+	. /opt/qt512/bin/qt512-env.sh &&	\
 	qmake ./cppdevtk.pro -r -spec linux-g++	\
 	CONFIG*=release CONFIG-=debug CONFIG-=debug_and_release	\
 	CONFIG*=shared CONFIG-=static CONFIG-=static_and_shared	\
