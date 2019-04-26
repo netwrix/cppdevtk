@@ -16,7 +16,7 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: CppDevTk base library
- CppDevTk C++ base library.
+ CppDevTk base library.
 
 
 Package: libcppdevtk-qtsol-qtservice
@@ -48,7 +48,7 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: CppDevTk util library
- CppDevTk C++ util library.
+ CppDevTk util library.
 
 
 Package: libcppdevtk-jni
@@ -56,7 +56,7 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: CppDevTk jni library
- CppDevTk C++ jni library.
+ CppDevTk jni library.
 
 
 Package: libcppdevtk-qtsol-qtcopydialog
@@ -80,7 +80,7 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: CppDevTk gui library
- CppDevTk C++ gui library.
+ CppDevTk gui library.
 
 
 Package: libcppdevtk
@@ -92,7 +92,7 @@ Depends: libcppdevtk-gui (= ${binary:Version}), libcppdevtk-qtsol-qtsingleapplic
 	libcppdevtk-qtsol-qtlockedfile (= ${binary:Version}), libcppdevtk-qtsol-qtsinglecoreapplication (= ${binary:Version}), 
 	libcppdevtk-base (= ${binary:Version}), ${misc:Depends}
 Description: CppDevTk libraries
- Convenience package to install all CppDevTk C++ libraries.
+ Convenience package to install all CppDevTk libraries.
 
 
 Package: cppdevtk-base-dev

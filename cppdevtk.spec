@@ -176,7 +176,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description -n lib%{name}-base
-CppDevTk C++ base library.
+CppDevTk base library.
 
 
 %package -n lib%{name}-qtsol-qtservice
@@ -228,7 +228,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description -n lib%{name}-util
-CppDevTk C++ util library.
+CppDevTk util library.
 
 
 %package -n lib%{name}-jni
@@ -261,7 +261,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description -n lib%{name}-jni
-CppDevTk C++ jni library.
+CppDevTk jni library.
 
 
 %package -n lib%{name}-qtsol-qtcopydialog
@@ -336,7 +336,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
 %description -n lib%{name}-gui
-CppDevTk C++ gui library.
+CppDevTk gui library.
 
 
 %package -n lib%{name}
@@ -353,7 +353,7 @@ Requires: lib%{name}-qtsol-qtsingleapplication = %{version}
 Requires: lib%{name}-gui = %{version}
 
 %description -n lib%{name}
-Convenience package to install all CppDevTk C++ libraries.
+Convenience package to install all CppDevTk libraries.
 
 
 
@@ -753,8 +753,8 @@ make %{_smp_mflags}
 %install
 %make_install
 
-%__install -m 755 -d %{buildroot}/%{_defaultdocdir}/%{name}-devel
-%__install -m 644 -t %{buildroot}/%{_defaultdocdir}/%{name}-devel %{_builddir}/%{name}-%{version}/doc/*
+%__install -m 755 -d %{buildroot}/%{_defaultdocdir}/%{name}-base-devel
+%__install -m 644 -t %{buildroot}/%{_defaultdocdir}/%{name}-base-devel %{_builddir}/%{name}-%{version}/doc/*
 
 
 
@@ -818,56 +818,56 @@ exit 0
 
 %files -n lib%{name}-base
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_base.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_base.so.*
 
 
 %files -n lib%{name}-qtsol-qtservice
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_qtsol_qtservice.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_qtsol_qtservice.so.*
 
 
 %files -n lib%{name}-qtsol-qtlockedfile
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_qtsol_qtlockedfile.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_qtsol_qtlockedfile.so.*
 
 
 %files -n lib%{name}-qtsol-qtsinglecoreapplication
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.so.*
 
 
 %files -n lib%{name}-util
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_util.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_util.so.*
 
 
 %files -n lib%{name}-jni
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_jni.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_jni.so.*
 
 
 %files -n lib%{name}-qtsol-qtcopydialog
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_qtsol_qtcopydialog.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_qtsol_qtcopydialog.so.*
 
 
 %files -n lib%{name}-qtsol-qtsingleapplication
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_qtsol_qtsingleapplication.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_qtsol_qtsingleapplication.so.*
 
 
 %files -n lib%{name}-gui
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}_gui.so.*
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%{_libdir}/lib%{name}_gui.so.*
 
 
 %files -n lib%{name}
@@ -876,106 +876,106 @@ exit 0
 
 
 
-
 %files base-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+%docdir %{_defaultdocdir}/%{name}-devel
+%{_defaultdocdir}/%{name}-devel/*
 %{_includedir}/%{name}/config
 %{_includedir}/%{name}/base
 %{_libdir}/lib%{name}_base.so
 %{_libdir}/lib%{name}_base.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files qtsol-qtservice-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/QtSolutions/QtService
 %{_libdir}/lib%{name}_qtsol_qtservice.so
 %{_libdir}/lib%{name}_qtsol_qtservice.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files qtsol-qtlockedfile-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/QtSolutions/QtLockedFile
 %{_libdir}/lib%{name}_qtsol_qtlockedfile.so
 %{_libdir}/lib%{name}_qtsol_qtlockedfile.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files qtsol-qtsinglecoreapplication-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/QtSolutions/QtSingleCoreApplication
 %{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.so
 %{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files util-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/util
 %{_libdir}/lib%{name}_util.so
 %{_libdir}/lib%{name}_util.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files jni-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/jni
 %{_libdir}/lib%{name}_jni.so
 %{_libdir}/lib%{name}_jni.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files qtsol-qtcopydialog-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/QtSolutions/QtCopyDialog
 %{_libdir}/lib%{name}_qtsol_qtcopydialog.so
 %{_libdir}/lib%{name}_qtsol_qtcopydialog.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files qtsol-qtsingleapplication-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/QtSolutions/QtSingleApplication
 %{_libdir}/lib%{name}_qtsol_qtsingleapplication.so
 %{_libdir}/lib%{name}_qtsol_qtsingleapplication.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files gui-devel
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_includedir}/%{name}/gui
 %{_libdir}/lib%{name}_gui.so
 %{_libdir}/lib%{name}_gui.prl
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%docdir %{_defaultdocdir}/%{name}-devel
-%{_defaultdocdir}/%{name}-devel/*
 
 
 
 
 %files test-base
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_bindir}/%{name}_test_base
 %{_bindir}/%{name}_test_config
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files test-util
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_bindir}/%{name}_test_service
 %{_bindir}/%{name}_test_term_sig
 %{_bindir}/%{name}_test_util
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files test-gui
 %defattr(-,root,root,-)
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 %{_bindir}/%{name}_test_caps_lock_widget
 %{_bindir}/%{name}_test_disk_space_widget
 %{_bindir}/%{name}_test_invisible_widget
@@ -985,12 +985,13 @@ exit 0
 %{_bindir}/%{name}_test_slot_throw
 %{_datadir}/applications/*.desktop
 %{_datadir}/pixmaps
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
 
 
 %files test
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
+
+
 
 
 %changelog
