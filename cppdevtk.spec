@@ -879,8 +879,8 @@ exit 0
 %files base-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%docdir %{_defaultdocdir}/%{name}-devel
-%{_defaultdocdir}/%{name}-devel/*
+%docdir %{_defaultdocdir}/%{name}-base-devel
+%{_defaultdocdir}/%{name}-base-devel/*
 %{_includedir}/%{name}/config
 %{_includedir}/%{name}/base
 %{_libdir}/lib%{name}_base.so
