@@ -353,7 +353,7 @@ Requires: lib%{name}-qtsol-qtsingleapplication = %{version}
 Requires: lib%{name}-gui = %{version}
 
 %description -n lib%{name}
-Convenience package to install all CppDevTk libraries.
+Convenience package to install all %{name} libraries.
 
 
 
@@ -613,7 +613,7 @@ developing applications that use lib%{name}-gui.
 
 
 %package devel
-Summary: Development files for lib%{name}
+Summary: Development files for %{name}
 Group: Development/Libraries/C and C++
 Requires: %{name}-base-devel = %{version}
 Requires: %{name}-qtsol-qtservice-devel = %{version}
@@ -626,7 +626,7 @@ Requires: %{name}-qtsol-qtsingleapplication-devel = %{version}
 Requires: %{name}-gui-devel = %{version}
 
 %description devel
-Convenience package to install all %{name}-devel packages.
+Convenience package to install all %{name} devel packages.
 
 
 
@@ -674,14 +674,14 @@ The %{name}-test-gui package contains applications for testing lib%{name}-gui.
 
 
 %package test
-Summary: Test applications for lib%{name}
+Summary: Test applications for %{name}
 Group: Development/Libraries/C and C++
 Requires: %{name}-test-base = %{version}
 Requires: %{name}-test-util = %{version}
 Requires: %{name}-test-gui = %{version}
 
 %description test
-Convenience package to install all %{name}-test packages.
+Convenience package to install all %{name} test packages.
 
 
 

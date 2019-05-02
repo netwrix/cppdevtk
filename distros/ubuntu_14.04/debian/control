@@ -185,8 +185,8 @@ Depends: cppdevtk-gui-dev (= ${binary:Version}), cppdevtk-qtsol-qtsingleapplicat
 	cppdevtk-util-dev (= ${binary:Version}), cppdevtk-qtsol-qtsinglecoreapplication-dev (= ${binary:Version}),
 	cppdevtk-qtsol-qtlockedfile-dev (= ${binary:Version}), cppdevtk-qtsol-qtservice-dev (= ${binary:Version}),
 	cppdevtk-base-dev (= ${binary:Version}), ${misc:Depends}
-Description: Development files for libcppdevtk
- Convenience package to install all libcppdevtk-devel packages.
+Description: Development files for CppDevTk
+ Convenience package to install all CppDevTk devel packages.
 
 
 Package: cppdevtk-test-base
@@ -218,5 +218,5 @@ Section: utils
 Architecture: any
 Depends: cppdevtk-test-gui (= ${binary:Version}), cppdevtk-test-util (= ${binary:Version}),
 	cppdevtk-test-base (= ${binary:Version}), ${misc:Depends}
-Description: Test applications for libcppdevtk
- Convenience package to install all cppdevtk-test packages.
+Description: Test applications for CppDevTk
+ Convenience package to install all CppDevTk test packages.

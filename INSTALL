@@ -109,7 +109,9 @@ make -j1 install
 
 6.3 On Linux if packaging:
 RPM: rpmbuild -ta --sign cppdevtk-1.0.0.tar.bz2
-Deb: debuild --no-tgz-check -D -us -uc -B
+Deb:
+> debuild --no-tgz-check -D -us -uc -B
+> dpkg-sig -k CoSoSys --sign=origin --cache-passphrase ./*.deb
 
 Verify signature:
 - rpm based
