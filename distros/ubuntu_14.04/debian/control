@@ -4,7 +4,7 @@ Maintainer: Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.c
 Build-Depends: debhelper (>=9),
 	zlib1g-dev, libudev-dev, libboost-all-dev (>=1.54.0), libxss-dev, libx11-dev, x11proto-core-dev, libgl1-mesa-dev, default-jdk,
 	qt59base (>=5.9.7), qt59x11extras (>=5.9.7)
-Standards-Version: 3.9.6
+Standards-Version: 3.9.5
 Section: libs
 Homepage: https://github.com/cososys/cppdevtk
 #Vcs-Git: git://anonscm.debian.org/collab-maint/cppdevtk.git
