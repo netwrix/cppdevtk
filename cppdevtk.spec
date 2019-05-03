@@ -753,10 +753,6 @@ make %{_smp_mflags}
 %install
 %make_install
 
-%__install -m 755 -d %{buildroot}/%{_defaultdocdir}/%{name}-base-devel
-%__install -m 644 -t %{buildroot}/%{_defaultdocdir}/%{name}-base-devel %{_builddir}/%{name}-%{version}/doc/*
-
-
 
 %clean
 %__rm -rf %{buildroot}
@@ -878,9 +874,7 @@ exit 0
 
 %files base-devel
 %defattr(-,root,root,-)
-%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%docdir %{_defaultdocdir}/%{name}-base-devel
-%{_defaultdocdir}/%{name}-base-devel/*
+%doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO doc/cppdevtk_api.chm
 %{_includedir}/%{name}/config
 %{_includedir}/%{name}/base
 %{_libdir}/lib%{name}_base.so
