@@ -64,10 +64,7 @@ int main(int argc, char* argv[]) try {
 		try {
 			static_cast<Application*>(QCoreApplication::instance())->SetQuitOnTerminationSignals(false);
 		}
-		catch (const exception& exc) {
-			CPPDEVTK_LOG_ERROR("failed to SetQuitOnTerminationSignals(false); exc: " << Exception::GetDetailedInfo(exc));
-			::cppdevtk::base::SuppressUnusedWarning(exc);
-		}
+		CPPDEVTK_ON_BLOCK_EXIT_CATCH
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END
 	

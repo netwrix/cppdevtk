@@ -22,8 +22,14 @@
 
 
 #include "config.hpp"
+#include "logger.hpp"
+#include "cassert.hpp"
+#include "exception.hpp"
+#include "stdexcept.hpp"
 
 #include <boost/scope_exit.hpp>
+
+#include <stdexcept>
 
 
 #define CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void_or_seq)	\
@@ -33,6 +39,25 @@
 	BOOST_SCOPE_EXIT_TPL(void_or_seq)
 
 #define CPPDEVTK_ON_BLOCK_EXIT_END BOOST_SCOPE_EXIT_END
+
+
+#define CPPDEVTK_ON_BLOCK_EXIT_CATCH	\
+		catch (const ::std::logic_error& exc) {	\
+			CPPDEVTK_LOG_FATAL("CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error");	\
+			::std::terminate();	\
+		}	\
+		catch (const ::cppdevtk::base::LogicException& exc) {	\
+			CPPDEVTK_LOG_FATAL("CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException");	\
+			::std::terminate();	\
+		}	\
+		catch (const ::std::exception& exc) {	\
+			CPPDEVTK_LOG_WARN("CPPDEVTK_ON_BLOCK_EXIT: absorbing caught ::std::exception: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+		}	\
+		catch (...) {	\
+			CPPDEVTK_LOG_WARN("CPPDEVTK_ON_BLOCK_EXIT: absorbing caught unknown exception");	\
+		}
 
 
 #endif	// CPPDEVTK_BASE_ON_BLOCK_EXIT_HPP_INCLUDED_

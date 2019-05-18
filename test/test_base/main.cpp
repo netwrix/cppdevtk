@@ -367,136 +367,119 @@ int main(int argc, char* argv[]) try {
 	
 	//TestTmplExplInst testTmplExplInst;
 	
-	try {
-		CPPDEVTK_COUT << "testing SafeDelete..." << endl;
-		if (!TestSafeDelete()) {
-			CPPDEVTK_CERR << "SafeDelete test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "SafeDelete test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing Singleton..." << endl;
-		if (!TestSingleton()) {
-			CPPDEVTK_CERR << "Singleton test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "Singleton test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing StackTrace..." << endl;
-		if (!TestStackTrace()) {
-			CPPDEVTK_CERR << "StackTrace test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "StackTrace test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing StdExceptions..." << endl;
-		if (!TestStdExceptions()) {
-			CPPDEVTK_CERR << "StdExceptions test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "StdExceptions test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing NonStdExceptions..." << endl;
-		if (!TestNonStdExceptions()) {
-			CPPDEVTK_CERR << "NonStdExceptions test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "NonStdExceptions test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing SystemException..." << endl;
-		if (!TestSystemException()) {
-			CPPDEVTK_CERR << "SystemException test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "SystemException test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing ExceptionPropagation..." << endl;
-		if (!TestExceptionPropagation()) {
-			CPPDEVTK_CERR << "ExceptionPropagation test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "ExceptionPropagation test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing Factory..." << endl;
-		if (!TestFactory()) {
-			CPPDEVTK_CERR << "Factory test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "Factory test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing Any..." << endl;
-		if (!TestAny()) {
-			CPPDEVTK_CERR << "Any test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "Any test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing Optional..." << endl;
-		if (!TestOptional()) {
-			CPPDEVTK_CERR << "Optional test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		if (boost::test_errors_counter != 0) {
-			CPPDEVTK_COUT << "Optional test_errors_counter: " << boost::test_errors_counter << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "Optional test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing CallTraits..." << endl;
-		if (!TestCallTraits()) {
-			CPPDEVTK_CERR << "CallTraits test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		if (boost::test_errors_counter != 0) {
-			CPPDEVTK_COUT << "CallTraits test_errors_counter: " << boost::test_errors_counter << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "CallTraits test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing Mutex..." << endl;
-		if (!TestMutex()) {
-			CPPDEVTK_CERR << "Mutex test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "Mutex test: PASSED" << endl;
-		
-#		if (CPPDEVTK_HAVE_THREAD_STORAGE)
-		
-		CPPDEVTK_COUT << "testing Thread..." << endl;
-		if (!TestThread()) {
-			CPPDEVTK_CERR << "Thread test: FAILED!!!" << endl;
-			return EXIT_FAILURE;
-		}
-		CPPDEVTK_COUT << "Thread test: PASSED" << endl;
-		
-#		endif
-		
-		CPPDEVTK_COUT << "testing semaphore..." << endl;
-		test_sem();
-		CPPDEVTK_COUT << "semaphore test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "testing condition variable..." << endl;
-		test_cv();
-		CPPDEVTK_COUT << "condition variable test: PASSED" << endl;
-		
-		CPPDEVTK_COUT << "done!" << endl;
-		return EXIT_SUCCESS;
-	}
-	catch (const exception& exc) {
-		const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
-				exc.what(), Exception::GetDetailedInfo(exc));
-		CPPDEVTK_LOG_ERROR(kErrMsg);
-		CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
-		
+	CPPDEVTK_COUT << "testing SafeDelete..." << endl;
+	if (!TestSafeDelete()) {
+		CPPDEVTK_CERR << "SafeDelete test: FAILED!!!" << endl;
 		return EXIT_FAILURE;
 	}
-	catch (...) {
-		const QString kErrMsg("caught unknown exception!!!");
-		CPPDEVTK_LOG_ERROR(kErrMsg);
-		CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
-		
+	CPPDEVTK_COUT << "SafeDelete test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing Singleton..." << endl;
+	if (!TestSingleton()) {
+		CPPDEVTK_CERR << "Singleton test: FAILED!!!" << endl;
 		return EXIT_FAILURE;
 	}
+	CPPDEVTK_COUT << "Singleton test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing StackTrace..." << endl;
+	if (!TestStackTrace()) {
+		CPPDEVTK_CERR << "StackTrace test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "StackTrace test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing StdExceptions..." << endl;
+	if (!TestStdExceptions()) {
+		CPPDEVTK_CERR << "StdExceptions test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "StdExceptions test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing NonStdExceptions..." << endl;
+	if (!TestNonStdExceptions()) {
+		CPPDEVTK_CERR << "NonStdExceptions test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "NonStdExceptions test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing SystemException..." << endl;
+	if (!TestSystemException()) {
+		CPPDEVTK_CERR << "SystemException test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "SystemException test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing ExceptionPropagation..." << endl;
+	if (!TestExceptionPropagation()) {
+		CPPDEVTK_CERR << "ExceptionPropagation test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "ExceptionPropagation test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing Factory..." << endl;
+	if (!TestFactory()) {
+		CPPDEVTK_CERR << "Factory test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "Factory test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing Any..." << endl;
+	if (!TestAny()) {
+		CPPDEVTK_CERR << "Any test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "Any test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing Optional..." << endl;
+	if (!TestOptional()) {
+		CPPDEVTK_CERR << "Optional test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	if (boost::test_errors_counter != 0) {
+		CPPDEVTK_COUT << "Optional test_errors_counter: " << boost::test_errors_counter << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "Optional test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing CallTraits..." << endl;
+	if (!TestCallTraits()) {
+		CPPDEVTK_CERR << "CallTraits test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	if (boost::test_errors_counter != 0) {
+		CPPDEVTK_COUT << "CallTraits test_errors_counter: " << boost::test_errors_counter << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "CallTraits test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing Mutex..." << endl;
+	if (!TestMutex()) {
+		CPPDEVTK_CERR << "Mutex test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "Mutex test: PASSED" << endl;
+	
+#	if (CPPDEVTK_HAVE_THREAD_STORAGE)
+	
+	CPPDEVTK_COUT << "testing Thread..." << endl;
+	if (!TestThread()) {
+		CPPDEVTK_CERR << "Thread test: FAILED!!!" << endl;
+		return EXIT_FAILURE;
+	}
+	CPPDEVTK_COUT << "Thread test: PASSED" << endl;
+	
+#	endif
+	
+	CPPDEVTK_COUT << "testing semaphore..." << endl;
+	test_sem();
+	CPPDEVTK_COUT << "semaphore test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "testing condition variable..." << endl;
+	test_cv();
+	CPPDEVTK_COUT << "condition variable test: PASSED" << endl;
+	
+	CPPDEVTK_COUT << "done!" << endl;
+	return EXIT_SUCCESS;
 }
 catch (const exception& exc) {
 	const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(

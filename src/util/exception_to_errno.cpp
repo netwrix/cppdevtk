@@ -67,7 +67,7 @@ CPPDEVTK_UTIL_API void ExceptionToErrno() {
 			errno = EINVAL;
 		}
 		catch (const base::LogicException&) {
-			errno = ENODATA;
+			errno = EINVAL;
 		}
 		catch (const base::Exception&) {
 			errno = ENODATA;
@@ -83,7 +83,7 @@ CPPDEVTK_UTIL_API void ExceptionToErrno() {
 			errno = EINVAL;
 		}
 		catch (const ::std::logic_error&) {
-			errno = ENODATA;
+			errno = EINVAL;
 		}
 		catch (const ::std::bad_alloc&) {
 			errno = ENOMEM;
