@@ -434,7 +434,7 @@ Requires: qt-devel >= 4.6.2
 Requires: lib%{name}-base = %{version}
 
 %description base-devel
-The %{name}-base-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-base.
 
 
@@ -445,7 +445,7 @@ Requires: lib%{name}-qtsol-qtservice = %{version}
 Requires: %{name}-base-devel = %{version}
 
 %description qtsol-qtservice-devel
-The %{name}-qtsol-qtservice-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-qtsol-qtservice.
 
 
@@ -456,7 +456,7 @@ Requires: lib%{name}-qtsol-qtlockedfile = %{version}
 Requires: %{name}-base-devel = %{version}
 
 %description qtsol-qtlockedfile-devel
-The %{name}-qtsol-qtlockedfile-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-qtsol-qtlockedfile.
 
 
@@ -468,7 +468,7 @@ Requires: %{name}-qtsol-qtlockedfile-devel = %{version}
 Requires: %{name}-base-devel = %{version}
 
 %description qtsol-qtsinglecoreapplication-devel
-The %{name}-qtsol-qtsinglecoreapplication-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-qtsol-qtsinglecoreapplication.
 
 
@@ -494,7 +494,7 @@ Requires: %{name}-qtsol-qtsinglecoreapplication-devel = %{version}
 Requires: %{name}-base-devel = %{version}
 
 %description util-devel
-The %{name}-util-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-util.
 
 
@@ -528,7 +528,7 @@ Requires: lib%{name}-jni = %{version}
 Requires: %{name}-util-devel = %{version}
 
 %description jni-devel
-The %{name}-jni-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-jni.
 
 
@@ -539,7 +539,7 @@ Requires: lib%{name}-qtsol-qtcopydialog = %{version}
 Requires: %{name}-util-devel = %{version}
 
 %description qtsol-qtcopydialog-devel
-The %{name}-qtsol-qtcopydialog-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-qtsol-qtcopydialog.
 
 
@@ -550,7 +550,7 @@ Requires: lib%{name}-qtsol-qtsingleapplication = %{version}
 Requires: %{name}-util-devel = %{version}
 
 %description qtsol-qtsingleapplication-devel
-The %{name}-qtsol-qtsingleapplication-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-qtsol-qtsingleapplication.
 
 
@@ -608,7 +608,7 @@ Requires: %{name}-qtsol-qtsingleapplication-devel = %{version}
 Requires: %{name}-util-devel = %{version}
 
 %description gui-devel
-The %{name}-gui-devel package contains libraries and header files for
+This package contains libraries and header files for
 developing applications that use lib%{name}-gui.
 
 
@@ -642,7 +642,7 @@ BuildRequires: desktop-file-utils
 %endif
 
 %description test-base
-The %{name}-test-base package contains applications for testing lib%{name}-base.
+This package contains applications for testing lib%{name}-base.
 
 
 %package test-util
@@ -656,7 +656,7 @@ BuildRequires: desktop-file-utils
 %endif
 
 %description test-util
-The %{name}-test-util package contains applications for testing lib%{name}-util.
+This package contains applications for testing lib%{name}-util.
 
 
 %package test-gui
@@ -670,7 +670,7 @@ BuildRequires: desktop-file-utils
 %endif
 
 %description test-gui
-The %{name}-test-gui package contains applications for testing lib%{name}-gui.
+This package contains applications for testing lib%{name}-gui.
 
 
 %package test
