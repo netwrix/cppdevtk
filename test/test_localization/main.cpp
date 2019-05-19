@@ -96,6 +96,9 @@ int main(int argc, char* argv[]) try {
 				Application::translate(CPPDEVTK_TEST_LOCALIZATION_TR_CTX, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR),
 				Application::translate("main", "Caught exception: %1").arg(exc.what()), exc);
 		
+		CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) == NULL)
+				&& (dynamic_cast<const ::std::logic_error*>(&exc) == NULL));
+		
 		return EXIT_FAILURE;
 	}
 	catch (...) {
@@ -113,8 +116,8 @@ catch (const exception& exc) {
 	CPPDEVTK_LOG_ERROR(kErrMsg);
 	qcerr << "Error: " << kErrMsg << endl;
 	
-	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) != NULL)
-			&& (dynamic_cast<const ::std::logic_error*>(&exc) != NULL));
+	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) == NULL)
+			&& (dynamic_cast<const ::std::logic_error*>(&exc) == NULL));
 	
 	return EXIT_FAILURE;
 }

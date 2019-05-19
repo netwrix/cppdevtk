@@ -79,8 +79,8 @@ catch (const exception& exc) {
 	CPPDEVTK_LOG_ERROR(kErrMsg);
 	CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 	
-	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) != NULL)
-			&& (dynamic_cast<const ::std::logic_error*>(&exc) != NULL));
+	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) == NULL)
+			&& (dynamic_cast<const ::std::logic_error*>(&exc) == NULL));
 	
 	return EXIT_FAILURE;
 }

@@ -119,6 +119,9 @@ int main(int argc, char* argv[]) try {
 		MessageBox::Critical(application.GetDefaultWindow(), CPPDEVTK_TEST_PC_MAN_SHORT_NAME,
 				QString("Caught exception: %1").arg(exc.what()), exc);
 		
+		CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) == NULL)
+				&& (dynamic_cast<const ::std::logic_error*>(&exc) == NULL));
+		
 		return EXIT_FAILURE;
 	}
 	catch (...) {
@@ -135,8 +138,8 @@ catch (const exception& exc) {
 	CPPDEVTK_LOG_ERROR(kErrMsg);
 	qcerr << "Error: " << kErrMsg << endl;
 	
-	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) != NULL)
-			&& (dynamic_cast<const ::std::logic_error*>(&exc) != NULL));
+	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) == NULL)
+			&& (dynamic_cast<const ::std::logic_error*>(&exc) == NULL));
 	
 	return EXIT_FAILURE;
 }
