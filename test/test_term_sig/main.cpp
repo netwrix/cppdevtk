@@ -30,10 +30,21 @@
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/unused.hpp>
+#include <cppdevtk/base/qiostream.hpp>
 
 #include <QtCore/QString>
+#include <QtCore/QtDebug>
 
 #include <cstdlib>
+
+
+#if (!CPPDEVTK_PLATFORM_ANDROID)
+#define CPPDEVTK_COUT ::cppdevtk::base::qcout
+#define CPPDEVTK_CERR ::cppdevtk::base::qcerr
+#else
+#define CPPDEVTK_COUT qDebug()
+#define CPPDEVTK_CERR qCritical()
+#endif
 
 
 using ::cppdevtk::base::Exception;

@@ -28,6 +28,11 @@
 #	error "This file requires PowerNotifier, ScreenSaver, Session, SessionManager and StorageDeviceNotifier!!!"
 #endif
 
+#if (!CPPDEVTK_PLATFORM_DESKTOP)
+#	error "This project is deskyop only!!!"
+#endif
+
+
 #include "info.hpp"
 
 

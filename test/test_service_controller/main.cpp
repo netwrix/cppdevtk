@@ -29,6 +29,7 @@
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/info_tr.hpp>
 
+#include <QtCore/QtDebug>
 #include <QtCore/QSettings>
 #include <QtCore/QString>
 #ifndef CPPDEVTK_SHARED
@@ -45,6 +46,15 @@ Q_IMPORT_PLUGIN(QICOPlugin)
 #else
 Q_IMPORT_PLUGIN(qico)
 #endif
+#endif
+
+
+#if (!CPPDEVTK_PLATFORM_ANDROID)
+#define CPPDEVTK_COUT ::cppdevtk::base::qcout
+#define CPPDEVTK_CERR ::cppdevtk::base::qcerr
+#else
+#define CPPDEVTK_COUT qDebug()
+#define CPPDEVTK_CERR qCritical()
 #endif
 
 
@@ -106,7 +116,7 @@ catch (const exception& exc) {
 	const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
 			exc.what(), Exception::GetDetailedInfo(exc));
 	CPPDEVTK_LOG_ERROR(kErrMsg);
-	qcerr << "Error: " << kErrMsg << endl;
+	CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 	
 	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) == NULL)
 			&& (dynamic_cast<const ::std::logic_error*>(&exc) == NULL));
@@ -116,7 +126,7 @@ catch (const exception& exc) {
 catch (...) {
 	const QString kErrMsg("caught unknown exception!!!");
 	CPPDEVTK_LOG_ERROR(kErrMsg);
-	qcerr << "Error: " << kErrMsg << endl;
+	CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
 	
 	return EXIT_FAILURE;
 }

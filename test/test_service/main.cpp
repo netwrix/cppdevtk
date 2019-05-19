@@ -27,6 +27,7 @@
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/cassert.hpp>
 
+#include <QtCore/QtDebug>
 #include <QtCore/QString>
 #include <QtCore/QtDebug>
 #include <QtCore/QSettings>
