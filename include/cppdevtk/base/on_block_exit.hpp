@@ -29,6 +29,7 @@
 
 #include <boost/scope_exit.hpp>
 
+#include <exception>
 #include <stdexcept>
 
 
@@ -42,15 +43,13 @@
 
 
 #define CPPDEVTK_ON_BLOCK_EXIT_CATCH	\
-		catch (const ::std::logic_error& exc) {	\
-			CPPDEVTK_LOG_FATAL("CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
-			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error");	\
-			::std::terminate();	\
-		}	\
 		catch (const ::cppdevtk::base::LogicException& exc) {	\
-			CPPDEVTK_LOG_FATAL("CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			CPPDEVTK_LOG_ERROR("CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
 			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException");	\
-			::std::terminate();	\
+		}	\
+		catch (const ::std::logic_error& exc) {	\
+			CPPDEVTK_LOG_ERROR("CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error");	\
 		}	\
 		catch (const ::std::exception& exc) {	\
 			CPPDEVTK_LOG_WARN("CPPDEVTK_ON_BLOCK_EXIT: absorbing caught ::std::exception: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\

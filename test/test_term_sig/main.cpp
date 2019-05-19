@@ -26,6 +26,7 @@
 #include "application.hpp"
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/exception.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/unused.hpp>
@@ -80,6 +81,9 @@ catch (const exception& exc) {
 			exc.what(), Exception::GetDetailedInfo(exc));
 	CPPDEVTK_LOG_ERROR(kErrMsg);
 	CPPDEVTK_CERR << "Error: " << kErrMsg << endl;
+	
+	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) != NULL)
+			&& (dynamic_cast<const ::std::logic_error*>(&exc) != NULL));
 	
 	return EXIT_FAILURE;
 }

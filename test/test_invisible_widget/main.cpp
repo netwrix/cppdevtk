@@ -27,6 +27,7 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/qiostream.hpp>
 #include <cppdevtk/base/exception.hpp>
+#include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/info_tr.hpp>
 
 #include <QtCore/QString>
@@ -97,15 +98,18 @@ int main(int argc, char* argv[]) try {
 catch (const exception& exc) {
 	const QString kErrMsg = QString("caught ::std::exception: %1\nDetails: %2").arg(
 			exc.what(), Exception::GetDetailedInfo(exc));
-	CPPDEVTK_LOG_FATAL(kErrMsg);
-	qcerr << "Fatal Error: " << kErrMsg << endl;
+	CPPDEVTK_LOG_ERROR(kErrMsg);
+	qcerr << "Error: " << kErrMsg << endl;
+	
+	CPPDEVTK_ASSERT((dynamic_cast<const ::cppdevtk::base::LogicException*>(&exc) != NULL)
+			&& (dynamic_cast<const ::std::logic_error*>(&exc) != NULL));
 	
 	return EXIT_FAILURE;
 }
 catch (...) {
 	const QString kErrMsg("caught unknown exception!!!");
-	CPPDEVTK_LOG_FATAL(kErrMsg);
-	qcerr << "Fatal Error: " << kErrMsg << endl;
+	CPPDEVTK_LOG_ERROR(kErrMsg);
+	qcerr << "Error: " << kErrMsg << endl;
 	
 	return EXIT_FAILURE;
 }
