@@ -218,7 +218,7 @@ SOURCES += \
 	core_application_base.cpp \
 	damerau_levenshtein_distance.cpp \
 	dynamic_library.cpp \
-	exception_to_errno.cpp	\
+	set_errno_from_exception.cpp	\
 	filesystem_exception.cpp \
 	filesystem_utils.cpp \
 	init_resources.cpp	\
@@ -227,7 +227,8 @@ SOURCES += \
 	no_such_file_or_directory_exception.cpp	\
 	password_requirements.cpp \
 	q_zip.cpp \
-	tinyxml2.cpp
+	tinyxml2.cpp	\
+	throw_exception_from_errno.cpp
 
 unix {
 	SOURCES +=	\
@@ -295,7 +296,7 @@ HEADERS += \
 	../../include/cppdevtk/util/dynamic_library.hpp \
 	../../include/cppdevtk/util/dynamic_loader.hpp \
 	../../include/cppdevtk/util/dynamic_loader_exception.hpp \
-	../../include/cppdevtk/util/exception_to_errno.hpp	\
+	../../include/cppdevtk/util/set_errno_from_exception.hpp	\
 	../../include/cppdevtk/util/filesystem_exception.hpp \
 	../../include/cppdevtk/util/filesystem_utils.hpp \
 	../../include/cppdevtk/util/get_user_name.hpp \
@@ -311,7 +312,8 @@ HEADERS += \
 	../../include/cppdevtk/util/password_requirements.hpp \
 	../../include/cppdevtk/util/q_zip_reader.hpp \
 	../../include/cppdevtk/util/q_zip_writer.hpp \
-	../../include/cppdevtk/util/tinyxml2.h
+	../../include/cppdevtk/util/tinyxml2.h	\
+	../../include/cppdevtk/util/throw_exception_from_errno.hpp
 
 unix {
 	HEADERS += ../../include/cppdevtk/util/filesystem_utils_unx.hpp

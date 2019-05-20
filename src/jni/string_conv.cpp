@@ -18,26 +18,25 @@
 
 
 #include <cppdevtk/jni/config.hpp>
+#if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
+#undef CPPDEVTK_ENABLE_DBC
+#define CPPDEVTK_ENABLE_DBC 1
+#undef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
+#define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION (!CPPDEVTK_ENABLE_DBC || 0)
+#endif
+
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
 #endif
 
 #include <cppdevtk/jni/string_conv.hpp>
-#if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
-#undef CPPDEVTK_ENABLE_DBC
-#define CPPDEVTK_ENABLE_DBC 1
-#undef CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE
-#define CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE 0
-#undef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
-#define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION 0
-#endif
-
 #include <cppdevtk/jni/exceptions.hpp>
 #include <cppdevtk/jni/exceptions_support.hpp>
+
 #include <cppdevtk/base/cassert.hpp>
-#include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/dbc.hpp>
 
 #include <cstddef>
 

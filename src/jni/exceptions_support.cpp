@@ -18,37 +18,35 @@
 
 
 #include <cppdevtk/jni/config.hpp>
+#if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
+#undef CPPDEVTK_ENABLE_DBC
+#define CPPDEVTK_ENABLE_DBC 1
+#undef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
+#define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION (!CPPDEVTK_ENABLE_DBC || 0)
+#endif
+
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(disable: 4459)	// C4459: declaration of 'item' hides global declaration
 #endif
 
 #include <cppdevtk/jni/exceptions_support.hpp>
-#if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
-#undef CPPDEVTK_ENABLE_DBC
-#define CPPDEVTK_ENABLE_DBC 1
-#undef CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE
-#define CPPDEVTK_DBC_DISABLE_THROW_ON_FAILURE 0
-#undef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
-#define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION 0
-#endif
-
 #include <cppdevtk/jni/exceptions.hpp>
 #include <cppdevtk/jni/string_conv.hpp>
 
-#include <cppdevtk/base/task_canceled_exception.hpp>
 #include <cppdevtk/util/no_such_file_or_directory_exception.hpp>
+
+#include <cppdevtk/base/task_canceled_exception.hpp>
 #include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/dbc_exceptions.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/exception.hpp>
-
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/string_conv.hpp>
-#include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/on_block_exit.hpp>
+#include <cppdevtk/base/dbc.hpp>
 
 #include <cstddef>
 #include <cstdlib>
@@ -76,6 +74,33 @@ CPPDEVTK_JNI_API void ThrowJavaExceptionFromCatchedCppException(JNIEnv* pJniEnv)
 	// NOTE: we must support Java >= 1.6 (this is why we can not use for ex java.nio.file.FileSystemException (since 1.7))
 	try {
 		throw;
+	}
+	
+	// CppDevTk JNI exceptions
+	catch (const NoSuchFieldError& exc) {
+		CPPDEVTK_LOG_ERROR("throwing Java NoSuchFieldError; caught C++ NoSuchFieldError: "
+				<< Exception::GetDetailedInfo(exc));
+		detail::ThrowJavaException(pJniEnv, "java/lang/NoSuchFieldError", exc.what());
+	}
+	catch (const NoSuchMethodError& exc) {
+		CPPDEVTK_LOG_ERROR("throwing Java NoSuchMethodError; caught C++ NoSuchMethodError: "
+				<< Exception::GetDetailedInfo(exc));
+		detail::ThrowJavaException(pJniEnv, "java/lang/NoSuchMethodError", exc.what());
+	}
+	catch (const NoClassDefFoundError& exc) {
+		CPPDEVTK_LOG_ERROR("throwing Java NoClassDefFoundError; caught C++ NoClassDefFoundError: "
+				<< Exception::GetDetailedInfo(exc));
+		detail::ThrowJavaException(pJniEnv, "java/lang/NoClassDefFoundError", exc.what());
+	}
+	catch (const OutOfMemoryError& exc) {
+		CPPDEVTK_LOG_ERROR("throwing Java OutOfMemoryError; caught C++ OutOfMemoryError: "
+				<< Exception::GetDetailedInfo(exc));
+		detail::ThrowJavaException(pJniEnv, "java/lang/OutOfMemoryError", exc.what());
+	}
+	catch (const JniException& exc) {
+		CPPDEVTK_LOG_ERROR("throwing Java Exception; caught C++ JniException: "
+				<< Exception::GetDetailedInfo(exc));
+		detail::ThrowJavaException(pJniEnv, "java/lang/Exception", exc.what());
 	}
 	
 	// CppDevTk specific exceptions
@@ -247,75 +272,75 @@ CPPDEVTK_JNI_API void ThrowCppExceptionFromJavaPendingException(JNIEnv* pJniEnv,
 	CPPDEVTK_ON_BLOCK_EXIT_END
 	CPPDEVTK_THROW_JNI_EXC_IF_JAVA_PENDING_EXC(pJniEnv, "'String Throwable::getMessage()' failed", false);
 	
-	QString qThrowableMsg;
+	QString qThrowableMsg = "no message";
 	if (jThrowableMsg != NULL) {
 		qThrowableMsg = J2Q(pJniEnv, jThrowableMsg);
 	}
 	
 	// Derived from java/lang/RuntimeException
 	if (detail::IsBaseOf(pJniEnv, "java/lang/IllegalArgumentException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ InvalidArgumentException; caught Java IllegalArgumentException");
+		CPPDEVTK_LOG_ERROR("throwing C++ InvalidArgumentException; caught Java IllegalArgumentException: " << qThrowableMsg);
 		throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/IllegalStateException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ InvalidStateException; caught Java IllegalStateException");
+		CPPDEVTK_LOG_ERROR("throwing C++ InvalidStateException; caught Java IllegalStateException: " << qThrowableMsg);
 		throw CPPDEVTK_INVALID_STATE_EXCEPTION("", "", qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/NullPointerException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ NullPointerException; caught Java NullPointerException");
+		CPPDEVTK_LOG_ERROR("throwing C++ NullPointerException; caught Java NullPointerException: " << qThrowableMsg);
 		throw CPPDEVTK_NULL_POINTER_EXCEPTION();
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/ClassCastException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ bad_cast; caught Java ClassCastException");
+		CPPDEVTK_LOG_ERROR("throwing C++ bad_cast; caught Java ClassCastException: " << qThrowableMsg);
 		throw ::std::bad_cast();
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/RuntimeException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ LogicException; caught Java RuntimeException");
+		CPPDEVTK_LOG_ERROR("throwing C++ LogicException; caught Java RuntimeException: " << qThrowableMsg);
 		throw CPPDEVTK_LOGIC_EXCEPTION(qThrowableMsg);
 	}
 	
 	// Derived from java/lang/Exception
 	if (detail::IsBaseOf(pJniEnv, "java/util/concurrent/CancellationException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ TaskCanceledException; caught Java CancellationException");
+		CPPDEVTK_LOG_ERROR("throwing C++ TaskCanceledException; caught Java CancellationException: " << qThrowableMsg);
 		throw CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/io/FileNotFoundException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ NoSuchFileOrDirectoryException; caught Java FileNotFoundException");
+		CPPDEVTK_LOG_ERROR("throwing C++ NoSuchFileOrDirectoryException; caught Java FileNotFoundException: " << qThrowableMsg);
 		throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/io/IOException", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ IosFailureException; caught Java IOException");
+		CPPDEVTK_LOG_ERROR("throwing C++ IosFailureException; caught Java IOException: " << qThrowableMsg);
 		throw CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/Exception", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ JniException; caught Java Exception");
+		CPPDEVTK_LOG_ERROR("throwing C++ JniException; caught Java Exception: " << qThrowableMsg);
 		throw CPPDEVTK_JNI_EXCEPTION(qThrowableMsg);
 	}
 	
 	// Derived from java/lang/Error
 	if (detail::IsBaseOf(pJniEnv, "java/lang/OutOfMemoryError", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ OutOfMemoryError; caught Java OutOfMemoryError");
+		CPPDEVTK_LOG_ERROR("throwing C++ OutOfMemoryError; caught Java OutOfMemoryError: " << qThrowableMsg);
 		throw CPPDEVTK_OUT_OF_MEMORY_ERROR(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/NoClassDefFoundError", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ NoClassDefFoundError; caught Java NoClassDefFoundError");
+		CPPDEVTK_LOG_ERROR("throwing C++ NoClassDefFoundError; caught Java NoClassDefFoundError: " << qThrowableMsg);
 		throw CPPDEVTK_NO_CLASS_DEF_FOUND_ERROR(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/NoSuchMethodError", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ NoSuchMethodError; caught Java NoSuchMethodError");
+		CPPDEVTK_LOG_ERROR("throwing C++ NoSuchMethodError; caught Java NoSuchMethodError: " << qThrowableMsg);
 		throw CPPDEVTK_NO_SUCH_METHOD_ERROR(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/NoSuchFieldError", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ NoSuchFieldError; caught Java NoSuchFieldError");
+		CPPDEVTK_LOG_ERROR("throwing C++ NoSuchFieldError; caught Java NoSuchFieldError: " << qThrowableMsg);
 		throw CPPDEVTK_NO_SUCH_FIELD_ERROR(qThrowableMsg);
 	}
 	if (detail::IsBaseOf(pJniEnv, "java/lang/Error", jThrowableClass)) {
-		CPPDEVTK_LOG_ERROR("throwing C++ JniException; caught Java Error");
+		CPPDEVTK_LOG_ERROR("throwing C++ JniException; caught Java Error: " << qThrowableMsg);
 		throw CPPDEVTK_JNI_EXCEPTION(qThrowableMsg);
 	}
 	
 	CPPDEVTK_ASSERT(detail::IsBaseOf(pJniEnv, "java/lang/Throwable", jThrowableClass));
-	CPPDEVTK_LOG_ERROR("throwing C++ JniException; caught Java Throwable");
+	CPPDEVTK_LOG_ERROR("throwing C++ JniException; caught Java Throwable: " << qThrowableMsg);
 	throw CPPDEVTK_JNI_EXCEPTION(qThrowableMsg);
 }
 

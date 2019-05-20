@@ -17,45 +17,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/jni/config.hpp>
-#if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
-#undef CPPDEVTK_ENABLE_DBC
-#define CPPDEVTK_ENABLE_DBC 1
-#undef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
-#define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION (!CPPDEVTK_ENABLE_DBC || 0)
-#endif
+#ifndef CPPDEVTK_UTIL_THROW_EXCEPTION_FROM_ERRNO_HPP_INCLUDED_
+#define CPPDEVTK_UTIL_THROW_EXCEPTION_FROM_ERRNO_HPP_INCLUDED_
 
-#include <cppdevtk/jni/jni_loader.hpp>
 
-#include <cppdevtk/base/unused.h>
-#include <cppdevtk/base/dbc.hpp>
-
-#include <cstddef>
+#include "config.hpp"
 
 
 namespace cppdevtk {
-namespace jni_base {
+namespace util {
 
 
-CPPDEVTK_JNI_API JavaVM* gpJniJvm;
-CPPDEVTK_JNI_API ::cppdevtk::base::DefaultMutex gpJniJvmMtx;
+CPPDEVTK_UTIL_API void ThrowExceptionFromErrno(int errNo);
 
 
-}
-}
+}	// namespace util
+}	// namespace cppdevtk
 
 
-CPPDEVTK_JNI_API jint JNICALL JNI_OnLoad(JavaVM* pJavaVm, void* reserved) {
-	CPPDEVTK_UNUSED(reserved);
-	
-	::cppdevtk::jni_base::gpJniJvm = pJavaVm;
-	
-	return CPPDEVTK_JNI_VERSION;
-}
-
-CPPDEVTK_JNI_API void JNICALL JNI_OnUnload(JavaVM* pJavaVm, void* reserved) {
-	CPPDEVTK_UNUSED(pJavaVm);
-	CPPDEVTK_UNUSED(reserved);
-	
-	::cppdevtk::jni_base::gpJniJvm = NULL;
-}
+#endif	// CPPDEVTK_UTIL_THROW_EXCEPTION_FROM_ERRNO_HPP_INCLUDED_

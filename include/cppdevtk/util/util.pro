@@ -32,7 +32,7 @@ HEADERS += \
 	dynamic_library.hpp \
 	dynamic_loader.hpp \
 	dynamic_loader_exception.hpp \
-	exception_to_errno.hpp	\
+	set_errno_from_exception.hpp	\
 	filesystem_exception.hpp \
 	filesystem_utils.hpp \
 	get_user_name.hpp \
@@ -46,7 +46,8 @@ HEADERS += \
 	password_requirements.hpp \
 	q_zip_reader.hpp \
 	q_zip_writer.hpp \
-	tinyxml2.h
+	tinyxml2.h	\
+	throw_exception_from_errno.hpp
 
 unix {
 	HEADERS += filesystem_utils_unx.hpp

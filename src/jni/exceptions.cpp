@@ -17,7 +17,17 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#include <cppdevtk/jni/config.hpp>
+#if (CPPDEVTK_FORCE_DBC_IN_JNI_API)
+#undef CPPDEVTK_ENABLE_DBC
+#define CPPDEVTK_ENABLE_DBC 1
+#undef CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION
+#define CPPDEVTK_DBC_DISABLE_CHECK_PRECONDITION (!CPPDEVTK_ENABLE_DBC || 0)
+#endif
+
 #include <cppdevtk/jni/exceptions.hpp>
+
+#include <cppdevtk/base/dbc.hpp>
 
 
 namespace cppdevtk {

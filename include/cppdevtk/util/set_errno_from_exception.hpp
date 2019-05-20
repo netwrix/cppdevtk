@@ -17,8 +17,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_UTIL_EXCEPTION_TO_ERRNO_HPP_INCLUDED_
-#define CPPDEVTK_UTIL_EXCEPTION_TO_ERRNO_HPP_INCLUDED_
+#ifndef CPPDEVTK_UTIL_SET_ERRNO_FROM_EXCEPTION_HPP_INCLUDED_
+#define CPPDEVTK_UTIL_SET_ERRNO_FROM_EXCEPTION_HPP_INCLUDED_
 
 
 #include "config.hpp"
@@ -31,11 +31,11 @@ namespace util {
 /// \brief Set errno based on catched exception.
 /// \details Useful mapped errno: ENOENT, EIO, ECANCELED, EINVAL, ENOMEM, and ENODATA as generic error.
 /// \attention May be called only in a catch block.
-CPPDEVTK_UTIL_API void ExceptionToErrno();
+CPPDEVTK_UTIL_API void SetErrNoFromException();
 
 
 }	// namespace util
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_UTIL_EXCEPTION_TO_ERRNO_HPP_INCLUDED_
+#endif	// CPPDEVTK_UTIL_SET_ERRNO_FROM_EXCEPTION_HPP_INCLUDED_
