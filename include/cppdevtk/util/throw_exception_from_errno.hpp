@@ -28,7 +28,7 @@ namespace cppdevtk {
 namespace util {
 
 
-CPPDEVTK_UTIL_API void ThrowExceptionFromErrno(int errNo);
+CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo);
 
 
 }	// namespace util

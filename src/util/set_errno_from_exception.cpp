@@ -54,6 +54,7 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 				<< base::Exception::GetDetailedInfo(exc));
 		errno = ENOENT;
 	}
+	
 	catch (const base::IosFailureException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught IosFailureException: "
 				<< base::Exception::GetDetailedInfo(exc));

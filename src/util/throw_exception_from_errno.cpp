@@ -30,37 +30,42 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
 
+#include <QtCore/QString>
+
 
 namespace cppdevtk {
 namespace util {
 
 
-CPPDEVTK_UTIL_API void ThrowExceptionFromErrno(int errNo) {
+CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo) {
+	const base::ErrorCode kErrorCode = base::MakeSystemErrorCode(errNo);
+	const QString kErrMsg = QString("exception from errno: ") + kErrorCode.ToString();
+	
 	switch (errNo) {
 		case EDEADLK:
 			CPPDEVTK_LOG_ERROR("errNo EDEADLK; throwing DeadlockException");
-			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock from EDEADLK");
+			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA(kErrMsg);
 		case ECANCELED:
 			CPPDEVTK_LOG_ERROR("errNo ECANCELED; throwing TaskCanceledException");
-			throw CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA("task canceled from ECANCELED");
+			throw CPPDEVTK_TASK_CANCELED_EXCEPTION_W_WA(kErrMsg);
 		case ENOENT:
 			CPPDEVTK_LOG_ERROR("errNo ENOENT; throwing NoSuchFileOrDirectoryException");
 			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION();
 		case EIO:
 			CPPDEVTK_LOG_ERROR("errNo EIO; throwing IosFailureException");
-			throw CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA("ios failure from EIO");
+			throw CPPDEVTK_IOS_FAILURE_EXCEPTION_W_WA(kErrMsg);
 		case EINVAL:
 			CPPDEVTK_LOG_ERROR("errNo EINVAL; throwing InvalidArgumentException");
-			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION("invalid argument from EINVAL");
+			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION(kErrMsg);
 		case ENOMEM:
 			CPPDEVTK_LOG_ERROR("errNo ENOMEM; throwing bad_alloc");
 			throw ::std::bad_alloc();
 		case ENODATA:
-			CPPDEVTK_LOG_ERROR("errNo ENODATA; throwing SystemException");
-			throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(base::MakeSystemErrorCode(ENODATA), "system exception from ENODATA");
+			CPPDEVTK_LOG_ERROR("errNo ENODATA; throwing RuntimeException");
+			throw CPPDEVTK_RUNTIME_EXCEPTION(kErrMsg);
 		default:
 			CPPDEVTK_LOG_ERROR("errNo other; throwing SystemException");
-			throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(base::MakeSystemErrorCode(ENODATA), "system exception from errno");
+			throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(kErrorCode, "system exception from errno");
 	}
 }
 
