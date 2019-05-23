@@ -23,11 +23,15 @@
 #include <cppdevtk/base/cerrno.hpp>
 #include <cppdevtk/base/deadlock_exception.hpp>
 #include <cppdevtk/base/task_canceled_exception.hpp>
+#include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/exception.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
+#if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
+#include <system_error>
+#endif
 
 
 namespace cppdevtk {
@@ -55,6 +59,13 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 		errno = ENOENT;
 	}
 	
+	catch (const base::SystemException& exc) {
+		const int kErrCodeErrNo = exc.ErrorCodeRef().GetValue();
+		const int kErrNo = (kErrCodeErrNo != ESUCCESS) ? kErrCodeErrNo : ENODATA;
+		CPPDEVTK_LOG_ERROR("setting errno to " << kErrNo << "; caught SystemException: "
+				<< base::Exception::GetDetailedInfo(exc));
+		errno = kErrNo;
+	}
 	catch (const base::IosFailureException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught IosFailureException: "
 				<< base::Exception::GetDetailedInfo(exc));
@@ -81,6 +92,15 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 		errno = ENODATA;
 	}
 	
+#	if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
+	catch (const ::std::system_error& exc) {
+		const int kErrCodeErrNo = exc.code().value();
+		const int kErrNo = (kErrCodeErrNo != ESUCCESS) ? kErrCodeErrNo : ENODATA;
+		CPPDEVTK_LOG_ERROR("setting errno to " << kErrNo << "; caught system_error: "
+				<< base::Exception::GetDetailedInfo(exc));
+		errno = kErrNo;
+	}
+#	endif
 	catch (const ::std::ios_base::failure& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught ios_base::failure: "
 				<< base::Exception::GetDetailedInfo(exc));

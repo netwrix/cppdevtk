@@ -29,6 +29,7 @@
 #include <cppdevtk/base/ios.hpp>
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/unused.hpp>
+#include <cppdevtk/base/dbc.hpp>
 
 #include <QtCore/QString>
 
@@ -38,6 +39,8 @@ namespace util {
 
 
 CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo) {
+	CPPDEVTK_DBC_CHECK_ARGUMENT((errNo != ESUCCESS), "errNo must not be ESUCCESS");
+	
 	const base::ErrorCode kErrorCode = base::MakeSystemErrorCode(errNo);
 	const QString kErrMsg = QString("exception from errno: ") + kErrorCode.ToString();
 	
