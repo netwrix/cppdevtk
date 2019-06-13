@@ -94,7 +94,7 @@ CPPDEVTK_BASE_API void swap(LockException& x, LockException& y) CPPDEVTK_NOEXCEP
 // Inline functions
 
 inline LockException::LockException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode): Exception(throwPoint),
-		RuntimeException(throwPoint, ""), SystemException(throwPoint, errorCode) {}
+		RuntimeException(throwPoint, "lock exception"), SystemException(throwPoint, errorCode) {}
 
 inline LockException::LockException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint, errorCode, whatArg) {}

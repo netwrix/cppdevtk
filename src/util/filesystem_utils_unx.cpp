@@ -64,7 +64,6 @@
 
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
-using ::cppdevtk::base::GetSystemCategory;
 
 
 namespace cppdevtk {
@@ -116,8 +115,7 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((kSrcFd)(&kNativeSrcFileName)) {
 		if (close(kSrcFd) == -1) {
-			const ErrorCode kErrorCode = GetLastSystemErrorCode();
-			CPPDEVTK_LOG_WARN("failed to close file: " << kNativeSrcFileName << "\nerror code: " << kErrorCode.ToString());
+			CPPDEVTK_LOG_WARN("failed to close file: " << kNativeSrcFileName << "\nerror code: " << GetLastSystemErrorCode().ToString());
 			base::SuppressUnusedWarning(kNativeSrcFileName);
 		}
 	}
@@ -144,9 +142,8 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&closeDstFd)(kDstFd)(&kNativeDstFileName)) {
 		if (closeDstFd) {
 			if (close(kDstFd) == -1) {
-				const ErrorCode kErrorCode = GetLastSystemErrorCode();
 				CPPDEVTK_LOG_WARN("failed to close file: " << kNativeDstFileName
-						<< "\nerror code: " << kErrorCode.ToString());
+						<< "\nerror code: " << GetLastSystemErrorCode().ToString());
 				base::SuppressUnusedWarning(kNativeDstFileName);
 			}
 		}
@@ -199,8 +196,7 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	
 	const int kRetCode = TEMP_FAILURE_RETRY(fsync(kDstFd));
 	if (kRetCode != ESUCCESS) {
-		const ErrorCode kErrorCode = GetLastSystemErrorCode();
-		CPPDEVTK_LOG_WARN("fsync() failed for file: " << kNativeDstFileName << "\nerror code: " << kErrorCode.ToString());
+		CPPDEVTK_LOG_WARN("fsync() failed for file: " << kNativeDstFileName << "\nerror code: " << GetLastSystemErrorCode().ToString());
 	}
 	
 	closeDstFd = false;
@@ -210,8 +206,7 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "failed to close file", dstFileName);
 		}
 		
-		const ErrorCode kErrorCode = GetLastSystemErrorCode();
-		CPPDEVTK_LOG_WARN("failed to close file: " << kNativeDstFileName << "\nerror code: " << kErrorCode.ToString());
+		CPPDEVTK_LOG_WARN("failed to close file: " << kNativeDstFileName << "\nerror code: " << GetLastSystemErrorCode().ToString());
 	}
 }
 
@@ -295,11 +290,12 @@ CPPDEVTK_UTIL_API void GetFileSystemSpaceInfo(const QString& path, FileSystemSpa
 	//Zeroize(&statVfs, sizeof(statVfs));
 	const int kRetCode = TEMP_FAILURE_RETRY(statvfs(CPPDEVTK_Q2U(kNativeAbsPath).c_str(), &statVfs));
 	if (kRetCode != ESUCCESS) {
-		if (GetLastSystemErrorCode().GetValue() == ENOENT) {
+		const ErrorCode kErrorCode = GetLastSystemErrorCode();
+		if (kErrorCode.GetValue() == ENOENT) {
 			throw CPPDEVTK_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_W_P(path);
 		}
 		else {
-			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(GetLastSystemErrorCode(), "statvfs() failed", path);
+			throw CPPDEVTK_FILESYSTEM_EXCEPTION_W_EC_WA_SRC(kErrorCode, "statvfs() failed", path);
 		}
 	}
 	

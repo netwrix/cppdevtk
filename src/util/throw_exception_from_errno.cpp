@@ -41,10 +41,19 @@ namespace util {
 CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo) {
 	CPPDEVTK_DBC_CHECK_ARGUMENT((errNo != ESUCCESS), "errNo must not be ESUCCESS");
 	
-	const base::ErrorCode kErrorCode = base::MakeSystemErrorCode(errNo);
+	const base::ErrorCode kErrorCode(errNo,
+#			if (CPPDEVTK_PLATFORM_WINDOWS)
+			base::GetGenericCategory()
+#			else
+			base::GetSystemCategory()
+#			endif
+	);
 	const QString kErrMsg = QString("exception from errno: ") + kErrorCode.ToString();
 	
 	switch (errNo) {
+		case ESUCCESS:
+			CPPDEVTK_LOG_ERROR("errNo ESUCCESS; throwing InvalidArgumentException");
+			throw CPPDEVTK_INVALID_ARGUMENT_EXCEPTION(kErrMsg);
 		case EDEADLK:
 			CPPDEVTK_LOG_ERROR("errNo EDEADLK; throwing DeadlockException");
 			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA(kErrMsg);
@@ -67,7 +76,7 @@ CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo) {
 			CPPDEVTK_LOG_ERROR("errNo ENODATA; throwing RuntimeException");
 			throw CPPDEVTK_RUNTIME_EXCEPTION(kErrMsg);
 		default:
-			CPPDEVTK_LOG_ERROR("errNo other; throwing SystemException");
+			CPPDEVTK_LOG_ERROR("errNo " << errNo << "; throwing SystemException");
 			throw CPPDEVTK_SYSTEM_EXCEPTION_W_EC_WA(kErrorCode, "system exception from errno");
 	}
 }

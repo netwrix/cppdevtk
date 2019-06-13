@@ -85,8 +85,7 @@ CPPDEVTK_BASE_API int SocketPair(socket_t socketVector[2], bool makeOverlapped) 
 	
     int retCode = socketpair(AF_LOCAL, SOCK_STREAM, 0, socketVector);
 	if (retCode != ESUCCESS) {
-		const ErrorCode kErrorCode = GetLastSystemErrorCode();
-		CPPDEVTK_LOG_ERROR("socketpair() failed; error code: " << kErrorCode.ToString());
+		CPPDEVTK_LOG_ERROR("socketpair() failed; error code: " << GetLastSystemErrorCode().ToString());
         socketVector[0] = socketVector[1] = -1;
 	}
 	

@@ -83,11 +83,11 @@ CPPDEVTK_BASE_API void swap(TaskCanceledException& x, TaskCanceledException& y) 
 
 inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwPoint):
 		Exception(throwPoint), RuntimeException(throwPoint, "task canceled"), SystemException(throwPoint,
-		MakeErrorCode(base::errc::operation_canceled), "") {}
+		MakeErrorCode(::cppdevtk::base::errc::operation_canceled), "") {}
 
 inline TaskCanceledException::TaskCanceledException(const SourceCodeInfo& throwPoint, const QString& whatArg):
 		Exception(throwPoint), RuntimeException(throwPoint, whatArg), SystemException(throwPoint,
-		MakeErrorCode(base::errc::operation_canceled), whatArg) {}
+		MakeErrorCode(::cppdevtk::base::errc::operation_canceled), whatArg) {}
 
 inline TaskCanceledException::~TaskCanceledException() CPPDEVTK_NOEXCEPT {}
 

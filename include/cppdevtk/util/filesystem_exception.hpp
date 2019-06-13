@@ -160,7 +160,7 @@ CPPDEVTK_UTIL_API void swap(FilesystemException& x, FilesystemException& y) CPPD
 // Inline functions
 
 inline FilesystemException::FilesystemException(const ::cppdevtk::base::SourceCodeInfo& throwPoint,
-		const ::cppdevtk::base::ErrorCode& errorCode): Exception(throwPoint), RuntimeException(throwPoint, ""),
+		const ::cppdevtk::base::ErrorCode& errorCode): Exception(throwPoint), RuntimeException(throwPoint, "filesystem exception"),
 		SystemException(throwPoint, errorCode), IosFailureException(throwPoint, "", errorCode), srcPath_(), dstPath_() {}
 
 inline FilesystemException::FilesystemException(const ::cppdevtk::base::SourceCodeInfo& throwPoint,
@@ -181,7 +181,7 @@ inline FilesystemException::FilesystemException(const ::cppdevtk::base::SourceCo
 
 inline FilesystemException::FilesystemException(const ::cppdevtk::base::SourceCodeInfo& throwPoint,
 		const ::cppdevtk::base::ErrorCode& errorCode, const ::cppdevtk::base::Exception& cause):
-		Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
+		Exception(throwPoint, cause), RuntimeException(throwPoint, "filesystem exception", cause),
 		SystemException(throwPoint, errorCode, cause), IosFailureException(throwPoint, "", errorCode, cause),
 		srcPath_(), dstPath_() {}
 

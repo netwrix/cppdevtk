@@ -64,7 +64,6 @@
 using ::cppdevtk::base::Exception;
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
-using ::cppdevtk::base::GetSystemCategory;
 using ::cppdevtk::base::SuppressUnusedWarning;
 using ::std::auto_ptr;
 using ::std::exception;
@@ -153,8 +152,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPointsFromPath(const QString& path) {
 		//Zeroize(&statMntDir, sizeof(statMntDir));
 		if (stat(mntEntry.mnt_dir, &statMntDir) != ESUCCESS) {
 			CPPDEVTK_ASSERT(errno != EINTR);
-			const ErrorCode kErrorCode = GetLastSystemErrorCode();
-			CPPDEVTK_LOG_ERROR("stat() failed for: " << mntEntry.mnt_dir << "\nerror code: " << kErrorCode.ToString());
+			CPPDEVTK_LOG_ERROR("stat() failed for: " << mntEntry.mnt_dir << "\nerror code: " << GetLastSystemErrorCode().ToString());
 			continue;
 		}
 		

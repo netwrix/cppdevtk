@@ -33,7 +33,7 @@
 
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/logger.hpp>
-#include <cppdevtk/base/name_mangling.hpp>
+#include <cppdevtk/base/demangle.hpp>
 
 #include <QtCore/QStringList>
 
@@ -71,14 +71,14 @@ bool StackTrace::ParseSymbolicAddressRepresentation(/* const */ char* pSymAddrRe
 		
 	const QStringList kSymAddrRepParts = QString(pSymAddrRep).split(' ', QString::SkipEmptyParts);
 	if ((kSymAddrRepParts.size() != 6) && (kSymAddrRepParts.size() != 7)) {
-		CPPDEVTK_LOG_ERROR("backtrace_symbols() format changed: not 6 or 7 components but " << kSymAddrRepParts.size());
-		Q_ASSERT(0 && "backtrace_symbols() format changed: not 6 components");
+		//CPPDEVTK_LOG_ERROR("backtrace_symbols() format changed: not 6 or 7 components but " << kSymAddrRepParts.size());
+		Q_ASSERT(0 && "backtrace_symbols() format changed: not 6 or 7 components");
 		return false;
 	}
 	if (((kSymAddrRepParts.size() == 6) && (kSymAddrRepParts[4] != "+"))
 			|| ((kSymAddrRepParts.size() == 7) && (kSymAddrRepParts[5] != "+"))) {
-		CPPDEVTK_LOG_ERROR("backtrace_symbols() format changed: component 4(5) is not + but " << kSymAddrRepParts[4]);
-		Q_ASSERT(0 && "backtrace_symbols() format changed: component 4 is not +");
+		//CPPDEVTK_LOG_ERROR("backtrace_symbols() format changed: component 4(5) is not + but " << kSymAddrRepParts[4]);
+		Q_ASSERT(0 && "backtrace_symbols() format changed: component 4(5) is not +");
 		return false;
 	}
 	
@@ -99,18 +99,13 @@ bool StackTrace::ParseSymbolicAddressRepresentation(/* const */ char* pSymAddrRe
 		}
 	}
 	
-	QString demangledFunctionName;
 	QString functionName = kSymAddrRepParts[3];
 	if (kSymAddrRepParts.size() == 7) {
 		functionName += " " + kSymAddrRepParts[4];
 	}
-	if (!functionName.isEmpty()) {
-		if (IsMangled(functionName)) {
-			demangledFunctionName = Demangle(functionName);
-		}
-		if (demangledFunctionName.isEmpty()) {
-			demangledFunctionName = functionName;
-		}
+	QString demangledFunctionName = Demangle(functionName);
+	if (demangledFunctionName.isEmpty()) {
+		demangledFunctionName = functionName;
 	}
 	
 	const QString kStrOffset =  (kSymAddrRepParts.size() == 6) ? kSymAddrRepParts[5] : kSymAddrRepParts[6];

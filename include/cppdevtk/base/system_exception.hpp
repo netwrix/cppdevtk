@@ -168,7 +168,7 @@ CPPDEVTK_BASE_API void swap(SystemException& x, SystemException& y) CPPDEVTK_NOE
 // Inline functions
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode):
-		Exception(throwPoint), RuntimeException(throwPoint, ""), errorCode_(errorCode) {}
+		Exception(throwPoint), RuntimeException(throwPoint, "system exception"), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
 		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errorCode) {}
@@ -177,7 +177,7 @@ inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const 
 		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory):
-		Exception(throwPoint), RuntimeException(throwPoint,""), errorCode_(errVal, errorCategory) {}
+		Exception(throwPoint), RuntimeException(throwPoint,"system exception"), errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
 		const char* whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errVal, errorCategory) {}
@@ -186,7 +186,7 @@ inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int er
 		const QString& whatArg): Exception(throwPoint), RuntimeException(throwPoint, whatArg), errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
-		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "", cause),
+		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint, "system exception", cause),
 		errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode,
@@ -198,7 +198,7 @@ inline SystemException::SystemException(const SourceCodeInfo& throwPoint, const 
 		RuntimeException(throwPoint, whatArg, cause), errorCode_(errorCode) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,
-		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint,"", cause),
+		const Exception& cause): Exception(throwPoint, cause), RuntimeException(throwPoint,"system exception", cause),
 		errorCode_(errVal, errorCategory) {}
 
 inline SystemException::SystemException(const SourceCodeInfo& throwPoint, int errVal, const ErrorCategory& errorCategory,

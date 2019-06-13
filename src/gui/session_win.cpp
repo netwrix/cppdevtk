@@ -199,8 +199,7 @@ HWND Session::WmWtSessionChange::GetHWnd() const {
 
 bool Session::Lock() {
 	if (!LockWorkStation()) {
-		const ErrorCode kErrorCode = GetLastSystemErrorCode();
-		CPPDEVTK_LOG_ERROR("LockWorkStation() failed; errorCode: " << kErrorCode.ToString());
+		CPPDEVTK_LOG_ERROR("LockWorkStation() failed; errorCode: " << GetLastSystemErrorCode().ToString());
 		return false;
 	}
 	

@@ -17,8 +17,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CPPDEVTK_BASE_NAME_MANGLING_HPP_INCLUDED_
-#define CPPDEVTK_BASE_NAME_MANGLING_HPP_INCLUDED_
+#ifndef CPPDEVTK_BASE_DEMANGLE_HPP_INCLUDED_
+#define CPPDEVTK_BASE_DEMANGLE_HPP_INCLUDED_
 
 
 #include "config.hpp"
@@ -30,9 +30,6 @@ namespace cppdevtk {
 namespace base {
 
 
-CPPDEVTK_BASE_API bool IsMangled(const QString& name);
-
-/// \pre \a mangledName IsMangled()
 /// \return Empty string if fails
 CPPDEVTK_BASE_API QString Demangle(const QString& mangledName);
 
@@ -41,4 +38,4 @@ CPPDEVTK_BASE_API QString Demangle(const QString& mangledName);
 }	// namespace cppdevtk
 
 
-#endif	// CPPDEVTK_BASE_NAME_MANGLING_HPP_INCLUDED_
+#endif	// CPPDEVTK_BASE_DEMANGLE_HPP_INCLUDED_

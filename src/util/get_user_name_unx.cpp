@@ -52,10 +52,6 @@ CPPDEVTK_UTIL_API QString GetUserName() {
 	// there is no getlogin_r() on Mac OS X, only getlogin()
 	// so we use getuid() + getpwuid_r() that works on both Linux and Mac OS X
 	
-	using ::cppdevtk::base::ErrorCode;
-	using ::cppdevtk::base::GetSystemCategory;
-	
-	
 	QString userName;
 	
 	const uid_t kUid = getuid();
@@ -86,7 +82,8 @@ CPPDEVTK_UTIL_API QString GetUserName() {
 	while ((retCode == EINTR) || (retCode == ERANGE));
 	
 	if (retCode != ESUCCESS) {
-		CPPDEVTK_LOG_ERROR("getpwuid_r() failed; error code: " << ErrorCode(retCode, GetSystemCategory()).ToString());
+		CPPDEVTK_LOG_ERROR("getpwuid_r() failed; error code: "
+				<< ::cppdevtk::base::ErrorCode(retCode, ::cppdevtk::base::GetSystemCategory()).ToString());
 		return userName;
 	}
 	if (pResult == NULL) {

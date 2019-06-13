@@ -46,8 +46,7 @@ using base::GetLastSystemErrorCode;
 
 bool SessionManager::Logout() {
 	if (!ExitWindows(0, 0)) {
-		const ErrorCode kErrorCode = GetLastSystemErrorCode();
-		CPPDEVTK_LOG_ERROR("ExitWindows() failed; errorCode: " << kErrorCode.ToString());
+		CPPDEVTK_LOG_ERROR("ExitWindows() failed; errorCode: " << GetLastSystemErrorCode().ToString());
 		return false;
 	}
 	
@@ -56,8 +55,7 @@ bool SessionManager::Logout() {
 
 bool SessionManager::Shutdown() {
 	if (!ExitWindowsEx(EWX_POWEROFF, (SHTDN_REASON_MAJOR_OTHER | SHTDN_REASON_MINOR_OTHER))) {
-		const ErrorCode kErrorCode = GetLastSystemErrorCode();
-		CPPDEVTK_LOG_ERROR("failed to Shutdown; errorCode: " << kErrorCode.ToString());
+		CPPDEVTK_LOG_ERROR("failed to Shutdown; errorCode: " << GetLastSystemErrorCode().ToString());
 		return false;
 	}
 	
@@ -82,9 +80,8 @@ void SessionManager::EnableShutdownPrivilege() {
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN((&hToken)) {
 		if (!CloseHandle(hToken)) {
-			const ErrorCode kErrorCode = GetLastSystemErrorCode();
 			CPPDEVTK_LOG_WARN("CloseHandle() failed for current process access token"
-					"; errorCode: " << kErrorCode.ToString());
+					"; errorCode: " << GetLastSystemErrorCode().ToString());
 		}
 	}
 	CPPDEVTK_ON_BLOCK_EXIT_END

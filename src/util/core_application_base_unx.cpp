@@ -68,7 +68,7 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 						unwatchSigTerm_ = false;
 					}
 					else {
-						CPPDEVTK_LOG_WARN("failed to unwatch SIGTERM; errorCode: " << GetLastSystemErrorCode());
+						CPPDEVTK_LOG_WARN("failed to unwatch SIGTERM; errorCode: " << GetLastSystemErrorCode().ToString());
 					}
 				}
 			}
@@ -106,7 +106,7 @@ void CoreApplicationBase::SetQuitOnTerminationSignals(bool value) {
 					unwatchSigInt_ = true;
 				}
 				else {
-					CPPDEVTK_LOG_WARN("failed to watch SIGINT; errorCode: " << GetLastSystemErrorCode());
+					CPPDEVTK_LOG_WARN("failed to watch SIGINT; errorCode: " << GetLastSystemErrorCode().ToString());
 				}
 			}
 		}

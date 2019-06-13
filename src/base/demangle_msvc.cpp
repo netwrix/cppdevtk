@@ -17,7 +17,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/base/name_mangling.hpp>
+#include <cppdevtk/base/demangle.hpp>
 #if (!CPPDEVTK_COMPILER_MSVC)
 #	error "This file is msvc specific!!!"
 #endif
@@ -27,6 +27,7 @@
 
 #include <QtCore/QString>
 
+#include CPPDEVTK_TR1_HEADER(memory)
 #include <cstddef>
 #include <cstdlib>
 
@@ -37,8 +38,8 @@
 // TODO: UnDecorateSymbolName() is not thread safe (as all DbgHelp functions), but __unDName() being from CRT is? Test!
 // __unDName() taken from Wine
 // Please see:
-// http://cvs.winehq.org/cvsweb/wine/dlls/msvcrt/msvcrt.h
-// http://cvs.winehq.com/cvsweb/wine/dlls/msvcrt/undname.c
+// https://source.winehq.org/git/wine.git/blob/HEAD:/dlls/msvcrt/msvcrt.h
+// https://source.winehq.org/git/wine.git/blob/HEAD:/dlls/msvcrt/undname.c
 
 
 /*
@@ -63,6 +64,7 @@
  */
 
 
+/* __unDName/__unDNameEx flags */
 #define UNDNAME_COMPLETE                 (0x0000)
 #define UNDNAME_NO_LEADING_UNDERSCORES   (0x0001) /* Don't show __ in calling convention */
 #define UNDNAME_NO_MS_KEYWORDS           (0x0002) /* Don't show calling convention at all */
@@ -88,40 +90,10 @@ extern "C" {
 #endif
 
 
-#ifdef _WIN64
-typedef unsigned __int64 MSVCRT_size_t;
-#else
-typedef unsigned long MSVCRT_size_t;
-#endif
-
-
 // C4229: anachronism used : modifiers on data are ignored
-//typedef void* (* /* __cdecl */ malloc_func_t)(MSVCRT_size_t);
-typedef void* (* /* __cdecl */ malloc_func_t)(::std::size_t);
+typedef void* (* /* __cdecl */ malloc_func_t)(size_t);
 typedef void (* /* __cdecl */ free_func_t)(void*);
 
-
-/*********************************************************************
- *		__unDNameEx (MSVCRT.@)
- *
- * Demangle a C++ identifier.
- *
- * PARAMS
- *  buffer   [O] If not NULL, the place to put the demangled string
- *  mangled  [I] Mangled name of the function
- *  buflen   [I] Length of buffer
- *  memget   [I] Function to allocate memory with
- *  memfree  [I] Function to free memory with
- *  unknown  [?] Unknown, possibly a call back
- *  flags    [I] Flags determining demangled format
- *
- * RETURNS
- *  Success: A string pointing to the unmangled name, allocated with memget.
- *  Failure: NULL.
- */
-char* __cdecl __unDNameEx(char* buffer, const char* mangled, int buflen,
-                        malloc_func_t memget, free_func_t memfree,
-                        void* unknown, unsigned short int flags);
 
 /*********************************************************************
  *		__unDName (MSVCRT.@)
@@ -144,21 +116,18 @@ namespace cppdevtk {
 namespace base {
 
 
-CPPDEVTK_BASE_API bool IsMangled(const QString& name) {
-	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(name.isEmpty(), "name");
-	
-	return ((name.length() > 1) && name.startsWith('?'));
-}
-
 CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
-	CPPDEVTK_DBC_CHECK_ARGUMENT(IsMangled(mangledName), "mangledName is not a mangled name");
+	if (mangledName.isEmpty() || !(mangledName.startsWith('?') || mangledName.startsWith('_') || mangledName.startsWith('@'))) {
+		return "";
+	}
 	
 	QString demangledName;
 	
-	char* pDemangledName = __unDName(NULL, Q2A(mangledName).c_str(), 0, &::std::malloc, &::std::free, UNDNAME_COMPLETE);
-	if (pDemangledName != NULL) {
-		demangledName = A2Q(pDemangledName);
-		::std::free(pDemangledName);
+	CPPDEVTK_TR1_NS::shared_ptr<char> pDemangledName(
+			__unDName(NULL, Q2A(mangledName).c_str(), 0, &::std::malloc, &::std::free, UNDNAME_COMPLETE),
+			&::std::free);
+	if (pDemangledName.get() != NULL) {
+		demangledName = A2Q(pDemangledName.get());
 	}
 	
 	return demangledName;

@@ -26,7 +26,7 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/string_conv.hpp>
-#include <cppdevtk/base/name_mangling.hpp>
+#include <cppdevtk/base/demangle.hpp>
 #include <cppdevtk/base/typeinfo.hpp>
 
 #include <QtCore/QString>
@@ -58,14 +58,9 @@ namespace base {
 	
 	if (pCloneable.get() == NULL) {
 		const QString kTypeInfoName = typeid(*this).name();
-		QString demangledName;
-		if (!kTypeInfoName.isEmpty()) {
-			if (IsMangled(kTypeInfoName)) {
-				demangledName = Demangle(kTypeInfoName);
-			}
-			if (demangledName.isEmpty()) {
-				demangledName = kTypeInfoName;
-			}
+		QString demangledName = Demangle(kTypeInfoName);
+		if (demangledName.isEmpty()) {
+			demangledName = kTypeInfoName;
 		}
 		
 		CPPDEVTK_CLONEABLE_LOG_TERMINATE(
@@ -87,25 +82,15 @@ namespace base {
 	
 	if (typeid(*this) != typeid(*(pCloneable.get()))) {
 		const QString kTypeInfoExpectedName = typeid(*this).name();
-		QString demangledExpectedName;
-		if (!kTypeInfoExpectedName.isEmpty()) {
-			if (IsMangled(kTypeInfoExpectedName)) {
-				demangledExpectedName = Demangle(kTypeInfoExpectedName);
-			}
-			if (demangledExpectedName.isEmpty()) {
-				demangledExpectedName = kTypeInfoExpectedName;
-			}
+		QString demangledExpectedName = Demangle(kTypeInfoExpectedName);
+		if (demangledExpectedName.isEmpty()) {
+			demangledExpectedName = kTypeInfoExpectedName;
 		}
 		
 		const QString kTypeInfoActualName = typeid(*(pCloneable.get())).name();
-		QString demangledActualName;
-		if (!kTypeInfoActualName.isEmpty()) {
-			if (IsMangled(kTypeInfoActualName)) {
-				demangledActualName = Demangle(kTypeInfoActualName);
-			}
-			if (demangledActualName.isEmpty()) {
-				demangledActualName = kTypeInfoActualName;
-			}
+		QString demangledActualName = Demangle(kTypeInfoActualName);
+		if (demangledActualName.isEmpty()) {
+			demangledActualName = kTypeInfoActualName;
 		}
 		
 		CPPDEVTK_CLONEABLE_LOG_TERMINATE(QString("Cloneable::DoClone() not or incorrectly overridden (type mismatch)!!!"

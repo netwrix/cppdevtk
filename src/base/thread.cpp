@@ -100,7 +100,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 					terminate();
 				}
 				else {
-					CPPDEVTK_LOG_INFO("thread destructor: join threw exception: " << Exception::GetDetailedInfo(exc));
+					CPPDEVTK_LOG_WARN("thread destructor: join threw exception: " << Exception::GetDetailedInfo(exc));
 				}
 				SuppressUnusedWarning(exc);
 			}
@@ -111,7 +111,7 @@ Thread::~Thread() CPPDEVTK_NOEXCEPT {
 					terminate();
 				}
 				else {
-					CPPDEVTK_LOG_INFO("thread destructor: join threw unknown exception");
+					CPPDEVTK_LOG_WARN("thread destructor: join threw unknown exception");
 				}
 			}
 			
@@ -168,7 +168,7 @@ void Thread::Start() {
 			pTmpData->GetStartInfoRef().WaitToStart();
 		}
 		catch (const exception& exc1) {
-			CPPDEVTK_LOG_FATAL("failed to wait for child thread to start; exc1: " << Exception::GetDetailedInfo(exc));
+			CPPDEVTK_LOG_FATAL("failed to wait for child thread to start; exc1: " << Exception::GetDetailedInfo(exc1));
 			CPPDEVTK_ASSERT(0 && "failed to wait for child thread to start");
 			SuppressUnusedWarning(exc1);
 			terminate();

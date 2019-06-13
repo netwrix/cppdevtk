@@ -122,10 +122,10 @@ void ConditionVariableAny::NotifyOne() CPPDEVTK_NOEXCEPT {
 	}
 	catch (const exception& exc) {
 		SuppressUnusedWarning(exc);
-		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; exc: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_LOG_WARN("failed to lock; impredictable scheduling behaviour; exc: " << Exception::GetDetailedInfo(exc));
 	}
 	catch (...) {
-		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; (caught unknown exception)");
+		CPPDEVTK_LOG_WARN("failed to lock; impredictable scheduling behaviour; (caught unknown exception)");
 	}
 	
 	conditionVariable_.NotifyOne();
@@ -138,10 +138,10 @@ void ConditionVariableAny::NotifyAll() CPPDEVTK_NOEXCEPT {
 	}
 	catch (const exception& exc) {
 		SuppressUnusedWarning(exc);
-		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; exc: " << Exception::GetDetailedInfo(exc));
+		CPPDEVTK_LOG_WARN("failed to lock; impredictable scheduling behaviour; exc: " << Exception::GetDetailedInfo(exc));
 	}
 	catch (...) {
-		CPPDEVTK_LOG_INFO("failed to lock; impredictable scheduling behaviour; (caught unknown exception)");
+		CPPDEVTK_LOG_WARN("failed to lock; impredictable scheduling behaviour; (caught unknown exception)");
 	}
 	
 	conditionVariable_.NotifyAll();

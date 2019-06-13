@@ -30,7 +30,7 @@
 
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/logger.hpp>
-#include <cppdevtk/base/name_mangling.hpp>
+#include <cppdevtk/base/demangle.hpp>
 
 #include <cstddef>
 
@@ -190,13 +190,9 @@ bool StackTrace::ParseSymbolicAddressRepresentation(/* const */ char* pSymAddrRe
 		Q_ASSERT(pCloseRoundParanthesis != NULL);
 		QString functionName = pOpenRoundParanthesis + 1;
 		functionName = functionName.trimmed();
-		if (!functionName.isEmpty()) {
-			if (IsMangled(functionName)) {
-				demangledFunctionName = Demangle(functionName);
-			}
-			if (demangledFunctionName.isEmpty()) {
-				demangledFunctionName = functionName;
-			}
+		demangledFunctionName = Demangle(functionName);
+		if (demangledFunctionName.isEmpty()) {
+			demangledFunctionName = functionName;
 		}
 	}
 	

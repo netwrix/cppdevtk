@@ -175,7 +175,7 @@ CPPDEVTK_BASE_API void swap(ThreadInterruptedException& x, ThreadInterruptedExce
 // Inline functions
 
 inline ThreadException::ThreadException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode): Exception(throwPoint),
-		RuntimeException(throwPoint, ""), SystemException(throwPoint, errorCode)
+		RuntimeException(throwPoint, "thread exception"), SystemException(throwPoint, errorCode)
 #		if (CPPDEVTK_HAVE_THREAD_STORAGE)
 		, threadId_(this_thread::GetId())
 #		endif
@@ -250,7 +250,7 @@ inline CPPDEVTK_BASE_API void swap(ThreadException& x, ThreadException& y) CPPDE
 #if (CPPDEVTK_ENABLE_THREAD_INTERRUPTION)
 
 inline ThreadInterruptedException::ThreadInterruptedException(const SourceCodeInfo& throwPoint): Exception(throwPoint),
-		RuntimeException(throwPoint, ""), //SystemException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::interrupted)),
+		RuntimeException(throwPoint, "thread interrupted"), //SystemException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::interrupted)),
 		ThreadException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::interrupted)) {}
 
 inline ThreadInterruptedException::ThreadInterruptedException(const SourceCodeInfo& throwPoint, const QString& whatArg):

@@ -28,7 +28,7 @@
 #include "stringizable.hpp"
 #include "source_code_info.hpp"
 #include "stack_trace.hpp"
-#include "name_mangling.hpp"
+#include "demangle.hpp"
 #include "unused.hpp"
 #include "tstring.hpp"
 
@@ -248,19 +248,10 @@ inline QString Exception::DoWhat(bool includeCause) const {
 }
 
 inline QString Exception::DoOwnWhat() const {
-	QString demangledName;
-	
 	const QString kTypeInfoName = typeid(*this).name();
-	if (!kTypeInfoName.isEmpty()) {
-		if (IsMangled(kTypeInfoName)) {
-			demangledName = Demangle(kTypeInfoName);
-		}
-		if (demangledName.isEmpty()) {
-			demangledName = kTypeInfoName;
-		}
-	}
+	const QString kDemangledName = Demangle(kTypeInfoName);
 	
-	return demangledName;
+	return kDemangledName.isEmpty() ? kTypeInfoName : kDemangledName;
 }
 
 inline void Exception::SwapOwnData(Exception& other) CPPDEVTK_NOEXCEPT {

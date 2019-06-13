@@ -33,6 +33,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QtGlobal>
 #include <QtCore/QtDebug>
+#include <QtCore/QThread>
 
 
 #define CPPDEVTK_LOG_TRACE(msg)	\
@@ -68,19 +69,29 @@
 #endif
 
 
+#if (CPPDEVTK_ENABLE_CONFIDENTIAL_INFO_IN_LOG_ENTRY_INFO)
+#	define CPPDEVTK_LOG_ENTRY_INFO	\
+		" [" << __FILE__ << " : " << __LINE__ << " : " << CPPDEVTK_FUNCTION_LONG_NAME << "]"	\
+		<< "[" << QThread::currentThreadId() << " : " << QDateTime::currentDateTime().toString(CPPDEVTK_LOGGER_DATE_FORMAT) << "]"
+#else
+#	define CPPDEVTK_LOG_ENTRY_INFO	\
+		" [" << QThread::currentThreadId() << " : " << QDateTime::currentDateTime().toString(CPPDEVTK_LOGGER_DATE_FORMAT) << "]"
+#endif
+
+
 #if (CPPDEVTK_ENABLE_LOG)
 #	define CPPDEVTK_LOG(logMsg, logLevel)	\
 		do {	\
 			if (logLevel >= CPPDEVTK_LOG_LEVEL) {	\
 				const int kErrNo = errno;	\
 				const ::cppdevtk::base::ErrorCode kLastSystemErrorCode = ::cppdevtk::base::GetLastSystemErrorCode();	\
+				\
 				try {	\
 					QString logEntry;	\
 					{	\
 						QTextStream logTextStream(&logEntry, QIODevice::WriteOnly);	\
 						logTextStream << "[" << ::cppdevtk::base::detail::LogLevelToString(logLevel) << "]: " << logMsg	\
-								<< " [" << __FILE__ << " : " << __LINE__ << " : " << CPPDEVTK_FUNCTION_LONG_NAME << "] "	\
-								<< QDateTime::currentDateTime().toString(CPPDEVTK_LOGGER_DATE_FORMAT);	\
+								<< CPPDEVTK_LOG_ENTRY_INFO;	\
 					}	\
 					switch (logLevel) {	\
 						case ::cppdevtk::base::llTrace:	\
@@ -107,6 +118,7 @@
 					}	\
 				}	\
 				catch (...) {}	\
+				\
 				::cppdevtk::base::SetLastSystemErrorCode(kLastSystemErrorCode);	\
 				errno = kErrNo;	\
 			}	\

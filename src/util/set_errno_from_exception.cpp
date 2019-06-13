@@ -59,17 +59,17 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 		errno = ENOENT;
 	}
 	
+	catch (const base::IosFailureException& exc) {
+		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught IosFailureException: "
+				<< base::Exception::GetDetailedInfo(exc));
+		errno = EIO;
+	}
 	catch (const base::SystemException& exc) {
 		const int kErrCodeErrNo = exc.ErrorCodeRef().GetValue();
 		const int kErrNo = (kErrCodeErrNo != ESUCCESS) ? kErrCodeErrNo : ENODATA;
 		CPPDEVTK_LOG_ERROR("setting errno to " << kErrNo << "; caught SystemException: "
 				<< base::Exception::GetDetailedInfo(exc));
 		errno = kErrNo;
-	}
-	catch (const base::IosFailureException& exc) {
-		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught IosFailureException: "
-				<< base::Exception::GetDetailedInfo(exc));
-		errno = EIO;
 	}
 	catch (const base::RuntimeException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught RuntimeException: "
@@ -92,6 +92,11 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 		errno = ENODATA;
 	}
 	
+	catch (const ::std::ios_base::failure& exc) {
+		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught ios_base::failure: "
+				<< base::Exception::GetDetailedInfo(exc));
+		errno = EIO;
+	}
 #	if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
 	catch (const ::std::system_error& exc) {
 		const int kErrCodeErrNo = exc.code().value();
@@ -101,11 +106,6 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 		errno = kErrNo;
 	}
 #	endif
-	catch (const ::std::ios_base::failure& exc) {
-		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught ios_base::failure: "
-				<< base::Exception::GetDetailedInfo(exc));
-		errno = EIO;
-	}
 	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught runtime_error: "
 				<< base::Exception::GetDetailedInfo(exc));

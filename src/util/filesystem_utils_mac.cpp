@@ -86,7 +86,6 @@
 
 using ::cppdevtk::base::ErrorCode;
 using ::cppdevtk::base::GetLastSystemErrorCode;
-using ::cppdevtk::base::GetSystemCategory;
 using ::cppdevtk::base::SuppressUnusedWarning;
 
 
@@ -339,8 +338,8 @@ CPPDEVTK_UTIL_API QString GetDeviceNameFromMountPoint(const QString& mountPoint)
 
 QString GetDeviceName(DeviceType deviceType, const QString& serialNumber,
 		unsigned long vendorId, unsigned long productId, const QString& iousbDeviceClassName) {
-	Q_ASSERT(!serialNumber.isEmpty());
-	Q_ASSERT(!iousbDeviceClassName.isEmpty());
+	CPPDEVTK_ASSERT(!serialNumber.isEmpty());
+	CPPDEVTK_ASSERT(!iousbDeviceClassName.isEmpty());
 	
 	CPPDEVTK_LOG_DEBUG("deviceType: " << deviceType << "; serialNumber: " << serialNumber
 			<< "; vendorId: " << base::NumToHexStr(vendorId) << "; productId: " << base::NumToHexStr(productId)
@@ -486,7 +485,7 @@ QString GetDeviceName(DeviceType deviceType, const QString& serialNumber,
 				}
 			}
 			else {
-				Q_ASSERT(deviceType == dtDisk);
+				CPPDEVTK_ASSERT(deviceType == dtDisk);
 				if (ioMediaPreferredBlockSize != 0x200) {
 					CPPDEVTK_LOG_DEBUG("ioMediaPreferredBlockSize is not 0x200");
 					CFRelease(cfRegistryEntryProperty);

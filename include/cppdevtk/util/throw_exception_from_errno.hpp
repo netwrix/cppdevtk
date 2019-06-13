@@ -28,6 +28,7 @@ namespace cppdevtk {
 namespace util {
 
 
+/// \pre errNo != ESUCCESS
 CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo);
 
 

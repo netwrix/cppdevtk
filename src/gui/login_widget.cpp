@@ -265,7 +265,7 @@ void LoginWidget::DoValidate() {
 			const int kCountNonAscii = base::CountNonAscii(password);
 			if (kCountNonAscii > 0) {
 				MarkPasswordInvalid();
-				CPPDEVTK_LOG_WARN("Password contains " << kCountNonAscii << " non-ASCII characters.");
+				CPPDEVTK_LOG_INFO("Password contains " << kCountNonAscii << " non-ASCII characters.");
 				isValid_ = false;
 				return;
 			}
@@ -282,7 +282,7 @@ void LoginWidget::DoValidate() {
 		
 		if (kPwdLen > reqMaxLen) {
 			MarkPasswordInvalid();
-			CPPDEVTK_LOG_WARN("Password length " << kPwdLen << " exceeds maximum " << reqMaxLen);
+			CPPDEVTK_LOG_INFO("Password length " << kPwdLen << " exceeds maximum " << reqMaxLen);
 			isValid_ = false;
 			return;
 		}
@@ -293,7 +293,7 @@ void LoginWidget::DoValidate() {
 		if (kReqMinLen > 0) {
 			if (kPwdLen < kReqMinLen) {
 				MarkPasswordIntermediate();
-				CPPDEVTK_LOG_WARN("Password length " << kPwdLen << "is less than minimum " << kReqMinLen);
+				CPPDEVTK_LOG_INFO("Password length " << kPwdLen << "is less than minimum " << kReqMinLen);
 				isValid_ = false;
 				return;
 			}

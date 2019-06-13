@@ -26,7 +26,7 @@
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/string_conv.hpp>
-#include <cppdevtk/base/name_mangling.hpp>
+#include <cppdevtk/base/demangle.hpp>
 #include <cppdevtk/base/typeinfo.hpp>
 
 #include <QtCore/QString>
@@ -59,25 +59,15 @@ void Throwable::Throw() const {
 	catch (const Throwable& exc) {
 		if (typeid(*this) != typeid(exc)) {
 			const QString kTypeInfoExpectedName = typeid(*this).name();
-			QString demangledExpectedName;
-			if (!kTypeInfoExpectedName.isEmpty()) {
-				if (IsMangled(kTypeInfoExpectedName)) {
-					demangledExpectedName = Demangle(kTypeInfoExpectedName);
-				}
-				if (demangledExpectedName.isEmpty()) {
-					demangledExpectedName = kTypeInfoExpectedName;
-				}
+			QString demangledExpectedName = Demangle(kTypeInfoExpectedName);
+			if (demangledExpectedName.isEmpty()) {
+				demangledExpectedName = kTypeInfoExpectedName;
 			}
 			
 			const QString kTypeInfoActualName = typeid(exc).name();
-			QString demangledActualName;
-			if (!kTypeInfoActualName.isEmpty()) {
-				if (IsMangled(kTypeInfoActualName)) {
-					demangledActualName = Demangle(kTypeInfoActualName);
-				}
-				if (demangledActualName.isEmpty()) {
-					demangledActualName = kTypeInfoActualName;
-				}
+			QString demangledActualName = Demangle(kTypeInfoActualName);
+			if (demangledActualName.isEmpty()) {
+				demangledActualName = kTypeInfoActualName;
 			}
 			
 			CPPDEVTK_THROWABLE_LOG_TERMINATE(QString("Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!"
@@ -96,14 +86,9 @@ void Throwable::Throw() const {
 	}
 	catch (...) {
 		const QString kTypeInfoName = typeid(*this).name();
-		QString demangledName;
-		if (!kTypeInfoName.isEmpty()) {
-			if (IsMangled(kTypeInfoName)) {
-				demangledName = Demangle(kTypeInfoName);
-			}
-			if (demangledName.isEmpty()) {
-				demangledName = kTypeInfoName;
-			}
+		QString demangledName = Demangle(kTypeInfoName);
+		if (demangledName.isEmpty()) {
+			demangledName = kTypeInfoName;
 		}
 		
 		CPPDEVTK_THROWABLE_LOG_TERMINATE(QString("Throwable::DoThrow() not or incorrectly overridden (type mismatch)!!!"
@@ -119,14 +104,9 @@ void Throwable::Throw() const {
 	}
 	
 	const QString kTypeInfoName = typeid(*this).name();
-	QString demangledName;
-	if (!kTypeInfoName.isEmpty()) {
-		if (IsMangled(kTypeInfoName)) {
-			demangledName = Demangle(kTypeInfoName);
-		}
-		if (demangledName.isEmpty()) {
-			demangledName = kTypeInfoName;
-		}
+	QString demangledName = Demangle(kTypeInfoName);
+	if (demangledName.isEmpty()) {
+		demangledName = kTypeInfoName;
 	}
 	
 	CPPDEVTK_THROWABLE_LOG_TERMINATE(

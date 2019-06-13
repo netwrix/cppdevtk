@@ -76,10 +76,19 @@
 #	endif
 #endif
 
-// TODO: remove when logger will not be Qt based
+#ifndef CPPDEVTK_ENABLE_CONFIDENTIAL_INFO_IN_LOG_ENTRY_INFO
+#	ifdef NDEBUG
+#		define CPPDEVTK_ENABLE_CONFIDENTIAL_INFO_IN_LOG_ENTRY_INFO 0
+#	else
+#		define CPPDEVTK_ENABLE_CONFIDENTIAL_INFO_IN_LOG_ENTRY_INFO 1
+#	endif
+#endif
+
 #if (CPPDEVTK_ENABLE_LOG)
-#	undef QT_NO_DEBUG_OUTPUT
-#	undef QT_NO_INFO_OUTPUT
+#	ifndef NDEBUG
+#		undef QT_NO_DEBUG_OUTPUT
+#		undef QT_NO_INFO_OUTPUT
+#	endif
 #	undef QT_NO_WARNING_OUTPUT
 #endif
 
@@ -87,7 +96,7 @@
 /// \sa ::cppdevtk::base::LogLevel
 #ifndef CPPDEVTK_LOG_LEVEL
 #	ifdef NDEBUG
-#		define CPPDEVTK_LOG_LEVEL ::cppdevtk::base::llError
+#		define CPPDEVTK_LOG_LEVEL ::cppdevtk::base::llWarn
 #	else
 #		define CPPDEVTK_LOG_LEVEL ::cppdevtk::base::llDebug
 #	endif

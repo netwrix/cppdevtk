@@ -278,11 +278,11 @@ else {
 }
 
 *g++*|*clang* {
-	SOURCES += name_mangling_gcc_clang.cpp
+	SOURCES += demangle_gcc_clang.cpp
 }
 else {
 	*msvc* {
-		SOURCES += name_mangling_msvc.cpp
+		SOURCES += demangle_msvc.cpp
 	}
 	else {
 		error("Unsupported compiler!!!")
@@ -373,7 +373,7 @@ HEADERS += \
 	../../include/cppdevtk/base/locks.hpp	\
 	../../include/cppdevtk/base/logger.hpp	\
 	../../include/cppdevtk/base/mutex.hpp	\
-	../../include/cppdevtk/base/name_mangling.hpp	\
+	../../include/cppdevtk/base/demangle.hpp	\
 	../../include/cppdevtk/base/non_copyable.hpp	\
 	../../include/cppdevtk/base/on_block_exit.hpp	\
 	../../include/cppdevtk/base/optional.hpp	\

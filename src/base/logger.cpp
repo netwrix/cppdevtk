@@ -18,7 +18,6 @@
 
 
 #include <cppdevtk/base/logger.hpp>
-#include <cppdevtk/base/dbc.hpp>
 #include <cppdevtk/base/cassert.hpp>
 
 
@@ -34,7 +33,7 @@ ScopeLogger::ScopeLogger(const QString& scopeName, const SourceCodeInfo& sourceC
 #define CPPDEVTK_ENABLE_LOG 1
 #define CPPDEVTK_DISABLE_ENABLE_LOG 1
 #endif
-	CPPDEVTK_LOG("ENTERING SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace);
+	CPPDEVTK_LOG("ENTERING_SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace);
 #if (CPPDEVTK_DISABLE_ENABLE_LOG)
 #undef CPPDEVTK_ENABLE_LOG
 #define CPPDEVTK_ENABLE_LOG 0
@@ -48,7 +47,7 @@ ScopeLogger::~ScopeLogger() {
 #define CPPDEVTK_ENABLE_LOG 1
 #define CPPDEVTK_DISABLE_ENABLE_LOG 1
 #endif
-	CPPDEVTK_LOG("LEAVING SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace);
+	CPPDEVTK_LOG("LEAVING_SCOPE: " << kScopeName_ << " [" << kSourceCodeInfo_.ToString() << "]", llTrace);
 #if (CPPDEVTK_DISABLE_ENABLE_LOG)
 #undef CPPDEVTK_ENABLE_LOG
 #define CPPDEVTK_ENABLE_LOG 0
@@ -58,7 +57,7 @@ ScopeLogger::~ScopeLogger() {
 
 
 CPPDEVTK_BASE_API QString LogLevelToString(LogLevel logLevel) {
-	CPPDEVTK_DBC_CHECK_IN_RANGE(((llFirst <= logLevel) && (logLevel <= llLast)), "logLevel has invalid enum value (UB)");
+	CPPDEVTK_ASSERT(((llFirst <= logLevel) && (logLevel <= llLast)) && "logLevel has invalid enum value (UB)");
 	
 	QString logLevelName;
 	
@@ -82,7 +81,7 @@ CPPDEVTK_BASE_API QString LogLevelToString(LogLevel logLevel) {
 			logLevelName = "FATAL";
 			break;
 		default:
-			logLevelName = "INVALID";
+			logLevelName = "INVALID_LOG_LEVEL";
 			break;
 	}
 	

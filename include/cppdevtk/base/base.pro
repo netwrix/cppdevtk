@@ -76,7 +76,7 @@ HEADERS += \
 	locks.hpp	\
 	logger.hpp	\
 	mutex.hpp	\
-	name_mangling.hpp	\
+	demangle.hpp	\
 	non_copyable.hpp	\
 	on_block_exit.hpp	\
 	optional.hpp	\

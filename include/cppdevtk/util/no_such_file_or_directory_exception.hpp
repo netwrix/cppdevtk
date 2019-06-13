@@ -95,24 +95,24 @@ CPPDEVTK_UTIL_API void swap(NoSuchFileOrDirectoryException& x, NoSuchFileOrDirec
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Inline functions
 
-#define CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG "No such file or directory"
+#define CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG "no such file or directory"
 
 inline NoSuchFileOrDirectoryException::NoSuchFileOrDirectoryException(const ::cppdevtk::base::SourceCodeInfo& throwPoint):
-		Exception(throwPoint), RuntimeException(throwPoint, ""),
-		SystemException(throwPoint, MakeErrorCode(base::errc::no_such_file_or_directory),
+		Exception(throwPoint), RuntimeException(throwPoint, CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG),
+		SystemException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::no_such_file_or_directory),
 		CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG),
 		IosFailureException(throwPoint, CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG,
-		MakeErrorCode(base::errc::no_such_file_or_directory)),
-		FilesystemException(throwPoint, MakeErrorCode(base::errc::no_such_file_or_directory),
+		MakeErrorCode(::cppdevtk::base::errc::no_such_file_or_directory)),
+		FilesystemException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::no_such_file_or_directory),
 		CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG) {}
 
 inline NoSuchFileOrDirectoryException::NoSuchFileOrDirectoryException(const ::cppdevtk::base::SourceCodeInfo& throwPoint,
-		const QString& path): Exception(throwPoint), RuntimeException(throwPoint, ""),
-		SystemException(throwPoint, MakeErrorCode(base::errc::no_such_file_or_directory),
+		const QString& path): Exception(throwPoint), RuntimeException(throwPoint, CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG),
+		SystemException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::no_such_file_or_directory),
 		CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG),
 		IosFailureException(throwPoint, CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG,
-		MakeErrorCode(base::errc::no_such_file_or_directory)),
-		FilesystemException(throwPoint, MakeErrorCode(base::errc::no_such_file_or_directory),
+		MakeErrorCode(::cppdevtk::base::errc::no_such_file_or_directory)),
+		FilesystemException(throwPoint, MakeErrorCode(::cppdevtk::base::errc::no_such_file_or_directory),
 		CPPDEVTK_DETAIL_NO_SUCH_FILE_OR_DIRECTORY_EXCEPTION_MSG, path) {}
 
 inline NoSuchFileOrDirectoryException::~NoSuchFileOrDirectoryException() CPPDEVTK_NOEXCEPT {}

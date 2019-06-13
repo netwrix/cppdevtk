@@ -81,7 +81,7 @@ void Semaphore::Wait() {
 			default:
 				CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 				CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
-				throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(GetLastSystemErrorCode(), "semaphore failed to wait");
+				throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(kLastErrorCode, "semaphore failed to wait");
 		}
 	}
 }
@@ -101,7 +101,7 @@ bool Semaphore::TryWait() {
 		default:
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != ENOSYS);
-			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "semaphore failed to trywait");
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(kLastErrorCode, "semaphore failed to trywait");
 	}
 }
 
@@ -126,7 +126,7 @@ bool Semaphore::WaitFor(int relTime) {
 			throw CPPDEVTK_DEADLOCK_EXCEPTION_WA("deadlock when timedwait semaphore");
 		default:
 			CPPDEVTK_ASSERT(kLastErrorCode.GetValue() != EINVAL);
-			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(MakeSystemErrorCode(kRetCode), "semaphore failed to timedwait");
+			throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(kLastErrorCode, "semaphore failed to timedwait");
 	}
 }
 

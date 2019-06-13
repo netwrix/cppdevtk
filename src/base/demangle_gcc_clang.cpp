@@ -17,7 +17,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include <cppdevtk/base/name_mangling.hpp>
+#include <cppdevtk/base/demangle.hpp>
 #if (!(CPPDEVTK_COMPILER_GCC || CPPDEVTK_COMPILER_CLANG))
 #	error "This file is gcc/clang specific!!!"
 #endif
@@ -44,15 +44,14 @@ namespace cppdevtk {
 namespace base {
 
 
-CPPDEVTK_BASE_API bool IsMangled(const QString& name) {
-	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(name.isEmpty(), "name");
-	
-	return (((name.length() > 2) && (name.startsWith("_Z")))
-			|| ((name.length() > 1) && (name.startsWith("N"))));
-}
-
 CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
-	CPPDEVTK_DBC_CHECK_ARGUMENT(IsMangled(mangledName), "mangledName is not a mangled name");
+	if (mangledName.isEmpty() || !(mangledName.startsWith("_Z") || mangledName.startsWith("__Z") || mangledName.startsWith("_GLOBAL_")
+#				if (CPPDEVTK_PLATFORM_MACOSX)	// Swift (not supported by __cxa_demangle())
+				// || mangledName.startsWith("_T") || mangledName.startsWith("__T")
+#				endif
+			)) {
+		return "";
+	}
 	
 	QString demangledName;
 	int status = -1;
@@ -68,12 +67,11 @@ CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
 			CPPDEVTK_ASSERT(0 && "::abi::__cxa_demangle(): one of the arguments is invalid");
 			CPPDEVTK_ASSERT(pDemangledName.get() == NULL);
 			break;
-		case -2: {
-			CPPDEVTK_LOG_ERROR("::abi::__cxa_demangle(): argument mangled_name is not a valid name under the C++ ABI mangling rules"
+		case -2:
+			CPPDEVTK_LOG_ERROR("::abi::__cxa_demangle(): argument mangledName is not a valid name under the C++ ABI mangling rules"
 					<< "; mangledName: " << mangledName);
 			CPPDEVTK_ASSERT(pDemangledName.get() == NULL);
 			break;
-		}
 		case -1:
 			CPPDEVTK_LOG_ERROR("::abi::__cxa_demangle(): a memory allocation failure occurred");
 			CPPDEVTK_ASSERT(pDemangledName.get() == NULL);
@@ -83,7 +81,7 @@ CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
 			demangledName = A2Q(pDemangledName.get());
 			break;
 		default:
-			CPPDEVTK_LOG_ERROR("::abi::__cxa_demangle() returned unknown code");
+			CPPDEVTK_LOG_ERROR("::abi::__cxa_demangle() returned unknown code: " << status);
 			CPPDEVTK_ASSERT(0 && "::abi::__cxa_demangle() returned unknown code");
 			break;
 	}

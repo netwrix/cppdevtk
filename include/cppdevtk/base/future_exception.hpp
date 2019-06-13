@@ -101,7 +101,7 @@ CPPDEVTK_BASE_API void swap(FutureException& x, FutureException& y) CPPDEVTK_NOE
 // Inline functions
 
 inline FutureException::FutureException(const SourceCodeInfo& throwPoint, const ErrorCode& errorCode):
-		Exception(throwPoint), LogicException(throwPoint, ""), errorCode_(errorCode) {}
+		Exception(throwPoint), LogicException(throwPoint, "future exception"), errorCode_(errorCode) {}
 
 inline FutureException::FutureException(const FutureException& other) CPPDEVTK_NOEXCEPT: Exception(other), LogicException(other),
 		errorCode_(other.errorCode_) {}

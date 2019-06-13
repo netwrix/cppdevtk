@@ -72,14 +72,9 @@ QString Exception::ToString() const {
 	QString stringized;
 	
 	const QString kTypeInfoName = typeid(*this).name();
-	QString demangledName;
-	if (!kTypeInfoName.isEmpty()) {
-		if (IsMangled(kTypeInfoName)) {
-			demangledName = Demangle(kTypeInfoName);
-		}
-		if (demangledName.isEmpty()) {
-			demangledName = kTypeInfoName;
-		}
+	QString demangledName = Demangle(kTypeInfoName);
+	if (demangledName.isEmpty()) {
+		demangledName = kTypeInfoName;
 	}
 	
 	stringized = QString("Runtime type: ") + demangledName + "\nMessage: " + DoOwnWhat();
@@ -114,8 +109,6 @@ const char* Exception::what() const CPPDEVTK_NOEXCEPT {
 		return pStdWhatMsg_->c_str();
 	}
 	catch (...) {
-		//pStdWhatMsg_->clear();
-		// return "::cppdevtk::base::Exception";
 		return typeid(*this).name();
 	}
 }
@@ -147,14 +140,9 @@ QString Exception::GetDetailedInfo(const ::std::exception& exc) {
 	}
 	else {
 		const QString kTypeInfoName = typeid(exc).name();
-		QString demangledName;
-		if (!kTypeInfoName.isEmpty()) {
-			if (IsMangled(kTypeInfoName)) {
-				demangledName = Demangle(kTypeInfoName);
-			}
-			if (demangledName.isEmpty()) {
-				demangledName = kTypeInfoName;
-			}
+		QString demangledName = Demangle(kTypeInfoName);
+		if (demangledName.isEmpty()) {
+			demangledName = kTypeInfoName;
 		}
 		
 		detailedInfo = QString("Runtime type: ") + demangledName + "\nMessage: " + Utf82Q(exc.what());
