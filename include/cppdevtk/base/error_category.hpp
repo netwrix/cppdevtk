@@ -74,8 +74,8 @@ public:
 };
 
 
-CPPDEVTK_BASE_API const ErrorCategory& GetGenericCategory() CPPDEVTK_NOEXCEPT;
-CPPDEVTK_BASE_API const ErrorCategory& GetSystemCategory() CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API const ErrorCategory& GenericCategoryRef() CPPDEVTK_NOEXCEPT;
+CPPDEVTK_BASE_API const ErrorCategory& SystemCategoryRef() CPPDEVTK_NOEXCEPT;
 
 
 class CPPDEVTK_BASE_API GenericErrorCategory: public ErrorCategory {
@@ -122,7 +122,7 @@ inline bool ErrorCategory::IsEquivalent(int code, const ErrorCondition& conditio
 }
 
 inline bool ErrorCategory::IsEquivalent(const ErrorCode& code, int condition) const CPPDEVTK_NOEXCEPT {
-	return (*this == code.GetCategory()) && (code.GetValue() == condition);
+	return (*this == code.CategoryRef()) && (code.GetValue() == condition);
 }
 
 inline bool ErrorCategory::operator==(const ErrorCategory& other) const CPPDEVTK_NOEXCEPT {

@@ -43,9 +43,9 @@ CPPDEVTK_UTIL_API void ThrowExceptionFromErrNo(int errNo) {
 	
 	const base::ErrorCode kErrorCode(errNo,
 #			if (CPPDEVTK_PLATFORM_WINDOWS)
-			base::GetGenericCategory()
+			base::GenericCategoryRef()
 #			else
-			base::GetSystemCategory()
+			base::SystemCategoryRef()
 #			endif
 	);
 	const QString kErrMsg = QString("exception from errno: ") + kErrorCode.ToString();

@@ -164,7 +164,7 @@ class ErrorCategory;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \note Usage: ErrorCondition(errno, GetGenericCategory())
+/// \note Usage: ErrorCondition(errno, GenericCategoryRef())
 /// \sa C++11, 19.5.3 Class error_condition
 class CPPDEVTK_BASE_API ErrorCondition: public QStringizable {
 public:
@@ -187,7 +187,7 @@ public:
 	void Clear() CPPDEVTK_NOEXCEPT;
 	
 	int GetValue() const CPPDEVTK_NOEXCEPT;
-	const ErrorCategory& GetCategory() const CPPDEVTK_NOEXCEPT;
+	const ErrorCategory& CategoryRef() const CPPDEVTK_NOEXCEPT;
 	QString GetMessage() const;
 	
 	operator UnspecifiedBoolType() const CPPDEVTK_NOEXCEPT;

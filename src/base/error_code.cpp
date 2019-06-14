@@ -25,14 +25,14 @@ namespace cppdevtk {
 namespace base {
 
 
-ErrorCode::ErrorCode() CPPDEVTK_NOEXCEPT: value_(sys_err::success), pErrorCategory_(&GetSystemCategory()) {}
+ErrorCode::ErrorCode() CPPDEVTK_NOEXCEPT: value_(sys_err::success), pErrorCategory_(&SystemCategoryRef()) {}
 
 void ErrorCode::Clear() CPPDEVTK_NOEXCEPT {
 	value_ = sys_err::success;
-	pErrorCategory_ = &GetSystemCategory();
+	pErrorCategory_ = &SystemCategoryRef();
 }
 
-const ErrorCategory& ErrorCode::GetCategory() const CPPDEVTK_NOEXCEPT {
+const ErrorCategory& ErrorCode::CategoryRef() const CPPDEVTK_NOEXCEPT {
 	return *pErrorCategory_;
 }
 
@@ -53,7 +53,7 @@ namespace sys_err {
 
 
 CPPDEVTK_BASE_API ErrorCode MakeErrorCode(sys_err_t sysErr) CPPDEVTK_NOEXCEPT {
-	return ErrorCode(sysErr, GetSystemCategory());
+	return ErrorCode(sysErr, SystemCategoryRef());
 }
 
 
@@ -64,7 +64,7 @@ namespace errc {
 
 
 CPPDEVTK_BASE_API ErrorCode MakeErrorCode(errc_t errCond) CPPDEVTK_NOEXCEPT {
-	return ErrorCode(errCond, GetGenericCategory());
+	return ErrorCode(errCond, GenericCategoryRef());
 }
 
 
@@ -72,28 +72,28 @@ CPPDEVTK_BASE_API ErrorCode MakeErrorCode(errc_t errCond) CPPDEVTK_NOEXCEPT {
 
 
 CPPDEVTK_BASE_API ErrorCode MakeSystemErrorCode(int value) CPPDEVTK_NOEXCEPT {
-	return ErrorCode(value, GetSystemCategory());
+	return ErrorCode(value, SystemCategoryRef());
 }
 
 
 CPPDEVTK_BASE_API bool operator==(const ErrorCode& lhs, const ErrorCode& rhs) CPPDEVTK_NOEXCEPT {
-	return (lhs.GetCategory() == rhs.GetCategory()) && (lhs.GetValue() == rhs.GetValue());
+	return (lhs.CategoryRef() == rhs.CategoryRef()) && (lhs.GetValue() == rhs.GetValue());
 }
 
 CPPDEVTK_BASE_API bool operator<(const ErrorCode& lhs, const ErrorCode& rhs) CPPDEVTK_NOEXCEPT {
-	return (lhs.GetCategory() < rhs.GetCategory())
-			|| ((lhs.GetCategory() == rhs.GetCategory()) && (lhs.GetValue() < rhs.GetValue()));
+	return (lhs.CategoryRef() < rhs.CategoryRef())
+			|| ((lhs.CategoryRef() == rhs.CategoryRef()) && (lhs.GetValue() < rhs.GetValue()));
 }
 
 
 CPPDEVTK_BASE_API bool operator==(const ErrorCode& lhs, const ErrorCondition& rhs) CPPDEVTK_NOEXCEPT {
-	return lhs.GetCategory().IsEquivalent(lhs.GetValue(), rhs)
-			|| rhs.GetCategory().IsEquivalent(lhs, rhs.GetValue());
+	return lhs.CategoryRef().IsEquivalent(lhs.GetValue(), rhs)
+			|| rhs.CategoryRef().IsEquivalent(lhs, rhs.GetValue());
 }
 
 CPPDEVTK_BASE_API bool operator==(const ErrorCondition& lhs, const ErrorCode& rhs) CPPDEVTK_NOEXCEPT {
-	return lhs.GetCategory().IsEquivalent(rhs, lhs.GetValue())
-			|| rhs.GetCategory().IsEquivalent(rhs.GetValue(), lhs);
+	return lhs.CategoryRef().IsEquivalent(rhs, lhs.GetValue())
+			|| rhs.CategoryRef().IsEquivalent(rhs.GetValue(), lhs);
 }
 
 

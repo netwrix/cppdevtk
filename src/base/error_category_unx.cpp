@@ -92,7 +92,7 @@ QString GenericErrorCategory::GetMessage(int errVal, const QLocale& locale) cons
 
 
 QString SystemErrorCategory::GetMessage(int errVal, const QLocale& locale) const {
-	return GetGenericCategory().GetMessage(errVal, locale);
+	return GenericCategoryRef().GetMessage(errVal, locale);
 }
 
 ErrorCondition SystemErrorCategory::GetDefaultErrorCondition(int errVal) const CPPDEVTK_NOEXCEPT {
@@ -193,7 +193,7 @@ ErrorCondition SystemErrorCategory::GetDefaultErrorCondition(int errVal) const C
 #		endif // EAGAIN != EWOULDBLOCK
 		case EXDEV: return MakeErrorCondition(cross_device_link);
 		
-		default: return ErrorCondition(errVal, GetSystemCategory());
+		default: return ErrorCondition(errVal, SystemCategoryRef());
 	}
 }
 

@@ -83,7 +83,7 @@ CPPDEVTK_UTIL_API QString GetUserName() {
 	
 	if (retCode != ESUCCESS) {
 		CPPDEVTK_LOG_ERROR("getpwuid_r() failed; error code: "
-				<< ::cppdevtk::base::ErrorCode(retCode, ::cppdevtk::base::GetSystemCategory()).ToString());
+				<< ::cppdevtk::base::ErrorCode(retCode, ::cppdevtk::base::SystemCategoryRef()).ToString());
 		return userName;
 	}
 	if (pResult == NULL) {

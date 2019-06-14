@@ -39,96 +39,143 @@ namespace util {
 
 
 CPPDEVTK_UTIL_API void SetErrNoFromException() {
+	using ::cppdevtk::base::Exception;
+	using ::cppdevtk::base::GenericCategoryRef;
+	using ::cppdevtk::base::SystemCategoryRef;
+#	if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
+	using ::std::generic_category;
+	using ::std::system_category;
+#	endif
+	
+	
 	// TODO: keep updated
 	try {
 		throw;
 	}
 	catch (const base::DeadlockException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EDEADLK; caught DeadlockException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EDEADLK;
 	}
 	catch (const base::concurrent::TaskCanceledException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ECANCELED; caught TaskCanceledException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ECANCELED;
 	}
 	catch (const util::NoSuchFileOrDirectoryException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENOENT; caught NoSuchFileOrDirectoryException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ENOENT;
 	}
 	
 	catch (const base::IosFailureException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught IosFailureException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EIO;
 	}
 	catch (const base::SystemException& exc) {
-		const int kErrCodeErrNo = exc.ErrorCodeRef().GetValue();
-		const int kErrNo = (kErrCodeErrNo != ESUCCESS) ? kErrCodeErrNo : ENODATA;
+		int errCodeErrNo = ESUCCESS;
+		const base::ErrorCode& kErrorCode = exc.ErrorCodeRef();
+		if ((kErrorCode.CategoryRef() == GenericCategoryRef())
+#				if (CPPDEVTK_PLATFORM_UNIX)
+				|| (kErrorCode.CategoryRef() == SystemCategoryRef())
+#				endif
+				) {
+			errCodeErrNo = kErrorCode.GetValue();
+		}
+		else {
+			const base::ErrorCondition kErrorCondition = kErrorCode.GetDefaultErrorCondition();
+			if ((kErrorCondition.CategoryRef() == GenericCategoryRef())
+#					if (CPPDEVTK_PLATFORM_UNIX)
+					|| (kErrorCondition.CategoryRef() == SystemCategoryRef())
+#					endif
+					) {
+				errCodeErrNo = kErrorCondition.GetValue();
+			}
+		}
+		
+		const int kErrNo = (errCodeErrNo != ESUCCESS) ? errCodeErrNo : ENODATA;
 		CPPDEVTK_LOG_ERROR("setting errno to " << kErrNo << "; caught SystemException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = kErrNo;
 	}
 	catch (const base::RuntimeException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught RuntimeException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ENODATA;
 	}
 	catch (const base::InvalidArgumentException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught InvalidArgumentException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EINVAL;
 	}
 	catch (const base::LogicException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught LogicException: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EINVAL;
 	}
-	catch (const base::Exception& exc) {
+	catch (const Exception& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught Exception: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ENODATA;
 	}
 	
 	catch (const ::std::ios_base::failure& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught ios_base::failure: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EIO;
 	}
 #	if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
 	catch (const ::std::system_error& exc) {
-		const int kErrCodeErrNo = exc.code().value();
-		const int kErrNo = (kErrCodeErrNo != ESUCCESS) ? kErrCodeErrNo : ENODATA;
+		int errCodeErrNo = ESUCCESS;
+		const ::std::error_code& kErrorCode = exc.code();
+		if ((kErrorCode.category() == generic_category())
+#				if (CPPDEVTK_PLATFORM_UNIX)
+				|| (kErrorCode.category() == system_category())
+#				endif
+				) {
+			errCodeErrNo = kErrorCode.value();
+		}
+		else {
+			const ::std::error_condition kErrorCondition = kErrorCode.default_error_condition();
+			if ((kErrorCondition.category() == generic_category())
+#					if (CPPDEVTK_PLATFORM_UNIX)
+					|| (kErrorCondition.category() == system_category())
+#					endif
+					) {
+				errCodeErrNo = kErrorCondition.value();
+			}
+		}
+		
+		const int kErrNo = (errCodeErrNo != ESUCCESS) ? errCodeErrNo : ENODATA;
 		CPPDEVTK_LOG_ERROR("setting errno to " << kErrNo << "; caught system_error: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = kErrNo;
 	}
 #	endif
 	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught runtime_error: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ENODATA;
 	}
 	catch (const ::std::invalid_argument& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught invalid_argument: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EINVAL;
 	}
 	catch (const ::std::logic_error& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught logic_error: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = EINVAL;
 	}
 	catch (const ::std::bad_alloc& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENOMEM; caught bad_alloc: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ENOMEM;
 	}
 	catch (const ::std::exception& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught exception: "
-				<< base::Exception::GetDetailedInfo(exc));
+				<< Exception::GetDetailedInfo(exc));
 		errno = ENODATA;
 	}
 	

@@ -86,8 +86,8 @@ class ErrorCategory;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \note Usage:
-/// - Unix: ErrorCode(errno, GetSystemCategory())
-/// - Windows: ErrorCode(GetLastError(), GetSystemCategory())
+/// - Unix: ErrorCode(errno, SystemCategoryRef())
+/// - Windows: ErrorCode(GetLastError(), SystemCategoryRef())
 /// \sa C++11, 19.5.2 Class error_code
 class CPPDEVTK_BASE_API ErrorCode: public QStringizable {
 public:
@@ -108,7 +108,7 @@ public:
 	void Clear() CPPDEVTK_NOEXCEPT;
 	
 	int GetValue() const CPPDEVTK_NOEXCEPT;
-	const ErrorCategory& GetCategory() const CPPDEVTK_NOEXCEPT;
+	const ErrorCategory& CategoryRef() const CPPDEVTK_NOEXCEPT;
 	ErrorCondition GetDefaultErrorCondition() const CPPDEVTK_NOEXCEPT;
 	QString GetMessage() const;
 	

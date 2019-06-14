@@ -35,7 +35,7 @@ CPPDEVTK_BASE_API ErrorCode GetLastSystemErrorCode() CPPDEVTK_NOEXCEPT {
 }
 
 CPPDEVTK_BASE_API void SetLastSystemErrorCode(const ErrorCode& systemErrorCode) {
-	CPPDEVTK_DBC_CHECK_ARGUMENT((systemErrorCode.GetCategory() == GetSystemCategory()),
+	CPPDEVTK_DBC_CHECK_ARGUMENT((systemErrorCode.CategoryRef() == SystemCategoryRef()),
 			"systemErrorCode does not have SystemCategory");
 	
 	errno = systemErrorCode.GetValue();

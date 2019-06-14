@@ -73,7 +73,7 @@ CPPDEVTK_BASE_API ::std::time_t GetCurrentTime() {
 	
 	const time_t kCurrTime = ::std::time(NULL);
 	if (kCurrTime == (time_t)-1) {
-		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EV_WA(errno, GetGenericCategory(), "time() failed");
+		throw CPPDEVTK_SYSTEM_EXCEPTION_W_EV_WA(errno, GenericCategoryRef(), "time() failed");
 	}
 	return kCurrTime;
 }

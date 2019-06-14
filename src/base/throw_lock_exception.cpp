@@ -38,11 +38,11 @@ void ThrowLockException(const ::std::system_error& exc) {
 	}
 	
 	if (kErrorCode.category() == ::std::system_category()) {
-		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(ErrorCode(kErrorCode.value(), GetSystemCategory()), exc.what());
+		throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(ErrorCode(kErrorCode.value(), SystemCategoryRef()), exc.what());
 	}
 	
 	CPPDEVTK_ASSERT(kErrorCode.category() == ::std::generic_category());
-	throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(ErrorCode(kErrorCode.value(), GetGenericCategory()), exc.what());
+	throw CPPDEVTK_LOCK_EXCEPTION_W_EC_WA(ErrorCode(kErrorCode.value(), GenericCategoryRef()), exc.what());
 }
 
 #endif

@@ -352,7 +352,7 @@ ErrorCondition SystemErrorCategory::GetDefaultErrorCondition(int errVal) const C
 		case WSAETIMEDOUT: return MakeErrorCondition(timed_out);
 		case WSAEWOULDBLOCK: return MakeErrorCondition(operation_would_block);
 		
-		default: return ErrorCondition(errVal, GetSystemCategory());
+		default: return ErrorCondition(errVal, SystemCategoryRef());
 	}
 }
 
