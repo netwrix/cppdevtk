@@ -32,6 +32,7 @@
 #include <QtCore/QtDebug>
 #include <QtCore/QSettings>
 #include <QtCore/QString>
+#include <QtCore/QDir>
 #ifndef CPPDEVTK_SHARED
 #	include <QtCore/QtPlugin>
 #endif
@@ -69,6 +70,10 @@ using ::std::exception;
 __attribute__((visibility("default")))
 #endif
 int main(int argc, char* argv[]) try {
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	const bool kIsLogFileMsgHandlerInstalled = ::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 	::cppdevtk::test_service_controller::InitResources();
 	
 #	if (CPPDEVTK_PLATFORM_UNIX)
@@ -85,6 +90,17 @@ int main(int argc, char* argv[]) try {
 	Application application(argc, argv);
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_service_controller/res/ico/application.ico"));
+	
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	if (kIsLogFileMsgHandlerInstalled) {
+		MessageBox::Information(application.GetDefaultWindow(), CPPDEVTK_TEST_SERVICE_CONTROLLER_SHORT_NAME,
+				QString("Log file: %1").arg(QDir::toNativeSeparators(::cppdevtk::base::GetLogFileName())));
+	}
+	else {
+		MessageBox::Critical(application.GetDefaultWindow(), CPPDEVTK_TEST_SERVICE_CONTROLLER_SHORT_NAME,
+				"InstallLogFileMsgHandler() failed");
+	}
+#	endif
 	
 	try {
 		::cppdevtk::test_service_controller::Widget widget;

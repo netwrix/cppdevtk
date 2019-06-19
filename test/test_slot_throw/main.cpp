@@ -32,6 +32,7 @@
 
 #include <QtCore/QtDebug>
 #include <QtCore/QString>
+#include <QtCore/QDir>
 #ifndef CPPDEVTK_SHARED
 #	include <QtCore/QtPlugin>
 #endif
@@ -69,6 +70,10 @@ using ::std::exception;
 __attribute__((visibility("default")))
 #endif
 int main(int argc, char* argv[]) try {
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	const bool kIsLogFileMsgHandlerInstalled = ::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 	::cppdevtk::test_slot_throw::InitResources();
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
@@ -79,6 +84,17 @@ int main(int argc, char* argv[]) try {
 	CPPDEVTK_ASSERT(application.GetNotifyThrowAction() == Application::ntaRethrow);
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_slot_throw/res/ico/application.ico"));
+	
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	if (kIsLogFileMsgHandlerInstalled) {
+		MessageBox::Information(application.GetDefaultWindow(), CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME,
+				QString("Log file: %1").arg(QDir::toNativeSeparators(::cppdevtk::base::GetLogFileName())));
+	}
+	else {
+		MessageBox::Critical(application.GetDefaultWindow(), CPPDEVTK_TEST_SLOT_THROW_SHORT_NAME,
+				"InstallLogFileMsgHandler() failed");
+	}
+#	endif
 	
 	try {
 		::cppdevtk::test_slot_throw::Widget widget;

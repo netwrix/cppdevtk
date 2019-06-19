@@ -59,6 +59,10 @@ __attribute__((visibility("default")))
 int main(int argc, char* argv[]) try {
 	::cppdevtk::test_service::InitResources();
 	
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 #	if (CPPDEVTK_PLATFORM_UNIX)
 	// QtService stores service settings in SystemScope, which normally require root privileges.
 	// To allow testing this example as non-root, we change the directory of the SystemScope settings file.

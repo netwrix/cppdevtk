@@ -55,6 +55,10 @@ using ::std::exception;
 __attribute__((visibility("default")))
 #endif
 int main(int argc, char* argv[]) try {
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 	using ::cppdevtk::test_term_sig::Application;
 	
 	

@@ -153,6 +153,10 @@ enum LogLevel {
 };
 
 
+CPPDEVTK_BASE_API QString GetLogFileName();
+CPPDEVTK_BASE_API bool InstallLogFileMsgHandler(const QString& logFileName);
+
+
 namespace detail {
 
 

@@ -55,6 +55,7 @@ public:
 	/// \param maxSize maximum number of stack frames to Capture().
 	/// \sa SetMaxSize()
 	explicit StackTrace(bool autoCapture = true, ::std::size_t maxSize = 200);
+	StackTrace(const StackTrace& other);
 	
 	StackTrace& operator=(const StackTrace& other);	///< \throw whatever copy ctor throws
 	
@@ -109,6 +110,9 @@ inline StackTrace::StackTrace(bool autoCapture, ::std::size_t maxSize): QStringi
 		Capture();
 	}
 }
+
+inline StackTrace::StackTrace(const StackTrace& other): QStringizable(other), maxSize_(other.maxSize_),
+		stackFrames_(other.stackFrames_) {}
 
 inline StackTrace& StackTrace::operator=(const StackTrace& other) {
 	StackTrace tmp(other);

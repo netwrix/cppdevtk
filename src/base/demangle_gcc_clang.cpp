@@ -45,11 +45,17 @@ namespace base {
 
 
 CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
-	if (mangledName.isEmpty() || !(mangledName.startsWith("_Z") || mangledName.startsWith("__Z") || mangledName.startsWith("_GLOBAL_")
-#				if (CPPDEVTK_PLATFORM_MACOSX)	// Swift (not supported by __cxa_demangle())
-				// || mangledName.startsWith("_T") || mangledName.startsWith("__T")
-#				endif
-			)) {
+	if (mangledName.isEmpty()
+			/*
+			|| !(mangledName.startsWith("_Z") || mangledName.startsWith("__Z")
+			|| mangledName.startsWith("N")
+			|| mangledName.startsWith("_GLOBAL_")
+#			if (CPPDEVTK_PLATFORM_MACOSX)	// Swift (not supported by __cxa_demangle())
+			// || mangledName.startsWith("_T") || mangledName.startsWith("__T")
+#			endif
+			)
+			*/
+			) {
 		return "";
 	}
 	
@@ -68,7 +74,8 @@ CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
 			CPPDEVTK_ASSERT(pDemangledName.get() == NULL);
 			break;
 		case -2:
-			CPPDEVTK_LOG_ERROR("::abi::__cxa_demangle(): argument mangledName is not a valid name under the C++ ABI mangling rules"
+			// CPPDEVTK_LOG_ERROR(): avoid too many unsignificant errors...
+			CPPDEVTK_LOG_TRACE("::abi::__cxa_demangle(): argument mangledName is not a valid name under the C++ ABI mangling rules"
 					<< "; mangledName: " << mangledName);
 			CPPDEVTK_ASSERT(pDemangledName.get() == NULL);
 			break;

@@ -79,6 +79,9 @@ public:
 private:
 	class CPPDEVTK_BASE_API TypeErasedValue: public Cloneable {
 	public:
+		TypeErasedValue();
+		TypeErasedValue(const TypeErasedValue& other);
+		
 		virtual TypeInfo GetTypeInfo() const CPPDEVTK_NOEXCEPT = 0;
 	private:
 		TypeErasedValue& operator=(const TypeErasedValue&);
@@ -95,7 +98,8 @@ private:
 		typedef TValue ValueType;
 		
 		
-		Value(const TValue& value) CPPDEVTK_NOEXCEPT;
+		Value(const TValue& value);
+		Value(const Value& other);
 		
 		virtual TypeInfo GetTypeInfo() const CPPDEVTK_NOEXCEPT;
 		
@@ -178,8 +182,16 @@ inline void Any::Swap(Any& other) CPPDEVTK_NOEXCEPT {
 }
 
 
+inline Any::TypeErasedValue::TypeErasedValue(): Cloneable() {}
+
+inline Any::TypeErasedValue::TypeErasedValue(const TypeErasedValue& other): Cloneable(other) {}
+
+
 template <typename TValue>
-inline Any::Value<TValue>::Value(const TValue& value) CPPDEVTK_NOEXCEPT: TypeErasedValue(), value_(value) {}
+inline Any::Value<TValue>::Value(const TValue& value): TypeErasedValue(), value_(value) {}
+
+template <typename TValue>
+inline Any::Value<TValue>::Value(const Value& other): TypeErasedValue(other), value_(other.value_) {}
 
 template <typename TValue>
 inline TypeInfo Any::Value<TValue>::GetTypeInfo() const CPPDEVTK_NOEXCEPT {

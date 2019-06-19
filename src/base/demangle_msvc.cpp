@@ -24,6 +24,7 @@
 
 #include <cppdevtk/base/string_conv.hpp>
 #include <cppdevtk/base/dbc.hpp>
+#include <cppdevtk/base/logger.hpp>
 
 #include <QtCore/QString>
 
@@ -117,7 +118,13 @@ namespace base {
 
 
 CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
-	if (mangledName.isEmpty() || !(mangledName.startsWith('?') || mangledName.startsWith('_') || mangledName.startsWith('@'))) {
+	if (mangledName.isEmpty()
+			/*
+			|| !(mangledName.startsWith('?')
+			|| mangledName.startsWith('_')
+			|| mangledName.startsWith('@'))
+			*/
+			) {
 		return "";
 	}
 	
@@ -128,6 +135,10 @@ CPPDEVTK_BASE_API QString Demangle(const QString& mangledName) {
 			&::std::free);
 	if (pDemangledName.get() != NULL) {
 		demangledName = A2Q(pDemangledName.get());
+	}
+	else {
+		// CPPDEVTK_LOG_ERROR(): avoid too many unsignificant errors...
+		CPPDEVTK_LOG_TRACE("__unDName() failed for mangledName: " << mangledName);
 	}
 	
 	return demangledName;

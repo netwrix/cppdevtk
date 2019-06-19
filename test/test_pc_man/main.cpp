@@ -39,6 +39,7 @@
 #include <cppdevtk/gui/power_notifier.hpp>
 
 #include <QtCore/QString>
+#include <QtCore/QDir>
 #ifndef CPPDEVTK_SHARED
 #	include <QtCore/QtPlugin>
 #endif
@@ -64,6 +65,10 @@ using ::std::exception;
 
 
 int main(int argc, char* argv[]) try {
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	const bool kIsLogFileMsgHandlerInstalled = ::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 	::cppdevtk::test_pc_man::InitResources();
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
@@ -73,6 +78,17 @@ int main(int argc, char* argv[]) try {
 	Application application(argc, argv);
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_pc_man/res/ico/application.ico"));
+	
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	if (kIsLogFileMsgHandlerInstalled) {
+		MessageBox::Information(application.GetDefaultWindow(), CPPDEVTK_TEST_PC_MAN_SHORT_NAME,
+				QString("Log file: %1").arg(QDir::toNativeSeparators(::cppdevtk::base::GetLogFileName())));
+	}
+	else {
+		MessageBox::Critical(application.GetDefaultWindow(), CPPDEVTK_TEST_PC_MAN_SHORT_NAME,
+				"InstallLogFileMsgHandler() failed");
+	}
+#	endif
 	
 #	if (BOOST_VERSION >= 105000)
 	CPPDEVTK_ON_BLOCK_EXIT_BEGIN(void) {

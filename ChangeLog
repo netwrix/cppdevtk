@@ -19,6 +19,7 @@ Version 1.1.1.1:
 	- openSUSE TW: java 12 and boost 1.69
 	- added CPPDEVTK_ON_BLOCK_EXIT_CATCH
 	- removed IsMangled()
+	- log to file
 - Fixed bugs:
 	- executor: workaround for Qt bug #6799
 	- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831

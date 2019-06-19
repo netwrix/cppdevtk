@@ -33,6 +33,7 @@
 
 #include <QtCore/QtDebug>
 #include <QtCore/QString>
+#include <QtCore/QDir>
 #ifndef CPPDEVTK_SHARED
 #	include <QtCore/QtPlugin>
 #endif
@@ -70,6 +71,10 @@ using ::std::exception;
 __attribute__((visibility("default")))
 #endif
 int main(int argc, char* argv[]) try {
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	const bool kIsLogFileMsgHandlerInstalled = ::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 	::cppdevtk::test_localization::InitResources();
 	
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
@@ -81,6 +86,17 @@ int main(int argc, char* argv[]) try {
 	Application application(argc, argv);
 	
 	Application::setWindowIcon(QIcon(":/cppdevtk/test_localization/res/ico/application.ico"));
+	
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	if (kIsLogFileMsgHandlerInstalled) {
+		MessageBox::Information(application.GetDefaultWindow(), CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR,
+				QString("Log file: %1").arg(QDir::toNativeSeparators(::cppdevtk::base::GetLogFileName())));
+	}
+	else {
+		MessageBox::Critical(application.GetDefaultWindow(), CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_TR,
+				"InstallLogFileMsgHandler() failed");
+	}
+#	endif
 	
 #	if (CPPDEVTK_ENABLE_QT_SOLUTIONS)
 	if (application.isRunning()) {

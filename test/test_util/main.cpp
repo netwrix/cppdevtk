@@ -58,6 +58,10 @@ int main(int argc, char* argv[]) try {
 	using ::cppdevtk::util::CoreApplication;
 	
 	
+#	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
+	::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+#	endif
+	
 	::cppdevtk::test_util::InitResources();
 	
 	CoreApplication::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
