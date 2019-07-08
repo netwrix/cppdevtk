@@ -19,7 +19,6 @@
 
 #include <cppdevtk/base/logger.hpp>
 #include <cppdevtk/base/cassert.hpp>
-#include <cppdevtk/base/qiostream.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/dbc.hpp>
 
@@ -31,10 +30,8 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QMessageLogContext>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
-#endif
 
 #include <cstddef>
 #include <cstdlib>
@@ -43,6 +40,14 @@
 namespace cppdevtk {
 namespace base {
 namespace detail {
+
+
+class LogFile: public QFile {
+public:
+	~LogFile();
+	
+	void setFileName(const QString& name);
+};
 
 
 static void LogFileMsgHandler(QtMsgType msgType,
@@ -54,7 +59,7 @@ static void LogFileMsgHandler(QtMsgType msgType,
 );
 
 
-Q_GLOBAL_STATIC(QFile, gLogFile);
+Q_GLOBAL_STATIC(LogFile, gLogFile);
 Q_GLOBAL_STATIC(QTextStream, gLogTextStream);
 
 
@@ -83,7 +88,6 @@ CPPDEVTK_BASE_API QString GetLogFileName() {
 			continue;
 		}
 		
-		//qcout << "found writeable temp path: '" << *kIter << "'" << endl;
 		logFileName = *kIter;
 		break;
 	}
@@ -91,7 +95,7 @@ CPPDEVTK_BASE_API QString GetLogFileName() {
 	if (!logFileName.isEmpty() && !logFileName.endsWith('/')) {
 		logFileName += '/';
 	}
-	logFileName += "cppdevtk_" + QString::number(QCoreApplication::applicationPid());
+	logFileName += "cppdevtk_" + QString::number(QCoreApplication::applicationPid()) + ".log";
 	
 	return logFileName;
 }
@@ -99,7 +103,7 @@ CPPDEVTK_BASE_API QString GetLogFileName() {
 CPPDEVTK_BASE_API bool InstallLogFileMsgHandler(const QString& logFileName) {
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(logFileName.isEmpty(), "logFileName");
 	
-	QFile* pLogFile = detail::gLogFile;
+	detail::LogFile* pLogFile = detail::gLogFile;
 	if (pLogFile == NULL) {
 		return false;
 	}
@@ -121,18 +125,12 @@ CPPDEVTK_BASE_API bool InstallLogFileMsgHandler(const QString& logFileName) {
 	
 	pLogFile->setFileName(logFileName);
 	if (!pLogFile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
-		qcerr << "Failed to open log file: " << pLogFile->fileName()
-				<< "; errorString: " << pLogFile->errorString() << endl;
-		
 		return false;
 	}
 	
 	pLogTextStream->setDevice(pLogFile);
 	pLogTextStream->setCodec("UTF-8");
 	if (pLogTextStream->status() != QTextStream::Ok) {
-		qcerr << "Failed to setup logging to file: " << pLogFile->fileName()
-				<< "; status: " << pLogTextStream->status() << endl;
-		
 		pLogTextStream->setDevice(NULL);
 		pLogFile->close();
 		
@@ -145,13 +143,30 @@ CPPDEVTK_BASE_API bool InstallLogFileMsgHandler(const QString& logFileName) {
 	qInstallMessageHandler(detail::LogFileMsgHandler);
 #	endif
 	
-	qcout << "Logs will be placed in file: " << pLogFile->fileName() << endl;
-	
 	return true;
 }
 
 
 namespace detail {
+
+
+LogFile::~LogFile() {
+	if (isOpen()) {
+		flush();
+		if (size() == 0) {
+			remove();
+		}
+		else {
+			QString origfileName = fileName();
+			origfileName.chop(4);	// ".tmp"
+			rename(origfileName);
+		}
+	}
+}
+
+void LogFile::setFileName(const QString& name) {
+	QFile::setFileName(name + ".tmp");
+}
 
 
 static void LogFileMsgHandler(QtMsgType msgType,
@@ -167,11 +182,16 @@ static void LogFileMsgHandler(QtMsgType msgType,
 	SuppressUnusedWarning(msgLogCtx);
 #	endif
 	
-	// qDebug() family is thread safe in Qt 5 but not in Qt 4
-#	if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	// - qDebug() family is thread safe in Qt 5 but not in Qt 4
+	// - there is no mention in qInstallMessageHandler() doc if message handler may be called from multiple threads
+	// at the same time or not (if the call is synchronized from outside by Qt or not) so better to be safe...
+//#	if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+
 	static QMutex mutex;
+
 	QMutexLocker mutexLocker(&mutex);
-#	endif
+
+//#	endif
 	
 	QTextStream* pLogTextStream = detail::gLogTextStream;
 	if (pLogTextStream == NULL) {

@@ -52,6 +52,7 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QTime>
 #include <QtCore/QtDebug>
+#include <QtCore/QDir>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/QException>
 #else
@@ -349,7 +350,13 @@ int main(int argc, char* argv[]) try {
 	
 	
 #	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
-	::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+	const QString kLogFileName = ::cppdevtk::base::GetLogFileName();
+	if (::cppdevtk::base::InstallLogFileMsgHandler(kLogFileName)) {
+		CPPDEVTK_COUT << "Logs will be placed in file: " << QDir::toNativeSeparators(kLogFileName) << endl;
+	}
+	else {
+		CPPDEVTK_CERR << "Failed to setup logging to file: " << QDir::toNativeSeparators(kLogFileName) << endl;
+	}
 #	endif
 	
 	::cppdevtk::test_base::InitResources();

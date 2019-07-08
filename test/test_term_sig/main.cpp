@@ -34,6 +34,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QtDebug>
+#include <QtCore/QDir>
 
 #include <cstdlib>
 
@@ -56,7 +57,13 @@ __attribute__((visibility("default")))
 #endif
 int main(int argc, char* argv[]) try {
 #	if (CPPDEVTK_ENABLE_LOG_TO_FILE)
-	::cppdevtk::base::InstallLogFileMsgHandler(::cppdevtk::base::GetLogFileName());
+	const QString kLogFileName = ::cppdevtk::base::GetLogFileName();
+	if (::cppdevtk::base::InstallLogFileMsgHandler(kLogFileName)) {
+		CPPDEVTK_COUT << "Logs will be placed in file: " << QDir::toNativeSeparators(kLogFileName) << endl;
+	}
+	else {
+		CPPDEVTK_CERR << "Failed to setup logging to file: " << QDir::toNativeSeparators(kLogFileName) << endl;
+	}
 #	endif
 	
 	using ::cppdevtk::test_term_sig::Application;

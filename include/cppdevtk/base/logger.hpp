@@ -83,8 +83,8 @@
 #	define CPPDEVTK_LOG(logMsg, logLevel)	\
 		do {	\
 			if (logLevel >= CPPDEVTK_LOG_LEVEL) {	\
-				const int kErrNo = errno;	\
-				const ::cppdevtk::base::ErrorCode kLastSystemErrorCode = ::cppdevtk::base::GetLastSystemErrorCode();	\
+				const int kOrigErrNo = errno;	\
+				const ::cppdevtk::base::ErrorCode kOrigLastSystemErrorCode = ::cppdevtk::base::GetLastSystemErrorCode();	\
 				\
 				try {	\
 					QString logEntry;	\
@@ -119,8 +119,8 @@
 				}	\
 				catch (...) {}	\
 				\
-				::cppdevtk::base::SetLastSystemErrorCode(kLastSystemErrorCode);	\
-				errno = kErrNo;	\
+				::cppdevtk::base::SetLastSystemErrorCode(kOrigLastSystemErrorCode);	\
+				errno = kOrigErrNo;	\
 			}	\
 		}	\
 		while (0)
