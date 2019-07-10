@@ -18,6 +18,8 @@
 
 #include <cppdevtk/gui/k_squeezed_text_label.hpp>
 
+#include "k_squeezed_text_label_p.h"
+
 #include <QtCore/QtDebug>
 #include <QtCore/QLocale>
 #include <QtCore/QMimeData>
@@ -41,20 +43,6 @@
 
 namespace cppdevtk {
 namespace gui {
-
-
-class KSqueezedTextLabelPrivate: public QObject
-{
-	Q_OBJECT
-public Q_SLOTS:
-    void _k_copyFullText() {
-        QApplication::clipboard()->setText(fullText);
-    }
-
-public:
-    QString fullText;
-    Qt::TextElideMode elideMode;
-};
 
 
 KSqueezedTextLabel::KSqueezedTextLabel(const QString &text, QWidget *parent)
@@ -301,7 +289,3 @@ void KSqueezedTextLabel::mouseDoubleClickEvent(QMouseEvent* pEvent) {
 
 }	// namespace gui
 }	// namespace cppdevtk
-
-
-//#include "moc_k_squeezed_text_label.cpp"
-#include "k_squeezed_text_label.moc"

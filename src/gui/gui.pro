@@ -349,6 +349,9 @@ HEADERS += \
 	../../include/cppdevtk/gui/timed_computer_management_widget.hpp \
 	../../include/cppdevtk/gui/widget_base.hpp
 
+HEADERS +=	\
+	k_squeezed_text_label_p.h
+
 !android:!ios {
 	HEADERS += \
 		../../include/cppdevtk/gui/screensaver.hpp	\

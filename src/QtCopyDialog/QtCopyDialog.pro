@@ -151,6 +151,13 @@ HEADERS +=	\
 	../../include/cppdevtk/QtSolutions/QtCopyDialog/qtfilecopier.h
 
 
+HEADERS +=	\
+	qtotherdialog.h	\
+	qtoverwritedialog.h	\
+	qtcopythread.h	\
+	qtcopydialog_p.h
+
+
 FORMS +=	\
 	qtcopydialog.ui	\
 	qtotherdialog.ui	\

@@ -53,6 +53,9 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QMetaType>
+#include <QtCore/QList>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 
 namespace cppdevtk {

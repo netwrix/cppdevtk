@@ -162,10 +162,17 @@ HEADERS +=	\
 	../../include/cppdevtk/QtSolutions/QtService/QtServiceController
 
 HEADERS +=	\
-	qtservice_p.h
+	qtservice_p.h	\
+	qtservicestarter.h
 
 unix {
 	HEADERS +=	\
 		qtunixserversocket.h	\
-		qtunixsocket.h
+		qtunixsocket.h	\
+		qtservicesys_p_unix.h
+}
+
+win32 {
+	HEADERS +=	\
+		qtservicecontrollerhandler_win.h
 }

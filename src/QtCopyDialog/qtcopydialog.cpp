@@ -51,16 +51,19 @@
 #endif
 
 #include <cppdevtk/QtSolutions/QtCopyDialog/qtcopydialog.h>
-
 #include <cppdevtk/QtSolutions/QtCopyDialog/qtfilecopier.h>
+
+#include "ui_qtcopydialog.h"
+#include "ui_qtoverwritedialog.h"
+#include "ui_qtotherdialog.h"
+#include "qtotherdialog.h"
+#include "qtoverwritedialog.h"
+#include "qtcopydialog_p.h"
 
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/stdexcept.hpp>
 #include <cppdevtk/base/unused.hpp>
-#include "ui_qtcopydialog.h"
-#include "ui_qtoverwritedialog.h"
-#include "ui_qtotherdialog.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -104,32 +107,6 @@ static QString formatSize(qint64 size)
     return str;
 }
 
-///////////////////////////
-
-class QtOverwriteDialog : public QDialog
-{
-    Q_OBJECT
-public:
-    QtOverwriteDialog(QWidget *parent = 0);
-
-    enum ResultButton {
-        Cancel,
-        Skip,
-        SkipAll,
-        Overwrite,
-        OverwriteAll
-    };
-
-    ResultButton execute(const QString &sourceFile, const QString &destinationFile);
-private Q_SLOTS:
-    void cancel()       { done(Cancel); }
-    void skip()         { done(Skip); }
-    void skipAll()      { done(SkipAll); }
-    void overwrite()    { done(Overwrite); }
-    void overwriteAll() { done(OverwriteAll); }
-private:
-    Ui::QtOverwriteDialog ui;
-};
 
 QtOverwriteDialog::QtOverwriteDialog(QWidget *parent) : QDialog(parent)
 {
@@ -155,29 +132,6 @@ QtOverwriteDialog::ResultButton QtOverwriteDialog::execute(const QString &source
     return (ResultButton)result;
 }
 
-class QtOtherDialog : public QDialog
-{
-    Q_OBJECT
-public:
-    QtOtherDialog(QWidget *parent = 0);
-
-    enum ResultButton {
-        Cancel,
-        Skip,
-        SkipAll,
-        Retry
-    };
-
-    ResultButton execute(const QString &sourceFile, const QString &destinationFile,
-                    const QString &title, const QString &message);
-private Q_SLOTS:
-    void cancel()       { done(Cancel); }
-    void skip()         { done(Skip); }
-    void skipAll()      { done(SkipAll); }
-    void retry()        { done(Retry); }
-private:
-    Ui::QtOtherDialog ui;
-};
 
 QtOtherDialog::QtOtherDialog(QWidget *parent) : QDialog(parent)
 {
@@ -200,60 +154,6 @@ QtOtherDialog::ResultButton QtOtherDialog::execute(const QString &sourceFile,
     return (ResultButton)result;
 }
 
-////////////////////////////////////////////////
-
-class QtCopyDialogPrivate {
-    QtCopyDialog *q_ptr;
-    Q_DECLARE_PUBLIC(QtCopyDialog)
-public:
-    QtCopyDialogPrivate() {}
-
-    void init();
-
-    void error(int id, ::cppdevtk::qtsol::QtFileCopier::Error error, bool stopped);
-    void stateChanged(::cppdevtk::qtsol::QtFileCopier::State state);
-    void done(bool error);
-    void started(int id);
-    void dataTransferProgress(int id, qint64 progress);
-    void finished(int id, bool error);
-    void canceled();
-    void childrenCanceled(int id);
-
-    void showProgress();
-    void showDialog();
-    void reset();
-    void setFileLabel(int currentF, int totalFiles);
-    void setDirLabel(int currentD, int totalDirs);
-    void setFileNames(const QString &source, const QString &dest);
-    void setCurrentProgress(qint64 completed, qint64 totalSize);
-    void setCompleted(qint64 completed, qint64 totalSize, int msecs);
-
-    void addRequest(int id);
-
-    struct Request {
-        QString source;
-        QString dest;
-        qint64 size;
-    };
-
-    QtFileCopier *fileCopier;
-    bool autoClose;
-    QTimer *showTimer;
-    QTime startTime;
-
-    QMap<int, Request> requests;
-    int currentFile;
-    qint64 totalSize;
-    qint64 currentProgress;
-    qint64 currentDone;
-    int currentProgressTime;
-    int currentDoneTime;
-    int dirCount;
-    int currentDir;
-
-    int lastCurrentId;
-    Ui::QtCopyDialog ui;
-};
 
 void QtCopyDialogPrivate::init()
 {
@@ -872,5 +772,5 @@ void QtCopyDialog::reject()
 }	// namespace cppdevtk
 
 
-#include "qtcopydialog.moc"
+//#include "qtcopydialog.moc"
 #include "moc_qtcopydialog.cpp"

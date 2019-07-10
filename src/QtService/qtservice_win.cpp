@@ -53,6 +53,7 @@
 #include <cppdevtk/base/unused.hpp>
 
 #include "qtservice_p.h"
+#include "qtservicecontrollerhandler_win.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>
@@ -515,18 +516,6 @@ void QtServiceBase::logMessage(const QString &message, MessageType type,
     }
 }
 
-class QtServiceControllerHandler : public QObject
-{
-    Q_OBJECT
-public:
-    QtServiceControllerHandler(QtServiceSysPrivate *sys);
-
-protected:
-    void customEvent(QEvent *e);
-
-private:
-    QtServiceSysPrivate *d_sys;
-};
 
 class QtServiceSysPrivate
 {
@@ -746,9 +735,6 @@ DWORD QtServiceSysPrivate::serviceFlags(QtServiceBase::ServiceFlags flags) const
 
     return control;
 }
-
-
-#include "qtservice_win.moc"
 
 
 class HandlerThread : public QThread

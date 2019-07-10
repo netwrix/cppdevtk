@@ -54,6 +54,9 @@
 
 #include <cppdevtk/QtSolutions/QtCopyDialog/qtfilecopier.h>
 
+#include "qtcopythread.h"
+#include "qtcopydialog_p.h"
+
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/unused.hpp>
 #include <cppdevtk/base/logger.hpp>
@@ -78,133 +81,6 @@
 namespace cppdevtk {
 namespace qtsol {
 
-
-struct CopyRequest {
-    CopyRequest() {
-        move = false;
-        dir = false;
-    }
-    QQueue<int> childrenQueue;
-    QString source;
-    QString dest;
-    bool move;
-    bool dir;
-    QtFileCopier::CopyFlags copyFlags;
-};
-
-class QtCopyThread : public QThread
-{
-    Q_OBJECT
-public:
-    QtCopyThread(QtFileCopier *fileCopier);
-    ~QtCopyThread();
-
-    struct Request {
-        Request() {
-            canceled = false;
-            overwrite = false;
-            moveError = false;
-        }
-        Request(const CopyRequest &r) {
-            request = r;
-            canceled = false;
-            overwrite = false;
-            moveError = false;
-        }
-        CopyRequest request;
-        bool canceled;
-        bool overwrite;
-        bool moveError;
-    };
-
-    void emitProgress(int id, qint64 progress) {
-        QMutexLocker l(&mutex);
-        Q_EMIT dataTransferProgress(id, progress);
-        progressRequest = 0;
-    }
-    bool isCanceled(int id) const {
-        QMutexLocker l(&mutex);
-        if (cancelRequest)
-            return true;
-        if (requestQueue.empty())
-            return false;
-        return requestQueue[id].canceled;
-    }
-    bool isMoveError(int id) const {
-        QMutexLocker l(&mutex);
-        if (requestQueue.empty())
-            return false;
-        return requestQueue[id].moveError;
-    }
-    bool isProgressRequest() const {
-        return (progressRequest != 0);
-    }
-    void setMoveError(int id, bool error) {
-        QMutexLocker l(&mutex);
-        if (requestQueue.empty())
-            return;
-        requestQueue[id].moveError = error;
-    }
-    void handle(int id);
-    void lockCancelChildren(int id);
-    void renameChildren(int id);
-    void cancelChildRequests(int id);
-    void overwriteChildRequests(int id);
-
-    void setAutoReset(bool on);
-public Q_SLOTS:
-    void restart();
-
-    void copy(int id, const CopyRequest &request);
-    void copy(const QMap<int, CopyRequest> &requests);
-
-    void cancel();
-    void cancel(int id);
-
-    void skip();
-    void skipAll();
-    void retry();
-
-    void overwrite();
-    void overwriteAll();
-
-    void resetOverwrite();
-    void resetSkip();
-
-    void progress();
-Q_SIGNALS:
-    void error(int id, ::cppdevtk::qtsol::QtFileCopier::Error error, bool stopped);
-    void started(int id);
-    void dataTransferProgress(int id, qint64 progress);
-    void finished(int id, bool error);
-    void canceled();
-protected:
-    void run();
-protected Q_SLOTS:
-    void copierDestroyed();
-private:
-
-    void cancelChildren(int id);
-
-    QtFileCopier *copier;
-    QMap<int, Request> requestQueue;
-    mutable QMutex mutex;
-    QWaitCondition newCopyCondition;
-    QWaitCondition interactionCondition;
-    bool waitingForInteraction;
-    bool stopRequest;
-    bool skipAllRequest;
-    QSet<QtFileCopier::Error> skipAllError;
-    bool overwriteAllRequest;
-    bool cancelRequest;
-    int currentId;
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-    QAtomicInt progressRequest;
-#else
-    QAtomic progressRequest;
-#endif
-    bool autoReset;
-};
 
 QtCopyThread::QtCopyThread(QtFileCopier *fileCopier)
     : QThread(QCoreApplication::instance()),
@@ -2140,5 +2016,5 @@ void QtFileCopier::setProgressInterval(int ms)
 }	// namespace cppdevtk
 
 
-#include "qtfilecopier.moc"
+//#include "qtfilecopier.moc"
 #include "moc_qtfilecopier.cpp"

@@ -27,11 +27,15 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
-#include <QtCore/QStandardPaths>
+#include <QtCore/QtGlobal>
 #include <QtCore/QCoreApplication>
-#include <QtCore/QMessageLogContext>
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtCore/QStandardPaths>
+#include <QtCore/QMessageLogContext>
+#include <QtCore/QGlobalStatic>
+#endif
 
 #include <cstddef>
 #include <cstdlib>
@@ -68,7 +72,11 @@ Q_GLOBAL_STATIC(QTextStream, gLogTextStream);
 
 CPPDEVTK_BASE_API QString GetLogFileName() {
 	const QStringList kTempPaths = QStringList() << QDir::tempPath()
+#if			(QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 			<< QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+#			else
+			// QDesktopServices is in gui module so we can not use QDesktopServices::DataLocation here
+#			endif
 #			if (CPPDEVTK_PLATFORM_ANDROID)
 			<< "/sdcard" << "/mnt/sdcard" << "/storage/sdcard0" << "/storage/emulated/0" << "/storage/emulated/legacy"
 #			endif
@@ -103,12 +111,20 @@ CPPDEVTK_BASE_API QString GetLogFileName() {
 CPPDEVTK_BASE_API bool InstallLogFileMsgHandler(const QString& logFileName) {
 	CPPDEVTK_DBC_CHECK_NON_EMPTY_ARGUMENT(logFileName.isEmpty(), "logFileName");
 	
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	detail::LogFile* pLogFile = detail::gLogFile;
+#	else
+	detail::LogFile* pLogFile = detail::gLogFile();
+#	endif
 	if (pLogFile == NULL) {
 		return false;
 	}
 	
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	QTextStream* pLogTextStream = detail::gLogTextStream;
+#	else
+	QTextStream* pLogTextStream = detail::gLogTextStream();
+#	endif
 	if (pLogTextStream == NULL) {
 		return false;
 	}
@@ -193,7 +209,11 @@ static void LogFileMsgHandler(QtMsgType msgType,
 
 //#	endif
 	
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 	QTextStream* pLogTextStream = detail::gLogTextStream;
+#	else
+	QTextStream* pLogTextStream = detail::gLogTextStream();
+#	endif
 	if (pLogTextStream == NULL) {
 		return;
 	}

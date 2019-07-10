@@ -47,6 +47,7 @@
 #include <cppdevtk/base/verify.h>
 #include <cppdevtk/base/cassert.hpp>
 
+#include "qtservicesys_p_unix.h"
 #include "qtservice_p.h"
 #include "qtunixsocket.h"
 #include "qtunixserversocket.h"
@@ -294,35 +295,6 @@ bool QtServiceController::isRunning() const
 
 
 
-///////////////////////////////////
-
-class QtServiceSysPrivate : public QtUnixServerSocket
-{
-    Q_OBJECT
-public:
-    QtServiceSysPrivate();
-    ~QtServiceSysPrivate();
-
-    char *ident;
-
-    QtServiceBase::ServiceFlags serviceFlags;
-
-protected:
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    void incomingConnection(qintptr socketDescriptor);
-#else
-    void incomingConnection(int socketDescriptor);
-#endif
-
-private Q_SLOTS:
-    void slotReady();
-    void slotClosed();
-
-private:
-    QString getCommand(const QTcpSocket *socket);
-    QMap<const QTcpSocket *, QString> cache;
-};
-
 QtServiceSysPrivate::QtServiceSysPrivate()
     : QtUnixServerSocket(), ident(0), serviceFlags(0)
 {
@@ -410,7 +382,6 @@ QString QtServiceSysPrivate::getCommand(const QTcpSocket *socket)
 }
 
 
-#include "qtservice_unix.moc"
 
 
 bool QtServiceBasePrivate::sysInit()
