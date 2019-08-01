@@ -70,7 +70,7 @@ cppdevtk_enable_target_suffix_qt_major_version {
 CPPDEVTK_UTIL_TARGET = $${qtLibraryTarget($${CPPDEVTK_UTIL_TARGET})}
 CPPDEVTK_BASE_TARGET = $${qtLibraryTarget($${CPPDEVTK_BASE_TARGET})}
 
-target.path = $${CPPDEVTK_LIB_DIR}
+target.path = $${CPPDEVTK_JNI_DIR}
 INSTALLS += target
 
 

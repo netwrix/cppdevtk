@@ -27,14 +27,7 @@
 
 
 # TODO: modify as desired
-%define _prefix /opt/cososys
-%ifarch x86_64 amd64
-%define rpathdir %{_prefix}/lib64
-%else
-%define rpathdir %{_prefix}/lib
-%endif
-%define _datadir /usr/share
-%define _sysconfdir /etc
+%define cososys_build 1
 %define debug_build 0
 %define debug_package %{nil}
 
@@ -51,6 +44,17 @@
 
 # Non-modifyable stuff starts here
 
+
+%if %{cososys_build}
+%define _prefix /opt/cososys
+%define _datadir /usr/share
+%define _sysconfdir /etc
+%endif
+%ifarch x86_64 amd64
+%define rpathdir %{_prefix}/lib64
+%else
+%define rpathdir %{_prefix}/lib
+%endif
 
 # Qt 4 or 5
 %if (0%{?suse_version})
@@ -172,6 +176,9 @@ BuildRequires: boost-devel >= 1.53.0
 BuildRequires: boost-devel >= 1.41.0
 %endif
 %endif
+%if %{cososys_build}
+Requires: cososys-filesystem >= 1.1.0
+%endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -251,12 +258,13 @@ BuildRequires: java-1_8_0-openjdk-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-BuildRequires: java-1.7.0-openjdk-devel
+BuildRequires: java-1.8.0-openjdk-devel
 %endif
 %if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: java7-devel-openjdk
+BuildRequires: java-1.8.0-openjdk-devel
 %endif
 %endif
+Requires: java >= 1.8.0
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -518,10 +526,10 @@ Requires: java-1_8_0-openjdk-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: java-1.7.0-openjdk-devel
+Requires: java-1.8.0-openjdk-devel
 %endif
 %if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: java7-devel-openjdk
+Requires: java-1.8.0-openjdk-devel
 %endif
 %endif
 Requires: lib%{name}-jni = %{version}
@@ -845,7 +853,7 @@ exit 0
 %files -n lib%{name}-jni
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_libdir}/lib%{name}_jni.so.*
+%{_jnidir}/lib%{name}-jni.so.*
 
 
 %files -n lib%{name}-qtsol-qtcopydialog
@@ -875,8 +883,11 @@ exit 0
 %files base-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO doc/cppdevtk_api.chm
-%{_includedir}/%{name}/config
-%{_includedir}/%{name}/base
+%dir %{_includedir}/%{name}
+%dir %{_includedir}/%{name}/config
+%dir %{_includedir}/%{name}/base
+%{_includedir}/%{name}/config/*
+%{_includedir}/%{name}/base/*
 %{_libdir}/lib%{name}_base.so
 %{_libdir}/lib%{name}_base.prl
 
@@ -884,7 +895,9 @@ exit 0
 %files qtsol-qtservice-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/QtSolutions/QtService
+%dir %{_includedir}/%{name}/QtSolutions
+%dir %{_includedir}/%{name}/QtSolutions/QtService
+%{_includedir}/%{name}/QtSolutions/QtService/*
 %{_libdir}/lib%{name}_qtsol_qtservice.so
 %{_libdir}/lib%{name}_qtsol_qtservice.prl
 
@@ -892,7 +905,9 @@ exit 0
 %files qtsol-qtlockedfile-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/QtSolutions/QtLockedFile
+%dir %{_includedir}/%{name}/QtSolutions
+%dir %{_includedir}/%{name}/QtSolutions/QtLockedFile
+%{_includedir}/%{name}/QtSolutions/QtLockedFile/*
 %{_libdir}/lib%{name}_qtsol_qtlockedfile.so
 %{_libdir}/lib%{name}_qtsol_qtlockedfile.prl
 
@@ -900,7 +915,9 @@ exit 0
 %files qtsol-qtsinglecoreapplication-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/QtSolutions/QtSingleCoreApplication
+%dir %{_includedir}/%{name}/QtSolutions
+%dir %{_includedir}/%{name}/QtSolutions/QtSingleCoreApplication
+%{_includedir}/%{name}/QtSolutions/QtSingleCoreApplication/*
 %{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.so
 %{_libdir}/lib%{name}_qtsol_qtsinglecoreapplication.prl
 
@@ -908,7 +925,8 @@ exit 0
 %files util-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/util
+%dir %{_includedir}/%{name}/util
+%{_includedir}/%{name}/util/*
 %{_libdir}/lib%{name}_util.so
 %{_libdir}/lib%{name}_util.prl
 
@@ -916,15 +934,18 @@ exit 0
 %files jni-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/jni
-%{_libdir}/lib%{name}_jni.so
-%{_libdir}/lib%{name}_jni.prl
+%dir %{_includedir}/%{name}/jni
+%{_includedir}/%{name}/jni/*
+%{_jnidir}/lib%{name}-jni.so
+%{_jnidir}/lib%{name}-jni.prl
 
 
 %files qtsol-qtcopydialog-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/QtSolutions/QtCopyDialog
+%dir %{_includedir}/%{name}/QtSolutions
+%dir %{_includedir}/%{name}/QtSolutions/QtCopyDialog
+%{_includedir}/%{name}/QtSolutions/QtCopyDialog/*
 %{_libdir}/lib%{name}_qtsol_qtcopydialog.so
 %{_libdir}/lib%{name}_qtsol_qtcopydialog.prl
 
@@ -932,7 +953,9 @@ exit 0
 %files qtsol-qtsingleapplication-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/QtSolutions/QtSingleApplication
+%dir %{_includedir}/%{name}/QtSolutions
+%dir %{_includedir}/%{name}/QtSolutions/QtSingleApplication
+%{_includedir}/%{name}/QtSolutions/QtSingleApplication/*
 %{_libdir}/lib%{name}_qtsol_qtsingleapplication.so
 %{_libdir}/lib%{name}_qtsol_qtsingleapplication.prl
 
@@ -940,7 +963,8 @@ exit 0
 %files gui-devel
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING FAQ NEWS README THANKS TODO
-%{_includedir}/%{name}/gui
+%dir %{_includedir}/%{name}/gui
+%{_includedir}/%{name}/gui/*
 %{_libdir}/lib%{name}_gui.so
 %{_libdir}/lib%{name}_gui.prl
 
@@ -978,7 +1002,7 @@ exit 0
 %{_bindir}/%{name}_test_service_controller
 %{_bindir}/%{name}_test_slot_throw
 %{_datadir}/applications/*.desktop
-%{_datadir}/pixmaps
+%{_datadir}/pixmaps/*
 
 
 %files test

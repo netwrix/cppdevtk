@@ -285,9 +285,13 @@ CONFIG -= strict_c++
 	# visibility hidden: gcc 4
 	!static_and_shared|build_pass {
 		CONFIG(shared, static|shared) {
-			QMAKE_CFLAGS *= -fvisibility=hidden
-			QMAKE_CXXFLAGS *= -fvisibility=hidden
-			QMAKE_CXXFLAGS *= -fvisibility-inlines-hidden
+			!debug_and_release|build_pass {
+				CONFIG(release, debug|release) {
+					QMAKE_CFLAGS *= -fvisibility=hidden
+					QMAKE_CXXFLAGS *= -fvisibility=hidden
+					QMAKE_CXXFLAGS *= -fvisibility-inlines-hidden
+				}
+			}
 		}
 	}
 	
@@ -380,9 +384,13 @@ else {
 		# visibility hidden
 		!static_and_shared|build_pass {
 			CONFIG(shared, static|shared) {
-				QMAKE_CFLAGS *= -fvisibility=hidden
-				QMAKE_CXXFLAGS *= -fvisibility=hidden
-				QMAKE_CXXFLAGS *= -fvisibility-inlines-hidden
+				!debug_and_release|build_pass {
+					CONFIG(release, debug|release) {
+						QMAKE_CFLAGS *= -fvisibility=hidden
+						QMAKE_CXXFLAGS *= -fvisibility=hidden
+						QMAKE_CXXFLAGS *= -fvisibility-inlines-hidden
+					}
+				}
 			}
 		}
 		
@@ -1009,6 +1017,10 @@ isEmpty(CPPDEVTK_LIB_DIR) {
 	else {
 		CPPDEVTK_LIB_DIR = $${CPPDEVTK_PREFIX}/lib
 	}
+}
+
+isEmpty(CPPDEVTK_JNI_DIR) {
+	CPPDEVTK_JNI_DIR = $${CPPDEVTK_LIB_DIR}/java
 }
 
 isEmpty(CPPDEVTK_BIN_DIR) {

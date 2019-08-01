@@ -15,6 +15,6 @@
 #****************************************************************************************************************************
 
 
-TARGET = cppdevtk_jni
+TARGET = cppdevtk-jni
 CPPDEVTK_UTIL_TARGET = cppdevtk_util
 CPPDEVTK_BASE_TARGET = cppdevtk_base
