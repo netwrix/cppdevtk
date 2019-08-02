@@ -23,11 +23,6 @@ Version 1.1.1.1:
 - Fixed bugs:
 	- executor: workaround for Qt bug #6799
 	- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831
-- No longer supported:
-	- openSUSE Leap 42.3: EOL since 1 July 2019
-	- Ubuntu 14.04: EOL since April 2019
-	- CentOS 6: we enabled C++11 in our code
-	- Mac OS X < 10.7
 
 
 Version 1.1.0.1:
