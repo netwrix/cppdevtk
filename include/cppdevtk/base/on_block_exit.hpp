@@ -26,6 +26,7 @@
 #include "cassert.hpp"
 #include "exception.hpp"
 #include "stdexcept.hpp"
+#include "unused.hpp"
 
 #include <boost/scope_exit.hpp>
 
@@ -45,14 +46,17 @@
 #define CPPDEVTK_ON_BLOCK_EXIT_CATCH	\
 		catch (const ::cppdevtk::base::LogicException& exc) {	\
 			CPPDEVTK_LOG_ERROR("CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			::cppdevtk::base::SuppressUnusedWarning(exc);	\
 			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::cppdevtk::base::LogicException");	\
 		}	\
 		catch (const ::std::logic_error& exc) {	\
 			CPPDEVTK_LOG_ERROR("CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			::cppdevtk::base::SuppressUnusedWarning(exc);	\
 			CPPDEVTK_ASSERT(0 && "CPPDEVTK_ON_BLOCK_EXIT: caught ::std::logic_error");	\
 		}	\
 		catch (const ::std::exception& exc) {	\
 			CPPDEVTK_LOG_WARN("CPPDEVTK_ON_BLOCK_EXIT: absorbing caught ::std::exception: " << ::cppdevtk::base::Exception::GetDetailedInfo(exc));	\
+			::cppdevtk::base::SuppressUnusedWarning(exc);	\
 		}	\
 		catch (...) {	\
 			CPPDEVTK_LOG_WARN("CPPDEVTK_ON_BLOCK_EXIT: absorbing caught unknown exception");	\

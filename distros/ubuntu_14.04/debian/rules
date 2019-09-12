@@ -18,11 +18,11 @@
 
 ifeq ($(shell uname -m),x86_64)
 	export CPPDEVTK_RPATHDIR_AUX=/opt/cososys/lib64
+	export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 else
 	export CPPDEVTK_RPATHDIR_AUX=/opt/cososys/lib
+	export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-i386
 endif
-
-export JAVA_HOME=/usr/lib/jvm/default-java
 
 
 %:

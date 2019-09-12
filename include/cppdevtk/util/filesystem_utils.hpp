@@ -56,6 +56,7 @@
 #	error "Unsupported platform!!!"
 #endif
 #include <cppdevtk/base/cstdint.hpp>
+#include <cppdevtk/base/static_assert.hpp>
 
 #include <QtCore/QString>
 #include <QtCore/QLocale>
@@ -67,7 +68,13 @@ namespace cppdevtk {
 namespace util {
 
 
-typedef ::std::streamsize fsize_t;	///< File size type.
+/// File size type (signed) (::std::streamsize is 32 bits instead of 64 bits on many 32 bits platforms...).
+typedef ::std::streamoff fsize_t;
+CPPDEVTK_STATIC_ASSERT(sizeof(fsize_t) == sizeof(int64_t));
+
+/// File offset type (signed)
+typedef ::std::streamoff foff_t;
+CPPDEVTK_STATIC_ASSERT(sizeof(foff_t) == sizeof(int64_t));
 
 
 struct FileSystemSpaceInfo {

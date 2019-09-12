@@ -489,10 +489,6 @@ unix {
 	}
 	else {
 		macx {
-				DEFINES += MAC_OS_X_VERSION_MIN_REQUIRED=$${CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED}
-				DEFINES += __MAC_OS_X_VERSION_MIN_REQUIRED=$${CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED}
-				DEFINES += MAC_OS_X_VERSION_MAX_ALLOWED=$${CPPDEVTK_MAC_OS_X_VERSION_MAX_ALLOWED}
-				DEFINES += __MAC_OS_X_VERSION_MAX_ALLOWED=$${CPPDEVTK_MAC_OS_X_VERSION_MAX_ALLOWED}
 				QMAKE_MACOSX_DEPLOYMENT_TARGET = $${CPPDEVTK_MACOSX_DEPLOYMENT_TARGET}
 				QMAKE_CFLAGS *= -mmacosx-version-min=$${CPPDEVTK_MACOSX_DEPLOYMENT_TARGET}
 				QMAKE_CXXFLAGS *= -mmacosx-version-min=$${CPPDEVTK_MACOSX_DEPLOYMENT_TARGET}
@@ -506,8 +502,6 @@ unix {
 					error("both iphonesimulator and iphoneos are missing from CONFIG")
 				}
 				
-				DEFINES += __IPHONE_OS_VERSION_MIN_REQUIRED=$${CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED}
-				DEFINES += __IPHONE_OS_VERSION_MAX_ALLOWED=$${CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED}
 				QMAKE_IOS_DEPLOYMENT_TARGET = $${CPPDEVTK_IOS_DEPLOYMENT_TARGET}
 				CONFIG(iphonesimulator, iphonesimulator|iphoneos) {
 					QMAKE_CFLAGS *= -mios-simulator-version-min=$${CPPDEVTK_IOS_DEPLOYMENT_TARGET}
@@ -531,10 +525,8 @@ unix {
 }
 else {
 	win32 {
-		DEFINES += _WIN32_WINNT=$${CPPDEVTK_WIN32_WINNT}
-		DEFINES += NTDDI_VERSION=$${CPPDEVTK_NTDDI_VERSION}
-		DEFINES += WINVER=$${CPPDEVTK_WINVER}
-		DEFINES += _WIN32_IE=$${CPPDEVTK_WIN32_IE}
+		#DEFINES *= _WIN32_WINNT=$${CPPDEVTK_WIN32_WINNT}
+		#DEFINES *= NTDDI_VERSION=$${CPPDEVTK_NTDDI_VERSION}
 	}
 	else {
 		error("Unsupported platform!!!")
@@ -838,7 +830,27 @@ else {
 		}
 		else {
 			macx {
-				DESTDIR = $${DESTDIR}/macosx
+				*g++* {
+					cppdevtk_disable_old_os {
+						DESTDIR = $${DESTDIR}/mac105
+					}
+					else {
+						DESTDIR = $${DESTDIR}/mac104
+					}
+				}
+				else {
+					*clang* {
+						cppdevtk_disable_old_os {
+							DESTDIR = $${DESTDIR}/mac1010
+						}
+						else {
+							DESTDIR = $${DESTDIR}/mac107
+						}
+					}
+					else {
+						error("Unsupported compiler for Mac OS X platform!!!")
+					}
+				}
 			}
 			else {
 				ios {
@@ -882,6 +894,9 @@ else {
 			isEmpty(CPPDEVTK_COMPILER) {
 				error("CPPDEVTK_COMPILER is empty")
 			}
+			isEqual(CPPDEVTK_COMPILER, "msvc") {
+				CPPDEVTK_COMPILER = msvc2015
+			}
 			DESTDIR = $${DESTDIR}/$${CPPDEVTK_COMPILER}
 		}
 	}
@@ -901,12 +916,24 @@ else {
 		}
 		else {
 			macx {
-				# QT_ARCH does not work in Qt 4 on mac; fortunatelly we use Qt 4 only on 32 bits.
 				greaterThan(QT_MAJOR_VERSION, 4) {
 					isEmpty(QT_ARCH) {
 						error("QT_ARCH is empty!!!")
 					}
 					DESTDIR = $${DESTDIR}/$${QT_ARCH}
+				}
+				else {
+					x86 {
+						DESTDIR = $${DESTDIR}/x86
+					}
+					else {
+						x86_64 {
+							DESTDIR = $${DESTDIR}/x86_64
+						}
+						else {
+							error("arch missing from CONFIG!!!")
+						}
+					}
 				}
 			}
 			else {
@@ -1325,12 +1352,12 @@ unix {
 				}
 				
 				macx {
-					!contains(QT_CONFIG, rpath) {
-						error("Please build Qt with rpath!!!")
-					}
-					
 					# @rpath was introduced in 10.5
 					greaterThan(CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED, 1040) {
+						!contains(QT_CONFIG, rpath) {
+							error("Please build Qt with rpath!!!")
+						}
+						
 						QMAKE_SONAME_PREFIX = @rpath
 						CONFIG -= absolute_library_soname
 					}
@@ -1351,10 +1378,12 @@ win32 {
 	
 	QMAKE_RC += -d _WIN32_WINNT=$${CPPDEVTK_WIN32_WINNT}
 	QMAKE_RC += -d NTDDI_VERSION=$${CPPDEVTK_NTDDI_VERSION}
-	QMAKE_RC += -d WINVER=$${CPPDEVTK_WINVER}
-	QMAKE_RC += -d _WIN32_IE=$${CPPDEVTK_WIN32_IE}
 	
 	QMAKE_RC += -d _WIN32 -d WIN32
+	isEqual(QMAKE_TARGET.arch, "x86_64") {
+		QMAKE_RC += -d _WIN64 -d WIN64
+	}
+	
 	QMAKE_RC += -d _UNICODE -d UNICODE
 	
 	!static_and_shared|build_pass {

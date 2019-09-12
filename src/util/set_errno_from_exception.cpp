@@ -55,22 +55,26 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 	catch (const base::DeadlockException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EDEADLK; caught DeadlockException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EDEADLK;
 	}
 	catch (const base::concurrent::TaskCanceledException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ECANCELED; caught TaskCanceledException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ECANCELED;
 	}
 	catch (const util::NoSuchFileOrDirectoryException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENOENT; caught NoSuchFileOrDirectoryException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ENOENT;
 	}
 	
 	catch (const base::IosFailureException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught IosFailureException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EIO;
 	}
 	catch (const base::SystemException& exc) {
@@ -102,27 +106,32 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 	catch (const base::RuntimeException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught RuntimeException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ENODATA;
 	}
 	catch (const base::InvalidArgumentException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught InvalidArgumentException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EINVAL;
 	}
 	catch (const base::LogicException& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught LogicException: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EINVAL;
 	}
 	catch (const Exception& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught Exception: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ENODATA;
 	}
 	
 	catch (const ::std::ios_base::failure& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EIO; caught ios_base::failure: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EIO;
 	}
 #	if (CPPDEVTK_HAVE_CPP11_SYSTEM_ERROR)
@@ -156,26 +165,31 @@ CPPDEVTK_UTIL_API void SetErrNoFromException() {
 	catch (const ::std::runtime_error& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught runtime_error: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ENODATA;
 	}
 	catch (const ::std::invalid_argument& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught invalid_argument: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EINVAL;
 	}
 	catch (const ::std::logic_error& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to EINVAL; caught logic_error: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = EINVAL;
 	}
 	catch (const ::std::bad_alloc& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENOMEM; caught bad_alloc: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ENOMEM;
 	}
 	catch (const ::std::exception& exc) {
 		CPPDEVTK_LOG_ERROR("setting errno to ENODATA; caught exception: "
 				<< Exception::GetDetailedInfo(exc));
+		base::SuppressUnusedWarning(exc);
 		errno = ENODATA;
 	}
 	

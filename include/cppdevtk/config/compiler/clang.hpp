@@ -227,8 +227,8 @@
 #endif
 
 #ifdef NDEBUG
-#	if (FORTIFY_SOURCE != 2)
-#		ifdef CPPDEVTK_DETAIL_BUILD
+#	ifdef CPPDEVTK_DETAIL_BUILD
+#		if (!defined(FORTIFY_SOURCE) || (FORTIFY_SOURCE != 2))
 //			CPPDEVTK_COMPILER_WARNING("setting FORTIFY_SOURCE to 2")
 #			undef FORTIFY_SOURCE
 #			define FORTIFY_SOURCE 2
@@ -242,7 +242,7 @@
 #if (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
 #	pragma clang diagnostic ignored "-Wdeprecated-declarations"	// from Qt Headers
 // TODO: put other third-party warnings safe to disable here.
-#endif	// (defined(CPPDEVTK_DETAIL_BUILD) || CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
+#endif	// (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,7 +250,7 @@
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
 //#	pragma clang diagnostic ignored "-Wunused-local-typedefs"	// typedef 'CppDevTkStaticAssert_1' locally defined but not used
 // TODO: put other cppdevtk warnings safe to disable here.
-#endif	// (defined(CPPDEVTK_DETAIL_BUILD) || CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#endif	// (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
 
 
 /// \endcond

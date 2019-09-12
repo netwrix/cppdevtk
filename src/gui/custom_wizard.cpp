@@ -45,7 +45,8 @@ namespace gui {
 
 
 CustomWizard::CustomWizard(QWidget* pParent, Qt::WindowFlags flags): QDialog(pParent, flags), WidgetBase(),
-		pUiCustomWizard_(new Ui::CustomWizard()), options_(NoOption), startId_(-1), initializedPageIds_(), homepage_() {
+		pUiCustomWizard_(new Ui::CustomWizard()), options_(NoOption), startId_(-1), initializedPageIds_(), homepage_(),
+		prevPages_() {
 	CPPDEVTK_LOG_TRACE_FUNCTION();
 	
 	pUiCustomWizard_->setupUi(this);
@@ -213,9 +214,12 @@ void CustomWizard::setVisible(bool visible) {
 }
 
 void CustomWizard::back() {
-	const int kCurrentId = currentId();
-	CPPDEVTK_ASSERT(kCurrentId > 0);
-	switchToPage(kCurrentId - 1);
+	int prevId = -1;
+	if (!prevPages_.isEmpty()) {
+		prevId = prevPages_.last();
+		prevPages_.pop_back();
+	}
+	switchToPage(prevId);
 }
 
 void CustomWizard::next() {
@@ -323,6 +327,7 @@ void CustomWizard::switchToPage(int pageId) {
 				initializedPageIds_.insert(pageId);
 				initializePage(pageId);
 			}
+			prevPages_.push_back(kOldPageId);
 		}
 		else {	// backward
 			if (!(options_ & IndependentPages)) {
@@ -350,6 +355,8 @@ void CustomWizard::reset() {
 		cleanupPage(*kIter);
 	}
 	initializedPageIds_.clear();
+	
+	prevPages_.clear();
 	
 	pUiCustomWizard_->pStackedWidgetWizardPages_->setCurrentIndex(-1);
 }

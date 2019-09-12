@@ -1,6 +1,6 @@
 1. Prerequisites:
 - Qt 5.6.3 msvc2015 and Qt 5.6.1-1 android needed on Windows
-- Qt 5.6.3 macosx and Qt 5.9.7 ios needed on Mac OS X
+- Qt 5.6.3 macosx and Qt 5.9.8 ios needed on Mac OS X
 - JDK 8u144 needed on Windows
 - JDK 8u144 needed on Mac OS X >= 10.7 and Apple provided JDK 6 on Mac < 10.7
 - Android SDK r25.2.5 + NDK r10e needed on Windows
@@ -8,9 +8,9 @@
 
 Qt 5:
 - Ubuntu 16.04 (ppa:beineri, https://launchpad.net/~beineri):
-	> sudo add-apt-repository ppa:beineri/opt-qt-5.12.3-xenial
+	> sudo add-apt-repository ppa:beineri/opt-qt597-xenial
 	> sudo apt-get update
-	> sudo apt-get install qt512-meta-full qt512base qt512x11extras
+	> sudo apt-get install qt59-meta-full qt-latest qt59base qt59x11extras
 - Ubuntu 14.04 (ppa:beineri, https://launchpad.net/~beineri):
 	> sudo apt-add-repository ppa:beineri/opt-qt597-trusty
 	> sudo apt-get update
@@ -22,6 +22,11 @@ Qt 5:
 - Ubuntu:
 > sudo apt-get install build-essential ubuntu-dev-tools debhelper dpkg-sig apt-file
 
+
+- Ubuntu 14.04 openjdk 8:
+> sudo add-apt-repository ppa:openjdk-r/ppa
+> sudo apt-get update
+> sudo apt-get install openjdk-8-jdk
 
 - Windows environment variables for Java and Android:
 JAVA_HOME C:\Program Files\Java\jdk1.8.0_144

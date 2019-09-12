@@ -72,24 +72,24 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 #if (!defined(QT_SHARED) && !defined(QT_STATIC))
-#error "Both QT_SHARED and QT_STATIC are not defined. Please check your Qt configuration!!!"
+#	error "Both QT_SHARED and QT_STATIC are not defined. Please check your Qt configuration!!!"
 #endif
 #if (defined(QT_SHARED) && defined(QT_STATIC))
-#error "Both QT_SHARED and QT_STATIC are defined. Please check your Qt configuration!!!"
+#	error "Both QT_SHARED and QT_STATIC are defined. Please check your Qt configuration!!!"
 #endif
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
 
 #ifndef QT_MAC_USE_COCOA
-#define QT_MAC_USE_COCOA 1
+#	define QT_MAC_USE_COCOA 1
 #else
-#if (QT_MAC_USE_COCOA != 1)
-#error "QT_MAC_USE_COCOA is not 1"
-#endif
+#	if (QT_MAC_USE_COCOA != 1)
+#		error "QT_MAC_USE_COCOA is not 1"
+#	endif
 #endif
 
 #if (!CPPDEVTK_COMPILER_CLANG)
-//#error "Qt5 Mac require clang!!!"
+//#	error "Qt5 Mac require clang!!!"
 #endif
 
 #endif	// (CPPDEVTK_PLATFORM_MACOSX)
@@ -99,23 +99,23 @@
 #include <QtCore/QtCore>
 
 #if (CPPDEVTK_PLATFORM_MACOSX)
-#if (!CPPDEVTK_COMPILER_GCC)
-//#error "Qt4 Mac require gcc!!!"
-#endif
+#	if (!CPPDEVTK_COMPILER_GCC)
+//#		error "Qt4 Mac require gcc!!!"
+#	endif
 #endif
 
 #endif	// (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 #if (CPPDEVTK_PLATFORM_WINDOWS)
-#if (defined(CPPDEVTK_SHARED) && (defined(QT_STATIC) || defined(QT_NODLL)))
-#error "On Windows CppDevTk shared with static Qt is a dangerous combination that is not supported!!!"
-#endif
+#	if (defined(CPPDEVTK_SHARED) && (defined(QT_STATIC) || defined(QT_NODLL)))
+#		error "On Windows CppDevTk shared with static Qt is a dangerous combination that is not supported!!!"
+#	endif
 #endif
 
-#if (CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID)
-#ifdef QT_NO_DBUS
-#error "QtDBus is required on Linux!!!"
-#endif
+#if (CPPDEVTK_PLATFORM_DESKTOP)
+#	ifdef QT_NO_DBUS
+#		error "QtDBus is required on desktop platforms!!!"
+#	endif
 #endif
 
 #endif	// __cplusplus
@@ -141,16 +141,16 @@
 
 
 #if (CPPDEVTK_WITH_ZLIB)
-#if (CPPDEVTK_PLATFORM_WINDOWS)
-#	ifndef ZLIB_WINAPI
-#		define ZLIB_WINAPI
-#	endif
-#	ifdef CPPDEVTK_SHARED
-#		ifndef ZLIB_DLL
-#			define ZLIB_DLL
+#	if (CPPDEVTK_PLATFORM_WINDOWS)
+#		ifndef ZLIB_WINAPI
+#			define ZLIB_WINAPI
+#		endif
+#		ifdef CPPDEVTK_SHARED
+#			ifndef ZLIB_DLL
+#				define ZLIB_DLL
+#			endif
 #		endif
 #	endif
-#endif
 #endif
 
 

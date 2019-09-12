@@ -573,6 +573,7 @@ CPPDEVTK_UTIL_API QStringList GetMountPoints(bool ignoreSpecialFileSystems) {
 #	else
 	// TODO: Android port for API level < 21
 	CPPDEVTK_COMPILER_WARNING("GetMountPoints(): Not working on Android < 5.0.1 (API level < 21)!");
+	SuppressUnusedWarning(ignoreSpecialFileSystems);
 	return QStringList();
 #	endif
 }

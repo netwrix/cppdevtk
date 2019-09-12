@@ -27,6 +27,8 @@
 #include <cppdevtk/base/cassert.hpp>
 #include <cppdevtk/base/system_exception.hpp>
 #include <cppdevtk/base/cerrno.hpp>
+#include <cppdevtk/base/static_assert.hpp>
+#include <cppdevtk/base/ios.hpp>
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QString>
@@ -40,6 +42,48 @@
 #include <queue>
 #include <list>
 #include <new>
+#include <sys/types.h>
+
+
+// check large file support; known issuse:
+//https://android.googlesource.com/platform/bionic/+/master/docs/32-bit-abi.md
+//https://developercommunity.visualstudio.com/content/problem/308714/in-c-header-systypesh-off-t-is-defined-as-32-bit-s.html
+
+#if (CPPDEVTK_COMPILER_GCC || CPPDEVTK_COMPILER_CLANG)
+#	if (CPPDEVTK_ARCHITECTURE_X86 || CPPDEVTK_ARCHITECTURE_ARM)
+#		ifndef _LARGEFILE_SOURCE
+#			error "_LARGEFILE_SOURCE is not defined"
+#		endif
+#		ifndef _FILE_OFFSET_BITS
+#			error "_FILE_OFFSET_BITS is not defined"
+#		else
+#			if (_FILE_OFFSET_BITS != 64)
+#				error "_FILE_OFFSET_BITS != 64"
+#			endif
+#		endif
+#	endif
+#endif
+
+#if (CPPDEVTK_ARCHITECTURE_X86 || CPPDEVTK_ARCHITECTURE_ARM)
+
+#if (!((CPPDEVTK_PLATFORM_LINUX && !CPPDEVTK_PLATFORM_ANDROID) || CPPDEVTK_PLATFORM_ANDROID	\
+		|| (CPPDEVTK_PLATFORM_MACOSX && !CPPDEVTK_PLATFORM_IOS) || CPPDEVTK_PLATFORM_IOS))
+CPPDEVTK_STATIC_ASSERT(sizeof(qint64) == sizeof(::std::streamsize));
+#endif
+CPPDEVTK_STATIC_ASSERT(sizeof(qint64) == sizeof(::std::streamoff));
+#if (!(CPPDEVTK_COMPILER_MSVC || CPPDEVTK_PLATFORM_ANDROID))
+CPPDEVTK_STATIC_ASSERT(sizeof(qint64) == sizeof(off_t));
+#endif
+
+#else	// (CPPDEVTK_ARCHITECTURE_X86 || CPPDEVTK_ARCHITECTURE_ARM)
+
+CPPDEVTK_STATIC_ASSERT(sizeof(qint64) == sizeof(::std::streamsize));
+CPPDEVTK_STATIC_ASSERT(sizeof(qint64) == sizeof(::std::streamoff));
+#if (!CPPDEVTK_COMPILER_MSVC)
+CPPDEVTK_STATIC_ASSERT(sizeof(qint64) == sizeof(off_t));
+#endif
+
+#endif	// (CPPDEVTK_ARCHITECTURE_X86 || CPPDEVTK_ARCHITECTURE_ARM)
 
 
 namespace cppdevtk {

@@ -270,14 +270,14 @@ macx|ios {
 		}
 	}
 	
-	#!isEmpty(QMAKE_INFO_PLIST) {
-		#!isEmpty(QMAKE_POST_LINK) {
-		#	QMAKE_POST_LINK += &&
-		#}
-	#}
-	#QMAKE_POST_LINK += rm -Rf $${DESTDIR}/$${TARGET}.app/Contents/Resources/qt_menu.nib
-	#QMAKE_POST_LINK += && cp -R $$[QT_INSTALL_PREFIX]/src/gui/mac/qt_menu.nib $${DESTDIR}/$${TARGET}.app/Contents/Resources
 	macx {
+		isEqual(QT_MAJOR_VERSION, "4"):CONFIG(static, static|shared):!isEqual(QMAKE_MACOSX_DEPLOYMENT_TARGET, "10.4") {
+			!isEmpty(QMAKE_POST_LINK) {
+				QMAKE_POST_LINK += &&
+			}
+			QMAKE_POST_LINK += cp -Rf $${_PRO_FILE_PWD_}/res/qt_menu.nib $${DESTDIR}/$${TARGET}.app/Contents/Resources
+		}
+		
 		CONFIG(shared, static|shared) {
 			#!isEmpty(QMAKE_POST_LINK) {
 			#	QMAKE_POST_LINK += &&

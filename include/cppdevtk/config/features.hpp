@@ -37,28 +37,30 @@
 /// @{
 
 /// \brief Platform (target OS) version.
-#ifndef CPPDEVTK_ENABLE_PLATFORM_VERSION
-#	ifdef CPPDEVTK_DETAIL_BUILD
-#		define CPPDEVTK_ENABLE_PLATFORM_VERSION 1
-#	else
+#ifndef RC_INVOKED
+#ifdef CPPDEVTK_DETAIL_BUILD
+#	define CPPDEVTK_ENABLE_PLATFORM_VERSION 1
+#else
+#	ifndef CPPDEVTK_ENABLE_PLATFORM_VERSION
 #		define CPPDEVTK_ENABLE_PLATFORM_VERSION 0
 #	endif
 #endif
+#endif
 
 /// \brief Disable compiler warnings caused by third party libraries (mainly <a href="http://www.qt.io">Qt</a>).
-#ifndef CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS
-#	ifdef CPPDEVTK_DETAIL_BUILD
-#		define CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS 1
-#	else
+#ifdef CPPDEVTK_DETAIL_BUILD
+#	define CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS 1
+#else
+#	ifndef CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS
 #		define CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS 0
 #	endif
 #endif
 
 /// \brief Disable compiler warnings caused by cppdevtk.
-#ifndef CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS
-#	ifdef CPPDEVTK_DETAIL_BUILD
-#		define CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS 1
-#	else
+#ifdef CPPDEVTK_DETAIL_BUILD
+#	define CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS 1
+#else
+#	ifndef CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS
 #		define CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS 0
 #	endif
 #endif
@@ -185,7 +187,13 @@
 /// @{
 
 /// \brief Minimum OS requirement.
-// TODO: keep in sync with common_customization.pri
+
+
+// TODO: keep in sync with cppdevtk_disable_old_os in common_customization.pri
+/// - old OS: Win XP SP3 target xp (Win Vista SP2 non target xp), Mac OS X 10.4 gcc (10.7 clang), Android 4.4.2 (API level 19), iOS 9
+/// - new OS: Win Vista SP2 target xp (Win 7 non target xp), Mac OS X 10.5 gcc (10.10 clang), Android 5.0.1 (API level 21), iOS 10
+#define CPPDEVTK_DISABLE_OLD_OS 1
+
 
 #if (defined(__APPLE__) && defined(__MACH__))
 	// Mac OS X is Unix
@@ -201,16 +209,28 @@
 #	if (defined(__linux__) || defined(linux) || defined(__linux))
 #		define CPPDEVTK_KERNEL_VERSION KERNEL_VERSION(2, 6, 32)	// NOTE: can not be less than 2.6.32
 #		if (defined(ANDROID) || defined(__ANDROID__))
-#			define CPPDEVTK_ANDROID_API 21
+#			if (CPPDEVTK_DISABLE_OLD_OS)
+#				define CPPDEVTK_ANDROID_API 21
+#			else
+#				define CPPDEVTK_ANDROID_API 19
+#			endif
 #		endif
 #	elif (defined(__APPLE__) && defined(__MACH__))
 #		if (defined(__GNUC__))
 #			if (defined(__clang__))
 				// NOTE: can not be less than 10.7
-#				define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 101100	// MAC_OS_X_VERSION_10_11
+#				if (CPPDEVTK_DISABLE_OLD_OS)
+#					define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 101000	// MAC_OS_X_VERSION_10_10
+#				else
+#					define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1070	// MAC_OS_X_VERSION_10_7
+#				endif
 #			else
 				// NOTE: can not be less than 10.4
-#				define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1050	// MAC_OS_X_VERSION_10_5
+#				if (CPPDEVTK_DISABLE_OLD_OS)
+#					define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1050	// MAC_OS_X_VERSION_10_5
+#				else
+#					define CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED 1040	// MAC_OS_X_VERSION_10_4
+#				endif
 #			endif
 #		else
 #			error "Unsupported compiler for Mac OS X platform!!!"
@@ -220,7 +240,11 @@
 #			error "CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED > CPPDEVTK_MAC_OS_X_VERSION_MAX_ALLOWED"
 #		endif
 
-#		define CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED 100000	// __IPHONE_10_0
+#		if (CPPDEVTK_DISABLE_OLD_OS)
+#			define CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED 100000	// __IPHONE_10_0
+#		else
+#			define CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED 90000	// __IPHONE_9_0
+#		endif
 #		define CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED
 #		if (CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED > CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED)
 #			error "CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED > CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED"
@@ -230,18 +254,34 @@
 #	endif
 #elif (defined(_WIN32))
 #	if ((_MSC_VER >= 1700) && !defined(_USING_V110_SDK71_))
-		// Win 7
-#		define CPPDEVTK_WIN32_WINNT 0x0601	// _WIN32_WINNT_WIN7
-#		define CPPDEVTK_NTDDI_VERSION 0x06010000	// NTDDI_WIN7
-#		define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
-#		define CPPDEVTK_WIN32_IE 0x0800	// _WIN32_IE_WIN7, _WIN32_IE_IE80
+#		if (CPPDEVTK_DISABLE_OLD_OS)
+			// Win 7
+#			define CPPDEVTK_WIN32_WINNT 0x0601	// _WIN32_WINNT_WIN7
+#			define CPPDEVTK_NTDDI_VERSION 0x06010000	// NTDDI_WIN7
+#			define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
+#			define CPPDEVTK_WIN32_IE 0x0800	// _WIN32_IE_WIN7, _WIN32_IE_IE80
+#		else
+			// Win Vista SP2
+#			define CPPDEVTK_WIN32_WINNT 0x0600	// _WIN32_WINNT_VISTA
+#			define CPPDEVTK_NTDDI_VERSION 0x06000200	// NTDDI_VISTASP2
+#			define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
+#			define CPPDEVTK_WIN32_IE 0x0700	// _WIN32_IE_WIN6, _WIN32_IE_IE70
+#		endif
 #	else
 		// NOTE: can not be less than XP SP3
-		// Win XP SP3
-#		define CPPDEVTK_WIN32_WINNT 0x0501	// _WIN32_WINNT_WINXP
-#		define CPPDEVTK_NTDDI_VERSION 0x05010300	// NTDDI_WINXPSP3
-#		define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
-#		define CPPDEVTK_WIN32_IE 0x0603	// _WIN32_IE_XPSP2, _WIN32_IE_IE60SP2
+#		if (CPPDEVTK_DISABLE_OLD_OS)
+			// Win Vista SP2
+#			define CPPDEVTK_WIN32_WINNT 0x0600	// _WIN32_WINNT_VISTA
+#			define CPPDEVTK_NTDDI_VERSION 0x06000200	// NTDDI_VISTASP2
+#			define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
+#			define CPPDEVTK_WIN32_IE 0x0700	// _WIN32_IE_WIN6, _WIN32_IE_IE70
+#		else
+			// Win XP SP3
+#			define CPPDEVTK_WIN32_WINNT 0x0501	// _WIN32_WINNT_WINXP
+#			define CPPDEVTK_NTDDI_VERSION 0x05010300	// NTDDI_WINXPSP3
+#			define CPPDEVTK_WINVER CPPDEVTK_WIN32_WINNT
+#			define CPPDEVTK_WIN32_IE 0x0603	// _WIN32_IE_XPSP2, _WIN32_IE_IE60SP2
+#		endif
 #	endif
 #else
 #	error "Unsupported platform!!!"

@@ -319,6 +319,7 @@
 #	pragma warning(disable: 4371)	// C4371: 'class': layout of class may have changed from a previous version of the compiler due to better packing of member 'member' (from boost headers)
 
 #	if (_MSC_VER >= 1900)	// MSVC 2015 (14.0)
+#	pragma warning(disable: 4714)	// C4714: function marked as __forceinline not inlined (from Qt headers)
 #	pragma warning(disable: 5026)	// C5026: move constructor was implicitly defined as deleted (from Qt headers)
 #	pragma warning(disable: 5027)	// C5027: move assignment operator was implicitly defined as deleted (from Qt headers)
 #	pragma warning(disable: 5031)	// C5031: #pragma warning(pop): likely mismatch, popping warning state pushed in different file (from boost headers)

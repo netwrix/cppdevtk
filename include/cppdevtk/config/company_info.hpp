@@ -27,8 +27,8 @@
 
 
 #include "features.hpp"
+#include "platform_compiler.hpp"
 #include "company_info_customization.hpp"
-#include "platform.hpp"
 
 #if (defined(__cplusplus) && !defined(RC_INVOKED))
 #	include <QtCore/QString>

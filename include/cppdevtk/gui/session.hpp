@@ -91,7 +91,11 @@ class CPPDEVTK_GUI_API Session: public QObject {
 #	endif
 	
 	Q_OBJECT
+#if (!defined(QT_MAC_USE_COCOA) || (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)))
 Q_SIGNALS:
+#else
+public:
+#endif
 	void Activated();
 	void Deactivated();
 	

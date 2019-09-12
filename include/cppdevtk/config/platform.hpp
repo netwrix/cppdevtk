@@ -154,7 +154,7 @@
 
 
 /// \defgroup config_platform_supported_platforms_ios iOS
-/// Minimum requirement: iOS >= 6.0\n
+/// Minimum requirement: iOS >= 9.0\n
 /// @{
 
 /// \brief iOS platform (is also Mac OS X and Unix).

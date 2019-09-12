@@ -14,7 +14,7 @@ Homepage: https://github.com/cososys/cppdevtk
 Package: libcppdevtk-base
 Section: libs
 Architecture: any
-Depends: cososys-filesystem (>= 1.1.0), ${shlibs:Depends}, ${misc:Depends}
+Depends: cososys-filesystem (>= 1.1.1), ${shlibs:Depends}, ${misc:Depends}
 Description: CppDevTk base library
  CppDevTk base library.
 

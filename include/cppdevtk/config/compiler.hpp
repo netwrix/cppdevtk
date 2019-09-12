@@ -22,6 +22,9 @@
 
 
 #include "features.hpp"
+#ifndef RC_INVOKED
+#include "architecture.hpp"
+#endif
 
 
 #ifndef RC_INVOKED
@@ -265,6 +268,38 @@
 
 
 #ifndef RC_INVOKED	// for RC4011: identifier truncated to 'identifier'...
+
+#if (CPPDEVTK_COMPILER_GCC || CPPDEVTK_COMPILER_CLANG)
+#	if (CPPDEVTK_ARCHITECTURE_X86 || CPPDEVTK_ARCHITECTURE_ARM)
+		// large file support
+#		ifdef CPPDEVTK_DETAIL_BUILD
+#			ifndef _LARGEFILE_SOURCE
+#				define _LARGEFILE_SOURCE
+#			endif
+#		else
+#			ifndef _LARGEFILE_SOURCE
+#				error "Please enable large file support; -D_LARGEFILE_SOURCE"
+#			endif
+#		endif
+#		ifdef CPPDEVTK_DETAIL_BUILD
+#			ifndef _FILE_OFFSET_BITS
+#				define _FILE_OFFSET_BITS 64
+#			else
+#				if (_FILE_OFFSET_BITS != 64)
+#					error "_FILE_OFFSET_BITS != 64"
+#				endif
+#			endif
+#		else
+#			ifndef _FILE_OFFSET_BITS
+#				error "Please enable large file support; -D_FILE_OFFSET_BITS=64"
+#			else
+#				if (_FILE_OFFSET_BITS != 64)
+#					error "_FILE_OFFSET_BITS != 64"
+#				endif
+#			endif
+#		endif
+#	endif
+#endif
 
 #if (CPPDEVTK_COMPILER_GCC)
 #	include "compiler/gcc.hpp"

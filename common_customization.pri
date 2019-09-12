@@ -24,48 +24,70 @@ CONFIG += cppdevtk_enable_debuginfo_in_release
 #CONFIG += cppdevtk_enable_target_suffix_qt_major_version
 CONFIG += cppdevtk_enable_app_target_debug_suffix
 CONFIG += cppdevtk_disable_warnings
+
 # TODO: keep in sync with CPPDEVTK_WITH_ZLIB in config/features.hpp
 CONFIG += cppdevtk_with_zlib
-win32 {
-	CONFIG += cppdevtk_target_xp
-}
 
+win32 {
+	#CONFIG += cppdevtk_target_xp
+}
+# TODO: keep in sync with CPPDEVTK_DISABLE_OLD_OS in config/features.hpp
+CONFIG += cppdevtk_disable_old_os
 
 # TODO: keep in sync with CPPDEVTK_ENABLE_QT_SOLUTIONS in config/features.hpp
 CPPDEVTK_ENABLE_QTSOLUTIONS = true
 
 
 # target OS version
-# TODO: keep in sync with features.hpp
+# TODO: keep in sync with config/features.hpp
 unix {
 	linux* {
 		android {
 			# ignored by Qt Creator and qmake; must be set as environment variable
-			#ANDROID_NDK_PLATFORM = android-21
+			cppdevtk_disable_old_os {
+				#ANDROID_NDK_PLATFORM = android-21
+			}
+			else {
+				#ANDROID_NDK_PLATFORM = android-19
+			}
 		}
 	}
 	else {
 		macx {
 			*g++* {
-				CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1050
-				CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.5
+				cppdevtk_disable_old_os {
+					CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1050
+					CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.5
+				}
+				else {
+					CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1040
+					CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.4
+				}
 			}
 			else {
 				*clang* {
-					CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 101100
-					CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.11
+					cppdevtk_disable_old_os {
+						CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 101000
+						CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.10
+					}
+					else {
+						CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1070
+						CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.7
+					}
 				}
 				else {
 					error("Unsupported compiler for Mac OS X platform!!!")
 				}
 			}
-			CPPDEVTK_MAC_OS_X_VERSION_MAX_ALLOWED = $${CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED}
 		}
 		else {
 			ios {
-				CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED = 100000
-				CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED = $${CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED}
-				CPPDEVTK_IOS_DEPLOYMENT_TARGET = 10.0
+				cppdevtk_disable_old_os {
+					CPPDEVTK_IOS_DEPLOYMENT_TARGET = 10.0
+				}
+				else {
+					CPPDEVTK_IOS_DEPLOYMENT_TARGET = 9.0
+				}
 			}
 			else {
 				error("Unsupported Unix platform!!!")
@@ -75,19 +97,29 @@ unix {
 }
 else {
 	win32 {
-		cppdevtk_target_xp {
-			# Win XP SP3
-			CPPDEVTK_WIN32_WINNT = 0x0501
-			CPPDEVTK_NTDDI_VERSION = 0x05010300
-			CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
-			CPPDEVTK_WIN32_IE = 0x0603
+		cppdevtk_disable_old_os {
+			cppdevtk_target_xp {
+				# Win Vista SP2
+				CPPDEVTK_WIN32_WINNT = 0x0600
+				CPPDEVTK_NTDDI_VERSION = 0x06000200
+			}
+			else {
+				# Win 7
+				CPPDEVTK_WIN32_WINNT = 0x0601
+				CPPDEVTK_NTDDI_VERSION = 0x06010000
+			}
 		}
 		else {
-			# Win 7
-			CPPDEVTK_WIN32_WINNT = 0x0601
-			CPPDEVTK_NTDDI_VERSION = 0x06010000
-			CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
-			CPPDEVTK_WIN32_IE = 0x0800
+			cppdevtk_target_xp {
+				# Win XP SP3
+				CPPDEVTK_WIN32_WINNT = 0x0501
+				CPPDEVTK_NTDDI_VERSION = 0x05010300
+			}
+			else {
+				# Win Vista SP2
+				CPPDEVTK_WIN32_WINNT = 0x0600
+				CPPDEVTK_NTDDI_VERSION = 0x06000200
+			}
 		}
 	}
 	else {
@@ -169,9 +201,9 @@ else {
 
 # CPPDEVTK_PREFIX
 # Ex:
-# linux: /usr/local/(static)
+# linux: /usr/local
 # android: C:/local-android/arch (/usr/local-android/arch)
-# mac: /usr/local/arch/(static)
+# mac: /usr/local
 # iphonesimulator: /usr/local-ios/iphonesimulator
 # iphoneos: /usr/local-ios/iphoneos
 # windows: C:/local/qtver/compiler/arch/(static)
@@ -237,6 +269,9 @@ isEmpty(CPPDEVTK_PREFIX) {
 			isEmpty(CPPDEVTK_COMPILER) {
 				error("CPPDEVTK_COMPILER is empty")
 			}
+			isEqual(CPPDEVTK_COMPILER, "msvc") {
+				CPPDEVTK_COMPILER = msvc2015
+			}
 			CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/$${CPPDEVTK_COMPILER}
 		}
 	}
@@ -256,26 +291,7 @@ isEmpty(CPPDEVTK_PREFIX) {
 		}
 		else {
 			macx {
-				# QT_ARCH does not work in Qt 4 on mac.
-				greaterThan(QT_MAJOR_VERSION, 4) {
-					isEmpty(QT_ARCH) {
-						error("QT_ARCH is empty!!!")
-					}
-					CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/$${QT_ARCH}
-				}
-				else {
-					x86 {
-						CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/x86
-					}
-					else {
-						x86_64 {
-							CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/x86_64
-						}
-						else {
-							error("arch missing from CONFIG!!!")
-						}
-					}
-				}
+				# arch not used
 			}
 			else {
 				ios {
@@ -301,7 +317,7 @@ isEmpty(CPPDEVTK_PREFIX) {
 	}
 
 	# link
-	!android:!ios {
+	!android:!ios:!linux*:!macx {
 		!static_and_shared|build_pass {
 			CONFIG(static, static|shared) {
 				CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/static

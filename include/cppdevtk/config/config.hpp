@@ -25,14 +25,14 @@
 /// \remark Some code (especially defines) may look that is written too complicated, but this was done for doxygen.
 
 
-#include "features.hpp"
-#include "company_info.hpp"
-#include "product_info.hpp"
-#include "info.hpp"
 #include "architecture.hpp"
+#include "company_info.hpp"
 #include "compiler.hpp"
-#include "platform.hpp"
+#include "features.hpp"
+#include "info.hpp"
 #include "platform_compiler.hpp"
+#include "platform.hpp"
+#include "product_info.hpp"
 #include "third_party.hpp"
 
 

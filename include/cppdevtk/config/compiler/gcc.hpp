@@ -284,8 +284,8 @@
 #endif
 
 #ifdef NDEBUG
-#	if (FORTIFY_SOURCE != 2)
-#		ifdef CPPDEVTK_DETAIL_BUILD
+#	ifdef CPPDEVTK_DETAIL_BUILD
+#		if (!defined(FORTIFY_SOURCE) || (FORTIFY_SOURCE != 2))
 //			CPPDEVTK_COMPILER_WARNING("setting FORTIFY_SOURCE to 2")
 #			undef FORTIFY_SOURCE
 #			define FORTIFY_SOURCE 2
@@ -306,7 +306,7 @@
 //#		pragma GCC diagnostic ignored "-Wunused-parameter"
 #	endif
 // TODO: put other third-party warnings safe to disable here.
-#endif	// (defined(CPPDEVTK_DETAIL_BUILD) || CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
+#endif	// (CPPDEVTK_DISABLE_THIRD_PARTY_WARNINGS)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,7 +321,7 @@
 #		pragma GCC diagnostic ignored "-Wdeprecated-declarations"	// template<class> class std::auto_ptr is deprecated if C++11 enabled
 #	endif
 // TODO: put other cppdevtk warnings safe to disable here.
-#endif	// (defined(CPPDEVTK_DETAIL_BUILD) || CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
+#endif	// (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS)
 
 #endif	// Disable warnings (Diagnostic Pragmas, GCC >= 4.2)
 

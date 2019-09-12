@@ -22,7 +22,6 @@
 
 
 #include "config.hpp"
-#include <cppdevtk/config/architecture.hpp>
 #include "stdint.h"
 
 

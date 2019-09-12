@@ -27,10 +27,10 @@
 
 
 #include "features.hpp"
+#include "platform_compiler.hpp"
 #include "product_info_customization.hpp"
 #include "company_info.hpp"
-#include "compiler.hpp"
-#include "platform.hpp"
+
 
 #if (defined(__cplusplus) && !defined(RC_INVOKED))
 #	include <QtCore/QString>

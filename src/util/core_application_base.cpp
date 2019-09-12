@@ -46,6 +46,9 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QtAlgorithms>
+#ifdef CPPDEVTK_SHARED
+#include <QtCore/QLibraryInfo>
+#endif
 
 
 using ::cppdevtk::base::Exception;
@@ -290,31 +293,44 @@ bool CoreApplicationBase::SetupTranslators() {
 		return retCode;
 	}
 	
+	
 #	if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-	if (qtTranslator_.load((QString("qtbase_") + currentLanguageInfo_.GetName()), ":/cppdevtk/util/res/tr")) {
+	const QString kQtQmFileName = QString("qtbase_") + currentLanguageInfo_.GetName();
 #	else
-	if (qtTranslator_.load((QString("qt_") + currentLanguageInfo_.GetName()), ":/cppdevtk/util/res/tr")) {
+	const QString kQtQmFileName = QString("qt_") + currentLanguageInfo_.GetName();
 #	endif
+	
+#	if (defined(CPPDEVTK_SHARED) && !CPPDEVTK_PLATFORM_ANDROID)
+	const QString kQtQmDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#	else
+	const QString kQtQmDir = ":/cppdevtk/util/res/tr";
+#	endif
+	
+	if (qtTranslator_.load(kQtQmFileName, kQtQmDir)) {
 		QCoreApplication::installTranslator(&qtTranslator_);
 	}
 	else {
-		CPPDEVTK_LOG_ERROR("failed to load qtTranslator_");
+		CPPDEVTK_LOG_ERROR("failed to load qtTranslator_; kQtQmFileName: " << kQtQmFileName << "; kQtQmDir: " << kQtQmDir);
 		retCode = false;
 	}
 	
-	const QString kQmNamePrefix("tr_");
-	if (baseTranslator_.load((kQmNamePrefix + currentLanguageInfo_.GetName()), ":/cppdevtk/base/res/tr")) {
+	
+	const QString kQmFileName = QString("tr_") + currentLanguageInfo_.GetName();
+	if (baseTranslator_.load(kQmFileName, ":/cppdevtk/base/res/tr")) {
 		QCoreApplication::installTranslator(&baseTranslator_);
 	}
 	else {
-		CPPDEVTK_LOG_ERROR("failed to load baseTranslator_");
+		CPPDEVTK_LOG_ERROR("failed to load baseTranslator_; kQmFileName: " << kQmFileName
+				<< "; qmDir: " << ":/cppdevtk/base/res/tr");
 		retCode = false;
 	}
-	if (utilTranslator_.load((kQmNamePrefix + currentLanguageInfo_.GetName()), ":/cppdevtk/util/res/tr")) {
+	
+	if (utilTranslator_.load(kQmFileName, ":/cppdevtk/util/res/tr")) {
 		QCoreApplication::installTranslator(&utilTranslator_);
 	}
 	else {
-		CPPDEVTK_LOG_ERROR("failed to load utilTranslator_");
+		CPPDEVTK_LOG_ERROR("failed to load utilTranslator_; kQmFileName: " << kQmFileName
+				<< "; qmDir: " << ":/cppdevtk/util/res/tr");
 		retCode = false;
 	}
 	

@@ -34,7 +34,7 @@
 #define CPPDEVTK_CONFIG_PLATFORM_COMPILER_UNIX_GCC_HPP_INCLUDED_
 
 
-#include <unistd.h>
+//#include <unistd.h>
 
 
 /// \cond

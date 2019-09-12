@@ -195,15 +195,17 @@ INSTALLS += target
 RESOURCES += cppdevtk_util.qrc	\
     cppdevtk_util_customization.qrc
 
-isEqual(QT_MAJOR_VERSION, "4") {
-	RESOURCES += cppdevtk_util_qt4qm.qrc
-}
-else {
-	isEqual(QT_MAJOR_VERSION, "5") {
-		RESOURCES += cppdevtk_util_qt5qm.qrc
+CONFIG(static, static|shared)|android {
+	isEqual(QT_MAJOR_VERSION, "4") {
+		RESOURCES += cppdevtk_util_qt4qm.qrc
 	}
 	else {
-		error("Qt 4 and Qt 5 are supported!!!")
+		isEqual(QT_MAJOR_VERSION, "5") {
+			RESOURCES += cppdevtk_util_qt5qm.qrc
+		}
+		else {
+			error("Qt 4 and Qt 5 are supported!!!")
+		}
 	}
 }
 

@@ -52,6 +52,9 @@
 %endif
 %ifarch x86_64 amd64
 %define rpathdir %{_prefix}/lib64
+%if (0%{?centos} || 0%{?rhel})
+%define _jnidir %{_prefix}/lib64/java
+%endif
 %else
 %define rpathdir %{_prefix}/lib
 %endif
@@ -177,7 +180,7 @@ BuildRequires: boost-devel >= 1.41.0
 %endif
 %endif
 %if %{cososys_build}
-Requires: cososys-filesystem >= 1.1.0
+Requires: cososys-filesystem >= 1.1.1
 %endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -1013,9 +1016,32 @@ exit 0
 
 
 %changelog
-* Thu Aug 23 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+* Thu Sep 10 2019 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.1.1.1
-- TODO
+- added MimeDatabase
+- added openSUSE Leap 15.1
+- executor: improved cancellation
+- qmake files cleanup
+- added CPPDEVTK_ON_BLOCK_EXIT_CATCH
+- added CPPDEVTK_NO_INLINE and CPPDEVTK_FORCE_INLINE
+- removed IsMangled()
+- log to file
+- improved os ver checks
+- large file support checks
+- embed Qt translations only in static build
+- openSUSE Leap 15 bug #1094735 was fixed; removed workaround
+- openSUSE Tumbleweed: gcc 9.1.1 + boost 1.69.0 + Qt 5.13.0
+- iOS >= 9 (default 10)
+- Android >= 4.0.3 (API level 15) (default 4.4.2 (API level 19))
+- updated JNI_VERSION: 1.6 on Android and Mac OS X < 10.7, 1.8 on remaining platforms
+- updated Qt to 5.9.7 on Ubuntu 16.04 and 14.04
+- updated Qt to 5.9.8 on Win, Mac and iOS
+- updated Ubuntu to 18.04.3, 16.04.6 and 14.04.6
+- updated CentOS 7 to 7.6
+- updated third party libs; modified for new third party dir structure on Win and Mac
+- executor: workaround for Qt bug #6799
+- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831
+- custom wizard back()
 * Mon Jul 2 2018 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.1.0.1
 - added PosixSignalsWatcher (Unix)

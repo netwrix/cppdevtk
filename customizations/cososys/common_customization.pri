@@ -24,48 +24,72 @@ CONFIG += cppdevtk_verbose
 #CONFIG += cppdevtk_enable_target_suffix_qt_major_version
 CONFIG += cppdevtk_enable_app_target_debug_suffix
 CONFIG += cppdevtk_disable_warnings
+
 # TODO: keep in sync with CPPDEVTK_WITH_ZLIB in config/features.hpp
 CONFIG += cppdevtk_with_zlib
-win32 {
-	CONFIG += cppdevtk_target_xp
-}
 
+win32 {
+	#CONFIG += cppdevtk_target_xp
+}
+# TODO: keep in sync with CPPDEVTK_DISABLE_OLD_OS in config/features.hpp
+CONFIG += cppdevtk_disable_old_os
 
 # TODO: keep in sync with CPPDEVTK_ENABLE_QT_SOLUTIONS in config/features.hpp
 CPPDEVTK_ENABLE_QTSOLUTIONS = true
 
 
 # target OS version
-# TODO: keep in sync with features.hpp
+# TODO: keep in sync with config/features.hpp
 unix {
 	linux* {
 		android {
 			# ignored by Qt Creator and qmake; must be set as environment variable
-			#ANDROID_NDK_PLATFORM = android-19
+			cppdevtk_disable_old_os {
+				#ANDROID_NDK_PLATFORM = android-19
+			}
+			else {
+				##ANDROID_NDK_PLATFORM = android-15
+				##ANDROID_NDK_PLATFORM = android-17
+				#ANDROID_NDK_PLATFORM = android-19
+			}
 		}
 	}
 	else {
 		macx {
 			*g++* {
-				CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1040
-				CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.4
+				cppdevtk_disable_old_os {
+					CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1050
+					CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.5
+				}
+				else {
+					CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1040
+					CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.4
+				}
 			}
 			else {
 				*clang* {
-					CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1070
-					CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.7
+					cppdevtk_disable_old_os {
+						CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 101000
+						CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.10
+					}
+					else {
+						CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED = 1070
+						CPPDEVTK_MACOSX_DEPLOYMENT_TARGET = 10.7
+					}
 				}
 				else {
 					error("Unsupported compiler for Mac OS X platform!!!")
 				}
 			}
-			CPPDEVTK_MAC_OS_X_VERSION_MAX_ALLOWED = $${CPPDEVTK_MAC_OS_X_VERSION_MIN_REQUIRED}
 		}
 		else {
 			ios {
-				CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED = 100000
-				CPPDEVTK_IPHONE_OS_VERSION_MAX_ALLOWED = $${CPPDEVTK_IPHONE_OS_VERSION_MIN_REQUIRED}
-				CPPDEVTK_IOS_DEPLOYMENT_TARGET = 10.0
+				cppdevtk_disable_old_os {
+					CPPDEVTK_IOS_DEPLOYMENT_TARGET = 10.0
+				}
+				else {
+					CPPDEVTK_IOS_DEPLOYMENT_TARGET = 10.0
+				}
 			}
 			else {
 				error("Unsupported Unix platform!!!")
@@ -75,19 +99,29 @@ unix {
 }
 else {
 	win32 {
-		cppdevtk_target_xp {
-			# Win XP SP3
-			CPPDEVTK_WIN32_WINNT = 0x0501
-			CPPDEVTK_NTDDI_VERSION = 0x05010300
-			CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
-			CPPDEVTK_WIN32_IE = 0x0603
+		cppdevtk_disable_old_os {
+			cppdevtk_target_xp {
+				# Win Vista SP2
+				CPPDEVTK_WIN32_WINNT = 0x0600
+				CPPDEVTK_NTDDI_VERSION = 0x06000200
+			}
+			else {
+				# Win 7
+				CPPDEVTK_WIN32_WINNT = 0x0601
+				CPPDEVTK_NTDDI_VERSION = 0x06010000
+			}
 		}
 		else {
-			# Win Vista SP2
-			CPPDEVTK_WIN32_WINNT = 0x0600
-			CPPDEVTK_NTDDI_VERSION = 0x06000200
-			CPPDEVTK_WINVER = $${CPPDEVTK_WIN32_WINNT}
-			CPPDEVTK_WIN32_IE = 0x0700
+			cppdevtk_target_xp {
+				# Win XP SP3
+				CPPDEVTK_WIN32_WINNT = 0x0501
+				CPPDEVTK_NTDDI_VERSION = 0x05010300
+			}
+			else {
+				# Win Vista SP2
+				CPPDEVTK_WIN32_WINNT = 0x0600
+				CPPDEVTK_NTDDI_VERSION = 0x06000200
+			}
 		}
 	}
 	else {
@@ -173,10 +207,10 @@ else {
 # Ex:
 # linux: /opt/cososys/local/(static)
 # android: C:/cososys-android/local/arch (/opt/cososys-android/local/arch)
-# mac: /opt/cososys/local/arch/(static)
+# mac: /opt/cososys/local/mac1010/arch/(static)
 # iphonesimulator: /opt/cososys-ios/iphonesimulator/local
 # iphoneos: /opt/cososys-ios/iphoneos/local
-# windows: C:/cososys/local/qtver/compiler/arch/(static)
+# windows: C:/cososys/local/win7/qtver/compiler/arch/(static)
 
 isEmpty(CPPDEVTK_PREFIX) {
 	unix {
@@ -195,7 +229,27 @@ isEmpty(CPPDEVTK_PREFIX) {
 		}
 		else {
 			macx {
-				CPPDEVTK_PREFIX = /opt/cososys/local
+				*g++* {
+					cppdevtk_disable_old_os {
+						CPPDEVTK_PREFIX = /opt/cososys/local/mac105
+					}
+					else {
+						CPPDEVTK_PREFIX = /opt/cososys/local/mac104
+					}
+				}
+				else {
+					*clang* {
+						cppdevtk_disable_old_os {
+							CPPDEVTK_PREFIX = /opt/cososys/local/mac1010
+						}
+						else {
+							CPPDEVTK_PREFIX = /opt/cososys/local/mac107
+						}
+					}
+					else {
+						error("Unsupported compiler for Mac OS X platform!!!")
+					}
+				}
 			}
 			else {
 				ios {
@@ -216,7 +270,12 @@ isEmpty(CPPDEVTK_PREFIX) {
 	}
 	else {
 		win32 {
-			CPPDEVTK_PREFIX = C:/cososys/local
+			cppdevtk_disable_old_os {
+				CPPDEVTK_PREFIX = C:/cososys/local/win7
+			}
+			else {
+				CPPDEVTK_PREFIX = C:/cososys/local/winxpsp3
+			}
 		}
 		else {
 			error("Unsupported platform!!!")
@@ -239,6 +298,9 @@ isEmpty(CPPDEVTK_PREFIX) {
 			CPPDEVTK_COMPILER = $$member(CPPDEVTK_QMAKESPEC_BASENAME_SPLIT, 1)
 			isEmpty(CPPDEVTK_COMPILER) {
 				error("CPPDEVTK_COMPILER is empty")
+			}
+			isEqual(CPPDEVTK_COMPILER, "msvc") {
+				CPPDEVTK_COMPILER = msvc2015
 			}
 			CPPDEVTK_PREFIX = $${CPPDEVTK_PREFIX}/$${CPPDEVTK_COMPILER}
 		}

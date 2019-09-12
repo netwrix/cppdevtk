@@ -1,5 +1,5 @@
 Version 1.1.1.1:
-- Release date:
+- Release date: 10 Sep 2019
 - New features:
 	- added MimeDatabase
 	- added openSUSE Leap 15.1
@@ -10,19 +10,23 @@ Version 1.1.1.1:
 	- added CPPDEVTK_NO_INLINE and CPPDEVTK_FORCE_INLINE
 	- removed IsMangled()
 	- log to file
+	- improved os ver checks
+	- large file support checks
+	- embed Qt translations only in static build
 	- openSUSE Leap 15 bug #1094735 was fixed; removed workaround
 	- openSUSE Tumbleweed: gcc 9.1.1 + boost 1.69.0 + Qt 5.13.0
-	- iOS >= 8 (default 10)
-	- Android >= 2.3 (API level 9) (default 4.4.2 (API level 19))
+	- iOS >= 9 (default 10)
+	- Android >= 4.0.3 (API level 15) (default 4.4.2 (API level 19))
 	- updated JNI_VERSION: 1.6 on Android and Mac OS X < 10.7, 1.8 on remaining platforms
-	- updated Qt to 5.12.3 on Ubuntu 16.04
-	- updated Qt to 5.9.7 on Ubuntu 14.04
-	- updated Qt to 5.9.8 on iOS
-	- updated Ubuntu to 18.04.2, 16.04.6 and 14.04.6
+	- updated Qt to 5.9.7 on Ubuntu 16.04 and 14.04
+	- updated Qt to 5.9.8 on Win, Mac and iOS
+	- updated Ubuntu to 18.04.3, 16.04.6 and 14.04.6
 	- updated CentOS 7 to 7.6
+	- updated third party libs; modified for new third party dir structure on Win and Mac
 - Fixed bugs:
 	- executor: workaround for Qt bug #6799
 	- executor: if Qt < 5.6.2 then may be affected by Qt bug #54831
+	- custom wizard back()
 
 
 Version 1.1.0.1:
