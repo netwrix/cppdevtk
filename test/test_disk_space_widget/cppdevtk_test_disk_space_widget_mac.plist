@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<string>True</string>
 	<key>CFBundleExecutable</key>
 	<string>cppdevtk_test_disk_space_widget</string>
 	<key>CFBundleIconFile</key>
 	<string>application.icns</string>
 	<key>CFBundleName</key>
-	<string>cppdevtk_test_disk_space_widget</string>
+	<string>CppDevTk Test Disk Space Widget</string>
 	<key>CFBundleDisplayName</key>
 	<string>CppDevTk Test Disk Space Widget</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.1</string>
+	<string>1.1.2</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>1.1.2</string>
 	<key>CFBundleGetInfoString</key>
 	<string>CppDevTk test application.</string>
 	<key>CFBundleIdentifier</key>

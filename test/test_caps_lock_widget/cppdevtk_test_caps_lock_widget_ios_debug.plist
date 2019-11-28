@@ -47,13 +47,13 @@
 		</dict>
 	</dict>
 	<key>CFBundleName</key>
-	<string>cppdevtk_test_caps_lock_widget_debug</string>
+	<string>CppDevTk Test Caps Lock Widget Debug</string>
 	<key>CFBundleDisplayName</key>
 	<string>CppDevTk Test Caps Lock Widget Debug</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.1</string>
+	<string>1.1.2</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>1.1.2</string>
 	<key>CFBundleGetInfoString</key>
 	<string>CppDevTk test application.</string>
 	<key>CFBundleIdentifier</key>

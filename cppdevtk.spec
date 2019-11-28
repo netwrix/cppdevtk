@@ -1,7 +1,7 @@
 #
 # spec file for package cppdevtk
 #
-# Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>.
+# Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>.
 #
 # Licensed under the Apache License, Version 2.0.
 # Please see the file COPYING.
@@ -33,11 +33,14 @@
 
 # CentOS minor version
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-%define centos_minor_ver 10
+%if (0%{?centos} == 8 || 0%{?rhel} == 8)
+%define centos_minor_ver 0
 %endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
-%define centos_minor_ver 6
+%define centos_minor_ver 7
+%endif
+%if (0%{?centos} == 6 || 0%{?rhel} == 6)
+%define centos_minor_ver 10
 %endif
 %endif
 
@@ -64,6 +67,9 @@
 %define with_qt5 1
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 8 || 0%{?rhel} == 8)
+%define with_qt5 1
+%endif
 # Qt5 is available on CentOS 7 >= 7.2 (EPEL) and 7.3 (official)
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 %if (%{centos_minor_ver} >= 2)
@@ -87,7 +93,7 @@
 
 
 Name: cppdevtk
-Version: 1.1.1
+Version: 1.1.2
 %if (0%{?centos} || 0%{?rhel})
 Release: 1.el%{rhel}_%{centos_minor_ver}
 %else
@@ -103,49 +109,17 @@ Source: %{name}-%{version}.tar.bz2
 BuildRequires: libstdc++-devel glibc-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-BuildRequires: libqt5-qtbase-devel >= 5.12.2
-%endif
-%if (0%{?sle_version} == 150100)
-BuildRequires: libqt5-qtbase-devel >= 5.9.7
-%endif
-%if (0%{?sle_version} == 150000)
-BuildRequires: libqt5-qtbase-devel >= 5.9.4
-%endif
-%if (0%{?sle_version} == 120300)
-BuildRequires: libqt5-qtbase-devel >= 5.6.2
-%endif
+BuildRequires: libqt5-qtbase-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-BuildRequires: qt5-qtbase-devel >= 5.9.2
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: qt5-qtbase-devel >= 5.6.1
-%endif
+BuildRequires: qt5-qtbase-devel
 %endif
 %else
 %if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-BuildRequires: libqt4-devel >= 4.8.7
-%endif
-%if (0%{?sle_version} == 150100)
-BuildRequires: libqt4-devel >= 4.8.7
-%endif
-%if (0%{?sle_version} == 150000)
-BuildRequires: libqt4-devel >= 4.8.7
-%endif
-%if (0%{?sle_version} == 120300)
-BuildRequires: libqt4-devel >= 4.8.6
-%endif
+BuildRequires: libqt4-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-BuildRequires: qt-devel >= 4.8.7
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: qt-devel >= 4.6.2
-%endif
+BuildRequires: qt-devel
 %endif
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-build
@@ -157,28 +131,7 @@ CppDevTk is a collection of libraries for C++ development.
 %package -n lib%{name}-base
 Summary: CppDevTk base library
 Group: System/Libraries
-%if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-BuildRequires: boost-devel >= 1.69.0
-%endif
-%if (0%{?sle_version} == 150100)
-BuildRequires: boost-devel >= 1.66.0
-%endif
-%if (0%{?sle_version} == 150000)
-BuildRequires: boost-devel >= 1.66.0
-%endif
-%if (0%{?sle_version} == 120300)
-BuildRequires: boost-devel >= 1.54.0
-%endif
-%endif
-%if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-BuildRequires: boost-devel >= 1.53.0
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: boost-devel >= 1.41.0
-%endif
-%endif
+BuildRequires: boost-devel
 %if %{cososys_build}
 Requires: cososys-filesystem >= 1.1.1
 %endif
@@ -227,6 +180,9 @@ BuildRequires: zlib-devel
 BuildRequires: libudev-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 8 || 0%{?rhel} == 8)
+BuildRequires: systemd-devel
+%endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 BuildRequires: systemd-devel
 %endif
@@ -260,6 +216,9 @@ BuildRequires: java-1_8_0-openjdk-devel
 %endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 8 || 0%{?rhel} == 8)
+BuildRequires: java-1.8.0-openjdk-devel
+%endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 BuildRequires: java-1.8.0-openjdk-devel
 %endif
@@ -312,35 +271,14 @@ BuildRequires: xorg-x11-proto-devel
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-BuildRequires: libqt5-qtx11extras-devel >= 5.12.2
-%endif
-%if (0%{?sle_version} == 150100)
-BuildRequires: libqt5-qtx11extras-devel >= 5.9.7
-%endif
-%if (0%{?sle_version} == 150000)
-BuildRequires: libqt5-qtx11extras-devel >= 5.9.4
-%endif
-%if (0%{?sle_version} == 120300)
-BuildRequires: libqt5-qtx11extras-devel >= 5.6.2
-%endif
+BuildRequires: libqt5-qtx11extras-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-BuildRequires: qt5-qtx11extras-devel >= 5.9.2
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: qt5-qtx11extras-devel >= 5.6.1
-%endif
+BuildRequires: qt5-qtx11extras-devel
 %endif
 %else
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-BuildRequires: qt-x11 >= 4.8.7
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-BuildRequires: qt-x11 >= 4.6.2
-%endif
+BuildRequires: qt-x11
 %endif
 %endif
 Requires(post): /sbin/ldconfig
@@ -373,73 +311,20 @@ Convenience package to install all %{name} libraries.
 Summary: Development files for lib%{name}-base
 Group: Development/Libraries/C and C++
 Requires: libstdc++-devel glibc-devel
-%if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-Requires: boost-devel >= 1.69.0
-%endif
-%if (0%{?sle_version} == 150100)
-Requires: boost-devel >= 1.66.0
-%endif
-%if (0%{?sle_version} == 150000)
-Requires: boost-devel >= 1.66.0
-%endif
-%if (0%{?sle_version} == 120300)
-Requires: boost-devel >= 1.54.0
-%endif
-%endif
-%if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: boost-devel >= 1.53.0
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: boost-devel >= 1.41.0
-%endif
-%endif
+Requires: boost-devel
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-Requires: libqt5-qtbase-devel >= 5.12.2
-%endif
-%if (0%{?sle_version} == 150100)
-Requires: libqt5-qtbase-devel >= 5.9.7
-%endif
-%if (0%{?sle_version} == 150000)
-Requires: libqt5-qtbase-devel >= 5.9.4
-%endif
-%if (0%{?sle_version} == 120300)
-Requires: libqt5-qtbase-devel >= 5.6.2
-%endif
+Requires: libqt5-qtbase-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: qt5-qtbase-devel >= 5.9.2
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: qt5-qtbase-devel >= 5.6.1
-%endif
+Requires: qt5-qtbase-devel
 %endif
 %else
 %if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-Requires: libqt4-devel >= 4.8.7
-%endif
-%if (0%{?sle_version} == 150100)
-Requires: libqt4-devel >= 4.8.7
-%endif
-%if (0%{?sle_version} == 150000)
-Requires: libqt4-devel >= 4.8.7
-%endif
-%if (0%{?sle_version} == 120300)
-Requires: libqt4-devel >= 4.8.6
-%endif
+Requires: libqt4-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: qt-devel >= 4.8.7
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: qt-devel >= 4.6.2
-%endif
+Requires: qt-devel
 %endif
 %endif
 Requires: lib%{name}-base = %{version}
@@ -490,6 +375,9 @@ Group: Development/Libraries/C and C++
 Requires: libudev-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 8 || 0%{?rhel} == 8)
+Requires: systemd-devel
+%endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 Requires: systemd-devel
 %endif
@@ -528,6 +416,9 @@ Requires: java-1_8_0-openjdk-devel
 %endif
 %endif
 %if (0%{?centos} || 0%{?rhel})
+%if (0%{?centos} == 8 || 0%{?rhel} == 8)
+Requires: java-1.8.0-openjdk-devel
+%endif
 %if (0%{?centos} == 7 || 0%{?rhel} == 7)
 Requires: java-1.8.0-openjdk-devel
 %endif
@@ -582,35 +473,14 @@ Requires: xorg-x11-proto-devel
 %endif
 %if (%{with_qt5})
 %if (0%{?suse_version})
-%if (%{?suse_version} >= 1550)
-Requires: libqt5-qtx11extras-devel >= 5.12.2
-%endif
-%if (0%{?sle_version} == 150100)
-Requires: libqt5-qtx11extras-devel >= 5.9.7
-%endif
-%if (0%{?sle_version} == 150000)
-Requires: libqt5-qtx11extras-devel >= 5.9.4
-%endif
-%if (0%{?sle_version} == 120300)
-Requires: libqt5-qtx11extras-devel >= 5.6.2
-%endif
+Requires: libqt5-qtx11extras-devel
 %endif
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: qt5-qtx11extras-devel >= 5.9.2
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: qt5-qtx11extras-devel >= 5.6.1
-%endif
+Requires: qt5-qtx11extras-devel
 %endif
 %else
 %if (0%{?centos} || 0%{?rhel})
-%if (0%{?centos} == 7 || 0%{?rhel} == 7)
-Requires: qt-x11 >= 4.8.7
-%endif
-%if (0%{?centos} == 6 || 0%{?rhel} == 6)
-Requires: qt-x11 >= 4.6.2
-%endif
+Requires: qt-x11
 %endif
 %endif
 Requires: lib%{name}-gui = %{version}
@@ -1016,6 +886,11 @@ exit 0
 
 
 %changelog
+* Wed Nov 27 2019 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
+- v1.1.2.1
+- added CentOS 8
+- SetStyleSheetFromFileCross(): added support for Android and iOS
+- updated CentOS 7 to 7.7
 * Thu Sep 10 2019 Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>
 - v1.1.1.1
 - added MimeDatabase

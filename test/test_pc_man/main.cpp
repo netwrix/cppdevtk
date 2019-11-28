@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -44,6 +44,10 @@
 #	include <QtCore/QtPlugin>
 #endif
 #include <QtGui/QIcon>
+#include <QtCore/QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+#	include <QtCore/Qt>
+#endif
 
 #include <cstdlib>
 
@@ -74,6 +78,9 @@ int main(int argc, char* argv[]) try {
 	CPPDEVTK_ASSERT(Application::quitOnLastWindowClosed());
 	Application::SetInfo(CPPDEVTK_COMPANY_SHORT_NAME_SANITIZED, CPPDEVTK_COMPANY_HOMEPAGE,
 			CPPDEVTK_SHORT_NAME_SANITIZED, CPPDEVTK_VERSION_STRING, CPPDEVTK_TEST_PC_MAN_SHORT_NAME_SANITIZED);
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+	Application::setAttribute(Qt::AA_EnableHighDpiScaling);
+#	endif
 	
 	Application application(argc, argv);
 	

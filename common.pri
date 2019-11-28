@@ -1,5 +1,5 @@
 #****************************************************************************************************************************
-# Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>
+# Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -58,7 +58,7 @@ else {
 # version
 CPPDEVTK_VERSION_MAJOR = 1
 CPPDEVTK_VERSION_MINOR = 1
-CPPDEVTK_VERSION_PATCH = 1
+CPPDEVTK_VERSION_PATCH = 2
 win32 {
 	CPPDEVTK_VERSION_BUILD = 1
 }
@@ -1382,6 +1382,10 @@ win32 {
 	QMAKE_RC += -d _WIN32 -d WIN32
 	isEqual(QMAKE_TARGET.arch, "x86_64") {
 		QMAKE_RC += -d _WIN64 -d WIN64
+		QMAKE_RC += -d _M_X64 -d _M_AMD64
+	}
+	else {
+		QMAKE_RC += -d _M_IX86
 	}
 	
 	QMAKE_RC += -d _UNICODE -d UNICODE
@@ -1403,6 +1407,7 @@ win32 {
 	
 	QMAKE_RC += -I $${PWD}/include
 	QMAKE_RC += -I $${CPPDEVTK_THIRD_PARTY_INCLUDE_DIR}
+	QMAKE_RC += -I $$[QT_INSTALL_HEADERS]
 }
 
 

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -482,14 +482,9 @@ inline bool Thread::Id::operator>=(const Id& other) const CPPDEVTK_NOEXCEPT {
 }	// namespace cppdevtk
 
 
-#if (CPPDEVTK_HAVE_THREAD_STORAGE)
-
 #if (CPPDEVTK_DISABLE_CPPDEVTK_WARNINGS && CPPDEVTK_COMPILER_MSVC)
 #	pragma warning(pop)
 #endif
-
-
-#endif	// (CPPDEVTK_HAVE_THREAD_STORAGE)
 
 
 #include "thread_exception.hpp"

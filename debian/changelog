@@ -1,3 +1,12 @@
+cppdevtk (1.1.2-0ubuntu1.3) bionic; urgency=medium
+
+  * added CentOS 8
+  * SetStyleSheetFromFileCross(): added support for Android and iOS
+  * updated CentOS 7 to 7.7
+
+ -- Cristian ANITA <cristian.anita@cososys.com>, <cristian_anita@yahoo.com>  Wed, 27 Nov 2019 14:19:46 +0300
+
+
 cppdevtk (1.1.1-0ubuntu1.3) bionic; urgency=medium
 
   * added MimeDatabase

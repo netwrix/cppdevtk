@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -34,7 +34,7 @@
 #define CPPDEVTK_COMPANY_LONG_NAME "CoSoSys Ltd."
 #define CPPDEVTK_COMPANY_HOMEPAGE "http://www.cososys.com"
 #define CPPDEVTK_COMPANY_EMAIL "info@cososys.com"
-#define CPPDEVTK_COMPANY_COPYRIGHT "Copyright (C) 2015 - 2019 " CPPDEVTK_COMPANY_LONG_NAME ". All rights reserved. " CPPDEVTK_COMPANY_EMAIL "."
+#define CPPDEVTK_COMPANY_COPYRIGHT "Copyright (C) 2015 - 2020 " CPPDEVTK_COMPANY_LONG_NAME ". All rights reserved. " CPPDEVTK_COMPANY_EMAIL "."
 #define CPPDEVTK_COMPANY_TRADEMARKS "TM " CPPDEVTK_COMPANY_LONG_NAME "."
 
 /// @}	// config_info_company_info

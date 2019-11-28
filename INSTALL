@@ -1,6 +1,6 @@
 1. Prerequisites:
-- Qt 5.6.3 msvc2015 and Qt 5.6.1-1 android needed on Windows
-- Qt 5.6.3 macosx and Qt 5.9.8 ios needed on Mac OS X
+- Qt 5.9.8 msvc2015 and Qt 5.6.1-1 android needed on Windows
+- Qt 5.9.8 needed on Mac OS X and iOS
 - JDK 8u144 needed on Windows
 - JDK 8u144 needed on Mac OS X >= 10.7 and Apple provided JDK 6 on Mac < 10.7
 - Android SDK r25.2.5 + NDK r10e needed on Windows

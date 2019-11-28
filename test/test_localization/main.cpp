@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -38,6 +38,10 @@
 #	include <QtCore/QtPlugin>
 #endif
 #include <QtGui/QIcon>
+#include <QtCore/QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+#	include <QtCore/Qt>
+#endif
 
 #include <cstdlib>
 
@@ -82,6 +86,9 @@ int main(int argc, char* argv[]) try {
 				CPPDEVTK_SHORT_NAME_SANITIZED, CPPDEVTK_VERSION_STRING, CPPDEVTK_TEST_LOCALIZATION_SHORT_NAME_SANITIZED);
 	Application::SetQmInfo(":/cppdevtk/test_localization/res/tr", "tr_");
 	CPPDEVTK_ASSERT(Application::GetNumberOfSupportedLanguages() > 1);
+#	if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+	Application::setAttribute(Qt::AA_EnableHighDpiScaling);
+#	endif
 	
 	Application application(argc, argv);
 	

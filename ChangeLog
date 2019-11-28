@@ -1,3 +1,13 @@
+Version 1.1.2.1:
+- Release date:
+- New features:
+	- added CentOS 8
+- Improvements:
+	- SetStyleSheetFromFileCross(): added support for Android and iOS
+	- updated CentOS 7 to 7.7
+- Fixed bugs:
+
+
 Version 1.1.1.1:
 - Release date: 10 Sep 2019
 - New features:

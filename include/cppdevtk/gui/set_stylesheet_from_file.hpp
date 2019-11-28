@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file
 ///
-/// \copyright Copyright (C) 2015 - 2019 CoSoSys Ltd <info@cososys.com>\n
+/// \copyright Copyright (C) 2015 - 2020 CoSoSys Ltd <info@cososys.com>\n
 /// Licensed under the Apache License, Version 2.0 (the "License");\n
 /// you may not use this file except in compliance with the License.\n
 /// You may obtain a copy of the License at\n
@@ -150,6 +150,16 @@ bool SetStyleSheetFromFileCross(TTarget& target, const QString& path, const QStr
 #			endif
 	;
 	retValue = SetStyleSheetFromFile(target, path, platformCompleteBaseName, true, suffix) || retValue;
+	
+#	if (CPPDEVTK_PLATFORM_ANDROID)
+	platformCompleteBaseName = completeBaseName + "_android";
+	retValue = SetStyleSheetFromFile(target, path, platformCompleteBaseName, true, suffix) || retValue;
+#	endif
+	
+#	if (CPPDEVTK_PLATFORM_IOS)
+	platformCompleteBaseName = completeBaseName + "_ios";
+	retValue = SetStyleSheetFromFile(target, path, platformCompleteBaseName, true, suffix) || retValue;
+#	endif
 #	endif	// (CPPDEVTK_PLATFORM_UNIX)
 	
 	return retValue;
