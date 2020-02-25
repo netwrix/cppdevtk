@@ -51,7 +51,7 @@
 #define CPPDEVTK_VERSION_MINOR 1	///< \attention May have maximum 2 digits.
 #define CPPDEVTK_VERSION_PATCH 2	///< \attention May have maximum 2 digits.
 #ifdef _WIN32
-#define CPPDEVTK_VERSION_BUILD 1
+#define CPPDEVTK_VERSION_BUILD 2
 #endif
 
 /// Example:

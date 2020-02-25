@@ -1,5 +1,15 @@
+Version 1.1.2.2:
+- Release date: 30 Jan 2020
+- New features:
+- Improvements:
+	- relaxed IsValidPath() on Win to allow ':'
+	- improved IsValidPath() on Win to handle "\\\\?\\" when validating '?'
+	- Win: prepend "\\\\?\\" to path only if it does not already exist
+- Fixed bugs:
+
+
 Version 1.1.2.1:
-- Release date:
+- Release date: 27 Nov 2019
 - New features:
 	- added CentOS 8
 - Improvements:

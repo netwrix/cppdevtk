@@ -75,8 +75,10 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 		return false;
 	}
 	if (path.contains('\?')) {
-		CPPDEVTK_LOG_ERROR("path '" << path << "' contains invalid character ?");
-		return false;
+		if (!path.startsWith("//?/") || (path.count('?') > 1)) {
+			CPPDEVTK_LOG_ERROR("path '" << path << "' contains invalid character ?");
+			return false;
+		}
 	}
 	if (path.contains('*')) {
 		CPPDEVTK_LOG_ERROR("path '" << path << "' contains invalid character *");
@@ -94,6 +96,7 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 	}
 	*/
 	
+	/*
 	int cnt = path.count(':');
 	if (cnt > 1) {
 		CPPDEVTK_LOG_ERROR("path '" << path << "' contains invalid character :");
@@ -110,6 +113,7 @@ CPPDEVTK_UTIL_API bool IsValidPath(const QString& path, bool ignorePathSeparator
 			return false;
 		}
 	}
+	*/
 	
 	return ignorePathSeparator ? true : !path.contains('/');
 }
@@ -120,7 +124,9 @@ CPPDEVTK_UTIL_API void DeleteFile(const QString& fileName, bool failIfNotExists)
 	QString nativeFileName = QDir::toNativeSeparators(fileName);
 #	if (!CPPDEVTK_DISABLE_UNICODE)
 	if (QDir::isAbsolutePath(fileName)) {
-		nativeFileName.prepend("\\\\?\\");
+		if (!nativeFileName.startsWith("\\\\?\\")) {
+			nativeFileName.prepend("\\\\?\\");
+		}
 	}
 #	endif
 	
@@ -179,14 +185,18 @@ CPPDEVTK_UTIL_API void CopyFile(const QString& srcFileName, const QString& dstFi
 	QString nativeSrcFileName = QDir::toNativeSeparators(srcFileName);
 #	if (!CPPDEVTK_DISABLE_UNICODE)
 	if (QDir::isAbsolutePath(srcFileName)) {
-		nativeSrcFileName.prepend("\\\\?\\");
+		if (!nativeSrcFileName.startsWith("\\\\?\\")) {
+			nativeSrcFileName.prepend("\\\\?\\");
+		}
 	}
 #	endif
 	
 	QString nativeDstFileName = QDir::toNativeSeparators(dstFileName);
 #	if (!CPPDEVTK_DISABLE_UNICODE)
 	if (QDir::isAbsolutePath(dstFileName)) {
-		nativeDstFileName.prepend("\\\\?\\");
+		if (!nativeDstFileName.startsWith("\\\\?\\")) {
+			nativeDstFileName.prepend("\\\\?\\");
+		}
 	}
 #	endif
 	
@@ -237,7 +247,9 @@ CPPDEVTK_UTIL_API void MakeDirectory(const QString& dirName, bool failIfExists) 
 	QString nativeDirName = QDir::toNativeSeparators(dirName);
 #	if (!CPPDEVTK_DISABLE_UNICODE)
 	if (QDir::isAbsolutePath(dirName)) {
-		nativeDirName.prepend("\\\\?\\");
+		if (!nativeDirName.startsWith("\\\\?\\")) {
+			nativeDirName.prepend("\\\\?\\");
+		}
 	}
 #	endif
 	
@@ -292,7 +304,9 @@ CPPDEVTK_UTIL_API void RemoveDirectory(const QString& path, bool failIfNotExists
 	QString nativePath = QDir::toNativeSeparators(path);
 #	if (!CPPDEVTK_DISABLE_UNICODE)
 	if (QDir::isAbsolutePath(path)) {
-		nativePath.prepend("\\\\?\\");
+		if (!nativePath.startsWith("\\\\?\\")) {
+			nativePath.prepend("\\\\?\\");
+		}
 	}
 #	endif
 	
@@ -351,7 +365,9 @@ CPPDEVTK_UTIL_API void GetFileSystemSpaceInfo(const QString& path, FileSystemSpa
 	
 	QString nativeDirAbsPath = QDir::toNativeSeparators(QFileInfo(path).absolutePath());
 #	if (!CPPDEVTK_DISABLE_UNICODE)
-	nativeDirAbsPath.prepend("\\\\?\\");
+	if (!nativeDirAbsPath.startsWith("\\\\?\\")) {
+		nativeDirAbsPath.prepend("\\\\?\\");
+	}
 #	endif
 	
 	if (!GetDiskFreeSpaceEx(CPPDEVTK_Q2T(nativeDirAbsPath).c_str(), &freeBytesAvailable, &totalNumberOfBytes,
