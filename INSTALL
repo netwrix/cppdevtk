@@ -17,6 +17,7 @@ Qt 5:
 	> sudo apt-get install qt59-meta-full qt-latest qt59base qt59x11extras
 - CentOS (6, 7, EPEL repo):
 	> yum install epel-release
+	> yum update
 
 
 - Ubuntu:
@@ -28,7 +29,7 @@ Qt 5:
 > sudo apt-get update
 > sudo apt-get install openjdk-8-jdk
 
-- Windows environment variables for Java and Android:
+- Windows environment variables for Java and Android (if preferred cmd line instead of Qt Creator):
 JAVA_HOME C:\Program Files\Java\jdk1.8.0_144
 ANDROID_NDK_ROOT C:\android\ndk-r10e
 NDK_ROOT %ANDROID_NDK_ROOT%
@@ -43,7 +44,8 @@ Add to PATH:
 %ANDROID_HOME%\tools
 %ANDROID_HOME%\platform-tools
 
-- On Mac OS X create symlink /Library/Java/Home
+
+- On Mac OS X create symlink /Library/Java/Home pointing to /Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home
 
 - Windows cross-compile (build on 64 for 32) JDK convenience workaround:
 Add in common.pri, win32 replace isEmpty(CPPDEVTK_JAVA_HOME) test with:
@@ -73,24 +75,26 @@ for CPPDEVTK_VERSION_MAJOR, CPPDEVTK_VERSION_MINOR and CPPDEVTK_VERSION_PATCH
 
 
 6. Build
-6.1 On Windows/Linux/Mac >= 10.7 build from Qt Creator
+6.1 On Windows/Linux/iOS/Android/Mac >= 10.7 build from Qt Creator
 In Qt Creator:
 - make sure to select Release configuration
 - add in Build Steps, qmake:
 shared (Lnx/Win/Mac/Android):
 CONFIG+=release CONFIG+=shared
-static (ios):
+static (iOS):
 CONFIG+=release CONFIG+=static
-Build then in bld dir:
+Build (on Android select one relevant app; note that iphone test apps will fail to build because they are not signed) then in bld dir:
 Linux:
 > make install
 Windows msvc 2015 cmd prompt:
 > nmake install
-Mac OS X:
+- move dlls in install dir from lib to bin
+Mac OS X, iOS:
 > make -j1 install
+Android: manually copy include, libs and apk from bld dir to install dir
 
 Mac OS X deployment:
-> cd /Applications/Qt/5.6.3/clang_64/bin
+> cd /Applications/Qt/5.9.8/clang_64/bin
 > ./macdeployqt ~/TestApplication/Build/Release/TestApplication.app -always-overwrite -appstore-compliant
 Optional to codesign append:
 -codesign=<ident>
@@ -115,6 +119,7 @@ make -j1 install
 6.3 On Linux if packaging:
 RPM: rpmbuild -ta --sign cppdevtk-1.0.0.tar.bz2
 Deb:
+- if needed copy distro specific from ./distros/xxx to ./
 > debuild --no-tgz-check -D -us -uc -B
 > dpkg-sig -k CoSoSys --sign=origin --cache-passphrase ./*.deb
 
